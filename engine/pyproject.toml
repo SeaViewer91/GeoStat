@@ -1,0 +1,44 @@
+[project]
+name = "geostat-engine"
+version = "0.0.1"
+description = "GeoStat 공간통계 분석 엔진"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn>=0.30",
+    "geopandas>=1.0",
+    "pyogrio>=0.10",
+    "pyproj>=3.7",
+    "shapely>=2.0",
+    "pyarrow>=17",
+    "numpy>=2.0",
+]
+
+[project.scripts]
+geostat-engine = "geostat_engine.__main__:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "httpx>=0.27",
+    "ruff>=0.6",
+]
+build = [
+    "pyinstaller>=6.10",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/geostat_engine"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"

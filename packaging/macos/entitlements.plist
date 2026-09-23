@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Hardened Runtime 예외 항목 (앱 본체와 Python 엔진 실행 파일에 적용함)
+
+  allow-unsigned-executable-memory
+    ctypes·cffi 콜백(libffi 클로저)이 실행 가능한 메모리를 새로 만들기 때문에 필요함.
+  allow-jit
+    이후 numba(LLVM JIT)를 도입하면 필요함. 지금은 미리 넣어 둠.
+-->
+<plist version="1.0">
+<dict>
+    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <true/>
+    <key>com.apple.security.cs.allow-jit</key>
+    <true/>
+</dict>
+</plist>

@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "메인 창 기본 권한: 핵심 API와 파일 열기 대화상자만 허용함",
+  "windows": ["main"],
+  "permissions": ["core:default", "dialog:allow-open"]
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "bundle": {
+    "resources": {
+      "../../../packaging/build/engine/geostat-engine/": "engine/geostat-engine/"
+    },
+    "macOS": {
+      "entitlements": "../../../packaging/macos/entitlements.plist",
+      "hardenedRuntime": true
+    }
+  }
+}

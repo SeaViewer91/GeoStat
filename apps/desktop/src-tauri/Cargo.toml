@@ -1,0 +1,32 @@
+[package]
+name = "geostat"
+version = "0.0.1"
+description = "GeoStat 공간통계 분석 데스크톱 앱"
+authors = ["Suho Bak"]
+license = "MIT"
+repository = "https://github.com/SeaViewer91/GeoStat"
+edition = "2021"
+rust-version = "1.77"
+
+[lib]
+# 이름 끝의 _lib는 Windows에서 bin/lib 이름 충돌을 피하기 위한 Tauri 관례임
+name = "geostat_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["sync", "time"] }
+getrandom = "0.3"
+log = "0.4"
+env_logger = "0.11"
+
+[profile.release]
+codegen-units = 1
+lto = true
+strip = true

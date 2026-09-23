@@ -225,17 +225,19 @@ GeoStat/
 
 ## 8. 바로 다음 할 일 (P0 체크리스트)
 
-- [ ] 저장소 초기화: `apps/desktop`(Tauri 2 + React + TS), `engine`(uv 프로젝트)
-- [ ] 엔진: FastAPI `/health`, `/datasets/open`(pyogrio) → GeoArrow 응답
-- [ ] Tauri: 엔진 spawn(랜덤 포트·토큰), 종료 시 정리, 크래시 시 재시작
-- [ ] 프론트: deck.gl GeoArrow 레이어로 20만 폴리곤 렌더링 + 사각형 선택
-- [ ] PyInstaller onedir 빌드(geopandas, libpysal, esda, numba 포함) → 서명 → 공증 → 다른 맥에서 실행 확인
-- [ ] 결과를 `docs/spike-report.md`에 기록하고 P1 착수 여부 결정
+- [x] 저장소 초기화: `apps/desktop`(Tauri 2 + React + TS), `engine`(uv 프로젝트)
+- [x] 엔진: FastAPI `/health`, `/datasets/open`(pyogrio) → GeoArrow 응답
+- [x] Tauri: 엔진 spawn(랜덤 포트·토큰), 종료 시 정리 — 크래시 시 재시작은 P1로 넘김
+- [x] 프론트: deck.gl GeoArrow 레이어로 20만 폴리곤 렌더링 + 사각형 선택 (Linux 헤드리스에서 확인함)
+- [x] PyInstaller onedir 빌드 + 스모크 테스트 (Linux)
+- [ ] **맥에서** 개발 모드 실행, 서명 → 공증 → 다른 맥에서 실행 확인
+- [ ] libpysal·esda·numba를 넣은 번들로 다시 확인 (P2 착수 시)
+- [x] 결과를 `docs/spike-report.md`에 기록함 — P1 착수 여부는 맥 확인 후 결정
 
 ---
 
 ## 부록: 주요 의존성
 
-- 프론트: React, TypeScript, Vite, MapLibre GL, deck.gl, @geoarrow/deck.gl-layers, apache-arrow, Zustand, i18next
+- 프론트: React, TypeScript, Vite, MapLibre GL, deck.gl, @geoarrow/deck.gl-geoarrow (구 @geoarrow/deck.gl-layers), apache-arrow, Zustand, i18next
 - 셸: Tauri 2 (+ updater, dialog, fs 플러그인)
 - 엔진: FastAPI, uvicorn, geopandas, shapely 2, pyogrio, pyproj, pyarrow, geoarrow-pyarrow, libpysal, esda, spreg, mgwr, spopt, mapclassify, numba, rasterio, rio-tiler, exactextract
