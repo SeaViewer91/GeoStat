@@ -7,6 +7,7 @@ GeoJSON 대신 Arrow IPC 스트림으로 보내 수십만 피처도 파싱 없�
 from __future__ import annotations
 
 import geopandas as gpd
+import numpy as np
 import pyarrow as pa
 import shapely
 
@@ -64,8 +65,9 @@ def to_display_crs(gdf: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
 
 
 def geometry_to_ipc(display_gdf: gpd.GeoDataFrame) -> bytes:
-    """지오메트리 열만 GeoArrow(interleaved) Arrow IPC 스트림으로 직렬화함.
+    """지오메트리와 중심점을 GeoArrow(interleaved) Arrow IPC 스트림으로 직렬화함.
 
+    열 구성: geometry(GeoArrow), cx·cy(중심점 경위도, 올가미 선택용. 빈 도형은 NaN)
     행 순서는 원본 데이터셋과 동일함. 행 번호가 곧 피처 ID이며 선택 상태 동기화에 쓰임.
     """
     family = geometry_family(display_gdf)
@@ -80,6 +82,15 @@ def geometry_to_ipc(display_gdf: gpd.GeoDataFrame) -> bytes:
     table = pa.table(
         frame.to_arrow(index=False, geometry_encoding="geoarrow", interleaved=True, include_z=False)
     )
+    # GeoDa처럼 올가미 선택은 중심점 기준으로 판정함 (표시용 WGS84 좌표에서 계산)
+    centroids = np.asarray(shapely.centroid(geom))
+    cx = np.full(len(centroids), np.nan)
+    cy = np.full(len(centroids), np.nan)
+    ok = ~shapely.is_empty(centroids)  # 빈 도형의 중심점은 좌표를 꺼낼 수 없음
+    cx[ok] = shapely.get_x(centroids[ok])
+    cy[ok] = shapely.get_y(centroids[ok])
+    table = table.append_column("cx", pa.array(cx, pa.float64()))
+    table = table.append_column("cy", pa.array(cy, pa.float64()))
     # pandas 메타데이터는 JS에서 쓰지 않으므로 제거함 (지오메트리 필드의 확장 메타데이터는 유지)
     table = table.replace_schema_metadata(None)
     return _write_stream(table)

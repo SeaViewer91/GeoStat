@@ -9,7 +9,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from geostat_engine import __version__
-from geostat_engine.api import datasets, health
+from geostat_engine.api import datasets, files, health, project
 from geostat_engine.auth import set_token
 from geostat_engine.errors import install_error_handlers
 from geostat_engine.state import AppState
@@ -46,5 +46,7 @@ def create_app(token: str, ready_line: str | None = None) -> FastAPI:
     install_error_handlers(app)
 
     app.include_router(health.router)
+    app.include_router(files.router)
     app.include_router(datasets.router)
+    app.include_router(project.router)
     return app

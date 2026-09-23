@@ -5,11 +5,12 @@
 //!
 //! 엔진 실행 파일 탐색 순서
 //!   1. 환경변수 GEOSTAT_ENGINE_URL 이 있으면 이미 떠 있는 엔진에 붙음 (디버깅용, 프로세스 안 띄움)
-//!   2. 앱 번들 리소스의 engine/geostat-engine/geostat-engine (PyInstaller onedir 빌드)
-//!   3. 디버그 빌드에서만: 저장소의 engine/ 폴더를 `uv run`으로 실행
+//!   2. 디버그 빌드: 저장소의 engine/ 폴더를 `uv run`으로 실행 (GEOSTAT_ENGINE_BUNDLED=1이면 건너뜀)
+//!   3. 앱 번들 리소스의 engine/geostat-engine/geostat-engine (PyInstaller onedir 빌드)
 
 use std::collections::VecDeque;
 use std::io::{BufRead, BufReader};
+#[cfg(debug_assertions)]
 use std::path::PathBuf;
 use std::process::{Child, Command, Stdio};
 use std::sync::{Arc, Mutex};
@@ -203,7 +204,16 @@ impl Engine {
 }
 
 fn build_command(app: &AppHandle) -> Result<Command, String> {
-    // 1. 앱 번들에 포함된 엔진
+    // 1. 개발 빌드: 저장소의 engine 프로젝트를 uv로 실행해 수정한 코드가 바로 반영되게 함.
+    //    번들 엔진을 시험하려면 GEOSTAT_ENGINE_BUNDLED=1 을 지정함
+    #[cfg(debug_assertions)]
+    if std::env::var_os("GEOSTAT_ENGINE_BUNDLED").is_none() {
+        if let Some(cmd) = dev_command()? {
+            return Ok(cmd);
+        }
+    }
+
+    // 2. 앱 번들에 포함된 엔진 (릴리스 빌드)
     if let Ok(resources) = app.path().resource_dir() {
         let exe = resources
             .join("engine")
@@ -215,28 +225,28 @@ fn build_command(app: &AppHandle) -> Result<Command, String> {
         }
     }
 
-    // 2. 개발 모드: 저장소의 engine 프로젝트를 uv로 실행
-    #[cfg(debug_assertions)]
-    {
-        let engine_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../engine");
-        if engine_dir.join("pyproject.toml").is_file() {
-            let uv = find_uv().ok_or_else(|| {
-                "개발 모드 엔진 실행에 uv가 필요함 (https://docs.astral.sh/uv/)".to_string()
-            })?;
-            log::info!(
-                "개발 엔진 사용: {} ({})",
-                engine_dir.display(),
-                uv.display()
-            );
-            let mut cmd = Command::new(uv);
-            cmd.args(["run", "--quiet", "--project"])
-                .arg(&engine_dir)
-                .arg("geostat-engine");
-            return Ok(cmd);
-        }
-    }
-
     Err("엔진 실행 파일을 찾을 수 없음".into())
+}
+
+#[cfg(debug_assertions)]
+fn dev_command() -> Result<Option<Command>, String> {
+    let engine_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../engine");
+    if !engine_dir.join("pyproject.toml").is_file() {
+        return Ok(None);
+    }
+    let uv = find_uv().ok_or_else(|| {
+        "개발 모드 엔진 실행에 uv가 필요함 (https://docs.astral.sh/uv/)".to_string()
+    })?;
+    log::info!(
+        "개발 엔진 사용: {} ({})",
+        engine_dir.display(),
+        uv.display()
+    );
+    let mut cmd = Command::new(uv);
+    cmd.args(["run", "--quiet", "--project"])
+        .arg(&engine_dir)
+        .arg("geostat-engine");
+    Ok(Some(cmd))
 }
 
 fn spawn(mut cmd: Command, token: &str) -> Result<Child, String> {

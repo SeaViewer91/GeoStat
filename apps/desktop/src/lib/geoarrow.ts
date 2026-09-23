@@ -90,26 +90,49 @@ export function featuresInBox(
 }
 
 /**
- * 선택 상태에 따른 RGBA 색상 데이터를 레코드 배치별로 만듦.
- * GeoArrow 레이어는 배치 하나당 레이어 하나로 그리므로 배치 길이에 맞춰 조각을 나눔.
+ * 피처별 채움 색(RGBA)을 계산함.
+ *
+ * - 주제도가 없으면 기본색, 선택된 피처는 강조색으로 칠함
+ * - 주제도가 있으면 계급 색을 유지하고, 선택이 있을 때 선택되지 않은 피처만 흐리게 함 (GeoDa 방식)
  */
-export function buildColorData(
-  table: arrow.Table,
+export function featureColors(
+  n: number,
   selection: Uint8Array,
+  selectedCount: number,
+  theme: { classes: Int16Array; colors: RGBA[]; missing: RGBA } | null,
   base: RGBA,
-  selected: RGBA,
-): arrow.Data<arrow.FixedSizeList<arrow.Uint8>>[] {
-  const n = table.numRows;
+  highlight: RGBA,
+): Uint8Array {
   const rgba = new Uint8Array(n * 4);
+  const dimAlpha = 55;
   for (let i = 0; i < n; i++) {
-    const c = selection[i] ? selected : base;
+    let c: RGBA;
+    let a: number;
+    if (theme) {
+      const k = theme.classes[i];
+      c = k >= 0 ? theme.colors[k] : theme.missing;
+      a = selectedCount > 0 && !selection[i] ? dimAlpha : c[3];
+    } else {
+      c = selection[i] ? highlight : base;
+      a = c[3];
+    }
     const o = i * 4;
     rgba[o] = c[0];
     rgba[o + 1] = c[1];
     rgba[o + 2] = c[2];
-    rgba[o + 3] = c[3];
+    rgba[o + 3] = a;
   }
+  return rgba;
+}
 
+/**
+ * RGBA 버퍼를 레코드 배치별 GeoArrow 색상 데이터로 나눔.
+ * GeoArrow 레이어는 배치 하나당 레이어 하나로 그리므로 배치 길이에 맞춰 조각을 나눔.
+ */
+export function splitColorData(
+  table: arrow.Table,
+  rgba: Uint8Array,
+): arrow.Data<arrow.FixedSizeList<arrow.Uint8>>[] {
   const type = new arrow.FixedSizeList(4, new arrow.Field("rgba", new arrow.Uint8(), false));
   const chunks: arrow.Data<arrow.FixedSizeList<arrow.Uint8>>[] = [];
   let offset = 0;
@@ -123,6 +146,53 @@ export function buildColorData(
     offset += len;
   }
   return chunks;
+}
+
+/** 중심점(cx, cy) 열을 [x0, y0, x1, y1, …] 배열로 읽음 */
+export function readCentroids(table: arrow.Table): Float64Array {
+  const cx = table.getChild("cx");
+  const cy = table.getChild("cy");
+  const out = new Float64Array(table.numRows * 2).fill(NaN);
+  if (!cx || !cy) return out;
+  // toArray()는 청크를 이어 붙인 Float64Array를 돌려줌 (값 없음은 엔진이 NaN으로 보냄)
+  const xs = cx.toArray() as Float64Array;
+  const ys = cy.toArray() as Float64Array;
+  for (let i = 0; i < table.numRows; i++) {
+    out[i * 2] = xs[i];
+    out[i * 2 + 1] = ys[i];
+  }
+  return out;
+}
+
+/**
+ * 중심점이 다각형(경위도 꼭짓점 목록) 안에 있는 피처 번호를 반환함 (올가미 선택).
+ * 짝홀 규칙(ray casting)으로 판정하며, 다각형 범위로 먼저 걸러 속도를 높임.
+ */
+export function featuresInPolygon(centroids: Float64Array, polygon: [number, number][]): Uint32Array {
+  const n = centroids.length / 2;
+  if (polygon.length < 3) return new Uint32Array(0);
+  let minx = Infinity, miny = Infinity, maxx = -Infinity, maxy = -Infinity;
+  for (const [x, y] of polygon) {
+    if (x < minx) minx = x;
+    if (x > maxx) maxx = x;
+    if (y < miny) miny = y;
+    if (y > maxy) maxy = y;
+  }
+  const hits = new Uint32Array(n);
+  let count = 0;
+  for (let i = 0; i < n; i++) {
+    const x = centroids[i * 2];
+    const y = centroids[i * 2 + 1];
+    if (!(x >= minx && x <= maxx && y >= miny && y <= maxy)) continue; // NaN도 여기서 빠짐
+    let inside = false;
+    for (let a = 0, b = polygon.length - 1; a < polygon.length; b = a++) {
+      const [xa, ya] = polygon[a];
+      const [xb, yb] = polygon[b];
+      if (ya > y !== yb > y && x < ((xb - xa) * (y - ya)) / (yb - ya) + xa) inside = !inside;
+    }
+    if (inside) hits[count++] = i;
+  }
+  return hits.slice(0, count);
 }
 
 /** 레코드 배치별 시작 행 번호. 레이어별 picking index를 전체 행 번호로 바꿀 때 씀 */

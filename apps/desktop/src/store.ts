@@ -1,90 +1,404 @@
 // 앱 전역 상태
 //
-// 선택(selection)은 프론트엔드가 소유함. 지도·차트·테이블이 같은 Uint8Array 비트마스크를 구독하므로
+// 선택(selection)은 프론트엔드가 소유함. 지도·테이블·범례가 같은 Uint8Array 비트마스크를 구독하므로
 // 브러싱할 때 엔진과 통신하지 않음. 마스크를 바꿀 때마다 새 배열을 만들어 참조 비교로 갱신을 감지함.
 
 import type { Table } from "apache-arrow";
 import { create } from "zustand";
 
-import { computeFeatureBounds } from "./lib/geoarrow";
-import { EngineError, engine, type DatasetInfo } from "./lib/engine";
+import { computeFeatureBounds, readCentroids } from "./lib/geoarrow";
+import {
+  EngineError,
+  engine,
+  type Classification,
+  type ClassifyMethod,
+  type DatasetInfo,
+  type FileInspection,
+  type TableOptions,
+} from "./lib/engine";
 
 export type SelectMode = "replace" | "add" | "toggle";
+export type Tool = "pan" | "box" | "lasso";
+export type Basemap = "none" | "positron" | "liberty";
+
+export interface ViewState {
+  longitude: number;
+  latitude: number;
+  zoom: number;
+}
+
+export interface StyleSpec {
+  column: string;
+  method: ClassifyMethod;
+  k: number;
+}
 
 export interface LoadedDataset {
   info: DatasetInfo;
-  table: Table;
+  /** 지도 표시용 지오메트리. 좌표계가 없어 표시할 수 없으면 null */
+  table: Table | null;
   /** 피처별 경위도 범위 (행 수 × 4) */
-  bounds: Float64Array;
+  bounds: Float64Array | null;
+  /** 피처별 중심점 경위도 (행 수 × 2) */
+  centroids: Float64Array | null;
   /** 1 = 선택됨 */
   selection: Uint8Array;
   selectedCount: number;
+  visible: boolean;
+  style: StyleSpec | null;
+  theme: Classification | null;
+  /** 속성 열이 바뀔 때마다 증가함 (테이블 캐시 무효화용) */
+  revision: number;
+}
+
+export type Dialog =
+  | { kind: "layers"; path: string; layers: string[] }
+  | { kind: "table"; path: string; inspection: FileInspection }
+  | { kind: "crs"; datasetId: string; reason: "missing" | "manual" }
+  | { kind: "field"; datasetId: string }
+  | { kind: "export"; datasetId: string };
+
+/** 프로젝트 파일에 저장하는 화면 설정 */
+interface ProjectUi {
+  basemap: Basemap;
+  view: ViewState;
+  activeIndex: number;
+}
+interface DatasetUi {
+  visible: boolean;
+  style: StyleSpec | null;
 }
 
 interface AppState {
   datasets: Record<string, LoadedDataset>;
+  /** 레이어 목록 순서 (앞쪽이 위에 그려짐) */
+  order: string[];
   activeId: string | null;
+  tool: Tool;
+  basemap: Basemap;
+  view: ViewState;
+  /** 지도가 이 범위로 이동해야 함 (값이 바뀔 때만 반응) */
+  fitRequest: { bounds: [number, number, number, number]; nonce: number } | null;
+  projectPath: string | null;
+  dialog: Dialog | null;
   busy: string | null;
   error: EngineError | null;
+  notices: { id: number; text: string }[];
 
-  openPath: (path: string) => Promise<void>;
+  // 파일·데이터셋
+  openFile: (path: string) => Promise<void>;
+  openDataset: (
+    path: string,
+    opts?: { layer?: string | null; table?: TableOptions | null },
+  ) => Promise<void>;
+  closeDataset: (id: string) => Promise<void>;
+  setActive: (id: string) => void;
+  toggleVisible: (id: string) => void;
+  moveLayer: (id: string, delta: -1 | 1) => void;
+  zoomTo: (id: string) => void;
+  assignCrs: (id: string, epsg: number) => Promise<void>;
+  updateInfo: (info: DatasetInfo) => Promise<void>;
+
+  // 주제도
+  applyStyle: (id: string, style: StyleSpec | null) => Promise<void>;
+
+  // 선택
   select: (id: string, indices: ArrayLike<number>, mode: SelectMode) => void;
+  selectClass: (id: string, klass: number, mode: SelectMode) => void;
   clearSelection: (id: string) => void;
+  invertSelection: (id: string) => void;
+
+  // 프로젝트
+  saveProject: (path: string) => Promise<void>;
+  openProject: (path: string) => Promise<void>;
+
+  // 화면
+  setTool: (tool: Tool) => void;
+  setBasemap: (basemap: Basemap) => void;
+  setView: (view: ViewState) => void;
+  showDialog: (dialog: Dialog | null) => void;
+  notify: (text: string) => void;
+  dismissNotice: (id: number) => void;
+  fail: (err: unknown) => void;
   dismissError: () => void;
 }
+
+let noticeSeq = 0;
 
 function toEngineError(err: unknown): EngineError {
   return err instanceof EngineError ? err : new EngineError("unknown", String(err));
 }
 
-export const useApp = create<AppState>((set, get) => ({
-  datasets: {},
-  activeId: null,
-  busy: null,
-  error: null,
+function countOnes(mask: Uint8Array): number {
+  let n = 0;
+  for (let i = 0; i < mask.length; i++) n += mask[i];
+  return n;
+}
 
-  openPath: async (path) => {
-    set({ busy: "파일을 여는 중…", error: null });
+/** 지오메트리를 받아 지도 표시 준비를 함. 좌표계가 없으면 table=null로 둠 */
+async function loadGeometry(
+  info: DatasetInfo,
+): Promise<Pick<LoadedDataset, "table" | "bounds" | "centroids">> {
+  try {
+    const t0 = performance.now();
+    const table = await engine.geometry(info.id);
+    const bounds = computeFeatureBounds(table);
+    const centroids = readCentroids(table);
+    console.info(
+      `[geostat] ${info.name}: ${info.n_rows}개 피처 로드 ${Math.round(performance.now() - t0)}ms`,
+    );
+    return { table, bounds, centroids };
+  } catch (err) {
+    if (err instanceof EngineError && err.code === "crs_missing") {
+      return { table: null, bounds: null, centroids: null };
+    }
+    throw err;
+  }
+}
+
+function newDataset(info: DatasetInfo, geo: Awaited<ReturnType<typeof loadGeometry>>): LoadedDataset {
+  return {
+    info,
+    ...geo,
+    selection: new Uint8Array(info.n_rows),
+    selectedCount: 0,
+    visible: true,
+    style: null,
+    theme: null,
+    revision: 0,
+  };
+}
+
+export const useApp = create<AppState>((set, get) => {
+  /** 데이터셋 하나를 부분 갱신함 */
+  const patch = (id: string, change: Partial<LoadedDataset>) =>
+    set((s) => {
+      const ds = s.datasets[id];
+      return ds ? { datasets: { ...s.datasets, [id]: { ...ds, ...change } } } : {};
+    });
+
+  const requestFit = (bounds: [number, number, number, number] | null) => {
+    if (bounds) set({ fitRequest: { bounds, nonce: Date.now() } });
+  };
+
+  /** 엔진 호출을 busy 표시·오류 처리로 감쌈 */
+  async function run<T>(label: string, fn: () => Promise<T>): Promise<T | undefined> {
+    set({ busy: label, error: null });
     try {
-      const info = await engine.openDataset(path);
-      set({ busy: `지오메트리 불러오는 중… (${info.n_rows.toLocaleString()}개)` });
-      const t0 = performance.now();
-      const table = await engine.geometry(info.id);
-      const bounds = computeFeatureBounds(table);
-      console.info(
-        `[geostat] ${info.name}: ${info.n_rows}개 피처 로드 ${Math.round(performance.now() - t0)}ms`,
-      );
-      const loaded: LoadedDataset = {
-        info,
-        table,
-        bounds,
-        selection: new Uint8Array(info.n_rows),
-        selectedCount: 0,
-      };
-      set((s) => ({ datasets: { ...s.datasets, [info.id]: loaded }, activeId: info.id }));
+      return await fn();
     } catch (err) {
       set({ error: toEngineError(err) });
+      return undefined;
     } finally {
       set({ busy: null });
     }
-  },
+  }
 
-  select: (id, indices, mode) => {
-    const ds = get().datasets[id];
-    if (!ds) return;
-    const next = mode === "replace" ? new Uint8Array(ds.selection.length) : ds.selection.slice();
-    for (let k = 0; k < indices.length; k++) {
-      const i = indices[k];
-      next[i] = mode === "toggle" ? (next[i] ^ 1) : 1;
-    }
-    let count = 0;
-    for (let i = 0; i < next.length; i++) count += next[i];
+  async function addLoaded(info: DatasetInfo, extra: Partial<LoadedDataset> = {}) {
+    const geo = await loadGeometry(info);
+    const loaded = { ...newDataset(info, geo), ...extra };
     set((s) => ({
-      datasets: { ...s.datasets, [id]: { ...ds, selection: next, selectedCount: count } },
+      datasets: { ...s.datasets, [info.id]: loaded },
+      order: [info.id, ...s.order.filter((x) => x !== info.id)],
+      activeId: info.id,
     }));
-  },
+    if (!geo.table) {
+      set({ dialog: { kind: "crs", datasetId: info.id, reason: "missing" } });
+    }
+    return loaded;
+  }
 
-  clearSelection: (id) => get().select(id, [], "replace"),
+  return {
+    datasets: {},
+    order: [],
+    activeId: null,
+    tool: "pan",
+    basemap: "none",
+    view: { longitude: 127.8, latitude: 36.3, zoom: 6 },
+    fitRequest: null,
+    projectPath: null,
+    dialog: null,
+    busy: null,
+    error: null,
+    notices: [],
 
-  dismissError: () => set({ error: null }),
-}));
+    // ---- 파일·데이터셋 -------------------------------------------------------
+
+    openFile: async (path) => {
+      const inspection = await run("파일 확인 중…", () => engine.inspect(path));
+      if (!inspection) return;
+      if (inspection.kind === "table") {
+        set({ dialog: { kind: "table", path, inspection } });
+      } else if (inspection.layers.length > 1) {
+        set({ dialog: { kind: "layers", path, layers: inspection.layers } });
+      } else {
+        await get().openDataset(path);
+      }
+    },
+
+    openDataset: async (path, opts = {}) => {
+      await run("파일을 여는 중…", async () => {
+        const info = await engine.openDataset(path, opts);
+        set({ busy: `지오메트리 불러오는 중… (${info.n_rows.toLocaleString()}개)` });
+        const loaded = await addLoaded(info);
+        if (loaded.table) requestFit(info.bounds_wgs84);
+      });
+    },
+
+    closeDataset: async (id) => {
+      await engine.closeDataset(id).catch(() => undefined); // 엔진에 없어도 화면에서는 닫음
+      set((s) => {
+        const { [id]: _removed, ...rest } = s.datasets;
+        const order = s.order.filter((x) => x !== id);
+        return { datasets: rest, order, activeId: s.activeId === id ? (order[0] ?? null) : s.activeId };
+      });
+    },
+
+    setActive: (id) => set({ activeId: id }),
+
+    toggleVisible: (id) => {
+      const ds = get().datasets[id];
+      if (ds) patch(id, { visible: !ds.visible });
+    },
+
+    moveLayer: (id, delta) =>
+      set((s) => {
+        const order = [...s.order];
+        const i = order.indexOf(id);
+        const j = i + delta;
+        if (i < 0 || j < 0 || j >= order.length) return {};
+        [order[i], order[j]] = [order[j], order[i]];
+        return { order };
+      }),
+
+    zoomTo: (id) => requestFit(get().datasets[id]?.info.bounds_wgs84 ?? null),
+
+    assignCrs: async (id, epsg) => {
+      await run("좌표계 지정 중…", async () => {
+        const info = await engine.assignCrs(id, epsg);
+        const geo = await loadGeometry(info);
+        patch(id, { info, ...geo });
+        set({ dialog: null });
+        if (geo.table) requestFit(info.bounds_wgs84);
+      });
+    },
+
+    updateInfo: async (info) => {
+      const ds = get().datasets[info.id];
+      if (!ds) return;
+      patch(info.id, { info, revision: ds.revision + 1 });
+      // 주제도에 쓰던 계산 필드가 바뀌었으면 다시 분류함
+      if (ds.style && info.columns.some((c) => c.name === ds.style!.column)) {
+        await get().applyStyle(info.id, ds.style);
+      } else if (ds.style) {
+        patch(info.id, { style: null, theme: null });
+      }
+    },
+
+    // ---- 주제도 --------------------------------------------------------------
+
+    applyStyle: async (id, style) => {
+      if (!style) {
+        patch(id, { style: null, theme: null });
+        return;
+      }
+      await run("단계 구분 중…", async () => {
+        const theme = await engine.classify(id, style.column, style.method, style.k);
+        patch(id, { style, theme });
+      });
+    },
+
+    // ---- 선택 ----------------------------------------------------------------
+
+    select: (id, indices, mode) => {
+      const ds = get().datasets[id];
+      if (!ds) return;
+      const next = mode === "replace" ? new Uint8Array(ds.selection.length) : ds.selection.slice();
+      for (let k = 0; k < indices.length; k++) {
+        const i = indices[k];
+        next[i] = mode === "toggle" ? next[i] ^ 1 : 1;
+      }
+      patch(id, { selection: next, selectedCount: countOnes(next) });
+    },
+
+    selectClass: (id, klass, mode) => {
+      const theme = get().datasets[id]?.theme;
+      if (!theme) return;
+      const hits: number[] = [];
+      for (let i = 0; i < theme.classes.length; i++) if (theme.classes[i] === klass) hits.push(i);
+      get().select(id, hits, mode === "toggle" ? "add" : mode);
+    },
+
+    clearSelection: (id) => get().select(id, [], "replace"),
+
+    invertSelection: (id) => {
+      const ds = get().datasets[id];
+      if (!ds) return;
+      const next = ds.selection.map((v) => v ^ 1);
+      patch(id, { selection: next, selectedCount: countOnes(next) });
+    },
+
+    // ---- 프로젝트 -----------------------------------------------------------
+
+    saveProject: async (path) => {
+      const s = get();
+      const ui: ProjectUi = {
+        basemap: s.basemap,
+        view: s.view,
+        activeIndex: Math.max(0, s.order.indexOf(s.activeId ?? "")),
+      };
+      const datasets = s.order.map((id) => {
+        const ds = s.datasets[id];
+        const dsUi: DatasetUi = { visible: ds.visible, style: ds.style };
+        return { id, ui: dsUi };
+      });
+      const result = await run("프로젝트 저장 중…", () => engine.saveProject(path, datasets, ui));
+      if (result) {
+        set({ projectPath: result.path });
+        get().notify(`프로젝트를 저장함: ${result.path}`);
+      }
+    },
+
+    openProject: async (path) => {
+      await run("프로젝트 여는 중…", async () => {
+        const project = await engine.openProject<ProjectUi | null, DatasetUi | null>(path);
+        set({ datasets: {}, order: [], activeId: null, projectPath: project.path });
+        // 목록 앞쪽이 위에 그려지므로 뒤에서부터 추가함
+        const opened: string[] = [];
+        for (const item of [...project.datasets].reverse()) {
+          if (!item.info) {
+            get().notify(`열지 못한 데이터: ${item.error}`);
+            continue;
+          }
+          const dsUi = item.ui ?? { visible: true, style: null };
+          await addLoaded(item.info, { visible: dsUi.visible });
+          if (dsUi.style) await get().applyStyle(item.info.id, dsUi.style);
+          item.warnings.forEach((w) => get().notify(`${item.info!.name}: ${w}`));
+          opened.unshift(item.info.id);
+        }
+        const ui = project.ui;
+        if (ui) {
+          set({ basemap: ui.basemap ?? "none", view: ui.view, activeId: opened[ui.activeIndex] ?? opened[0] ?? null });
+        }
+      });
+    },
+
+    // ---- 화면 ----------------------------------------------------------------
+
+    setTool: (tool) => set({ tool }),
+    setBasemap: (basemap) => set({ basemap }),
+    setView: (view) => set({ view }),
+    showDialog: (dialog) => set({ dialog }),
+    notify: (text) => {
+      const id = ++noticeSeq;
+      set((s) => ({ notices: [...s.notices, { id, text }] }));
+      setTimeout(() => get().dismissNotice(id), 6000);
+    },
+    dismissNotice: (id) => set((s) => ({ notices: s.notices.filter((n) => n.id !== id) })),
+    fail: (err) => set({ error: toEngineError(err) }),
+    dismissError: () => set({ error: null }),
+  };
+});
+
+/** 현재 활성 데이터셋 */
+export const useActive = () => useApp((s) => (s.activeId ? s.datasets[s.activeId] : undefined));

@@ -1,13 +1,14 @@
-// 하단 상태 표시줄: 피처 수, 선택 수, 좌표계, 인코딩, 엔진 버전
+// 하단 상태 표시줄: 작업 상태, 활성 레이어 요약, 엔진 버전
 
 import { useEffect, useState } from "react";
 
 import { engine, type HealthInfo } from "../lib/engine";
-import { useApp } from "../store";
+import { useActive, useApp } from "../store";
 
 export function StatusBar() {
-  const ds = useApp((s) => (s.activeId ? s.datasets[s.activeId] : undefined));
+  const ds = useActive();
   const busy = useApp((s) => s.busy);
+  const projectPath = useApp((s) => s.projectPath);
   const [health, setHealth] = useState<HealthInfo | null>(null);
   const [engineError, setEngineError] = useState<string | null>(null);
 
@@ -18,7 +19,6 @@ export function StatusBar() {
       .catch((err) => setEngineError(String(err?.message ?? err)));
   }, []);
 
-  const crs = ds?.info.crs;
   return (
     <footer className="statusbar">
       {busy ? (
@@ -28,13 +28,12 @@ export function StatusBar() {
           <span>{ds.info.name}</span>
           <span data-testid="feature-count">피처 {ds.info.n_rows.toLocaleString()}개</span>
           <span data-testid="selected-count">선택 {ds.selectedCount.toLocaleString()}개</span>
-          <span>{crs ? `EPSG:${crs.epsg ?? "?"} ${crs.name}` : "좌표계 없음"}</span>
-          {ds.info.encoding && <span>인코딩 {ds.info.encoding}</span>}
         </>
       ) : (
-        <span>파일을 열어 시작함</span>
+        <span>데이터를 열어 시작함 (⌘O)</span>
       )}
       <div className="spacer" />
+      {projectPath && <span className="muted" title={projectPath}>{projectPath.split(/[\\/]/).pop()}</span>}
       {health ? (
         <span className="engine ok" data-testid="engine-status">
           엔진 {health.version} · GDAL {health.gdal}

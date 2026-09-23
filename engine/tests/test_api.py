@@ -41,6 +41,7 @@ def test_geometry_is_geoarrow_stream(client: TestClient, auth: dict, grid_gpkg: 
     assert r.headers["content-type"] == "application/vnd.apache.arrow.stream"
     table = pa.ipc.open_stream(r.content).read_all()
     assert table.num_rows == 20
+    assert table.column_names == ["geometry", "cx", "cy"]
     field = table.schema.field("geometry")
     # 단일 Polygon만 있으면 polygon, MultiPolygon이 섞이면 multipolygon으로 승격됨
     assert field.metadata[b"ARROW:extension:name"] == b"geoarrow.polygon"
@@ -51,11 +52,12 @@ def test_geometry_is_geoarrow_stream(client: TestClient, auth: dict, grid_gpkg: 
 
 def test_rows_paging(client: TestClient, auth: dict, grid_gpkg: Path) -> None:
     ds = client.post("/datasets/open", json={"path": str(grid_gpkg)}, headers=auth).json()
-    r = client.get(f"/datasets/{ds['id']}/rows", params={"offset": 5, "limit": 3}, headers=auth)
+    r = client.post(f"/datasets/{ds['id']}/rows", json={"offset": 5, "limit": 3}, headers=auth)
     body = r.json()
     assert body["total"] == 20
     assert body["columns"] == ["이름", "값", "정수"]
     assert body["rows"][0] == ["격자_0100", 1.0, 5]
+    assert body["row_ids"] == [5, 6, 7]
 
 
 def test_missing_crs_then_assign(client: TestClient, auth: dict, tmp_path: Path) -> None:

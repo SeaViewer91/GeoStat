@@ -5,15 +5,44 @@ GWR/MGWR, 한국 좌표계·한글 UI, 래스터·대용량 데이터 지원을 
 
 > 🚧 개발 초기 단계임. 아직 설치 가능한 빌드는 없음.
 
-## 주요 기능 (계획)
+## 설치 (릴리스 이후)
 
-- **데이터 입력**: Shapefile, GeoPackage, GeoJSON, FlatGeobuf, CSV(좌표) 지원. cp949 DBF 자동 처리, 한국 좌표계 프리셋 제공
-- **공간가중치**: Queen/Rook, 거리, KNN, 커널 지원. GeoDa `.gal`/`.gwt`와 호환됨
-- **ESDA**: Global/Local Moran's I, Getis-Ord Gi*, Local Geary, Join Count 제공
-- **연동 시각화**: 지도·히스토그램·산점도·박스플롯·Moran 산점도 간 선택이 연동됨
-- **공간회귀**: OLS 공간진단, Spatial Lag/Error, **GWR/MGWR** 제공
-- **공간군집화**: SKATER, Max-p, AZP, Region K-Means, Ward 제공
-- **래스터**: GeoTIFF/COG 표시, 존 통계 산출
+[Releases](https://github.com/SeaViewer91/GeoStat/releases)에서 `.dmg`를 받아 `GeoStat.app`을 응용 프로그램 폴더로 옮김.
+
+Apple 공증을 받지 않은 앱이라 첫 실행 때 "확인되지 않은 개발자" 경고가 뜸. 아래 중 하나로 한 번만 허용하면 됨.
+
+- **시스템 설정 → 개인정보 보호 및 보안** 맨 아래의 **"그래도 열기"** 클릭
+- 또는 터미널에서 `xattr -dr com.apple.quarantine /Applications/GeoStat.app` 실행
+
+## 주요 기능
+
+✅ 구현됨 · 🚧 개발 예정
+
+- ✅ **데이터 입력**: Shapefile, GeoPackage, GeoJSON, FlatGeobuf, CSV·엑셀(X·Y 좌표) 지원. cp949 DBF·CSV 자동 처리, 한국 좌표계 프리셋 제공
+- ✅ **주제도**: 분위수·등간격·자연 분류·표준편차·백분위·박스·고유값 지도, 범례 클릭 선택, 배경지도(OpenFreeMap)
+- ✅ **속성 테이블**: 정렬, 선택 연동, 계산 필드(식), 내보내기(GeoPackage·Shapefile·GeoJSON·CSV, 좌표계 변환)
+- ✅ **선택**: 클릭·사각형·올가미, 지도·테이블·범례 간 연동
+- ✅ **프로젝트**: `.gstproj`로 저장·열기 (원본 경로와 작업 과정을 기록해 재현함)
+- 🚧 **공간가중치**: Queen/Rook, 거리, KNN, 커널 지원. GeoDa `.gal`/`.gwt`와 호환됨
+- 🚧 **ESDA**: Global/Local Moran's I, Getis-Ord Gi*, Local Geary, Join Count 제공
+- 🚧 **연동 차트**: 히스토그램·산점도·박스플롯·Moran 산점도와 지도 간 선택 연동
+- 🚧 **공간회귀**: OLS 공간진단, Spatial Lag/Error, **GWR/MGWR** 제공
+- 🚧 **공간군집화**: SKATER, Max-p, AZP, Region K-Means, Ward 제공
+- 🚧 **래스터**: GeoTIFF/COG 표시, 존 통계 산출
+
+## 사용법
+
+| 동작 | 방법 |
+|---|---|
+| 데이터 열기 / 프로젝트 열기 | ⌘O / ⇧⌘O |
+| 프로젝트 저장 / 다른 이름으로 | ⌘S / ⇧⌘S |
+| 사각형 선택 | B, 또는 Shift를 누른 채 끌기 |
+| 올가미 선택 | L (피처 중심점 기준) |
+| 선택 도구 해제 | Esc |
+| 기존 선택에 추가 | ⌘를 누른 채 클릭·끌기 |
+| 속성 테이블 열기·닫기 | ⌘T |
+
+계산 필드 식은 pandas 문법을 씀. 한글·공백이 있는 열 이름은 백틱으로 감쌈 (예: `` `인구` / `면적` * 1000 ``, `` log(`소득`) ``, `` (`인구` > 5000) * 1 ``).
 
 ## 구조
 
@@ -74,9 +103,8 @@ cd apps/desktop && npm run typecheck
 ### 앱 번들 빌드
 
 ```bash
-packaging/build-engine.sh             # 엔진만 PyInstaller로 빌드하고 스모크 테스트함
-packaging/macos/release.sh --unsigned # 서명 없는 .app/.dmg (로컬 확인용)
-packaging/macos/release.sh            # 서명·공증 포함. 필요한 환경변수는 스크립트 주석 참고
+packaging/build-engine.sh    # 엔진만 PyInstaller로 빌드하고 스모크 테스트함
+packaging/macos/release.sh   # 엔진 빌드 → ad-hoc 서명 → .app/.dmg 생성
 ```
 
 ### 샘플 데이터 생성

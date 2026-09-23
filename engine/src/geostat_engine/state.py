@@ -6,10 +6,19 @@ import threading
 import uuid
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
 import geopandas as gpd
 
 from geostat_engine.errors import NotFound
+
+
+@dataclass
+class DerivedField:
+    """계산 필드. 프로젝트를 다시 열 때 같은 식으로 재계산해 재현성을 확보함."""
+
+    name: str
+    expression: str
 
 
 @dataclass
@@ -21,11 +30,25 @@ class Dataset:
     encoding: str | None
     gdf: gpd.GeoDataFrame
     layers: list[str] = field(default_factory=list)
-    # 표시용 WGS84 사본. 첫 요청 때 만들고 CRS가 바뀌면 비움
+    # CSV·엑셀처럼 좌표 열로 점을 만든 경우의 옵션 (x, y, crs, sheet)
+    table: dict[str, Any] | None = None
+    # 사용자가 직접 지정한 EPSG (원본 .prj를 덮어씀)
+    crs_override: int | None = None
+    fields: list[DerivedField] = field(default_factory=list)
+    # 표시용 WGS84 사본과 대표점. 첫 요청 때 만들고 CRS가 바뀌면 비움
     _display: gpd.GeoDataFrame | None = field(default=None, repr=False)
 
     def invalidate_display(self) -> None:
         self._display = None
+
+    def source_spec(self) -> dict[str, Any]:
+        """원본을 다시 여는 데 필요한 정보 (프로젝트 저장용)."""
+        return {
+            "path": str(self.path),
+            "layer": self.layer,
+            "encoding": self.encoding,
+            "table": self.table,
+        }
 
 
 class AppState:
@@ -51,3 +74,7 @@ class AppState:
 
     def list(self) -> list[Dataset]:
         return list(self._datasets.values())
+
+    def clear(self) -> None:
+        with self._lock:
+            self._datasets.clear()

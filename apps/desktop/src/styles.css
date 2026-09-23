@@ -1,6 +1,7 @@
 :root {
   --bg: #f4f5f7;
   --panel: #ffffff;
+  --panel-2: #f8f9fa;
   --border: #d9dce1;
   --text: #1f2328;
   --muted: #656d76;
@@ -8,6 +9,7 @@
   --accent-soft: #dbe8f6;
   --map-bg: #e9ecef;
   --danger: #b42318;
+  --select: #fff1c2;
   color-scheme: light dark;
   font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", system-ui,
     sans-serif;
@@ -20,6 +22,7 @@
   :root {
     --bg: #1b1d21;
     --panel: #24272c;
+    --panel-2: #1f2226;
     --border: #3a3f46;
     --text: #e6e8eb;
     --muted: #9aa3ad;
@@ -27,6 +30,7 @@
     --accent-soft: #23374d;
     --map-bg: #15171a;
     --danger: #f97066;
+    --select: #4a3f16;
   }
 }
 
@@ -48,6 +52,21 @@ body,
   height: 100%;
 }
 
+.main {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: 0;
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* ---- 도구 모음·상태 표시줄 ---- */
+
 .toolbar,
 .statusbar {
   display: flex;
@@ -56,6 +75,11 @@ body,
   padding: 6px 10px;
   background: var(--panel);
   border-bottom: 1px solid var(--border);
+}
+
+.toolbar .group {
+  display: flex;
+  gap: 4px;
 }
 
 .statusbar {
@@ -75,14 +99,21 @@ body,
   margin-right: 8px;
 }
 
-button {
+button,
+select,
+input,
+textarea {
   font: inherit;
+  color: var(--text);
+}
+
+button {
   padding: 4px 10px;
   border: 1px solid var(--border);
   border-radius: 6px;
   background: var(--panel);
-  color: var(--text);
   cursor: pointer;
+  white-space: nowrap;
 }
 
 button:disabled {
@@ -90,29 +121,265 @@ button:disabled {
   cursor: default;
 }
 
-button.toggle.on {
-  background: var(--accent-soft);
+button.primary {
+  background: var(--accent);
   border-color: var(--accent);
+  color: #fff;
+}
+
+button.link {
+  border: none;
+  background: none;
+  padding: 0 2px;
   color: var(--accent);
 }
 
-.path-form {
+button.warn {
+  border-color: var(--danger);
+  color: var(--danger);
+  padding: 1px 6px;
+  font-size: 11px;
+}
+
+select,
+input,
+textarea {
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+}
+
+.segmented {
+  display: flex;
+}
+
+.segmented button {
+  border-radius: 0;
+  margin-left: -1px;
+}
+
+.segmented button:first-child {
+  border-radius: 6px 0 0 6px;
+}
+
+.segmented button:last-child {
+  border-radius: 0 6px 6px 0;
+}
+
+.segmented button.on {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+  position: relative;
+}
+
+/* ---- 왼쪽 패널 ---- */
+
+.sidebar {
+  background: var(--panel);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+}
+
+.panel {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.panel h2 {
+  margin: 4px 0 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.panel h2:not(:first-child) {
+  margin-top: 16px;
+}
+
+.layer-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.layer-list li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.layer-list li.active {
+  background: var(--accent-soft);
+}
+
+.layer-list .geom {
+  width: 14px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.layer-list .name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.layer-list .actions {
+  display: none;
+  gap: 2px;
+}
+
+.layer-list li:hover .actions,
+.layer-list li.active .actions {
+  display: flex;
+}
+
+.layer-list .actions button {
+  padding: 0 4px;
+  border: none;
+  background: none;
+  color: var(--muted);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form label {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.form label > select,
+.form label > input,
+.form label > textarea {
+  color: var(--text);
+}
+
+.form label.check,
+label.check {
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  color: var(--text);
+}
+
+.form .row {
   display: flex;
   gap: 6px;
 }
 
-.path-form input {
-  font: inherit;
-  width: 420px;
-  padding: 4px 8px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: var(--bg);
-  color: var(--text);
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
 }
+
+.grid2 .span2 {
+  grid-column: span 2;
+}
+
+.legend {
+  margin-top: 12px;
+}
+
+.legend-title {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.legend ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.legend li:hover {
+  background: var(--panel-2);
+}
+
+.legend .swatch {
+  width: 16px;
+  height: 12px;
+  border-radius: 2px;
+  border: 1px solid rgb(0 0 0 / 0.15);
+  flex: none;
+}
+
+.legend .label {
+  flex: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.legend .count {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.info {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 10px;
+  margin: 0;
+  font-size: 12px;
+}
+
+.info dt {
+  color: var(--muted);
+}
+
+.info dd {
+  margin: 0;
+  min-width: 0;
+}
+
+.info .path {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  direction: rtl;
+  text-align: left;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.small {
+  font-size: 11px;
+}
+
+.pad {
+  padding: 12px;
+}
+
+/* ---- 지도 ---- */
 
 .workspace {
   position: relative;
+  flex: 1;
   min-height: 0;
 }
 
@@ -125,6 +392,7 @@ button.toggle.on {
 .map-overlay {
   position: absolute;
   inset: 0;
+  cursor: crosshair;
 }
 
 .drag-box {
@@ -132,6 +400,29 @@ button.toggle.on {
   border: 1px solid var(--accent);
   background: color-mix(in srgb, var(--accent) 15%, transparent);
   pointer-events: none;
+}
+
+.lasso {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.lasso polygon {
+  fill: color-mix(in srgb, var(--accent) 15%, transparent);
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+}
+
+.table-toggle {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  font-size: 12px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.12);
 }
 
 .error-banner {
@@ -149,11 +440,250 @@ button.toggle.on {
   border-radius: 8px;
   color: var(--danger);
   box-shadow: 0 4px 16px rgb(0 0 0 / 0.15);
+  z-index: 5;
 }
 
 .error-banner code {
   font-size: 11px;
   color: var(--muted);
+}
+
+.notices {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 60%;
+  z-index: 4;
+}
+
+.notice {
+  padding: 8px 12px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.12);
+  cursor: pointer;
+  word-break: break-all;
+}
+
+/* ---- 속성 테이블 ---- */
+
+.divider {
+  height: 5px;
+  background: var(--border);
+  cursor: row-resize;
+  flex: none;
+}
+
+.table-panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  flex: none;
+  min-height: 0;
+}
+
+.table-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.table-scroll {
+  flex: 1;
+  overflow: auto;
+  position: relative;
+  font-size: 12px;
+}
+
+.thead {
+  position: sticky;
+  top: 0;
+  display: flex;
+  background: var(--panel-2);
+  border-bottom: 1px solid var(--border);
+  z-index: 1;
+  width: max-content;
+  min-width: 100%;
+}
+
+.tbody {
+  position: relative;
+  width: max-content;
+  min-width: 100%;
+}
+
+.tr {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  height: 24px;
+  cursor: pointer;
+}
+
+.tr:hover {
+  background: var(--panel-2);
+}
+
+.tr.selected {
+  background: var(--select);
+}
+
+.th,
+.td {
+  width: 130px;
+  flex: none;
+  padding: 4px 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-right: 1px solid var(--border);
+}
+
+.th {
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+}
+
+.th.derived {
+  color: var(--accent);
+}
+
+.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.rownum {
+  width: 64px;
+  color: var(--muted);
+  text-align: right;
+}
+
+/* ---- 대화상자 ---- */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgb(0 0 0 / 0.3);
+  display: grid;
+  place-items: center;
+  z-index: 10;
+}
+
+.modal {
+  width: min(560px, 92vw);
+  max-height: 86vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border-radius: 10px;
+  box-shadow: 0 16px 48px rgb(0 0 0 / 0.3);
+}
+
+.modal h3 {
+  margin: 0;
+  padding: 14px 16px 6px;
+  font-size: 15px;
+}
+
+.modal h4 {
+  margin: 14px 0 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.modal-body {
+  padding: 6px 16px 12px;
+  overflow: auto;
+}
+
+.modal-body > select[size] {
+  width: 100%;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 10px 16px;
+  border-top: 1px solid var(--border);
+}
+
+.crs-select {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.error-text {
+  color: var(--danger);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.chip {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.derived-list {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.derived-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.preview {
+  margin-top: 10px;
+  overflow: auto;
+  max-height: 200px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.preview table {
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.preview th,
+.preview td {
+  padding: 3px 8px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.preview th {
+  background: var(--panel-2);
+  position: sticky;
+  top: 0;
+}
+
+.preview th.hl {
+  color: var(--accent);
 }
 
 .engine.ok::before {
