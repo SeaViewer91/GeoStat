@@ -18,7 +18,7 @@ jobs:
         working-directory: engine
     steps:
       - uses: actions/checkout@v7
-      - uses: astral-sh/setup-uv@v10
+      - uses: astral-sh/setup-uv@v10.2.0 # 이 액션은 v10 같은 주 버전 태그를 제공하지 않음
       - run: uv sync
       - run: uv run ruff check src tests
       - run: uv run ruff format --check src tests
