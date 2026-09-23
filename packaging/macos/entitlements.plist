@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <!--
-  Hardened Runtime 예외 항목 (앱 본체와 Python 엔진 실행 파일에 적용함)
+  Hardened Runtime 예외 항목. Developer ID로 서명·공증할 때만 사용함 (현재 배포는 ad-hoc 서명이라 쓰지 않음)
 
   allow-unsigned-executable-memory
     ctypes·cffi 콜백(libffi 클로저)이 실행 가능한 메모리를 새로 만들기 때문에 필요함.

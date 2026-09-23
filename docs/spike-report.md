@@ -12,10 +12,10 @@
 | GeoArrow IPC 전송 + deck.gl 렌더링 | ✅ 통과 | 헤드리스 Chromium |
 | 사각형 선택 (20만 폴리곤) | ✅ 통과 | 헤드리스 Chromium |
 | PyInstaller onedir 빌드 + 번들 엔진 실행 | ✅ 통과 | Linux (.deb 번들로 확인) |
-| **macOS 서명·공증** | ⏳ 미검증 | 맥 + Apple Developer 인증서 필요 |
-| **macOS WKWebView 실제 렌더링** | ⏳ 미검증 | 맥에서 `npm run tauri dev` 필요 |
+| macOS 서명·공증 | ➖ 하지 않기로 함 | GitHub 배포만 하므로 ad-hoc 서명으로 대체 |
+| macOS 개발 모드 실행 | ✅ 통과 (2026-09-24) | 사용자 맥북 |
 
-클라우드 Linux 환경에서 확인 가능한 항목은 모두 통과함. **P0의 핵심 리스크인 macOS 서명·공증은 아직 확인하지 못했으므로 P1 착수 전에 맥에서 반드시 확인해야 함.**
+클라우드 Linux 환경과 맥 개발 모드에서 모두 통과함. 배포는 Apple 공증 없이 GitHub Releases로만 하기로 해서 서명·공증 검증은 범위에서 뺌 (계획서 5.2 참고).
 
 ## 2. 측정값
 
@@ -41,17 +41,15 @@ Linux 클라우드 VM(2코어, GPU 없음, WebGL은 SwiftShader 소프트웨어 
 | 폴리곤 삼각분할 워커를 기본값으로 CDN(jsdelivr)에서 받아옴 → 오프라인에서 동작하지 않고 CSP에도 걸림 | 워커 파일을 앱 번들에 포함하고 `_subLayerProps.fill.earcutWorkerUrl`로 지정함 |
 | PyInstaller가 `pyogrio._geometry` 등 확장 모듈 간 임포트를 놓침 | spec에서 pyogrio·pyproj·shapely를 `collect_all`로 수집함. 스모크 테스트로 확인하도록 함 |
 | 단일 Polygon만 있는 레이어는 `geoarrow.polygon`, 섞이면 `geoarrow.multipolygon`으로 나옴 | 프론트엔드가 두 타입을 모두 처리하므로 그대로 둠 |
-| Tauri는 `resources` 안의 바이너리를 서명하지 않음 | `packaging/macos/sign-engine.sh`로 tauri build 전에 엔진을 미리 서명하도록 함 (맥에서 검증 필요) |
+| Tauri는 `resources` 안의 바이너리를 서명하지 않음 | `packaging/macos/sign-engine.sh`로 tauri build 전에 엔진을 미리 ad-hoc 서명하도록 함 (P6에서 맥 확인 필요) |
 
-## 4. 맥에서 해야 할 확인 (P0 마무리)
+## 4. 맥에서 확인할 항목
 
-1. **개발 모드 실행**: `cd engine && uv sync`, `cd apps/desktop && npm install && npm run tauri dev`
+1. ✅ **개발 모드 실행** (2026-09-24 확인함): `cd engine && uv sync`, `cd apps/desktop && npm install && npm run tauri dev`
    - 파일 열기 대화상자 → `data/local/seoul_grid_cp949.shp` 열기 → 한글 속성, 지도 표시, 사각형 선택 확인
    - `perf_grid_200k.gpkg`로 렌더링·선택 체감 속도 확인
-2. **서명 없는 번들**: `packaging/macos/release.sh --unsigned` → `GeoStat.app` 실행 확인
-3. **서명·공증**: Apple Developer Program 가입 후 `APPLE_SIGNING_IDENTITY` 등 환경변수 설정 → `packaging/macos/release.sh`
-   - 다른 맥에서 .dmg 설치·실행 (Gatekeeper 경고 없이 열리는지)
-4. 결과를 이 문서에 추가하고 P1 착수 여부를 결정함
+2. **ad-hoc 서명 번들** (P6에서 확인): `packaging/macos/release.sh` → 다른 맥에서 .dmg 설치 후 "그래도 열기"로 실행되는지 확인
+3. ~~서명·공증~~ → 하지 않기로 함
 
 ## 5. 이후 개선 과제
 

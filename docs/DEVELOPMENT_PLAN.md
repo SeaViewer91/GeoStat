@@ -14,7 +14,7 @@
   1. **GWR/MGWR 통합** — 대역폭 선택, 지역 계수 지도, 유의성 마스킹까지 GUI로
   2. **한국 환경 기본 지원** — EPSG:5186/5179/5174 등, cp949 DBF 자동 처리, 한글 UI(한/영 전환)
   3. **래스터·대용량** — GeoTIFF/COG 존 통계, 수십만 피처 WebGL 렌더링
-- **외부 공개 배포** — Apple 코드서명·공증, GitHub Releases 자동 업데이트
+- **외부 공개 배포** — GitHub 공개 레포 + GitHub Releases로 .dmg 배포 (앱스토어 등재·Apple 공증은 하지 않음)
 
 ### 1.2 비목표 (1.0 이전에는 하지 않음)
 - 편집 GIS 기능(디지타이징, 토폴로지 편집) — QGIS 영역
@@ -87,9 +87,9 @@ GeoStat/
 │  │  ├─ jobs/             # 작업 큐, 진행률, 취소
 │  │  └─ report/           # 결과 리포트(텍스트/HTML)
 │  └─ tests/               # 참조 데이터 기반 수치 검증
-├─ packaging/              # PyInstaller spec, 서명·공증 스크립트, entitlements
+├─ packaging/              # PyInstaller spec, ad-hoc 서명·릴리스 스크립트
 ├─ docs/                   # 본 계획서, 사용자 매뉴얼
-└─ .github/workflows/      # CI 빌드·서명·릴리스
+└─ .github/workflows/      # CI 빌드·릴리스
 ```
 
 ---
@@ -166,15 +166,15 @@ GeoStat/
 
 | 단계 | 기간 | 산출물 | 완료 기준 |
 |---|---|---|---|
-| **P0. 기술 검증 스파이크** | 1~1.5주 | Tauri↔Python 엔진 연결, 번들·**서명·공증 시험 통과**, 20만 폴리곤 GeoArrow 렌더링 | 공증된 .dmg가 다른 맥에서 실행되고 shp를 띄움 |
+| **P0. 기술 검증 스파이크** | 1~1.5주 | Tauri↔Python 엔진 연결, 엔진 번들 빌드, 20만 폴리곤 GeoArrow 렌더링 | 맥에서 개발 모드로 shp를 띄움 ✅ |
 | **P1. 데이터·지도 기반** | 2~3주 | 파일 열기(인코딩·CRS), 속성 테이블, 주제도 7종, 프로젝트 저장 | 한글 DBF shp가 깨지지 않고 열림 |
 | **P2. 가중치 + ESDA + 연동 시각화** | 3주 | 가중치 관리자, Moran/LISA/Gi*/Local Geary, 히스토그램·산점도·박스·Moran 산점도 연동 | **v0.1 공개 알파** — 참조 데이터 결과가 GeoDa와 일치 |
 | **P3. 공간회귀 + GWR/MGWR** | 3주 | OLS 진단, Lag/Error 모형, GWR/MGWR, 결과 리포트 | spreg·mgwr 참조 결과와 수치 일치 |
 | **P4. 공간군집화** | 2주 | SKATER, Max-p, AZP, Region K-Means, Ward | 군집 결과·요약 리포트 |
 | **P5. 래스터·대용량 최적화** | 2주 | COG 표시, 존 통계, 성능 목표 달성 | 3.7 성능표 충족 |
-| **P6. 배포 완성** | 1.5주 | 자동 업데이트, 한/영 UI, 매뉴얼, 샘플 데이터 | **v1.0 릴리스** |
+| **P6. 배포 완성** | 1.5주 | 태그 푸시 시 GitHub Actions로 .dmg 빌드·릴리스, 자동 업데이트, 한/영 UI, 매뉴얼, 샘플 데이터 | **v1.0 릴리스** |
 
-총 약 15~17주. **P0를 가장 먼저** 하는 이유: Python 번들의 서명·공증 실패가 이 스택의 최대 리스크이며, 기능 개발 후에 발견하면 되돌리기 비싸다.
+총 약 15~17주. **P0를 가장 먼저** 한 이유: Tauri↔Python 엔진 연결과 번들링이 이 스택의 최대 리스크이며, 기능 개발 후에 발견하면 되돌리기 비싸기 때문임.
 
 ---
 
@@ -187,16 +187,18 @@ GeoStat/
 - GDAL/PROJ 데이터 경로(`GDAL_DATA`, `PROJ_DATA`)를 번들 내부로 지정
 - 예상 용량: 앱 300~500MB (GDAL, numpy/scipy, numba/llvmlite 포함)
 
-### 5.2 코드서명·공증
-- Apple Developer Program 가입(연 99달러), **Developer ID Application** 인증서
-- 번들 내 **모든 .so/.dylib/실행파일을 개별 서명** 후 앱 서명 (hardened runtime)
-- numba(LLVM JIT) 사용 시 entitlements에 `com.apple.security.cs.allow-jit`, `allow-unsigned-executable-memory` 필요 — P0에서 검증
-- `notarytool` 제출 → `stapler`로 티켓 부착
+### 5.2 서명 정책 (Apple Developer 미가입)
+- 배포 범위는 GitHub 공개 레포·Releases까지로 함. 앱스토어 등재와 Apple 공증은 하지 않음 (Developer Program 불필요)
+- 대신 **ad-hoc 서명**(`codesign -s -`)을 적용함. Apple Silicon은 서명이 전혀 없는 바이너리를 실행하지 않고,
+  번들 서명이 없으면 인터넷에서 받은 앱이 "손상됨"으로 표시되기 때문임
+- 사용자는 첫 실행 때 Gatekeeper 확인을 한 번 거쳐야 함 → README에 설치 안내를 둠
+  - 시스템 설정 → 개인정보 보호 및 보안 → "그래도 열기", 또는 `xattr -dr com.apple.quarantine /Applications/GeoStat.app`
+- 나중에 공증이 필요해지면 `packaging/macos/sign-engine.sh`에 Developer ID를 넣고 공증 단계만 추가하면 되도록 구조를 유지함
 
 ### 5.3 아키텍처·업데이트
 - Apple Silicon(arm64) 우선. Intel iMac 지원이 필요하면 x86_64 별도 빌드(유니버설 바이너리는 Python 번들 때문에 비권장)
-- Tauri updater 플러그인 + GitHub Releases, 업데이트 매니페스트 서명
-- GitHub Actions macOS 러너에서 빌드·서명·공증·릴리스 자동화 (인증서는 Secrets)
+- Tauri updater 플러그인 + GitHub Releases, 업데이트 매니페스트 서명 (Tauri 자체 서명키 사용, Apple 인증서와 무관함)
+- GitHub Actions macOS 러너에서 빌드·ad-hoc 서명·릴리스 자동화 (v 태그 푸시 시)
 
 ---
 
@@ -214,7 +216,7 @@ GeoStat/
 
 | 리스크 | 영향 | 대응 |
 |---|---|---|
-| Python 번들 서명·공증 실패 | 배포 불가 | P0에서 최우선 검증, 실패 시 python-build-standalone 방식 전환 |
+| 미공증 앱에 대한 Gatekeeper 경고 | 첫 실행 불편 | ad-hoc 서명으로 "손상됨" 오류는 피하고, README에 "그래도 열기" 절차 안내 |
 | MGWR 계산 시간(대규모 n) | 사용성 저하 | 진행률·취소, 규모 경고, 표본 추출 옵션, 추후 병렬화 |
 | 대용량 WebGL 메모리 | 크래시 | GeoArrow 바이너리, 지오메트리 단순화(줌별), 50만 초과 시 경고 |
 | GPL 의존성 유입 | 라이선스 충돌 | 의존성 라이선스 CI 점검(pip-licenses), pygeoda 미사용 |
@@ -223,16 +225,39 @@ GeoStat/
 
 ---
 
-## 8. 바로 다음 할 일 (P0 체크리스트)
+## 8. 진행 현황
+
+### P0. 기술 검증 — 완료 (2026-09-24)
 
 - [x] 저장소 초기화: `apps/desktop`(Tauri 2 + React + TS), `engine`(uv 프로젝트)
 - [x] 엔진: FastAPI `/health`, `/datasets/open`(pyogrio) → GeoArrow 응답
-- [x] Tauri: 엔진 spawn(랜덤 포트·토큰), 종료 시 정리 — 크래시 시 재시작은 P1로 넘김
-- [x] 프론트: deck.gl GeoArrow 레이어로 20만 폴리곤 렌더링 + 사각형 선택 (Linux 헤드리스에서 확인함)
+- [x] Tauri: 엔진 spawn(랜덤 포트·토큰), 종료 시 정리
+- [x] 프론트: deck.gl GeoArrow 레이어로 20만 폴리곤 렌더링 + 사각형 선택
 - [x] PyInstaller onedir 빌드 + 스모크 테스트 (Linux)
-- [ ] **맥에서** 개발 모드 실행, 서명 → 공증 → 다른 맥에서 실행 확인
-- [ ] libpysal·esda·numba를 넣은 번들로 다시 확인 (P2 착수 시)
-- [x] 결과를 `docs/spike-report.md`에 기록함 — P1 착수 여부는 맥 확인 후 결정
+- [x] **맥에서** 개발 모드 실행 확인 — 서명·공증은 하지 않기로 함 (5.2 참고)
+- [x] 결과를 `docs/spike-report.md`에 기록함
+
+### P1. 데이터·지도 기반 — 1차 구현 (2026-09-24)
+
+- [x] 파일 열기: 여러 레이어 GeoPackage는 레이어 선택, CSV·엑셀은 X·Y 열·좌표계 지정 (cp949 CSV, 좌표계 추정)
+- [x] 좌표계 없는 자료 → 좌표계 지정 대화상자 (한국 좌표계 프리셋 11종)
+- [x] 주제도 7종: 분위수·등간격·자연 분류·표준편차·백분위·박스·고유값 + 범례 (범례 클릭 → 해당 계급 선택)
+- [x] 배경지도: OpenFreeMap(밝은 지도·기본 지도), 기본값은 "없음"
+- [x] 속성 테이블: 가상 스크롤(20만 행), 열 정렬, 선택 연동, "선택 항목만" 보기
+- [x] 계산 필드: pandas eval 식, 프로젝트에 식으로 저장해 재계산
+- [x] 선택 도구: 클릭·사각형·올가미(중심점 기준), 반전·해제
+- [x] 여러 레이어: 표시·순서·전체 보기·닫기
+- [x] 내보내기: GeoPackage·Shapefile(UTF-8/CP949)·GeoJSON·FlatGeobuf·CSV, 좌표계 변환 저장
+- [x] 프로젝트 저장·열기 (`.gstproj`, 상대 경로 저장으로 폴더째 이동 가능)
+- [ ] 다중 지도 창(분할 뷰) — P2의 연동 차트와 함께 진행
+- [ ] 지도 이미지(PNG) 내보내기
+- [ ] 속성 조건 검색(필터)으로 선택
+- [ ] 엔진이 실행 중 종료됐을 때 알림·재시작
+- [ ] 맥에서 배경지도·대화상자 동작 확인 (클라우드 환경은 타일 서버 접속이 막혀 확인 못 함)
+
+### 다음: P2. 가중치 + ESDA + 연동 시각화
+
+- libpysal·esda를 엔진에 추가하고 번들로 다시 확인 (numba 포함 여부 결정)
 
 ---
 
