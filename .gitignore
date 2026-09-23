@@ -1,0 +1,50 @@
+# macOS
+.DS_Store
+._*
+
+# Editors
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+
+# Node / frontend
+node_modules/
+dist/
+dist-ssr/
+*.local
+.vite/
+coverage/
+npm-debug.log*
+pnpm-debug.log*
+
+# Rust / Tauri
+target/
+apps/desktop/src-tauri/gen/schemas/
+apps/desktop/src-tauri/binaries/
+apps/desktop/src-tauri/resources/engine/
+
+# Python / engine
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+build/
+engine/dist/
+
+# Packaging / signing secrets
+*.p12
+*.cer
+*.mobileprovision
+*.dmg
+.env
+.env.*
+
+# Local test data (large files)
+data/local/
+*.tif
+*.tiff
+!engine/tests/data/**
