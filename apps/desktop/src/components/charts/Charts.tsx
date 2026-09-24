@@ -4,6 +4,7 @@
 
 import { useMemo } from "react";
 
+import { t } from "../../i18n";
 import { CHART_BASE, CHART_BASE_SOLID, CHART_SELECTED } from "../../lib/palette";
 import { useApp, type ChartSpec, type LoadedDataset, type SelectMode } from "../../store";
 import { ChartCanvas, type BrushRect } from "./ChartCanvas";
@@ -111,7 +112,7 @@ export function Histogram({
   return (
     <ChartCanvas
       height={HEIGHT}
-      ariaLabel="히스토그램"
+      ariaLabel={t("히스토그램")}
       deps={[edges, counts, selectedCounts]}
       brushAxis="x"
       draw={(ctx, f, theme) => {
@@ -147,8 +148,8 @@ export function Histogram({
                 {formatTick(edges[b])} ~ {formatTick(edges[b + 1])}
               </div>
               <div>
-                <strong>{counts[b].toLocaleString()}</strong>개
-                {selectedCounts[b] > 0 && ` · 선택 ${selectedCounts[b].toLocaleString()}`}
+                <strong>{t("{n}개", { n: counts[b] })}</strong>
+                {selectedCounts[b] > 0 && ` · ${t("선택 {n}", { n: selectedCounts[b] })}`}
               </div>
             </>
           ),
@@ -202,7 +203,7 @@ export function Scatter({
     <>
       <ChartCanvas
         height={HEIGHT + 40}
-        ariaLabel={`${xLabel}–${yLabel} 산점도`}
+        ariaLabel={t("{x}–{y} 산점도", { x: xLabel, y: yLabel })}
         deps={[xs, ys, ds.selection, ext]}
         draw={(ctx, f, theme) => {
           const { x, y } = scales(f);
@@ -282,7 +283,7 @@ export function Scatter({
             y: py,
             content: (
               <>
-                <div>행 {best + 1}</div>
+                <div>{t("행 {n}", { n: best + 1 })}</div>
                 <div>{xLabel}: {fmt(xs[best])}</div>
                 <div>{yLabel}: {fmt(ys[best])}</div>
               </>
@@ -297,13 +298,13 @@ export function Scatter({
         {all && (
           <span>
             <i className="dot" style={{ background: CHART_BASE_SOLID }} />
-            {moran ? "I" : "기울기"} {fmt(all.slope)} · R² {fmt(all.r2, 3)}
+            {moran ? "I" : t("기울기")} {fmt(all.slope)} · R² {fmt(all.r2, 3)}
           </span>
         )}
         {sel && (
           <span>
             <i className="dot" style={{ background: CHART_SELECTED }} />
-            선택 {fmt(sel.slope)}
+            {t("선택 {n}", { n: fmt(sel.slope) })}
           </span>
         )}
       </div>
@@ -338,7 +339,7 @@ export function BoxPlot({ ds, values }: { ds: LoadedDataset; values: Float64Arra
     <>
       <ChartCanvas
         height={HEIGHT + 40}
-        ariaLabel="박스플롯"
+        ariaLabel={t("박스플롯")}
         deps={[values, ds.selection, stats]}
         brushAxis="y"
         draw={(ctx, f, theme) => {
@@ -393,9 +394,9 @@ export function BoxPlot({ ds, values }: { ds: LoadedDataset; values: Float64Arra
         }}
       />
       <div className="chart-foot">
-        <span>중앙값 {fmt(stats.q2)}</span>
+        <span>{t("중앙값 {v}", { v: fmt(stats.q2) })}</span>
         <span>Q1 {fmt(stats.q1)} · Q3 {fmt(stats.q3)}</span>
-        <span>평균 {fmt(stats.mean)}</span>
+        <span>{t("평균 {v}", { v: fmt(stats.mean) })}</span>
         <span>n {stats.n.toLocaleString()}</span>
       </div>
     </>
@@ -411,7 +412,7 @@ export function MoranReference({ moran }: { moran: NonNullable<ChartSpec["moran"
   return (
     <ChartCanvas
       height={90}
-      ariaLabel="순열 기준 분포"
+      ariaLabel={t("순열 기준 분포")}
       deps={[moran]}
       draw={(ctx, f, theme) => {
         const lo = Math.min(edges[0], moran.I), hi = Math.max(edges[edges.length - 1], moran.I);

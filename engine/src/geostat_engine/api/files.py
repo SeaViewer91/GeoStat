@@ -58,3 +58,60 @@ def inspect(body: InspectRequest) -> InspectResponse:
         info = inspect_table(path, encoding=body.encoding, sheet=body.sheet)
         return InspectResponse(path=str(path), kind="table", table=TableInfo(**info.__dict__))
     return InspectResponse(path=str(path), kind="vector", layers=list_layers(path))
+
+
+# ---- 샘플 데이터 ------------------------------------------------------------------
+
+
+class SampleInfo(BaseModel):
+    id: str
+    name: str
+    description: str
+    file: str
+
+
+@router.get("/samples", response_model=list[SampleInfo])
+def samples() -> list[SampleInfo]:
+    from geostat_engine.io.samples import list_samples
+
+    return [SampleInfo(**s) for s in list_samples()]
+
+
+@router.post("/samples/{sample_id}/copy")
+def copy_sample(sample_id: str) -> dict[str, str]:
+    """샘플을 문서 폴더로 복사하고 그 경로를 돌려줌 (앱은 이 경로로 파일을 엶)."""
+    from geostat_engine.io.samples import copy_sample as _copy
+
+    return {"path": str(_copy(sample_id))}
+
+
+# ---- 지도 이미지 저장 ---------------------------------------------------------------
+
+
+class ImageSaveRequest(BaseModel):
+    path: str
+    data: str  # base64 PNG
+
+
+@router.post("/save-image")
+def save_image(body: ImageSaveRequest) -> dict[str, str]:
+    """앱이 그린 지도 PNG를 파일로 씀 (웹뷰는 파일을 직접 쓸 수 없어 엔진이 대신 씀)."""
+    import base64
+    import binascii
+
+    path = Path(body.path).expanduser()
+    if path.suffix.lower() != ".png":
+        path = path.with_suffix(".png")
+    if not path.parent.exists():
+        raise EngineError("folder_not_found", f"폴더가 없음: {path.parent}")
+    try:
+        data = base64.b64decode(body.data, validate=True)
+    except (binascii.Error, ValueError) as exc:
+        raise EngineError("invalid_image", "이미지 데이터가 올바르지 않음") from exc
+    if not data.startswith(b"\x89PNG"):
+        raise EngineError("invalid_image", "PNG 이미지가 아님")
+    try:
+        path.write_bytes(data)
+    except OSError as exc:
+        raise EngineError("write_failed", f"이미지를 저장하지 못함: {exc}") from exc
+    return {"path": str(path)}

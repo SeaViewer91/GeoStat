@@ -39,6 +39,7 @@ jobs:
           cache: npm
           cache-dependency-path: apps/desktop/package-lock.json
       - run: npm ci
+      - run: npm run i18n:check
       - run: npm run build
 
   shell:

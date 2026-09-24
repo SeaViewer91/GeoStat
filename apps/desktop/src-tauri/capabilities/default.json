@@ -1,13 +1,16 @@
 {
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
-  "description": "메인 창 기본 권한: 핵심 API와 파일 열기·저장 대화상자만 허용함",
+  "description": "메인 창 기본 권한: 핵심 API, 파일 대화상자, 업데이트 확인·설치 후 재시작, 웹 링크 열기만 허용함",
   "windows": [
     "main"
   ],
   "permissions": [
     "core:default",
     "dialog:allow-open",
-    "dialog:allow-save"
+    "dialog:allow-save",
+    "updater:default",
+    "process:allow-restart",
+    "opener:allow-open-url"
   ]
 }

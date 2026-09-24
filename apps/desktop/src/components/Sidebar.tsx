@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import { t } from "../i18n";
 import { dirname, pickSavePath } from "../lib/dialogs";
 import { engine, type ClassifyMethod } from "../lib/engine";
 import { MISSING_COLOR, classColors, rgbaCss } from "../lib/palette";
@@ -51,8 +52,8 @@ function LayerList() {
 
   return (
     <section className="panel">
-      <h2>레이어</h2>
-      {order.length === 0 && <p className="muted">데이터를 열면 여기에 표시됨</p>}
+      <h2>{t("레이어")}</h2>
+      {order.length === 0 && <p className="muted">{t("데이터를 열면 여기에 표시됨")}</p>}
       <ul className="layer-list">
         {order.map((id, i) => {
           const ds = datasets[id];
@@ -69,7 +70,7 @@ function LayerList() {
                 checked={ds.visible}
                 onChange={() => toggleVisible(id)}
                 onClick={(e) => e.stopPropagation()}
-                aria-label="표시"
+                aria-label={t("표시")}
               />
               <span className="geom">{GEOM_ICON[ds.info.geometry_type]}</span>
               <span className="name" title={ds.info.path}>
@@ -78,26 +79,26 @@ function LayerList() {
               {!ds.table && (
                 <button
                   className="warn"
-                  title="좌표계가 없어 지도에 표시할 수 없음"
+                  title={t("좌표계가 없어 지도에 표시할 수 없음")}
                   onClick={(e) => {
                     e.stopPropagation();
                     showDialog({ kind: "crs", datasetId: id, reason: "missing" });
                   }}
                 >
-                  좌표계 지정
+                  {t("좌표계 지정")}
                 </button>
               )}
               <span className="actions">
-                <button title="위로" disabled={i === 0} onClick={() => moveLayer(id, -1)}>
+                <button title={t("위로")} disabled={i === 0} onClick={() => moveLayer(id, -1)}>
                   ↑
                 </button>
-                <button title="아래로" disabled={i === order.length - 1} onClick={() => moveLayer(id, 1)}>
+                <button title={t("아래로")} disabled={i === order.length - 1} onClick={() => moveLayer(id, 1)}>
                   ↓
                 </button>
-                <button title="전체 보기" onClick={() => zoomTo(id)}>
+                <button title={t("전체 보기")} onClick={() => zoomTo(id)}>
                   ⤢
                 </button>
-                <button title="닫기" onClick={() => closeDataset(id)}>
+                <button title={t("닫기")} onClick={() => closeDataset(id)}>
                   ✕
                 </button>
               </span>
@@ -156,26 +157,30 @@ function StyleEditor({ ds }: { ds: LoadedDataset }) {
 
   return (
     <section className="panel">
-      <h2>주제도</h2>
+      <h2>{t("주제도")}</h2>
       <div className="form">
         <label>
-          변수
-          <select value={column} onChange={(e) => setColumn(e.target.value)} aria-label="변수">
-            {candidates.length === 0 && <option value="">(해당 열 없음)</option>}
+          {t("변수")}
+          <select value={column} onChange={(e) => setColumn(e.target.value)} aria-label={t("변수")}>
+            {candidates.length === 0 && <option value="">{t("(해당 열 없음)")}</option>}
             {candidates.map((c) => (
               <option key={c.name} value={c.name}>
                 {c.name}
-                {c.origin === "expression" ? " (계산)" : c.origin === "analysis" ? " (분석)" : ""}
+                {c.origin === "expression" ? ` ${t("(계산)")}` : c.origin === "analysis" ? ` ${t("(분석)")}` : ""}
               </option>
             ))}
           </select>
         </label>
         <label>
-          방법
-          <select value={method} onChange={(e) => setMethod(e.target.value as ClassifyMethod)} aria-label="방법">
+          {t("방법")}
+          <select
+            value={method}
+            onChange={(e) => setMethod(e.target.value as ClassifyMethod)}
+            aria-label={t("방법")}
+          >
             {METHODS.map((m) => (
               <option key={m.id} value={m.id}>
-                {m.label}
+                {t(m.label)}
               </option>
             ))}
           </select>
@@ -183,53 +188,53 @@ function StyleEditor({ ds }: { ds: LoadedDataset }) {
         {maskColumn && meta.id !== "unique_values" && (
           <label className="check">
             <input type="checkbox" checked={useMask} onChange={(e) => setUseMask(e.target.checked)} />
-            유의하지 않은 지역 가리기
+            {t("유의하지 않은 지역 가리기")}
           </label>
         )}
         {meta.hasK && (
           <label>
-            계급 수
+            {t("계급 수")}
             <input
               type="number"
               min={2}
               max={12}
               value={k}
               onChange={(e) => setK(Math.min(12, Math.max(2, Number(e.target.value) || 5)))}
-              aria-label="계급 수"
+              aria-label={t("계급 수")}
             />
           </label>
         )}
         <div className="row">
           <button className="primary" onClick={apply} disabled={!column || !!busy || !ds.table}>
-            적용
+            {t("적용")}
           </button>
           <button onClick={() => applyStyle(ds.info.id, null)} disabled={!ds.theme}>
-            단일 색
+            {t("단일 색")}
           </button>
         </div>
       </div>
 
       {ds.theme && <Legend ds={ds} />}
 
-      <h2>정보</h2>
+      <h2>{t("정보")}</h2>
       <dl className="info">
-        <dt>피처</dt>
-        <dd>{ds.info.n_rows.toLocaleString()}개</dd>
-        <dt>좌표계</dt>
+        <dt>{t("피처")}</dt>
+        <dd>{t("{n}개", { n: ds.info.n_rows })}</dd>
+        <dt>{t("좌표계")}</dt>
         <dd>
-          {crs ? `EPSG:${crs.epsg ?? "?"}` : "없음"}{" "}
+          {crs ? `EPSG:${crs.epsg ?? "?"}` : t("없음")}{" "}
           <button className="link" onClick={() => showDialog({ kind: "crs", datasetId: ds.info.id, reason: "manual" })}>
-            지정…
+            {t("지정…")}
           </button>
           {crs && <div className="muted small">{crs.name}</div>}
         </dd>
         {ds.info.encoding && (
           <>
-            <dt>인코딩</dt>
+            <dt>{t("인코딩")}</dt>
             <dd>{ds.info.encoding}</dd>
           </>
         )}
-        <dt>경로</dt>
+        <dt>{t("경로")}</dt>
         <dd className="path" title={ds.info.path}>
           {ds.info.path}
         </dd>
@@ -247,24 +252,24 @@ function Legend({ ds }: { ds: LoadedDataset }) {
   return (
     <div className="legend" data-testid="legend">
       <div className="legend-title">
-        {theme.column} · {methodLabel}
+        {theme.column} · {t(methodLabel)}
       </div>
       <ul>
         {theme.labels.map((label, i) => (
           <li
             key={i}
-            title="클릭하면 이 계급의 피처를 선택함 (⌘: 추가 선택)"
+            title={t("클릭하면 이 계급의 피처를 선택함 (⌘: 추가 선택)")}
             onClick={(e) => selectClass(ds.info.id, i, e.metaKey || e.ctrlKey ? "add" : "replace")}
           >
             <span className="swatch" style={{ background: rgbaCss(colors[i]) }} />
-            <span className="label">{label}</span>
+            <span className="label">{t(label)}</span>
             <span className="count">{theme.counts[i]?.toLocaleString()}</span>
           </li>
         ))}
         {theme.n_missing > 0 && (
           <li onClick={(e) => selectClass(ds.info.id, -1, e.metaKey || e.ctrlKey ? "add" : "replace")}>
             <span className="swatch" style={{ background: rgbaCss(MISSING_COLOR) }} />
-            <span className="label">값 없음</span>
+            <span className="label">{t("값 없음")}</span>
             <span className="count">{theme.n_missing.toLocaleString()}</span>
           </li>
         )}
@@ -289,13 +294,13 @@ function WeightsPanel() {
     const binary = w.type === "queen" || w.type === "rook";
     const path = await pickSavePath(
       [binary ? { name: "GeoDa GAL", extensions: ["gal"] } : { name: "GeoDa GWT", extensions: ["gwt"] }],
-      "가중치 저장",
+      t("가중치 저장"),
       `${dirname(ds.info.path)}/${ds.info.name}_${w.name}.${binary ? "gal" : "gwt"}`,
     );
     if (!path) return;
     try {
       const r = await engine.saveWeights(ds.info.id, w.id, path);
-      notify(`가중치를 저장함: ${r.path}`);
+      notify(t("가중치를 저장함: {path}", { path: r.path }));
     } catch (err) {
       fail(err);
     }
@@ -303,12 +308,12 @@ function WeightsPanel() {
 
   return (
     <section className="panel" data-testid="weights-panel">
-      <h2>공간가중치</h2>
+      <h2>{t("공간가중치")}</h2>
       {ds.weights.length === 0 ? (
         <p className="muted">
-          아직 없음.{" "}
+          {t("아직 없음.")}{" "}
           <button className="link" onClick={() => showDialog({ kind: "weights", datasetId: ds.info.id })}>
-            만들기…
+            {t("만들기…")}
           </button>
         </p>
       ) : (
@@ -317,7 +322,7 @@ function WeightsPanel() {
             <select
               value={ds.activeWeightsId ?? ""}
               onChange={(e) => setActiveWeights(ds.info.id, e.target.value)}
-              aria-label="활성 가중치"
+              aria-label={t("활성 가중치")}
             >
               {ds.weights.map((x) => (
                 <option key={x.id} value={x.id}>
@@ -325,7 +330,7 @@ function WeightsPanel() {
                 </option>
               ))}
             </select>
-            <button onClick={() => showDialog({ kind: "weights", datasetId: ds.info.id })} title="새 가중치">
+            <button onClick={() => showDialog({ kind: "weights", datasetId: ds.info.id })} title={t("새 가중치")}>
               +
             </button>
           </div>
@@ -333,23 +338,26 @@ function WeightsPanel() {
             <>
               <p className="muted small">{w.description}</p>
               <dl className="info">
-                <dt>이웃 수</dt>
+                <dt>{t("이웃 수")}</dt>
                 <dd>
-                  평균 {w.summary.mean_neighbors.toFixed(2)} · 최소 {w.summary.min_neighbors} · 최대{" "}
-                  {w.summary.max_neighbors}
+                  {t("평균 {mean} · 최소 {min} · 최대 {max}", {
+                    mean: w.summary.mean_neighbors.toFixed(2),
+                    min: w.summary.min_neighbors,
+                    max: w.summary.max_neighbors,
+                  })}
                 </dd>
-                <dt>비영 비율</dt>
+                <dt>{t("비영 비율")}</dt>
                 <dd>{w.summary.pct_nonzero.toFixed(2)}%</dd>
                 {w.summary.n_islands > 0 && (
                   <>
-                    <dt className="warn-text">섬</dt>
+                    <dt className="warn-text">{t("섬")}</dt>
                     <dd className="warn-text">
-                      이웃 없는 피처 {w.summary.n_islands}개{" "}
+                      {t("이웃 없는 피처 {n}개", { n: w.summary.n_islands })}{" "}
                       <button
                         className="link"
                         onClick={() => useApp.getState().select(ds.info.id, w.summary.islands, "replace")}
                       >
-                        선택
+                        {t("선택")}
                       </button>
                     </dd>
                   </>
@@ -360,12 +368,12 @@ function WeightsPanel() {
                 <button
                   onClick={() => selectNeighbors(ds.info.id)}
                   disabled={ds.selectedCount === 0}
-                  title="선택한 피처의 이웃을 선택에 추가함"
+                  title={t("선택한 피처의 이웃을 선택에 추가함")}
                 >
-                  이웃 선택
+                  {t("이웃 선택")}
                 </button>
-                <button onClick={save}>저장…</button>
-                <button onClick={() => removeWeights(ds.info.id, w.id)}>삭제</button>
+                <button onClick={save}>{t("저장…")}</button>
+                <button onClick={() => removeWeights(ds.info.id, w.id)}>{t("삭제")}</button>
               </div>
             </>
           )}
@@ -379,9 +387,13 @@ function WeightsPanel() {
 function ConnectivityBars({ histogram }: { histogram: { neighbors: number; count: number }[] }) {
   const max = Math.max(...histogram.map((h) => h.count));
   return (
-    <div className="conn-bars" aria-label="이웃 수 분포">
+    <div className="conn-bars" aria-label={t("이웃 수 분포")}>
       {histogram.map((h) => (
-        <div key={h.neighbors} className="conn-bar" title={`이웃 ${h.neighbors}개: ${h.count.toLocaleString()}개 피처`}>
+        <div
+          key={h.neighbors}
+          className="conn-bar"
+          title={t("이웃 {k}개: {n}개 피처", { k: h.neighbors, n: h.count })}
+        >
           <div className="fill" style={{ height: `${Math.max(4, (h.count / max) * 100)}%` }} />
           <span>{h.neighbors}</span>
         </div>

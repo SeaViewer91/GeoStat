@@ -5,6 +5,8 @@
 import { isTauri } from "@tauri-apps/api/core";
 import { open, save } from "@tauri-apps/plugin-dialog";
 
+import { t } from "../i18n";
+
 export const DATA_FILTER = {
   name: "공간 데이터",
   extensions: [
@@ -39,9 +41,14 @@ export const EXPORT_FILTERS = [
 
 type Filter = { name: string; extensions: string[] };
 
+/** 필터 이름은 모듈 상수에 한국어로 두고, 대화상자를 여는 시점에 현재 언어로 바꿈 */
+function localize(filters: Filter[]): Filter[] {
+  return filters.map((f) => ({ ...f, name: t(f.name) }));
+}
+
 export async function pickOpenPath(filters: Filter[], title: string): Promise<string | null> {
-  if (!isTauri()) return promptPath(`${title} — 파일 절대 경로`);
-  const picked = await open({ title, multiple: false, directory: false, filters });
+  if (!isTauri()) return promptPath(t("{title} — 파일 절대 경로", { title }));
+  const picked = await open({ title, multiple: false, directory: false, filters: localize(filters) });
   return typeof picked === "string" ? picked : null;
 }
 
@@ -50,8 +57,8 @@ export async function pickSavePath(
   title: string,
   defaultPath?: string,
 ): Promise<string | null> {
-  if (!isTauri()) return promptPath(`${title} — 저장할 절대 경로`, defaultPath);
-  return (await save({ title, filters, defaultPath })) ?? null;
+  if (!isTauri()) return promptPath(t("{title} — 저장할 절대 경로", { title }), defaultPath);
+  return (await save({ title, filters: localize(filters), defaultPath })) ?? null;
 }
 
 function promptPath(message: string, defaultValue?: string): string | null {

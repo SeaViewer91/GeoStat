@@ -367,3 +367,22 @@ def export(dataset_id: str, body: ExportRequest, request: Request) -> ExportResp
     ds = _state(request).get(dataset_id)
     result = export_dataset(ds.gdf, body.path, epsg=body.epsg, encoding=body.encoding)
     return ExportResponse(**result)
+
+
+class QueryRequest(BaseModel):
+    expression: str = Field(description="pandas 조건식. 예: `인구` > 5000 and `구분` == '도심'")
+
+
+class QueryResponse(BaseModel):
+    ids: str = Field(description="조건에 맞는 행 번호 (uint32 리틀엔디언, base64)")
+    count: int
+
+
+@router.post("/{dataset_id}/query", response_model=QueryResponse)
+def query(dataset_id: str, body: QueryRequest, request: Request) -> QueryResponse:
+    """속성 조건으로 선택할 행 번호를 돌려줌 (선택 상태는 앱이 관리함)."""
+    from geostat_engine.analysis.fields import select
+
+    ds = _state(request).get(dataset_id)
+    hits = np.flatnonzero(select(ds.gdf, body.expression)).astype("<u4")
+    return QueryResponse(ids=base64.b64encode(hits.tobytes()).decode("ascii"), count=int(hits.size))

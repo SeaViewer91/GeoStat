@@ -6,10 +6,13 @@
 import type { Table } from "apache-arrow";
 import { create } from "zustand";
 
+import { getLang, setLang as applyLang, t, type Lang } from "./i18n";
 import { computeFeatureBounds, readCentroids } from "./lib/geoarrow";
+import { findUpdate, type AvailableUpdate } from "./lib/updater";
 import {
   EngineError,
   engine,
+  restartEngine as restartEngineProcess,
   type Classification,
   type ClassifyMethod,
   type DatasetInfo,
@@ -130,6 +133,8 @@ export type Dialog =
   | { kind: "cluster"; datasetId: string }
   | { kind: "zonal"; datasetId: string }
   | { kind: "fishnet" }
+  | { kind: "query"; datasetId: string }
+  | { kind: "about" }
   | { kind: "chart"; datasetId: string; chart: ChartKind };
 
 /** 프로젝트 파일에 저장하는 화면 설정 */
@@ -162,6 +167,26 @@ interface AppState {
   busy: string | null;
   error: EngineError | null;
   notices: { id: number; text: string }[];
+
+  // 엔진 상태: 비정상 종료 메시지, 다시 띄울 때마다 증가하는 세대 번호
+  engineDown: string | null;
+  engineGeneration: number;
+  setEngineDown: (message: string | null) => void;
+  restartEngine: () => Promise<void>;
+
+  // 업데이트: 새 버전 정보 (설치 버튼을 띄움)
+  update: AvailableUpdate | null;
+  checkUpdate: (manual: boolean) => Promise<void>;
+  installUpdate: () => Promise<void>;
+  dismissUpdate: () => void;
+
+  // 언어
+  lang: Lang;
+  setLanguage: (lang: Lang) => void;
+
+  // 조건 선택·샘플
+  querySelect: (id: string, expression: string, mode: SelectMode) => Promise<boolean>;
+  openSample: (sampleId: string) => Promise<void>;
 
   // 래스터 (벡터 레이어 아래에 그림)
   rasters: Record<string, LoadedRaster>;
@@ -331,6 +356,10 @@ export const useApp = create<AppState>((set, get) => {
     activeId: null,
     rasters: {},
     rasterOrder: [],
+    engineDown: null,
+    engineGeneration: 0,
+    update: null,
+    lang: getLang(),
     tool: "pan",
     basemap: "none",
     view: { longitude: 127.8, latitude: 36.3, zoom: 6 },
@@ -341,10 +370,81 @@ export const useApp = create<AppState>((set, get) => {
     error: null,
     notices: [],
 
+    // ---- 엔진·언어·조건 선택·샘플 -------------------------------------------------
+
+    setEngineDown: (message) => set({ engineDown: message, job: null, busy: null }),
+
+    restartEngine: async () => {
+      const ok = await run(t("분석 엔진을 다시 시작하는 중…"), async () => {
+        await restartEngineProcess();
+        await engine.health(); // 새 엔진이 준비될 때까지 기다림
+        return true;
+      });
+      if (!ok) return;
+      // 새 엔진은 이전에 열었던 데이터를 모르므로 화면 상태도 비움
+      set((s) => ({
+        datasets: {},
+        order: [],
+        activeId: null,
+        rasters: {},
+        rasterOrder: [],
+        charts: [],
+        reports: [],
+        job: null,
+        engineDown: null,
+        engineGeneration: s.engineGeneration + 1,
+      }));
+      get().notify(t("분석 엔진을 다시 시작함. 데이터나 프로젝트를 다시 열어야 함"));
+    },
+
+    checkUpdate: async (manual) => {
+      try {
+        const update = await findUpdate();
+        set({ update });
+        if (!update && manual) get().notify(t("최신 버전을 쓰고 있음"));
+      } catch (err) {
+        // 자동 확인은 조용히 넘어감 (오프라인 등). 직접 확인할 때만 알림
+        if (manual) get().notify(t("업데이트를 확인하지 못함: {msg}", { msg: String((err as Error)?.message ?? err) }));
+      }
+    },
+
+    installUpdate: async () => {
+      const update = get().update;
+      if (!update) return;
+      set({ busy: t("업데이트 받는 중…") });
+      try {
+        await update.install((f) =>
+          set({ busy: f === null ? t("업데이트 받는 중…") : t("업데이트 받는 중… {p}%", { p: Math.round(f * 100) }) }),
+        );
+      } catch (err) {
+        set({ busy: null, error: toEngineError(err) });
+      }
+    },
+
+    dismissUpdate: () => set({ update: null }),
+
+    setLanguage: (lang) => {
+      applyLang(lang);
+      set({ lang });
+    },
+
+    querySelect: async (id, expression, mode) => {
+      const ids = await run(t("조건으로 찾는 중…"), () => engine.query(id, expression));
+      if (!ids) return false;
+      get().select(id, ids, mode);
+      get().notify(t("조건에 맞는 피처 {n}개를 선택함", { n: ids.length }));
+      return true;
+    },
+
+    openSample: async (sampleId) => {
+      const r = await run(t("샘플 데이터 준비 중…"), () => engine.copySample(sampleId));
+      if (r) await get().openFile(r.path);
+    },
+
     // ---- 래스터 ----------------------------------------------------------------
 
     openRaster: async (path) => {
-      const info = await run("래스터 여는 중…", () => engine.openRaster(path));
+      const info = await run(t("래스터 여는 중…"), () => engine.openRaster(path));
       if (!info) return;
       set((s) => ({
         rasters: { ...s.rasters, [info.id]: { info, visible: true, style: defaultRasterStyle(info) } },
@@ -353,13 +453,16 @@ export const useApp = create<AppState>((set, get) => {
       requestFit(info.bounds_wgs84);
       if (info.needs_overviews) {
         get().notify(
-          `${info.name}: ${info.width.toLocaleString()}×${info.height.toLocaleString()} 크기에 오버뷰가 없어 축소 표시가 느림. 래스터 패널에서 '오버뷰 만들기'를 권함`,
+          t(
+            "{name}: {w}×{h} 크기에 오버뷰가 없어 축소 표시가 느림. 래스터 패널에서 '오버뷰 만들기'를 권함",
+            { name: info.name, w: info.width, h: info.height },
+          ),
         );
       }
     },
 
     closeRaster: async (id) => {
-      await run("래스터 닫는 중…", () => engine.closeRaster(id));
+      await run(t("래스터 닫는 중…"), () => engine.closeRaster(id));
       set((s) => {
         const { [id]: _removed, ...rest } = s.rasters;
         return { rasters: rest, rasterOrder: s.rasterOrder.filter((x) => x !== id) };
@@ -379,13 +482,17 @@ export const useApp = create<AppState>((set, get) => {
       }),
 
     buildOverviews: async (id) => {
-      const info = await run("오버뷰 만드는 중… (크기에 따라 수십 초 걸릴 수 있음)", () => engine.buildOverviews(id));
+      const info = await run(t("오버뷰 만드는 중… (크기에 따라 수십 초 걸릴 수 있음)"), () =>
+        engine.buildOverviews(id),
+      );
       if (!info) return;
       set((s) => {
         const r = s.rasters[id];
         return r ? { rasters: { ...s.rasters, [id]: { ...r, info } } } : {};
       });
-      get().notify(`${info.name}: 오버뷰 ${info.overviews.length}단계를 만듦 (원본 옆 .ovr 파일)`);
+      get().notify(
+        t("{name}: 오버뷰 {n}단계를 만듦 (원본 옆 .ovr 파일)", { name: info.name, n: info.overviews.length }),
+      );
     },
 
     zoomToRaster: (id) => requestFit(get().rasters[id]?.info.bounds_wgs84 ?? null),
@@ -393,18 +500,18 @@ export const useApp = create<AppState>((set, get) => {
     startZonal: (id, spec) => get().runJob(id, () => engine.startZonal(id, spec)),
 
     makeFishnet: async (spec) => {
-      const info = await run("격자 만드는 중…", () => engine.fishnet(spec));
+      const info = await run(t("격자 만드는 중…"), () => engine.fishnet(spec));
       if (!info) return null;
-      await run(`지오메트리 불러오는 중… (${info.n_rows.toLocaleString()}개)`, () => addLoaded(info));
+      await run(t("지오메트리 불러오는 중… ({n}개)", { n: info.n_rows }), () => addLoaded(info));
       requestFit(info.bounds_wgs84);
-      get().notify(`격자 ${info.n_rows.toLocaleString()}개를 만듦: ${info.path}`);
+      get().notify(t("격자 {n}개를 만듦: {path}", { n: info.n_rows, path: info.path }));
       return info.id;
     },
 
     // ---- 파일·데이터셋 -------------------------------------------------------
 
     openFile: async (path) => {
-      const inspection = await run("파일 확인 중…", () => engine.inspect(path));
+      const inspection = await run(t("파일 확인 중…"), () => engine.inspect(path));
       if (!inspection) return;
       if (inspection.kind === "raster") {
         await get().openRaster(path);
@@ -418,14 +525,17 @@ export const useApp = create<AppState>((set, get) => {
     },
 
     openDataset: async (path, opts = {}) => {
-      await run("파일을 여는 중…", async () => {
+      await run(t("파일을 여는 중…"), async () => {
         const info = await engine.openDataset(path, opts);
-        set({ busy: `지오메트리 불러오는 중… (${info.n_rows.toLocaleString()}개)` });
+        set({ busy: t("지오메트리 불러오는 중… ({n}개)", { n: info.n_rows }) });
         const loaded = await addLoaded(info);
         if (loaded.table) requestFit(info.bounds_wgs84);
         if (info.n_rows > LARGE_FEATURES) {
           get().notify(
-            `피처가 ${info.n_rows.toLocaleString()}개라 지도 이동·선택이 느릴 수 있음 (권장 ${LARGE_FEATURES.toLocaleString()}개 이하)`,
+            t("피처가 {n}개라 지도 이동·선택이 느릴 수 있음 (권장 {max}개 이하)", {
+              n: info.n_rows,
+              max: LARGE_FEATURES,
+            }),
           );
         }
       });
@@ -466,7 +576,7 @@ export const useApp = create<AppState>((set, get) => {
     zoomTo: (id) => requestFit(get().datasets[id]?.info.bounds_wgs84 ?? null),
 
     assignCrs: async (id, epsg) => {
-      await run("좌표계 지정 중…", async () => {
+      await run(t("좌표계 지정 중…"), async () => {
         const info = await engine.assignCrs(id, epsg);
         const geo = await loadGeometry(info);
         patch(id, { info, ...geo });
@@ -494,7 +604,7 @@ export const useApp = create<AppState>((set, get) => {
         patch(id, { style: null, theme: null });
         return;
       }
-      await run("단계 구분 중…", async () => {
+      await run(t("단계 구분 중…"), async () => {
         const theme = await engine.classify(id, style.column, style.method, style.k, style.mask);
         patch(id, { style, theme });
       });
@@ -516,7 +626,7 @@ export const useApp = create<AppState>((set, get) => {
     setActiveWeights: (id, weightsId) => patch(id, { activeWeightsId: weightsId }),
 
     removeWeights: async (id, weightsId) => {
-      await run("가중치 삭제 중…", async () => {
+      await run(t("가중치 삭제 중…"), async () => {
         await engine.deleteWeights(id, weightsId);
         await get().refreshWeights(id);
       });
@@ -525,20 +635,20 @@ export const useApp = create<AppState>((set, get) => {
     selectNeighbors: async (id) => {
       const ds = get().datasets[id];
       if (!ds?.activeWeightsId || ds.selectedCount === 0) return;
-      const ids = await run("이웃 찾는 중…", () =>
+      const ids = await run(t("이웃 찾는 중…"), () =>
         engine.neighbors(id, ds.activeWeightsId!, maskToIds(ds.selection)),
       );
       if (ids) {
         get().select(id, ids, "add");
-        get().notify(`이웃 ${ids.length.toLocaleString()}개를 선택에 추가함`);
+        get().notify(t("이웃 {n}개를 선택에 추가함", { n: ids.length }));
       }
     },
 
     runLocal: async (id, params) => {
-      const label = { lisa: "LISA", lisa_bv: "이변량 LISA", gi_star: "Gi*", local_geary: "Local Geary" }[
+      const label = { lisa: "LISA", lisa_bv: t("이변량 LISA"), gi_star: "Gi*", local_geary: "Local Geary" }[
         params.method
       ];
-      const result = await run(`${label} 계산 중… (순열 ${params.permutations}회)`, () =>
+      const result = await run(t("{label} 계산 중… (순열 {n}회)", { label, n: params.permutations }), () =>
         engine.local(id, params),
       );
       if (!result) return false;
@@ -548,8 +658,11 @@ export const useApp = create<AppState>((set, get) => {
         .filter(([code]) => code !== "0" && code !== "5")
         .reduce((a, [, n]) => a + n, 0);
       get().notify(
-        `${result.description}: 유의한 피처 ${sig.toLocaleString()}개 (p ≤ ${result.threshold.toPrecision(3)})` +
-          (result.n_islands ? `, 이웃 없는 피처 ${result.n_islands}개` : ""),
+        t("{desc}: 유의한 피처 {n}개 (p ≤ {p})", {
+          desc: result.description,
+          n: sig,
+          p: result.threshold.toPrecision(3),
+        }) + (result.n_islands ? t(", 이웃 없는 피처 {n}개", { n: result.n_islands }) : ""),
       );
       return true;
     },
@@ -585,11 +698,11 @@ export const useApp = create<AppState>((set, get) => {
       }
       set({ job: null });
       if (job.status === "cancelled") {
-        get().notify(`${job.title} — 취소함`);
+        get().notify(t("{title} — 취소함", { title: t(job.title) }));
         return false;
       }
       if (job.status === "failed" || !job.result) {
-        set({ error: new EngineError(job.error?.code ?? "job_failed", job.error?.message ?? "작업 실패") });
+        set({ error: new EngineError(job.error?.code ?? "job_failed", job.error?.message ?? t("작업 실패")) });
         return false;
       }
       const { info, analysis } = job.result;
@@ -600,7 +713,7 @@ export const useApp = create<AppState>((set, get) => {
         }));
       }
       await get().showResultMap(id, analysis);
-      get().notify(`${analysis.description} 완료 (${job.elapsed.toFixed(1)}초)`);
+      get().notify(t("{desc} 완료 ({s}초)", { desc: analysis.description, s: job.elapsed.toFixed(1) }));
       return true;
     },
 
@@ -663,7 +776,7 @@ export const useApp = create<AppState>((set, get) => {
     addChart: async (chart) => {
       let spec: ChartSpec = { ...chart, id: ++chartSeq };
       if (chart.kind === "moran") {
-        const moran = await run("Moran's I 계산 중…", () =>
+        const moran = await run(t("Moran's I 계산 중…"), () =>
           engine.moran(chart.datasetId, {
             column: chart.x,
             column_y: chart.y ?? null,
@@ -736,15 +849,15 @@ export const useApp = create<AppState>((set, get) => {
         const rUi: RasterUi = { visible: r.visible, style: r.style };
         return { id, ui: rUi };
       });
-      const result = await run("프로젝트 저장 중…", () => engine.saveProject(path, datasets, ui, rasters));
+      const result = await run(t("프로젝트 저장 중…"), () => engine.saveProject(path, datasets, ui, rasters));
       if (result) {
         set({ projectPath: result.path });
-        get().notify(`프로젝트를 저장함: ${result.path}`);
+        get().notify(t("프로젝트를 저장함: {path}", { path: result.path }));
       }
     },
 
     openProject: async (path) => {
-      await run("프로젝트 여는 중…", async () => {
+      await run(t("프로젝트 여는 중…"), async () => {
         const project = await engine.openProject<ProjectUi | null, DatasetUi | null, RasterUi | null>(path);
         set({
           datasets: {},
@@ -760,7 +873,7 @@ export const useApp = create<AppState>((set, get) => {
         const rasterOrder: string[] = [];
         for (const item of project.rasters ?? []) {
           if (!item.info) {
-            get().notify(`열지 못한 래스터: ${item.error}`);
+            get().notify(t("열지 못한 래스터: {error}", { error: String(item.error) }));
             continue;
           }
           // 밴드 수가 바뀌었으면 저장된 표시 설정 대신 기본값을 씀
@@ -778,7 +891,7 @@ export const useApp = create<AppState>((set, get) => {
         const opened: string[] = [];
         for (const item of [...project.datasets].reverse()) {
           if (!item.info) {
-            get().notify(`열지 못한 데이터: ${item.error}`);
+            get().notify(t("열지 못한 데이터: {error}", { error: String(item.error) }));
             continue;
           }
           const dsUi = item.ui ?? { visible: true, style: null };

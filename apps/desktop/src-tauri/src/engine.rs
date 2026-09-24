@@ -2,6 +2,7 @@
 //!
 //! 앱 시작 시 엔진을 하위 프로세스로 띄우고, stdout의 준비 신호에서 포트를 읽어
 //! 프론트엔드에 주소·토큰을 알려줌. 종료 시 stdin을 닫아 엔진이 스스로 끝나게 함.
+//! 엔진이 도중에 죽으면 `engine-exited` 이벤트로 알리고, 프론트엔드가 `restart()`로 다시 띄울 수 있음.
 //!
 //! 엔진 실행 파일 탐색 순서
 //!   1. 환경변수 GEOSTAT_ENGINE_URL 이 있으면 이미 떠 있는 엔진에 붙음 (디버깅용, 프로세스 안 띄움)
@@ -18,7 +19,7 @@ use std::thread;
 use std::time::{Duration, Instant};
 
 use serde::{Deserialize, Serialize};
-use tauri::{AppHandle, Manager};
+use tauri::{AppHandle, Emitter, Manager};
 use tokio::sync::watch;
 
 const READY_PREFIX: &str = "GEOSTAT_ENGINE_READY ";
@@ -48,40 +49,64 @@ struct ReadyLine {
     port: u16,
 }
 
+/// 엔진이 준비된 뒤 종료됐을 때 프론트엔드로 보내는 이벤트 이름
+pub const EXITED_EVENT: &str = "engine-exited";
+
 pub struct Engine {
+    app: AppHandle,
+    tx: Arc<watch::Sender<Status>>,
     status: watch::Receiver<Status>,
     child: Mutex<Option<Child>>,
+    /// 몇 번째로 띄운 엔진인지. 이전 엔진의 종료 알림이 새 엔진 상태를 덮어쓰지 않게 구분함
+    generation: Arc<Mutex<u64>>,
 }
 
 impl Engine {
     /// 엔진을 시작함. 준비 완료를 기다리지 않고 즉시 반환하며, 결과는 `info()`로 받음
     pub fn start(app: &AppHandle) -> Self {
         let (tx, rx) = watch::channel(Status::Starting);
+        let engine = Self {
+            app: app.clone(),
+            tx: Arc::new(tx),
+            status: rx,
+            child: Mutex::new(None),
+            generation: Arc::new(Mutex::new(0)),
+        };
+        engine.launch();
+        engine
+    }
 
+    /// 엔진을 종료하고 새로 띄움 (엔진이 죽었을 때 프론트엔드가 요청함)
+    pub fn restart(&self) {
+        self.shutdown();
+        self.tx.send_replace(Status::Starting);
+        self.launch();
+    }
+
+    fn launch(&self) {
+        let tx = Arc::clone(&self.tx);
         if let Ok(url) = std::env::var("GEOSTAT_ENGINE_URL") {
             let token = std::env::var("GEOSTAT_ENGINE_TOKEN").unwrap_or_default();
             log::info!("외부 엔진 사용: {url}");
             tx.send_replace(Status::Ready(EngineInfo { url, token }));
-            return Self {
-                status: rx,
-                child: Mutex::new(None),
-            };
+            return;
         }
+        let generation = {
+            let mut g = self.generation.lock().unwrap();
+            *g += 1;
+            *g
+        };
 
         let token = random_token();
-        let child = match build_command(app).and_then(|cmd| spawn(cmd, &token)) {
+        let mut child = match build_command(&self.app).and_then(|cmd| spawn(cmd, &token)) {
             Ok(child) => child,
             Err(err) => {
                 log::error!("엔진 시작 실패: {err}");
                 tx.send_replace(Status::Failed(err));
-                return Self {
-                    status: rx,
-                    child: Mutex::new(None),
-                };
+                return;
             }
         };
 
-        let mut child = child;
         let stdout = child
             .stdout
             .take()
@@ -114,6 +139,8 @@ impl Engine {
         // stdout: 준비 신호를 찾아 상태를 Ready로 바꿈. EOF까지 계속 읽어 파이프를 비움
         {
             let tail = Arc::clone(&stderr_tail);
+            let app = self.app.clone();
+            let current = Arc::clone(&self.generation);
             thread::Builder::new()
                 .name("engine-stdout".into())
                 .spawn(move || {
@@ -142,7 +169,9 @@ impl Engine {
                         }
                         println!("[engine] {line}");
                     }
-                    if !ready {
+                    if *current.lock().unwrap() != generation {
+                        // 종료·재시작을 요청해서 끝난 이전 엔진임
+                    } else if !ready {
                         let tail = tail.lock().unwrap();
                         let detail: Vec<&str> = tail.iter().map(String::as_str).collect();
                         tx.send_replace(Status::Failed(format!(
@@ -150,16 +179,26 @@ impl Engine {
                             detail.join("\n")
                         )));
                     } else {
-                        log::warn!("엔진 프로세스가 종료됨");
+                        // 앱 종료·재시작 요청이 아닌데 끝났으면 비정상 종료로 보고 알림
+                        let tail = tail.lock().unwrap();
+                        let detail: Vec<&str> = tail
+                            .iter()
+                            .rev()
+                            .take(8)
+                            .rev()
+                            .map(String::as_str)
+                            .collect();
+                        let message =
+                            format!("분석 엔진이 예기치 않게 종료됨\n{}", detail.join("\n"));
+                        log::error!("{message}");
+                        tx.send_replace(Status::Failed(message.clone()));
+                        let _ = app.emit(EXITED_EVENT, message);
                     }
                 })
                 .expect("stdout 스레드 생성 실패");
         }
 
-        Self {
-            status: rx,
-            child: Mutex::new(Some(child)),
-        }
+        *self.child.lock().unwrap() = Some(child);
     }
 
     /// 엔진이 준비될 때까지 기다린 뒤 연결 정보를 반환함
@@ -186,6 +225,8 @@ impl Engine {
 
     /// 엔진을 종료함. stdin을 닫아 정상 종료를 유도하고, 응답이 없으면 강제 종료함
     pub fn shutdown(&self) {
+        // 세대를 올려 두면 곧 끝날 이전 엔진의 stdout 스레드가 비정상 종료로 알리지 않음
+        *self.generation.lock().unwrap() += 1;
         let Some(mut child) = self.child.lock().unwrap().take() else {
             return;
         };

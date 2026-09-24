@@ -1,0 +1,23 @@
+# 변경 기록
+
+형식은 [Keep a Changelog](https://keepachangelog.com/ko/1.1.0/)를 따르고, 버전은 [유의적 버전](https://semver.org/lang/ko/)을 씀.
+
+## [0.9.0] - 2026-09-24
+
+첫 공개 베타임. 1.0 전에 실제 자료로 사용해 보고 문제를 찾기 위한 버전임.
+
+### 추가
+- 데이터 입력: Shapefile(cp949 자동 판별), GeoPackage, GeoJSON, FlatGeobuf, CSV·엑셀(X·Y 좌표), 한국 좌표계 프리셋
+- 래스터: GeoTIFF·COG 표시(색상표·RGB 합성·오버뷰), 존 통계, 정사각·육각 격자 만들기
+- 주제도: 분위수·등간격·자연 분류·표준편차·백분위·박스·0 기준 발산·고유값 지도, 배경지도
+- 속성 테이블, 계산 필드, 조건 선택, 내보내기(좌표계 변환), 지도 이미지(PNG) 저장
+- 공간가중치: Queen·Rook(고차)·거리·KNN·커널, GeoDa `.gal`·`.gwt` 호환
+- ESDA: Moran's I(단변량·이변량), LISA, Gi*, Local Geary, Join Count, 연동 차트
+- 공간회귀: OLS(공간진단), Spatial Lag·Error(ML·GM), 직접·간접 효과, GWR·MGWR, 모형 비교표
+- 공간군집화: SKATER, Max-p, AZP, Region K-Means, Ward(공간 제약), K-평균·계층적 군집
+- 프로젝트 저장·열기(결과 캐시), 한/영 화면, 자동 업데이트, 샘플 데이터, 사용 설명서
+
+### 알려진 제약
+- macOS 14 이상, Apple Silicon 맥만 지원함
+- Apple 공증을 받지 않아 첫 실행 때 "그래도 열기"가 필요함
+- 분석 엔진이 만드는 오류 메시지와 보고서는 한국어로만 나옴

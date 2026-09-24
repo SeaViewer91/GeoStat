@@ -6,7 +6,7 @@ import { WebMercatorViewport, type Layer, type PickingInfo } from "@deck.gl/core
 import { GeoArrowPathLayer, GeoArrowPolygonLayer, GeoArrowScatterplotLayer } from "@geoarrow/deck.gl-geoarrow";
 import { TileLayer } from "@deck.gl/geo-layers";
 import { BitmapLayer } from "@deck.gl/layers";
-import { Map as BaseMap } from "react-map-gl/maplibre";
+import { Map as BaseMap, type MapRef } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 // 삼각분할 워커를 CDN 대신 앱에 포함시킴 (오프라인 동작, CSP 준수)
 // 패키지 exports에 없는 파일이라 상대 경로로 가져옴
@@ -22,6 +22,7 @@ import {
   type RGBA,
 } from "../lib/geoarrow";
 import { engine } from "../lib/engine";
+import { registerMapCapture } from "../lib/mapExport";
 import { DEFAULT_FILL, MISSING_COLOR, SELECTED_FILL, classColors } from "../lib/palette";
 import { useApp, type Basemap, type LoadedDataset, type LoadedRaster, type SelectMode } from "../store";
 
@@ -44,6 +45,7 @@ type Gesture =
 
 export function MapCanvas() {
   const deckRef = useRef<DeckGLRef>(null);
+  const baseRef = useRef<MapRef>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const datasets = useApp((s) => s.datasets);
   const order = useApp((s) => s.order);
@@ -62,6 +64,16 @@ export function MapCanvas() {
   const shiftDown = useShiftKey();
   // Shift를 누르는 동안은 임시로 사각형 선택이 됨
   const areaTool = tool === "lasso" ? "lasso" : tool === "box" || shiftDown ? "box" : null;
+
+  // 지도 이미지 내보내기용으로 캔버스를 꺼내는 함수를 등록함
+  useEffect(() => {
+    registerMapCapture(() => ({
+      deck: (deckRef.current?.deck?.getCanvas() as HTMLCanvasElement | null) ?? null,
+      base: baseRef.current?.getMap().getCanvas() ?? null,
+      background: getComputedStyle(containerRef.current ?? document.body).backgroundColor || "#ffffff",
+    }));
+    return () => registerMapCapture(null);
+  }, []);
 
   // 범위 이동 요청 처리
   useEffect(() => {
@@ -186,7 +198,13 @@ export function MapCanvas() {
         }
       >
         {basemap !== "none" && (
-          <BaseMap mapStyle={BASEMAP_STYLE[basemap]} reuseMaps attributionControl={{ compact: true }} />
+          <BaseMap
+            ref={baseRef}
+            mapStyle={BASEMAP_STYLE[basemap]}
+            reuseMaps
+            attributionControl={{ compact: true }}
+            canvasContextAttributes={{ preserveDrawingBuffer: true }}
+          />
         )}
       </DeckGL>
       <div

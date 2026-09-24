@@ -1,6 +1,7 @@
 // 군집 분석 결과 카드 (결과 패널): 요약, 군집별 크기·조각 수·변수 평균(프로필), 지도 연동
 
 import { dirname, pickSavePath } from "../../lib/dialogs";
+import { t } from "../../i18n";
 import { engine, type ClusterReport } from "../../lib/engine";
 import { classColors, rgbaCss } from "../../lib/palette";
 import { useApp, type LoadedDataset, type ReportEntry } from "../../store";
@@ -9,8 +10,8 @@ import { num } from "./ReportCard";
 /** 표준화 평균(z)을 파랑(낮음)–흰색–빨강(높음) 배경색으로 바꿈. |z| ≥ 1.5면 가장 진함 */
 function zColor(z: number | null): string | undefined {
   if (z === null || !Number.isFinite(z)) return undefined;
-  const t = Math.min(1, Math.abs(z) / 1.5);
-  const alpha = (0.08 + 0.5 * t).toFixed(2);
+  const frac = Math.min(1, Math.abs(z) / 1.5);
+  const alpha = (0.08 + 0.5 * frac).toFixed(2);
   return z >= 0 ? `rgba(214, 96, 77, ${alpha})` : `rgba(67, 147, 195, ${alpha})`;
 }
 
@@ -32,21 +33,21 @@ export function ClusterReportCard({ ds, entry }: { ds: LoadedDataset; entry: Rep
 
   const selectCluster = async (clusterId: number, add: boolean) => {
     if (!theme) await showResultMap(ds.info.id, analysis);
-    const t = useApp.getState().datasets[ds.info.id]?.theme;
-    const k = t ? t.labels.indexOf(String(clusterId)) : -1;
+    const th = useApp.getState().datasets[ds.info.id]?.theme;
+    const k = th ? th.labels.indexOf(String(clusterId)) : -1;
     if (k >= 0) selectClass(ds.info.id, k, add ? "add" : "replace");
   };
 
   const save = async () => {
     const path = await pickSavePath(
-      [{ name: "텍스트", extensions: ["txt"] }],
-      "보고서 저장",
-      `${dirname(ds.info.path)}/${ds.info.name}_${report.method}_보고서.txt`,
+      [{ name: t("텍스트"), extensions: ["txt"] }],
+      t("보고서 저장"),
+      `${dirname(ds.info.path)}/${ds.info.name}_${report.method}_${t("보고서")}.txt`,
     );
     if (!path) return;
     try {
       const r = await engine.saveReport(ds.info.id, analysis.id, path);
-      notify(`보고서를 저장함: ${r.path}`);
+      notify(t("보고서를 저장함: {path}", { path: r.path }));
     } catch (err) {
       fail(err);
     }
@@ -56,36 +57,36 @@ export function ClusterReportCard({ ds, entry }: { ds: LoadedDataset; entry: Rep
     <section className="chart-card report-card" data-testid="cluster-card">
       <header>
         <span className="title" title={analysis.description}>
-          {report.title}
+          {t(report.title)}
         </span>
-        <button className="link" onClick={() => dismissReport(analysis.id)} aria-label="보고서 닫기">
+        <button className="link" onClick={() => dismissReport(analysis.id)} aria-label={t("보고서 닫기")}>
           ✕
         </button>
       </header>
       <div className="muted small">
-        {report.variables.join(", ")} · n={report.n.toLocaleString()} · {report.k}개 군집
+        {report.variables.join(", ")} · n={report.n.toLocaleString()} · {t("{k}개 군집", { k: report.k })}
       </div>
 
       <dl className="summary-grid">
         {report.summary.map(([label, value]) => (
           <div key={label}>
-            <dt>{label}</dt>
+            <dt>{t(label)}</dt>
             <dd>{num(value)}</dd>
           </div>
         ))}
       </dl>
 
-      <h4>군집별 요약 (행을 누르면 지도에서 선택, ⌘ 누르고 누르면 추가)</h4>
+      <h4>{t("군집별 요약 (행을 누르면 지도에서 선택, ⌘ 누르고 누르면 추가)")}</h4>
       <div className="table-scroll">
         <table className="result-table compact nowrap clickable" data-testid="cluster-table">
           <thead>
             <tr>
-              <th>군집</th>
-              <th>크기</th>
-              {hasFragments && <th title="공간적으로 이어진 조각 수 (1이면 한 덩어리)">조각</th>}
-              <th title="군집 내 제곱합">SS</th>
+              <th>{t("군집")}</th>
+              <th>{t("크기")}</th>
+              {hasFragments && <th title={t("공간적으로 이어진 조각 수 (1이면 한 덩어리)")}>{t("조각")}</th>}
+              <th title={t("군집 내 제곱합")}>SS</th>
               {report.variables.map((v) => (
-                <th key={v} title={`${v} 평균 (원래 값). 배경색은 표준화 평균`}>
+                <th key={v} title={t("{v} 평균 (원래 값). 배경색은 표준화 평균", { v })}>
                   {v}
                 </th>
               ))}
@@ -114,7 +115,9 @@ export function ClusterReportCard({ ds, entry }: { ds: LoadedDataset; entry: Rep
           </tbody>
         </table>
       </div>
-      <div className="muted small">평균 칸 배경: 전체 평균보다 높으면 빨강, 낮으면 파랑 (표준화 평균 기준)</div>
+      <div className="muted small">
+        {t("평균 칸 배경: 전체 평균보다 높으면 빨강, 낮으면 파랑 (표준화 평균 기준)")}
+      </div>
 
       {report.notes.filter(Boolean).length > 0 && (
         <ul className="notes">
@@ -125,8 +128,8 @@ export function ClusterReportCard({ ds, entry }: { ds: LoadedDataset; entry: Rep
       )}
 
       <div className="row wrap">
-        <button onClick={() => showResultMap(ds.info.id, analysis)}>군집 지도</button>
-        <button onClick={save}>보고서 저장…</button>
+        <button onClick={() => showResultMap(ds.info.id, analysis)}>{t("군집 지도")}</button>
+        <button onClick={save}>{t("보고서 저장…")}</button>
       </div>
     </section>
   );

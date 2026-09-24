@@ -7,6 +7,8 @@ import { MapCanvas } from "./components/MapCanvas";
 import { Sidebar } from "./components/Sidebar";
 import { StatusBar } from "./components/StatusBar";
 import { Toolbar, openDataFlow, openProjectFlow, saveProjectFlow } from "./components/Toolbar";
+import { t } from "./i18n";
+import { onEngineExited } from "./lib/engine";
 import { useApp } from "./store";
 
 const MIN_TABLE = 90;
@@ -24,6 +26,20 @@ export function App() {
   const dragStart = useRef<{ y: number; h: number } | null>(null);
 
   const toggleTable = useCallback(() => setTableOpen((v) => !v), []);
+  const engineDown = useApp((s) => s.engineDown);
+  const update = useApp((s) => s.update);
+  const busy = useApp((s) => s.busy);
+
+  // 엔진이 예기치 않게 끝나면 알림 띄움. 시작하고 조금 뒤 새 버전이 있는지 조용히 확인함
+  useEffect(() => {
+    let unlisten: (() => void) | undefined;
+    void onEngineExited((message) => useApp.getState().setEngineDown(message)).then((f) => (unlisten = f));
+    const timer = window.setTimeout(() => void useApp.getState().checkUpdate(false), 4000);
+    return () => {
+      unlisten?.();
+      window.clearTimeout(timer);
+    };
+  }, []);
   useShortcuts(toggleTable, toggleCharts);
   // 차트가 추가되면 패널을 엶
   const chartCount = useApp((s) => s.charts.length + s.reports.length);
@@ -50,11 +66,34 @@ export function App() {
         <div className="center">
           <main className="workspace">
             <MapCanvas />
+            {engineDown && (
+              <div className="error-banner engine-down" role="alert" data-testid="engine-down">
+                <strong>{t("분석 엔진이 멈춤")}</strong>
+                <span className="detail">{engineDown}</span>
+                <span className="muted">
+                  {t("다시 시작하면 열려 있던 데이터는 닫힘. 프로젝트를 저장해 두었다면 다시 열면 됨")}
+                </span>
+                <button className="primary" disabled={!!busy} onClick={() => void useApp.getState().restartEngine()}>
+                  {t("엔진 다시 시작")}
+                </button>
+              </div>
+            )}
+            {update && !engineDown && (
+              <div className="update-banner" role="status" data-testid="update-banner">
+                <span>{t("새 버전 {v}이(가) 있음", { v: update.version })}</span>
+                <button className="primary" disabled={!!busy} onClick={() => void useApp.getState().installUpdate()}>
+                  {t("설치 후 다시 시작")}
+                </button>
+                <button className="link" onClick={() => useApp.getState().dismissUpdate()}>
+                  {t("나중에")}
+                </button>
+              </div>
+            )}
             {error && (
               <div className="error-banner" role="alert">
                 <strong>{error.message}</strong>
                 <code>{error.code}</code>
-                <button onClick={dismissError}>닫기</button>
+                <button onClick={dismissError}>{t("닫기")}</button>
               </div>
             )}
             <div className="notices">
@@ -64,8 +103,8 @@ export function App() {
                 </div>
               ))}
             </div>
-            <button className="table-toggle" onClick={toggleTable} title="속성 테이블 (⌘T)">
-              {tableOpen ? "테이블 숨기기 ▾" : "테이블 ▴"}
+            <button className="table-toggle" onClick={toggleTable} title={t("속성 테이블 (⌘T)")}>
+              {tableOpen ? `${t("테이블 숨기기")} ▾` : `${t("테이블")} ▴`}
             </button>
           </main>
           {tableOpen && (

@@ -6,6 +6,7 @@
 import { invoke, isTauri } from "@tauri-apps/api/core";
 import { tableFromIPC, type Table } from "apache-arrow";
 
+import { t } from "../i18n";
 import { decodeFloat64, decodeInt16, decodeUint32, encodeUint32 } from "./binary";
 
 export interface EngineConnection {
@@ -485,6 +486,32 @@ export class EngineError extends Error {
 
 let connection: Promise<EngineConnection> | null = null;
 
+/** 엔진을 다시 띄운 뒤 새 주소·토큰을 받도록 캐시를 비움 */
+export function resetEngineConnection(): void {
+  connection = null;
+}
+
+/** 엔진 프로세스를 다시 띄움 (Tauri 앱에서만) */
+export async function restartEngine(): Promise<void> {
+  if (!isTauri()) throw new EngineError("unsupported", t("브라우저 개발 모드에서는 엔진을 다시 띄울 수 없음"));
+  await invoke("restart_engine");
+  resetEngineConnection();
+}
+
+/** 엔진이 예기치 않게 종료되면 부름. 해제 함수를 돌려줌 */
+export async function onEngineExited(handler: (message: string) => void): Promise<() => void> {
+  if (!isTauri()) return () => {};
+  const { listen } = await import("@tauri-apps/api/event");
+  return listen<string>("engine-exited", (e) => handler(e.payload));
+}
+
+export interface SampleInfo {
+  id: string;
+  name: string;
+  description: string;
+  file: string;
+}
+
 /** 엔진 연결 정보를 얻음. 엔진이 준비될 때까지 기다리며 결과는 캐시함 */
 export function getEngine(): Promise<EngineConnection> {
   if (!connection) {
@@ -501,7 +528,7 @@ async function resolveConnection(): Promise<EngineConnection> {
     try {
       return await invoke<EngineConnection>("engine_info");
     } catch (err) {
-      throw new EngineError("engine_unavailable", `분석 엔진을 시작하지 못함: ${String(err)}`);
+      throw new EngineError("engine_unavailable", t("분석 엔진을 시작하지 못함: {err}", { err: String(err) }));
     }
   }
   const url = import.meta.env.VITE_ENGINE_URL;
@@ -509,7 +536,7 @@ async function resolveConnection(): Promise<EngineConnection> {
   if (!url || !token) {
     throw new EngineError(
       "engine_unconfigured",
-      "브라우저 모드에서는 VITE_ENGINE_URL, VITE_ENGINE_TOKEN 환경변수가 필요함",
+      t("브라우저 모드에서는 VITE_ENGINE_URL, VITE_ENGINE_TOKEN 환경변수가 필요함"),
     );
   }
   return { url: url.replace(/\/$/, ""), token };
@@ -525,7 +552,7 @@ async function request(path: string, init: RequestInit = {}): Promise<Response> 
   try {
     res = await fetch(`${url}${path}`, { ...init, headers });
   } catch (err) {
-    throw new EngineError("engine_unreachable", `엔진에 연결할 수 없음: ${String(err)}`);
+    throw new EngineError("engine_unreachable", t("엔진에 연결할 수 없음: {err}", { err: String(err) }));
   }
   if (!res.ok) throw await toEngineError(res);
   return res;
@@ -542,7 +569,8 @@ async function toEngineError(res: Response): Promise<EngineError> {
   } catch {
     // JSON이 아닌 응답은 아래 기본 메시지로 처리함
   }
-  return new EngineError(`http_${res.status}`, `엔진 요청 실패 (HTTP ${res.status})`, res.status);
+  const message = t("엔진 요청 실패 (HTTP {status})", { status: String(res.status) });
+  return new EngineError(`http_${res.status}`, message, res.status);
 }
 
 async function json<T>(path: string, init?: RequestInit): Promise<T> {
@@ -616,6 +644,15 @@ export const engine = {
   ) => post<{ path: string; n_datasets: number }>("/project/save", { path, datasets, ui, rasters }),
 
   openProject: <U, D, R>(path: string) => post<OpenedProject<U, D, R>>("/project/open", { path }),
+
+  // ---- 샘플·조건 선택·이미지 ----
+  samples: () => json<SampleInfo[]>("/files/samples"),
+  copySample: (id: string) => post<{ path: string }>(`/files/samples/${encodeURIComponent(id)}/copy`, {}),
+  query: async (id: string, expression: string): Promise<Uint32Array> => {
+    const r = await post<{ ids: string; count: number }>(`${ds(id)}/query`, { expression });
+    return decodeUint32(r.ids);
+  },
+  saveImage: (path: string, data: string) => post<{ path: string }>("/files/save-image", { path, data }),
 
   // ---- 래스터 ----
   openRaster: (path: string, name?: string) => post<RasterInfo>("/rasters/open", { path, name }),

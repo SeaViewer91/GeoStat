@@ -37,6 +37,7 @@ engine/dist/
 
 # Packaging / signing secrets
 *.p12
+*.key
 *.cer
 *.mobileprovision
 *.dmg
@@ -48,3 +49,4 @@ data/local/
 *.tif
 *.tiff
 !engine/tests/data/**
+!engine/src/geostat_engine/samples/**

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import { t } from "../i18n";
 import type { RasterColormap, RasterStyle } from "../lib/engine";
 import { useApp, type LoadedRaster } from "../store";
 
@@ -34,7 +35,7 @@ export function RasterPanel() {
 
   return (
     <section className="panel" data-testid="raster-panel">
-      <h2>래스터</h2>
+      <h2>{t("래스터")}</h2>
       <ul className="layer-list">
         {rasterOrder.map((id) => {
           const r = rasters[id];
@@ -51,17 +52,17 @@ export function RasterPanel() {
                 checked={r.visible}
                 onChange={() => toggleRasterVisible(id)}
                 onClick={(e) => e.stopPropagation()}
-                aria-label="래스터 표시"
+                aria-label={t("래스터 표시")}
               />
               <span className="geom">▦</span>
               <span className="name" title={r.info.path}>
                 {r.info.name}
               </span>
               <span className="actions">
-                <button title="전체 보기" onClick={() => zoomToRaster(id)}>
+                <button title={t("전체 보기")} onClick={() => zoomToRaster(id)}>
                   ⤢
                 </button>
-                <button title="닫기" onClick={() => closeRaster(id)}>
+                <button title={t("닫기")} onClick={() => closeRaster(id)}>
                   ✕
                 </button>
               </span>
@@ -116,36 +117,42 @@ function RasterStyleEditor({ raster }: { raster: LoadedRaster }) {
   return (
     <div className="form raster-style">
       <div className="muted small">
-        {info.width.toLocaleString()}×{info.height.toLocaleString()} · {info.count}밴드 · {info.dtype} · {info.crs} ·
-        해상도 {fmt(info.res[0])}
-        {info.nodata !== null ? ` · 값 없음 ${fmt(info.nodata)}` : ""}
+        {t("{w}×{h} · {count}밴드 · {dtype} · {crs} · 해상도 {res}", {
+          w: info.width,
+          h: info.height,
+          count: info.count,
+          dtype: info.dtype,
+          crs: info.crs,
+          res: fmt(info.res[0]),
+        })}
+        {info.nodata !== null ? ` · ${t("값 없음 {v}", { v: fmt(info.nodata) })}` : ""}
       </div>
       {info.needs_overviews && (
         <div className="hint warn-text">
-          오버뷰가 없어 축소 표시가 느림.{" "}
+          {t("오버뷰가 없어 축소 표시가 느림.")}{" "}
           <button className="link" disabled={!!busy} onClick={() => buildOverviews(info.id)}>
-            오버뷰 만들기
+            {t("오버뷰 만들기")}
           </button>{" "}
-          (원본 옆에 .ovr 파일을 만듦)
+          {t("(원본 옆에 .ovr 파일을 만듦)")}
         </div>
       )}
       {info.count >= 3 && (
         <label>
-          표시 방식
+          {t("표시 방식")}
           <select
             value={rgb ? "rgb" : "single"}
             onChange={(e) => setBands(e.target.value === "rgb" ? [1, 2, 3] : [style.bands[0] ?? 1])}
-            aria-label="표시 방식"
+            aria-label={t("표시 방식")}
           >
-            <option value="rgb">RGB 합성</option>
-            <option value="single">단일 밴드 + 색상표</option>
+            <option value="rgb">{t("RGB 합성")}</option>
+            <option value="single">{t("단일 밴드 + 색상표")}</option>
           </select>
         </label>
       )}
       <div className={rgb ? "grid3" : "grid2"}>
         {style.bands.map((b, i) => (
           <label key={i}>
-            {rgb ? ["R", "G", "B"][i] : "밴드"}
+            {rgb ? ["R", "G", "B"][i] : t("밴드")}
             <select
               value={b}
               onChange={(e) => {
@@ -153,7 +160,7 @@ function RasterStyleEditor({ raster }: { raster: LoadedRaster }) {
                 next[i] = Number(e.target.value);
                 setBands(next);
               }}
-              aria-label={rgb ? `${["R", "G", "B"][i]} 밴드` : "밴드"}
+              aria-label={rgb ? t("{c} 밴드", { c: ["R", "G", "B"][i] }) : t("밴드")}
             >
               {info.band_names.map((name, j) => (
                 <option key={j} value={j + 1}>
@@ -165,15 +172,15 @@ function RasterStyleEditor({ raster }: { raster: LoadedRaster }) {
         ))}
         {!rgb && (
           <label>
-            색상표
+            {t("색상표")}
             <select
               value={style.colormap}
               onChange={(e) => set({ colormap: e.target.value as RasterColormap })}
-              aria-label="색상표"
+              aria-label={t("색상표")}
             >
               {COLORMAPS.map((c) => (
                 <option key={c.id} value={c.id}>
-                  {c.label}
+                  {t(c.label)}
                 </option>
               ))}
             </select>
@@ -182,13 +189,13 @@ function RasterStyleEditor({ raster }: { raster: LoadedRaster }) {
       </div>
       {style.bands.map((b, i) => (
         <div className="row" key={i}>
-          <span className="small muted band-tag">{rgb ? ["R", "G", "B"][i] : "범위"}</span>
+          <span className="small muted band-tag">{rgb ? ["R", "G", "B"][i] : t("값 범위")}</span>
           <input
             value={lo[i] ?? ""}
             onChange={(e) => setLo(lo.map((v, j) => (j === i ? e.target.value : v)))}
             onKeyDown={(e) => e.key === "Enter" && applyRange()}
             onBlur={applyRange}
-            aria-label={`밴드 ${b} 최솟값`}
+            aria-label={t("밴드 {b} 최솟값", { b })}
           />
           <span className="muted">~</span>
           <input
@@ -196,22 +203,25 @@ function RasterStyleEditor({ raster }: { raster: LoadedRaster }) {
             onChange={(e) => setHi(hi.map((v, j) => (j === i ? e.target.value : v)))}
             onKeyDown={(e) => e.key === "Enter" && applyRange()}
             onBlur={applyRange}
-            aria-label={`밴드 ${b} 최댓값`}
+            aria-label={t("밴드 {b} 최댓값", { b })}
           />
         </div>
       ))}
       <div className="row">
-        <button onClick={() => set(stretch(style.bands, "pct"))} title="2~98% 백분위로 늘림 (이상값 영향 줄임)">
+        <button
+          onClick={() => set(stretch(style.bands, "pct"))}
+          title={t("2~98% 백분위로 늘림 (이상값 영향 줄임)")}
+        >
           2–98%
         </button>
-        <button onClick={() => set(stretch(style.bands, "minmax"))}>최소–최대</button>
-        <label className="check" title="범주 자료(토지피복 등)는 최근접을 씀">
+        <button onClick={() => set(stretch(style.bands, "minmax"))}>{t("최소–최대")}</button>
+        <label className="check" title={t("범주 자료(토지피복 등)는 최근접을 씀")}>
           <input
             type="checkbox"
             checked={style.resampling === "nearest"}
             onChange={(e) => set({ resampling: e.target.checked ? "nearest" : "bilinear" })}
           />
-          최근접 보간
+          {t("최근접 보간")}
         </label>
       </div>
       {!rgb && (
@@ -225,7 +235,7 @@ function RasterStyleEditor({ raster }: { raster: LoadedRaster }) {
         </div>
       )}
       <label>
-        투명도 {Math.round((1 - style.opacity) * 100)}%
+        {t("투명도 {pct}%", { pct: Math.round((1 - style.opacity) * 100) })}
         <input
           type="range"
           min={0}
@@ -233,7 +243,7 @@ function RasterStyleEditor({ raster }: { raster: LoadedRaster }) {
           step={0.05}
           value={style.opacity}
           onChange={(e) => set({ opacity: Number(e.target.value) })}
-          aria-label="불투명도"
+          aria-label={t("불투명도")}
         />
       </label>
     </div>

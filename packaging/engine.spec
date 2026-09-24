@@ -8,14 +8,15 @@
 
 import os
 
-from PyInstaller.utils.hooks import collect_all, collect_submodules
+from PyInstaller.utils.hooks import collect_all, collect_data_files, collect_submodules
 
 hiddenimports = []
 # uvicorn은 문자열로 모듈을 불러오는 부분이 많아 정적 분석으로 잡히지 않음
 hiddenimports += collect_submodules("uvicorn")
 hiddenimports += collect_submodules("geostat_engine")
 
-datas = []
+datas = collect_data_files("geostat_engine")  # 샘플 데이터 (geostat_engine/samples)
+
 binaries = []
 # 컴파일 확장 모듈끼리 서로 임포트하는 경우(pyogrio._io → pyogrio._geometry, rasterio._base →
 # rasterio.serde 등)와 GDAL(gdal_data)·PROJ(proj.db) 데이터 파일까지 통째로 모음

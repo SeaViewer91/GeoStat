@@ -55,3 +55,25 @@ def evaluate(gdf: gpd.GeoDataFrame, expression: str) -> pd.Series:
     if pd.api.types.is_float_dtype(result):
         result = result.replace([np.inf, -np.inf], np.nan)
     return result
+
+
+def select(gdf: gpd.GeoDataFrame, expression: str) -> np.ndarray:
+    """조건식에 맞는 행의 불리언 배열. 예: `인구` > 5000 and `구분` == "도심" """
+    expression = expression.strip()
+    if not expression:
+        raise EngineError("invalid_expression", "조건식이 비었음")
+    if _FORBIDDEN.search(expression):
+        raise EngineError("invalid_expression", "식에 쓸 수 없는 구문이 있음")
+    frame = pd.DataFrame(gdf.drop(columns=gdf.geometry.name))
+    try:
+        result = frame.eval(expression, engine="python")
+    except Exception as exc:
+        raise EngineError("invalid_expression", f"조건식을 계산하지 못함: {exc}") from exc
+    if isinstance(result, pd.Series) and len(result) == len(frame):
+        if pd.api.types.is_bool_dtype(result):
+            return result.fillna(False).to_numpy(dtype=bool)
+        if pd.api.types.is_numeric_dtype(result) and set(result.dropna().unique()) <= {0, 1}:
+            return (result == 1).to_numpy()
+    raise EngineError(
+        "invalid_expression", "참·거짓을 돌려주는 조건식이어야 함 (예: `인구` > 5000)"
+    )

@@ -2,6 +2,8 @@
 
 import * as arrow from "apache-arrow";
 
+import { t } from "../i18n";
+
 export type RGBA = [number, number, number, number];
 
 /** 지오메트리 열 이름. 엔진은 항상 "geometry"로 보냄 */
@@ -16,7 +18,7 @@ export const GEOMETRY_COLUMN = "geometry";
  */
 export function computeFeatureBounds(table: arrow.Table): Float64Array {
   const column = table.getChild(GEOMETRY_COLUMN);
-  if (!column) throw new Error("geometry 열이 없음");
+  if (!column) throw new Error(t("geometry 열이 없음"));
 
   const out = new Float64Array(table.numRows * 4);
   let row = 0;
@@ -31,7 +33,7 @@ export function computeFeatureBounds(table: arrow.Table): Float64Array {
       data = data.children[0];
     }
     if (data.type.typeId !== arrow.Type.FixedSizeList) {
-      throw new Error(`지원하지 않는 GeoArrow 구조: ${String(data.type)}`);
+      throw new Error(t("지원하지 않는 GeoArrow 구조: {type}", { type: String(data.type) }));
     }
     const dim = (data.type as arrow.FixedSizeList).listSize;
     const coordsData = data.children[0];

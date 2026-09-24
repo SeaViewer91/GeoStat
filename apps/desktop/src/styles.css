@@ -1181,3 +1181,52 @@ button.on-soft {
 .raster-legend .row {
   display: flex;
 }
+
+/* ---- 엔진 멈춤·업데이트 알림 ---- */
+
+.error-banner.engine-down {
+  flex-direction: column;
+  align-items: flex-start;
+  z-index: 6;
+}
+
+.error-banner .detail {
+  white-space: pre-wrap;
+  font-size: 11px;
+  color: var(--muted);
+  max-height: 120px;
+  overflow: auto;
+}
+
+.update-banner {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: var(--panel);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.15);
+  z-index: 5;
+}
+
+.chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-height: 96px;
+  overflow-y: auto;
+}
+
+.chip {
+  padding: 1px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+.chip.op {
+  font-family: ui-monospace, Menlo, monospace;
+}

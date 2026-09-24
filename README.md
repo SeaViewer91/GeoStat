@@ -1,13 +1,15 @@
 # GeoStat
 
 macOS용 공간통계 분석 데스크톱 앱임. GeoDa 수준의 탐색적 공간자료분석(ESDA), 공간회귀, 공간군집화에
-GWR/MGWR, 한국 좌표계·한글 UI, 래스터·대용량 데이터 지원을 더하는 것을 목표로 함.
+GWR/MGWR, 한국 좌표계·한글 자료, 래스터 존 통계를 더했음. ([English guide](docs/manual.en.md))
 
-> 🚧 개발 초기 단계임. 아직 설치 가능한 빌드는 없음.
+> 0.9는 첫 공개 베타임. 문제를 찾으면 [Issues](https://github.com/SeaViewer91/GeoStat/issues)에 알려 주면 됨.
 
-## 설치 (릴리스 이후)
+📖 **[사용 설명서](docs/manual.md)** · 📝 [변경 기록](CHANGELOG.md)
 
-[Releases](https://github.com/SeaViewer91/GeoStat/releases)에서 `.dmg`를 받아 `GeoStat.app`을 응용 프로그램 폴더로 옮김.
+## 설치
+
+[Releases](https://github.com/SeaViewer91/GeoStat/releases)에서 `GeoStat_<버전>_aarch64.dmg`를 받아 `GeoStat.app`을 응용 프로그램 폴더로 옮김.
 
 macOS 14(Sonoma) 이상, Apple Silicon 맥이 필요함.
 
@@ -16,21 +18,22 @@ Apple 공증을 받지 않은 앱이라 첫 실행 때 "확인되지 않은 개�
 - **시스템 설정 → 개인정보 보호 및 보안** 맨 아래의 **"그래도 열기"** 클릭
 - 또는 터미널에서 `xattr -dr com.apple.quarantine /Applications/GeoStat.app` 실행
 
-## 주요 기능
+이후 새 버전은 앱이 알려 주며 **설치 후 다시 시작**으로 업데이트함 (서명을 확인한 뒤 설치함).
 
-✅ 구현됨 · 🚧 개발 예정
+## 주요 기능
 
 - ✅ **데이터 입력**: Shapefile, GeoPackage, GeoJSON, FlatGeobuf, CSV·엑셀(X·Y 좌표) 지원. cp949 DBF·CSV 자동 처리, 한국 좌표계 프리셋 제공
 - ✅ **주제도**: 분위수·등간격·자연 분류·표준편차·백분위·박스·0 기준 발산·고유값 지도, 범례 클릭 선택, 배경지도(OpenFreeMap)
-- ✅ **속성 테이블**: 정렬, 선택 연동, 계산 필드(식), 내보내기(GeoPackage·Shapefile·GeoJSON·CSV, 좌표계 변환)
+- ✅ **속성 테이블**: 정렬, 선택 연동, 조건 선택, 계산 필드(식), 내보내기(GeoPackage·Shapefile·GeoJSON·CSV, 좌표계 변환)
 - ✅ **선택**: 클릭·사각형·올가미, 지도·테이블·범례 간 연동
-- ✅ **프로젝트**: `.gstproj`로 저장·열기 (원본 경로와 작업 과정을 기록해 재현함)
+- ✅ **프로젝트**: `.gstproj`로 저장·열기 (원본 경로와 작업 과정을 기록해 재현함), 지도 이미지(PNG) 저장
 - ✅ **공간가중치**: Queen/Rook(고차), 거리, KNN, 커널. 연결성 히스토그램, 섬 탐지, GeoDa `.gal`/`.gwt` 호환
 - ✅ **ESDA**: Moran's I(단변량·이변량), LISA, Getis-Ord Gi*, Local Geary, Join Count. FDR·Bonferroni 보정, 군집·유의성 지도
 - ✅ **연동 차트**: 히스토그램·산점도·박스플롯·Moran 산점도와 지도·테이블 간 선택 연동
 - ✅ **공간회귀**: OLS(공간진단·LM 검정·White 강건 표준오차), Spatial Lag/Error(ML·GM), 직접·간접 효과, **GWR/MGWR**(유의성 마스크 계수 지도), 모형 비교표(AICc·잔차 Moran's I), 진행률·취소, 텍스트 보고서
 - ✅ **공간군집화**: SKATER, Max-p, AZP, Region K-Means, Ward(공간 제약)와 비교용 K-평균·계층적 군집. 군집 지도, 군집별 프로필·제곱합 비, 공간 조각 수
 - ✅ **래스터**: GeoTIFF/COG 표시(색상표·RGB 합성·오버뷰), 존 통계(면적 가중), 정사각·육각 격자 만들기 → 격자 단위 ESDA
+- ✅ **그 밖에**: 한/영 화면 전환, 자동 업데이트, 샘플 데이터(조지아 GWR·노스캐롤라이나 SIDS 등), 엔진이 멈추면 알림·다시 시작
 
 ## 사용법
 
@@ -109,6 +112,16 @@ cd apps/desktop && npm run typecheck
 packaging/build-engine.sh    # 엔진만 PyInstaller로 빌드하고 스모크 테스트함
 packaging/macos/release.sh   # 엔진 빌드 → ad-hoc 서명 → .app/.dmg 생성
 ```
+
+### 릴리스
+
+```bash
+python3 scripts/version.py 1.0.0     # 앱·엔진 버전을 한꺼번에 바꿈 (CHANGELOG.md에 같은 버전 항목을 먼저 적어 둠)
+git tag v1.0.0 && git push origin v1.0.0
+```
+
+태그를 푸시하면 GitHub Actions(`release.yml`)가 macOS에서 엔진·앱을 빌드해 Release에 dmg와 자동 업데이트 파일(`latest.json` 등)을 올림.
+업데이트 파일 서명에는 저장소 비밀값 `TAURI_SIGNING_PRIVATE_KEY`, `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`가 필요함.
 
 ### 성능 측정
 

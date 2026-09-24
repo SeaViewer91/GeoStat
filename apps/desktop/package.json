@@ -1,14 +1,15 @@
 {
   "name": "geostat-desktop",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.9.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "i18n:check": "node scripts/check-i18n.mjs"
   },
   "dependencies": {
     "@deck.gl/aggregation-layers": "^9.4.0",
@@ -20,6 +21,9 @@
     "@math.gl/polygon": "^4.1.0",
     "@tauri-apps/api": "^2.11.1",
     "@tauri-apps/plugin-dialog": "^2.7.3",
+    "@tauri-apps/plugin-opener": "^2.5.5",
+    "@tauri-apps/plugin-process": "^2.3.1",
+    "@tauri-apps/plugin-updater": "^2.12.0",
     "apache-arrow": "^21.2.0",
     "maplibre-gl": "^6.11.1",
     "react": "^19.3.0",

@@ -1,5 +1,6 @@
 // 모형 비교표: 같은 데이터셋에서 실행한 회귀 결과의 적합도를 한 표로 모음
 
+import { t } from "../../i18n";
 import { isRegressionReport, type RegressionModel, type RegressionReport } from "../../lib/engine";
 import { useApp, type ReportEntry } from "../../store";
 import { num, pval, stars } from "./ReportCard";
@@ -43,7 +44,7 @@ export function ModelComparison({ entries }: { entries: ReportEntry[] }) {
   const ys = new Set(rows.map((e) => reg(e).y));
 
   const copy = async () => {
-    const header = ["모형", "종속변수", "독립변수", "n", "R²", "로그우도", "AICc", "잔차 Moran's I", "p"];
+    const header = [t("모형"), t("종속변수"), t("독립변수"), "n", "R²", t("로그우도"), "AICc", t("잔차 Moran's I"), "p"];
     const lines = rows.map((e) => {
       const r = reg(e);
       const f = r.fit!;
@@ -53,30 +54,30 @@ export function ModelComparison({ entries }: { entries: ReportEntry[] }) {
     });
     try {
       await navigator.clipboard.writeText([header.join("\t"), ...lines].join("\n"));
-      notify("모형 비교표를 복사함 (엑셀에 붙여 넣을 수 있음)");
+      notify(t("모형 비교표를 복사함 (엑셀에 붙여 넣을 수 있음)"));
     } catch {
-      notify("클립보드에 복사하지 못함");
+      notify(t("클립보드에 복사하지 못함"));
     }
   };
 
   return (
     <section className="chart-card report-card" data-testid="model-comparison">
       <header>
-        <span className="title">모형 비교</span>
-        <button className="link" onClick={copy} title="탭으로 구분한 표로 복사">
-          복사
+        <span className="title">{t("모형 비교")}</span>
+        <button className="link" onClick={copy} title={t("탭으로 구분한 표로 복사")}>
+          {t("복사")}
         </button>
       </header>
       <div className="table-scroll">
         <table className="result-table compact nowrap">
           <thead>
             <tr>
-              <th>모형</th>
+              <th>{t("모형")}</th>
               {ys.size > 1 && <th>y</th>}
-              <th title="GM·ML 공간 모형은 유사 R²">R²</th>
-              <th>로그우도</th>
+              <th title={t("GM·ML 공간 모형은 유사 R²")}>R²</th>
+              <th>{t("로그우도")}</th>
               <th>AICc</th>
-              <th>잔차 I</th>
+              <th>{t("잔차 I")}</th>
               <th>p</th>
             </tr>
           </thead>
@@ -89,7 +90,7 @@ export function ModelComparison({ entries }: { entries: ReportEntry[] }) {
                 <tr key={e.analysis.id} className={isBest ? "best" : ""} title={e.analysis.description}>
                   <td>
                     {label(e)}
-                    {isBest && <span className="badge">최적</span>}
+                    {isBest && <span className="badge">{t("최적")}</span>}
                   </td>
                   {ys.size > 1 && <td>{r.y}</td>}
                   <td>{num(f.r2)}</td>
@@ -107,8 +108,10 @@ export function ModelComparison({ entries }: { entries: ReportEntry[] }) {
         </table>
       </div>
       <p className="muted small">
-        AICc는 σ²를 모수로 포함해 계산함 (mgwr 방식). 종속변수·관측치가 같은 모형끼리 비교하며 낮을수록 좋음. 잔차 I는
-        순열 999회 검정이며, 유의하면 공간 의존성이 남아 있다는 뜻임. GM 추정은 우도가 없어 비교에서 빠짐.
+        {t(
+          "AICc는 σ²를 모수로 포함해 계산함 (mgwr 방식). 종속변수·관측치가 같은 모형끼리 비교하며 낮을수록 좋음. " +
+            "잔차 I는 순열 999회 검정이며, 유의하면 공간 의존성이 남아 있다는 뜻임. GM 추정은 우도가 없어 비교에서 빠짐.",
+        )}
       </p>
     </section>
   );

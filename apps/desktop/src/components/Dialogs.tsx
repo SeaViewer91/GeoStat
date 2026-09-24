@@ -1,6 +1,6 @@
 // 대화상자 모음: 레이어 선택, 표 불러오기(X·Y), 좌표계 지정, 계산 필드, 내보내기
 
-import { useEffect, useState, type ReactNode } from "react";
+import { Fragment, useEffect, useState, type ReactNode } from "react";
 
 import { CRS_PRESETS } from "../lib/crs";
 import { EXPORT_FILTERS, dirname, pickOpenPath, pickSavePath } from "../lib/dialogs";
@@ -17,7 +17,9 @@ import {
   type WeightsSpec,
   type WeightsType,
 } from "../lib/engine";
-import { useApp, type ChartKind, type Dialog, type LoadedDataset } from "../store";
+import { t } from "../i18n";
+import { appVersion, openExternal } from "../lib/updater";
+import { useApp, type ChartKind, type Dialog, type LoadedDataset, type SelectMode } from "../store";
 
 export function DialogHost() {
   const dialog = useApp((s) => s.dialog);
@@ -47,6 +49,10 @@ export function DialogHost() {
       return <ZonalDialog datasetId={dialog.datasetId} />;
     case "fishnet":
       return <FishnetDialog />;
+    case "query":
+      return <QueryDialog datasetId={dialog.datasetId} />;
+    case "about":
+      return <AboutDialog />;
     case "chart":
     case "moran":
       return <ChartDialog dialog={dialog.kind === "moran" ? { ...dialog, kind: "chart", chart: "moran" } : dialog} />;
@@ -83,6 +89,13 @@ function Modal({
 
 const close = () => useApp.getState().showDialog(null);
 
+/** 번역문의 {이름} 자리에 강조·코드 같은 요소를 넣음 (언어마다 어순이 달라도 됨) */
+function tx(ko: string, parts: Record<string, ReactNode>): ReactNode[] {
+  return t(ko)
+    .split(/\{(\w+)\}/)
+    .map((s, i) => (i % 2 ? <Fragment key={i}>{parts[s] ?? `{${s}}`}</Fragment> : s));
+}
+
 // ---- 레이어 선택 ---------------------------------------------------------------
 
 function LayerPickDialog({ dialog }: { dialog: Extract<Dialog, { kind: "layers" }> }) {
@@ -94,18 +107,18 @@ function LayerPickDialog({ dialog }: { dialog: Extract<Dialog, { kind: "layers" 
   };
   return (
     <Modal
-      title="레이어 선택"
+      title={t("레이어 선택")}
       onClose={close}
       footer={
         <>
-          <button onClick={close}>취소</button>
+          <button onClick={close}>{t("취소")}</button>
           <button className="primary" onClick={submit}>
-            열기
+            {t("열기")}
           </button>
         </>
       }
     >
-      <p className="muted">이 파일에는 레이어가 {dialog.layers.length}개 있음.</p>
+      <p className="muted">{t("이 파일에는 레이어가 {n}개 있음.", { n: dialog.layers.length })}</p>
       <select size={Math.min(10, dialog.layers.length)} value={layer} onChange={(e) => setLayer(e.target.value)}>
         {dialog.layers.map((l) => (
           <option key={l}>{l}</option>
@@ -119,11 +132,11 @@ function LayerPickDialog({ dialog }: { dialog: Extract<Dialog, { kind: "layers" 
 
 function TableImportDialog({ dialog }: { dialog: Extract<Dialog, { kind: "table" }> }) {
   const [inspection, setInspection] = useState<FileInspection>(dialog.inspection);
-  const t = inspection.table!;
-  const numeric = t.columns.filter((c) => c.numeric);
-  const [x, setX] = useState(t.guess_x ?? numeric[0]?.name ?? "");
-  const [y, setY] = useState(t.guess_y ?? numeric[1]?.name ?? "");
-  const [epsg, setEpsg] = useState<number>(t.guess_epsg ?? 4326);
+  const tbl = inspection.table!;
+  const numeric = tbl.columns.filter((c) => c.numeric);
+  const [x, setX] = useState(tbl.guess_x ?? numeric[0]?.name ?? "");
+  const [y, setY] = useState(tbl.guess_y ?? numeric[1]?.name ?? "");
+  const [epsg, setEpsg] = useState<number>(tbl.guess_epsg ?? 4326);
   const openDataset = useApp((s) => s.openDataset);
   const fail = useApp((s) => s.fail);
 
@@ -137,65 +150,65 @@ function TableImportDialog({ dialog }: { dialog: Extract<Dialog, { kind: "table"
 
   const submit = () => {
     close();
-    void openDataset(dialog.path, { table: { x, y, epsg, sheet: t.sheet } });
+    void openDataset(dialog.path, { table: { x, y, epsg, sheet: tbl.sheet } });
   };
 
   return (
     <Modal
-      title="표를 점 레이어로 불러오기"
+      title={t("표를 점 레이어로 불러오기")}
       onClose={close}
       footer={
         <>
-          <button onClick={close}>취소</button>
+          <button onClick={close}>{t("취소")}</button>
           <button className="primary" onClick={submit} disabled={!x || !y || x === y}>
-            불러오기
+            {t("불러오기")}
           </button>
         </>
       }
     >
       <p className="muted">
-        {t.n_rows.toLocaleString()}행 · {t.encoding ?? "엑셀"}
+        {t("{n}행", { n: tbl.n_rows })} · {tbl.encoding ?? t("엑셀")}
       </p>
       <div className="form grid2">
-        {t.sheets.length > 1 && (
+        {tbl.sheets.length > 1 && (
           <label>
-            시트
-            <select value={t.sheet ?? ""} onChange={(e) => changeSheet(e.target.value)}>
-              {t.sheets.map((s) => (
+            {t("시트")}
+            <select value={tbl.sheet ?? ""} onChange={(e) => changeSheet(e.target.value)}>
+              {tbl.sheets.map((s) => (
                 <option key={s}>{s}</option>
               ))}
             </select>
           </label>
         )}
         <label>
-          X (경도·동향)
-          <select value={x} onChange={(e) => setX(e.target.value)} aria-label="X 열">
+          {t("X (경도·동향)")}
+          <select value={x} onChange={(e) => setX(e.target.value)} aria-label={t("X 열")}>
             {numeric.map((c) => (
               <option key={c.name}>{c.name}</option>
             ))}
           </select>
         </label>
         <label>
-          Y (위도·북향)
-          <select value={y} onChange={(e) => setY(e.target.value)} aria-label="Y 열">
+          {t("Y (위도·북향)")}
+          <select value={y} onChange={(e) => setY(e.target.value)} aria-label={t("Y 열")}>
             {numeric.map((c) => (
               <option key={c.name}>{c.name}</option>
             ))}
           </select>
         </label>
         <label className="span2">
-          좌표계
+          {t("좌표계")}
           <CrsSelect value={epsg} onChange={setEpsg} />
         </label>
       </div>
-      {t.guess_epsg && t.guess_epsg !== 4326 && (
-        <p className="hint">좌표 범위로 추정한 좌표계임. 원자료의 좌표계를 꼭 확인해야 함.</p>
+      {tbl.guess_epsg && tbl.guess_epsg !== 4326 && (
+        <p className="hint">{t("좌표 범위로 추정한 좌표계임. 원자료의 좌표계를 꼭 확인해야 함.")}</p>
       )}
       <div className="preview">
         <table>
           <thead>
             <tr>
-              {t.columns.map((c) => (
+              {tbl.columns.map((c) => (
                 <th key={c.name} className={c.name === x || c.name === y ? "hl" : ""}>
                   {c.name}
                 </th>
@@ -203,7 +216,7 @@ function TableImportDialog({ dialog }: { dialog: Extract<Dialog, { kind: "table"
             </tr>
           </thead>
           <tbody>
-            {t.sample.slice(0, 8).map((row, i) => (
+            {tbl.sample.slice(0, 8).map((row, i) => (
               <tr key={i}>
                 {row.map((v, j) => (
                   <td key={j}>{v === null ? "" : String(v)}</td>
@@ -233,22 +246,22 @@ function CrsSelect({ value, onChange }: { value: number; onChange: (epsg: number
             onChange(Number(e.target.value));
           }
         }}
-        aria-label="좌표계"
+        aria-label={t("좌표계")}
       >
         {CRS_PRESETS.map((p) => (
           <option key={p.epsg} value={p.epsg}>
-            EPSG:{p.epsg} — {p.label}
+            EPSG:{p.epsg} — {t(p.label)}
           </option>
         ))}
-        <option value="custom">직접 입력…</option>
+        <option value="custom">{t("직접 입력…")}</option>
       </select>
       {custom && (
         <input
           type="number"
-          placeholder="EPSG 코드"
+          placeholder={t("EPSG 코드")}
           value={Number.isFinite(value) ? value : ""}
           onChange={(e) => onChange(Number(e.target.value))}
-          aria-label="EPSG 코드"
+          aria-label={t("EPSG 코드")}
         />
       )}
     </div>
@@ -262,26 +275,28 @@ function CrsDialog({ dialog }: { dialog: Extract<Dialog, { kind: "crs" }> }) {
   if (!ds) return null;
   return (
     <Modal
-      title="좌표계 지정"
+      title={t("좌표계 지정")}
       onClose={close}
       footer={
         <>
-          <button onClick={close}>{dialog.reason === "missing" ? "나중에" : "취소"}</button>
+          <button onClick={close}>{dialog.reason === "missing" ? t("나중에") : t("취소")}</button>
           <button className="primary" onClick={() => assignCrs(dialog.datasetId, epsg)} disabled={!epsg}>
-            지정
+            {t("지정")}
           </button>
         </>
       }
     >
       {dialog.reason === "missing" ? (
         <p>
-          <strong>{ds.info.name}</strong>에 좌표계 정보(.prj)가 없어 지도에 표시할 수 없음. 원자료의 좌표계를
-          지정해야 함.
+          {tx("{name}에 좌표계 정보(.prj)가 없어 지도에 표시할 수 없음. 원자료의 좌표계를 지정해야 함.", {
+            name: <strong>{ds.info.name}</strong>,
+          })}
         </p>
       ) : (
         <p>
-          좌표 값은 바꾸지 않고 좌표계 정보만 바꿈. 좌표계를 <em>변환</em>하려면 내보내기에서 저장 좌표계를
-          고르면 됨.
+          {tx("좌표 값은 바꾸지 않고 좌표계 정보만 바꿈. 좌표계를 {convert}하려면 내보내기에서 저장 좌표계를 고르면 됨.", {
+            convert: <em>{t("변환")}</em>,
+          })}
         </p>
       )}
       <CrsSelect value={epsg} onChange={setEpsg} />
@@ -309,7 +324,7 @@ function FieldDialog({ dialog }: { dialog: Extract<Dialog, { kind: "field" }> })
       const info = await engine.addField(ds.info.id, name, expression);
       await updateInfo(info);
       close();
-      useApp.getState().notify(`계산 필드 추가함: ${name}`);
+      useApp.getState().notify(t("계산 필드 추가함: {name}", { name }));
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     } finally {
@@ -321,30 +336,35 @@ function FieldDialog({ dialog }: { dialog: Extract<Dialog, { kind: "field" }> })
 
   return (
     <Modal
-      title="계산 필드 추가"
+      title={t("계산 필드 추가")}
       onClose={close}
       footer={
         <>
-          <button onClick={close}>닫기</button>
+          <button onClick={close}>{t("닫기")}</button>
           <button className="primary" onClick={submit} disabled={!name.trim() || !expression.trim() || busy}>
-            계산
+            {t("계산")}
           </button>
         </>
       }
     >
       <div className="form">
         <label>
-          새 변수 이름
-          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="예: 인구밀도" aria-label="새 변수 이름" />
+          {t("새 변수 이름")}
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="예: 인구밀도"
+            aria-label={t("새 변수 이름")}
+          />
         </label>
         <label>
-          식
+          {t("식")}
           <textarea
             rows={3}
             value={expression}
             onChange={(e) => setExpression(e.target.value)}
             placeholder="예: `인구` / `면적` * 1000"
-            aria-label="식"
+            aria-label={t("식")}
           />
         </label>
       </div>
@@ -356,13 +376,21 @@ function FieldDialog({ dialog }: { dialog: Extract<Dialog, { kind: "field" }> })
         ))}
       </div>
       <p className="hint">
-        사칙연산, 비교(<code>&gt;</code>, <code>==</code>), <code>log</code>·<code>sqrt</code>·<code>abs</code> 등 수학
-        함수를 쓸 수 있음. 비교식은 0/1 변수가 됨. 계산 필드는 프로젝트에 식으로 저장돼 다시 열 때 재계산함.
+        {tx(
+          "사칙연산, 비교({gt}, {eq}), {log}·{sqrt}·{abs} 등 수학 함수를 쓸 수 있음. 비교식은 0/1 변수가 됨. 계산 필드는 프로젝트에 식으로 저장돼 다시 열 때 재계산함.",
+          {
+            gt: <code>&gt;</code>,
+            eq: <code>==</code>,
+            log: <code>log</code>,
+            sqrt: <code>sqrt</code>,
+            abs: <code>abs</code>,
+          },
+        )}
       </p>
       {error && <p className="error-text">{error}</p>}
       {derived.length > 0 && (
         <>
-          <h4>계산 필드</h4>
+          <h4>{t("계산 필드")}</h4>
           <ul className="derived-list">
             {derived.map((c) => (
               <li key={c.name}>
@@ -379,7 +407,7 @@ function FieldDialog({ dialog }: { dialog: Extract<Dialog, { kind: "field" }> })
                     }
                   }}
                 >
-                  삭제
+                  {t("삭제")}
                 </button>
               </li>
             ))}
@@ -405,7 +433,7 @@ function ExportDialog({ dialog }: { dialog: Extract<Dialog, { kind: "export" }> 
   const submit = async () => {
     const path = await pickSavePath(
       EXPORT_FILTERS,
-      "내보내기",
+      t("내보내기"),
       `${dirname(ds.info.path)}/${ds.info.name}_export.gpkg`,
     );
     if (!path) return;
@@ -416,7 +444,7 @@ function ExportDialog({ dialog }: { dialog: Extract<Dialog, { kind: "export" }> 
         encoding: path.toLowerCase().endsWith(".shp") ? encoding : null,
       });
       close();
-      notify(`${result.n_rows.toLocaleString()}행을 저장함: ${result.path}`);
+      notify(t("{n}행을 저장함: {path}", { n: result.n_rows, path: result.path }));
       result.warnings.forEach(notify);
     } catch (err) {
       fail(err);
@@ -427,31 +455,31 @@ function ExportDialog({ dialog }: { dialog: Extract<Dialog, { kind: "export" }> 
 
   return (
     <Modal
-      title="내보내기"
+      title={t("내보내기")}
       onClose={close}
       footer={
         <>
-          <button onClick={close}>취소</button>
+          <button onClick={close}>{t("취소")}</button>
           <button className="primary" onClick={submit} disabled={busy}>
-            저장 위치 선택…
+            {t("저장 위치 선택…")}
           </button>
         </>
       }
     >
       <p className="muted">
-        계산 필드를 포함해 저장함. 형식은 파일 확장자로 정함 (gpkg, shp, geojson, fgb, csv).
+        {t("계산 필드를 포함해 저장함. 형식은 파일 확장자로 정함 (gpkg, shp, geojson, fgb, csv).")}
       </p>
       <div className="form">
         <label className="check">
           <input type="checkbox" checked={reproject} onChange={(e) => setReproject(e.target.checked)} />
-          다른 좌표계로 변환해 저장
+          {t("다른 좌표계로 변환해 저장")}
         </label>
         {reproject && <CrsSelect value={epsg} onChange={setEpsg} />}
         <label>
-          shapefile 인코딩
+          {t("shapefile 인코딩")}
           <select value={encoding} onChange={(e) => setEncoding(e.target.value)}>
-            <option value="UTF-8">UTF-8 (권장)</option>
-            <option value="CP949">CP949 (구형 국내 프로그램 호환)</option>
+            <option value="UTF-8">{t("UTF-8 (권장)")}</option>
+            <option value="CP949">{t("CP949 (구형 국내 프로그램 호환)")}</option>
           </select>
         </label>
       </div>
@@ -494,9 +522,9 @@ function WeightsDialog({ dialog }: { dialog: Extract<Dialog, { kind: "weights" }
     if (type !== "distance" || threshold !== null || !datasetId) return;
     engine
       .weightsThreshold(datasetId)
-      .then((t) => {
-        setThreshold(Math.ceil(t.threshold * 1000) / 1000);
-        setThresholdNote(t.note);
+      .then((res) => {
+        setThreshold(Math.ceil(res.threshold * 1000) / 1000);
+        setThresholdNote(res.note);
       })
       .catch((e) => setError(String(e?.message ?? e)));
   }, [type, threshold, datasetId]);
@@ -515,9 +543,11 @@ function WeightsDialog({ dialog }: { dialog: Extract<Dialog, { kind: "weights" }
       await refreshWeights(ds.info.id, info.id);
       close();
       const s = info.summary;
+      const vars = { name: info.name, mean: s.mean_neighbors.toFixed(1), n: s.n_islands };
       notify(
-        `가중치 '${info.name}' 만듦: 평균 이웃 ${s.mean_neighbors.toFixed(1)}개` +
-          (s.n_islands ? `, 이웃 없는 피처 ${s.n_islands}개 (주의)` : ""),
+        s.n_islands
+          ? t("가중치 '{name}' 만듦: 평균 이웃 {mean}개, 이웃 없는 피처 {n}개 (주의)", vars)
+          : t("가중치 '{name}' 만듦: 평균 이웃 {mean}개", vars),
       );
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
@@ -527,14 +557,17 @@ function WeightsDialog({ dialog }: { dialog: Extract<Dialog, { kind: "weights" }
   };
 
   const load = async () => {
-    const path = await pickOpenPath([{ name: "GeoDa 가중치", extensions: ["gal", "gwt", "kwt"] }], "가중치 파일 열기");
+    const path = await pickOpenPath(
+      [{ name: t("GeoDa 가중치"), extensions: ["gal", "gwt", "kwt"] }],
+      t("가중치 파일 열기"),
+    );
     if (!path) return;
     setBusy(true);
     try {
       const info = await engine.loadWeights(ds.info.id, path);
       await refreshWeights(ds.info.id, info.id);
       close();
-      notify(`가중치 파일을 불러옴: ${info.name}`);
+      notify(t("가중치 파일을 불러옴: {name}", { name: info.name }));
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     } finally {
@@ -544,72 +577,80 @@ function WeightsDialog({ dialog }: { dialog: Extract<Dialog, { kind: "weights" }
 
   return (
     <Modal
-      title="공간가중치 만들기"
+      title={t("공간가중치 만들기")}
       onClose={close}
       footer={
         <>
           <button onClick={load} disabled={busy}>
-            파일에서 불러오기 (.gal/.gwt)…
+            {t("파일에서 불러오기 (.gal/.gwt)…")}
           </button>
           <div className="spacer" />
-          <button onClick={close}>취소</button>
+          <button onClick={close}>{t("취소")}</button>
           <button className="primary" onClick={create} disabled={busy || (type === "distance" && !threshold)}>
-            만들기
+            {t("만들기")}
           </button>
         </>
       }
     >
       <div className="form">
         <label>
-          유형
-          <select value={type} onChange={(e) => setType(e.target.value as WeightsType)} aria-label="가중치 유형">
-            {WEIGHT_TYPES.map((t) => (
-              <option key={t.id} value={t.id} disabled={!polygon && (t.id === "queen" || t.id === "rook")}>
-                {t.label}
+          {t("유형")}
+          <select value={type} onChange={(e) => setType(e.target.value as WeightsType)} aria-label={t("가중치 유형")}>
+            {WEIGHT_TYPES.map((wt) => (
+              <option key={wt.id} value={wt.id} disabled={!polygon && (wt.id === "queen" || wt.id === "rook")}>
+                {t(wt.label)}
               </option>
             ))}
           </select>
         </label>
-        <p className="hint">{WEIGHT_TYPES.find((t) => t.id === type)?.hint}</p>
+        <p className="hint">{t(WEIGHT_TYPES.find((wt) => wt.id === type)?.hint ?? "")}</p>
         {(type === "queen" || type === "rook") && (
           <div className="grid2">
             <label>
-              인접 차수
+              {t("인접 차수")}
               <input type="number" min={1} max={10} value={order} onChange={(e) => setOrder(Number(e.target.value) || 1)} />
             </label>
             {order > 1 && (
               <label className="check">
                 <input type="checkbox" checked={includeLower} onChange={(e) => setIncludeLower(e.target.checked)} />
-                하위 차수 포함
+                {t("하위 차수 포함")}
               </label>
             )}
           </div>
         )}
         {(type === "knn" || type === "kernel") && (
           <label>
-            이웃 수 k
-            <input type="number" min={1} value={k} onChange={(e) => setK(Math.max(1, Number(e.target.value) || 1))} aria-label="이웃 수" />
+            {t("이웃 수 k")}
+            <input
+              type="number"
+              min={1}
+              value={k}
+              onChange={(e) => setK(Math.max(1, Number(e.target.value) || 1))}
+              aria-label={t("이웃 수")}
+            />
           </label>
         )}
         {type === "distance" && (
           <>
             <label>
-              거리 임계값
+              {t("거리 임계값")}
               <input
                 type="number"
                 value={threshold ?? ""}
                 onChange={(e) => setThreshold(Number(e.target.value))}
-                aria-label="거리 임계값"
+                aria-label={t("거리 임계값")}
               />
             </label>
-            <p className="hint">기본값은 모든 피처가 이웃을 하나 이상 갖는 최소 거리임. {thresholdNote}</p>
+            <p className="hint">
+              {t("기본값은 모든 피처가 이웃을 하나 이상 갖는 최소 거리임.")} {thresholdNote}
+            </p>
             <label className="check">
               <input type="checkbox" checked={inverse} onChange={(e) => setInverse(e.target.checked)} />
-              역거리 가중 (가까울수록 큰 가중치)
+              {t("역거리 가중 (가까울수록 큰 가중치)")}
             </label>
             {inverse && (
               <label>
-                거리 지수
+                {t("거리 지수")}
                 <select value={power} onChange={(e) => setPower(Number(e.target.value))}>
                   <option value={1}>1 (1/d)</option>
                   <option value={2}>2 (1/d²)</option>
@@ -621,24 +662,24 @@ function WeightsDialog({ dialog }: { dialog: Extract<Dialog, { kind: "weights" }
         {type === "kernel" && (
           <div className="grid2">
             <label>
-              커널 함수
+              {t("커널 함수")}
               <select value={fn} onChange={(e) => setFn(e.target.value as typeof fn)}>
-                <option value="triangular">삼각 (triangular)</option>
-                <option value="uniform">균등 (uniform)</option>
-                <option value="quadratic">이차 (Epanechnikov)</option>
-                <option value="quartic">사차 (bisquare)</option>
-                <option value="gaussian">가우시안</option>
+                <option value="triangular">{t("삼각 (triangular)")}</option>
+                <option value="uniform">{t("균등 (uniform)")}</option>
+                <option value="quadratic">{t("이차 (Epanechnikov)")}</option>
+                <option value="quartic">{t("사차 (bisquare)")}</option>
+                <option value="gaussian">{t("가우시안")}</option>
               </select>
             </label>
             <label className="check">
               <input type="checkbox" checked={fixed} onChange={(e) => setFixed(e.target.checked)} />
-              고정 대역폭
+              {t("고정 대역폭")}
             </label>
           </div>
         )}
         <label>
-          이름 (선택)
-          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="비우면 자동으로 정함" />
+          {t("이름 (선택)")}
+          <input value={name} onChange={(e) => setName(e.target.value)} placeholder={t("비우면 자동으로 정함")} />
         </label>
       </div>
       {error && <p className="error-text">{error}</p>}
@@ -667,7 +708,7 @@ function NumericSelect({
         {cols.map((c) => (
           <option key={c.name} value={c.name}>
             {c.name}
-            {c.origin !== "data" ? " (계산)" : ""}
+            {c.origin !== "data" ? t(" (계산)") : ""}
           </option>
         ))}
       </select>
@@ -678,8 +719,8 @@ function NumericSelect({
 function WeightsSelect({ ds, value, onChange }: { ds: LoadedDataset; value: string; onChange: (v: string) => void }) {
   return (
     <label>
-      공간가중치
-      <select value={value} onChange={(e) => onChange(e.target.value)} aria-label="공간가중치">
+      {t("공간가중치")}
+      <select value={value} onChange={(e) => onChange(e.target.value)} aria-label={t("공간가중치")}>
         {ds.weights.map((w) => (
           <option key={w.id} value={w.id}>
             {w.name} — {w.description}
@@ -693,9 +734,9 @@ function WeightsSelect({ ds, value, onChange }: { ds: LoadedDataset; value: stri
 function NoWeights({ datasetId }: { datasetId: string }) {
   return (
     <div className="notice-box">
-      공간가중치가 아직 없음.{" "}
+      {t("공간가중치가 아직 없음.")}{" "}
       <button className="link" onClick={() => useApp.getState().showDialog({ kind: "weights", datasetId })}>
-        가중치 만들기…
+        {t("가중치 만들기…")}
       </button>
     </div>
   );
@@ -741,23 +782,23 @@ function ChartDialog({ dialog }: { dialog: Extract<Dialog, { kind: "chart" }> })
 
   return (
     <Modal
-      title={CHART_TITLES[kind]}
+      title={t(CHART_TITLES[kind])}
       onClose={close}
       footer={
         <>
-          <button onClick={close}>취소</button>
+          <button onClick={close}>{t("취소")}</button>
           <button className="primary" onClick={submit} disabled={!x || (needsWeights && !weightsId)}>
-            {kind === "moran" ? "계산" : "추가"}
+            {kind === "moran" ? t("계산") : t("추가")}
           </button>
         </>
       }
     >
       <div className="form">
-        <NumericSelect ds={ds} value={x} onChange={setX} label={kind === "scatter" ? "X 변수" : "변수"} />
-        {kind === "scatter" && <NumericSelect ds={ds} value={y} onChange={setY} label="Y 변수" />}
+        <NumericSelect ds={ds} value={x} onChange={setX} label={kind === "scatter" ? t("X 변수") : t("변수")} />
+        {kind === "scatter" && <NumericSelect ds={ds} value={y} onChange={setY} label={t("Y 변수")} />}
         {kind === "histogram" && (
           <label>
-            구간 수
+            {t("구간 수")}
             <input type="number" min={2} max={100} value={bins} onChange={(e) => setBins(Math.min(100, Math.max(2, Number(e.target.value) || 10)))} />
           </label>
         )}
@@ -765,9 +806,9 @@ function ChartDialog({ dialog }: { dialog: Extract<Dialog, { kind: "chart" }> })
           <>
             <label className="check">
               <input type="checkbox" checked={bivariate} onChange={(e) => setBivariate(e.target.checked)} />
-              이변량 Moran&apos;s I (두 번째 변수의 공간 시차와 비교)
+              {t("이변량 Moran's I (두 번째 변수의 공간 시차와 비교)")}
             </label>
-            {bivariate && <NumericSelect ds={ds} value={y} onChange={setY} label="두 번째 변수 (공간 시차)" />}
+            {bivariate && <NumericSelect ds={ds} value={y} onChange={setY} label={t("두 번째 변수 (공간 시차)")} />}
             {ds.weights.length ? <WeightsSelect ds={ds} value={weightsId} onChange={setWeightsId} /> : <NoWeights datasetId={ds.info.id} />}
             <PermutationSelect value={permutations} onChange={setPermutations} />
           </>
@@ -780,8 +821,8 @@ function ChartDialog({ dialog }: { dialog: Extract<Dialog, { kind: "chart" }> })
 function PermutationSelect({ value, onChange }: { value: number; onChange: (v: number) => void }) {
   return (
     <label>
-      순열 횟수 (유사 p값 계산)
-      <select value={value} onChange={(e) => onChange(Number(e.target.value))} aria-label="순열 횟수">
+      {t("순열 횟수 (유사 p값 계산)")}
+      <select value={value} onChange={(e) => onChange(Number(e.target.value))} aria-label={t("순열 횟수")}>
         {[99, 199, 499, 999, 9999].map((n) => (
           <option key={n} value={n}>
             {n}
@@ -832,37 +873,48 @@ function LocalDialog({ dialog }: { dialog: Extract<Dialog, { kind: "local" }> })
 
   return (
     <Modal
-      title="국지 공간자기상관"
+      title={t("국지 공간자기상관")}
       onClose={close}
       footer={
         <>
-          <button onClick={close}>취소</button>
+          <button onClick={close}>{t("취소")}</button>
           <button className="primary" onClick={submit} disabled={!x || !weightsId || !!busy}>
-            {busy ? "계산 중…" : "실행"}
+            {busy ? t("계산 중…") : t("실행")}
           </button>
         </>
       }
     >
       <div className="form">
         <label>
-          방법
-          <select value={method} onChange={(e) => setMethod(e.target.value as LocalMethod)} aria-label="국지 통계 방법">
+          {t("방법")}
+          <select
+            value={method}
+            onChange={(e) => setMethod(e.target.value as LocalMethod)}
+            aria-label={t("국지 통계 방법")}
+          >
             {LOCAL_METHODS.map((m) => (
               <option key={m.id} value={m.id}>
-                {m.label}
+                {t(m.label)}
               </option>
             ))}
           </select>
         </label>
-        <p className="hint">{meta.hint}</p>
-        <NumericSelect ds={ds} value={x} onChange={setX} label={method === "lisa_bv" ? "변수 (자기 값)" : "변수"} />
-        {method === "lisa_bv" && <NumericSelect ds={ds} value={y} onChange={setY} label="두 번째 변수 (주변 값)" />}
+        <p className="hint">{t(meta.hint)}</p>
+        <NumericSelect
+          ds={ds}
+          value={x}
+          onChange={setX}
+          label={method === "lisa_bv" ? t("변수 (자기 값)") : t("변수")}
+        />
+        {method === "lisa_bv" && (
+          <NumericSelect ds={ds} value={y} onChange={setY} label={t("두 번째 변수 (주변 값)")} />
+        )}
         {ds.weights.length ? <WeightsSelect ds={ds} value={weightsId} onChange={setWeightsId} /> : <NoWeights datasetId={ds.info.id} />}
         <div className="grid2">
           <PermutationSelect value={permutations} onChange={setPermutations} />
           <label>
-            유의수준 α
-            <select value={alpha} onChange={(e) => setAlpha(Number(e.target.value))} aria-label="유의수준">
+            {t("유의수준 α")}
+            <select value={alpha} onChange={(e) => setAlpha(Number(e.target.value))} aria-label={t("유의수준")}>
               {[0.1, 0.05, 0.01, 0.001].map((a) => (
                 <option key={a} value={a}>
                   {a}
@@ -871,21 +923,27 @@ function LocalDialog({ dialog }: { dialog: Extract<Dialog, { kind: "local" }> })
             </select>
           </label>
           <label>
-            다중검정 보정
-            <select value={correction} onChange={(e) => setCorrection(e.target.value as typeof correction)} aria-label="다중검정 보정">
-              <option value="none">없음</option>
+            {t("다중검정 보정")}
+            <select
+              value={correction}
+              onChange={(e) => setCorrection(e.target.value as typeof correction)}
+              aria-label={t("다중검정 보정")}
+            >
+              <option value="none">{t("없음")}</option>
               <option value="fdr">FDR (Benjamini-Hochberg)</option>
               <option value="bonferroni">Bonferroni</option>
             </select>
           </label>
           <label>
-            결과 열 접두어
+            {t("결과 열 접두어")}
             <input value={prefix} onChange={(e) => setPrefix(e.target.value)} placeholder={meta.prefix} />
           </label>
         </div>
         <p className="hint">
-          결과는 {prefix || meta.prefix}_I(통계량)·_CL(군집 코드)·_P(유사 p값) 열로 저장되고 군집 지도로 표시됨. 같은
-          접두어로 다시 실행하면 이전 결과를 대체함. 난수 시드는 GeoDa 기본값(123456789)으로 고정해 결과가 재현됨.
+          {t(
+            "결과는 {prefix}_I(통계량)·_CL(군집 코드)·_P(유사 p값) 열로 저장되고 군집 지도로 표시됨. 같은 접두어로 다시 실행하면 이전 결과를 대체함. 난수 시드는 GeoDa 기본값(123456789)으로 고정해 결과가 재현됨.",
+            { prefix: prefix || meta.prefix },
+          )}
         </p>
       </div>
     </Modal>
@@ -920,34 +978,34 @@ function JoinCountDialog({ dialog }: { dialog: Extract<Dialog, { kind: "joincoun
 
   return (
     <Modal
-      title="Join Count (이진 변수)"
+      title={t("Join Count (이진 변수)")}
       onClose={close}
       footer={
         <>
-          <button onClick={close}>닫기</button>
+          <button onClick={close}>{t("닫기")}</button>
           <button className="primary" onClick={run} disabled={!x || !weightsId || busy}>
-            {busy ? "계산 중…" : "계산"}
+            {busy ? t("계산 중…") : t("계산")}
           </button>
         </>
       }
     >
       <div className="form">
-        <NumericSelect ds={ds} value={x} onChange={setX} label="이진 변수 (0/1)" />
+        <NumericSelect ds={ds} value={x} onChange={setX} label={t("이진 변수 (0/1)")} />
         {ds.weights.length ? <WeightsSelect ds={ds} value={weightsId} onChange={setWeightsId} /> : <NoWeights datasetId={ds.info.id} />}
         <PermutationSelect value={permutations} onChange={setPermutations} />
       </div>
       <p className="hint">
-        1끼리 이웃한 쌍(BB)이 무작위 배치일 때보다 많으면 1이 뭉쳐 있다는 뜻임. 이진 가중치(인접 여부)로 셈.
+        {t("1끼리 이웃한 쌍(BB)이 무작위 배치일 때보다 많으면 1이 뭉쳐 있다는 뜻임. 이진 가중치(인접 여부)로 셈.")}
       </p>
       {error && <p className="error-text">{error}</p>}
       {result && (
         <table className="result-table" data-testid="joincount-result">
           <thead>
             <tr>
-              <th>이웃 쌍</th>
-              <th>관측</th>
-              <th>기댓값(순열 평균)</th>
-              <th>유사 p</th>
+              <th>{t("이웃 쌍")}</th>
+              <th>{t("관측")}</th>
+              <th>{t("기댓값(순열 평균)")}</th>
+              <th>{t("유사 p")}</th>
             </tr>
           </thead>
           <tbody>
@@ -1043,32 +1101,32 @@ function RegressionDialog({ dialog }: { dialog: Extract<Dialog, { kind: "regress
 
   return (
     <Modal
-      title="회귀 분석"
+      title={t("회귀 분석")}
       onClose={close}
       footer={
         <>
-          <button onClick={close}>취소</button>
+          <button onClick={close}>{t("취소")}</button>
           <button className="primary" onClick={submit} disabled={!canRun}>
-            실행
+            {t("실행")}
           </button>
         </>
       }
     >
       <div className="form">
         <label>
-          모형
-          <select value={model} onChange={(e) => setModel(e.target.value as RegressionModel)} aria-label="회귀 모형">
+          {t("모형")}
+          <select value={model} onChange={(e) => setModel(e.target.value as RegressionModel)} aria-label={t("회귀 모형")}>
             {REG_MODELS.map((m) => (
               <option key={m.id} value={m.id}>
-                {m.label}
+                {t(m.label)}
               </option>
             ))}
           </select>
         </label>
-        <p className="hint">{meta.hint}</p>
+        <p className="hint">{t(meta.hint)}</p>
         <label>
-          종속변수 (y)
-          <select value={y} onChange={(e) => setY(e.target.value)} aria-label="종속변수">
+          {t("종속변수 (y)")}
+          <select value={y} onChange={(e) => setY(e.target.value)} aria-label={t("종속변수")}>
             {numeric.map((c) => (
               <option key={c.name} value={c.name}>
                 {c.name}
@@ -1076,22 +1134,22 @@ function RegressionDialog({ dialog }: { dialog: Extract<Dialog, { kind: "regress
             ))}
           </select>
         </label>
-        <div className="field-label">독립변수 (x) — {xs.length}개 선택</div>
-        <div className="var-list" role="group" aria-label="독립변수">
+        <div className="field-label">{t("독립변수 (x) — {n}개 선택", { n: xs.length })}</div>
+        <div className="var-list" role="group" aria-label={t("독립변수")}>
           {numeric
             .filter((c) => c.name !== y)
             .map((c) => (
               <label key={c.name} className="check">
                 <input type="checkbox" checked={xs.includes(c.name)} onChange={() => toggleX(c.name)} />
                 {c.name}
-                {c.origin === "expression" ? " (계산)" : ""}
+                {c.origin === "expression" ? t(" (계산)") : ""}
               </label>
             ))}
         </div>
         {model === "ols" && (
           <label className="check">
             <input type="checkbox" checked={robust} onChange={(e) => setRobust(e.target.checked)} />
-            White 이분산 강건 표준오차
+            {t("White 이분산 강건 표준오차")}
           </label>
         )}
         {ds.weights.length ? (
@@ -1099,7 +1157,7 @@ function RegressionDialog({ dialog }: { dialog: Extract<Dialog, { kind: "regress
             {!needsWeights && (
               <label className="check">
                 <input type="checkbox" checked={useWeights} onChange={(e) => setUseWeights(e.target.checked)} />
-                {isGwr ? "잔차 공간 자기상관 진단 (Moran's I)" : "공간 진단 (잔차 Moran's I, LM 검정)"}
+                {isGwr ? t("잔차 공간 자기상관 진단 (Moran's I)") : t("공간 진단 (잔차 Moran's I, LM 검정)")}
               </label>
             )}
             {(needsWeights || useWeights) && <WeightsSelect ds={ds} value={weightsId} onChange={setWeightsId} />}
@@ -1107,46 +1165,48 @@ function RegressionDialog({ dialog }: { dialog: Extract<Dialog, { kind: "regress
         ) : needsWeights ? (
           <NoWeights datasetId={ds.info.id} />
         ) : (
-          <p className="hint">공간가중치를 만들면 잔차의 공간 의존성도 진단할 수 있음 (모형 비교표에 표시됨).</p>
+          <p className="hint">
+            {t("공간가중치를 만들면 잔차의 공간 의존성도 진단할 수 있음 (모형 비교표에 표시됨).")}
+          </p>
         )}
         {isGwr && (
           <div className="grid2">
             <label>
-              커널
-              <select value={kernel} onChange={(e) => setKernel(e.target.value as typeof kernel)} aria-label="커널">
-                <option value="bisquare">bisquare (권장)</option>
+              {t("커널")}
+              <select value={kernel} onChange={(e) => setKernel(e.target.value as typeof kernel)} aria-label={t("커널")}>
+                <option value="bisquare">{t("bisquare (권장)")}</option>
                 <option value="gaussian">gaussian</option>
                 <option value="exponential">exponential</option>
               </select>
             </label>
             <label>
-              대역폭 선택 기준
+              {t("대역폭 선택 기준")}
               <select value={criterion} onChange={(e) => setCriterion(e.target.value as typeof criterion)}>
-                <option value="AICc">AICc (권장)</option>
+                <option value="AICc">{t("AICc (권장)")}</option>
                 <option value="AIC">AIC</option>
                 <option value="BIC">BIC</option>
-                <option value="CV">교차검증 (CV)</option>
+                <option value="CV">{t("교차검증 (CV)")}</option>
               </select>
             </label>
             <label className="check span2">
               <input type="checkbox" checked={fixed} onChange={(e) => setFixed(e.target.checked)} />
-              고정 대역폭 (거리). 끄면 적응 대역폭 (이웃 수)
+              {t("고정 대역폭 (거리). 끄면 적응 대역폭 (이웃 수)")}
             </label>
             {model === "gwr" && (
               <label className="span2">
-                대역폭 직접 지정 (비우면 자동 탐색)
+                {t("대역폭 직접 지정 (비우면 자동 탐색)")}
                 <input
                   type="number"
                   value={manualBw}
                   onChange={(e) => setManualBw(e.target.value)}
-                  placeholder={fixed ? "거리 (m)" : "이웃 수"}
+                  placeholder={fixed ? t("거리 (m)") : t("이웃 수")}
                 />
               </label>
             )}
           </div>
         )}
         <label>
-          결과 열 접두어
+          {t("결과 열 접두어")}
           <input
             value={prefix}
             onChange={(e) => setPrefix(e.target.value)}
@@ -1160,13 +1220,16 @@ function RegressionDialog({ dialog }: { dialog: Extract<Dialog, { kind: "regress
       </div>
       {heavy && (
         <p className="hint warn-text">
-          관측치가 {n.toLocaleString()}개라 계산이 오래 걸릴 수 있음. 진행 중에 하단 상태 표시줄에서 취소할 수 있음.
+          {t("관측치가 {n}개라 계산이 오래 걸릴 수 있음. 진행 중에 하단 상태 표시줄에서 취소할 수 있음.", { n })}
         </p>
       )}
-      {job && <p className="hint">다른 분석이 실행 중임. 끝난 뒤에 실행할 수 있음.</p>}
+      {job && <p className="hint">{t("다른 분석이 실행 중임. 끝난 뒤에 실행할 수 있음.")}</p>}
       <p className="hint">
-        예측값·잔차{isGwr ? "·지역 계수(_B_)·t값(_T_)·유의 여부(_SIG_)·지역 R²" : ""}가 새 열로 저장되고, 결과
-        보고서는 오른쪽 결과 패널에 표시됨.
+        {isGwr
+          ? t(
+              "예측값·잔차·지역 계수(_B_)·t값(_T_)·유의 여부(_SIG_)·지역 R²가 새 열로 저장되고, 결과 보고서는 오른쪽 결과 패널에 표시됨.",
+            )
+          : t("예측값·잔차가 새 열로 저장되고, 결과 보고서는 오른쪽 결과 패널에 표시됨.")}
       </p>
     </Modal>
   );
@@ -1279,62 +1342,62 @@ function ClusterDialog({ dialog }: { dialog: Extract<Dialog, { kind: "cluster" }
 
   return (
     <Modal
-      title="군집 분석"
+      title={t("군집 분석")}
       onClose={close}
       footer={
         <>
-          <button onClick={close}>취소</button>
+          <button onClick={close}>{t("취소")}</button>
           <button className="primary" onClick={submit} disabled={!canRun}>
-            실행
+            {t("실행")}
           </button>
         </>
       }
     >
       <div className="form">
         <label>
-          방법
-          <select value={method} onChange={(e) => setMethod(e.target.value as ClusterMethod)} aria-label="군집 방법">
-            <optgroup label="공간 제약 (지역화)">
+          {t("방법")}
+          <select value={method} onChange={(e) => setMethod(e.target.value as ClusterMethod)} aria-label={t("군집 방법")}>
+            <optgroup label={t("공간 제약 (지역화)")}>
               {CLUSTER_METHODS.filter((m) => m.spatial).map((m) => (
                 <option key={m.id} value={m.id}>
-                  {m.label}
+                  {t(m.label)}
                 </option>
               ))}
             </optgroup>
-            <optgroup label="비공간 (비교용)">
+            <optgroup label={t("비공간 (비교용)")}>
               {CLUSTER_METHODS.filter((m) => !m.spatial).map((m) => (
                 <option key={m.id} value={m.id}>
-                  {m.label}
+                  {t(m.label)}
                 </option>
               ))}
             </optgroup>
           </select>
         </label>
-        <p className="hint">{meta.hint}</p>
-        <div className="field-label">변수 — {vars.length}개 선택</div>
-        <div className="var-list" role="group" aria-label="군집 변수">
+        <p className="hint">{t(meta.hint)}</p>
+        <div className="field-label">{t("변수 — {n}개 선택", { n: vars.length })}</div>
+        <div className="var-list" role="group" aria-label={t("군집 변수")}>
           {numeric.map((c) => (
             <label key={c.name} className="check">
               <input type="checkbox" checked={vars.includes(c.name)} onChange={() => toggle(c.name)} />
               {c.name}
-              {c.origin === "expression" ? " (계산)" : ""}
+              {c.origin === "expression" ? t(" (계산)") : ""}
             </label>
           ))}
         </div>
         <label className="check">
           <input type="checkbox" checked={standardize} onChange={(e) => setStandardize(e.target.checked)} />
-          변수 표준화 (z점수) — 단위가 다른 변수를 함께 쓸 때 권장
+          {t("변수 표준화 (z점수) — 단위가 다른 변수를 함께 쓸 때 권장")}
         </label>
         {isMaxp ? (
           <div className="grid2">
             <label>
-              임계값 변수
+              {t("임계값 변수")}
               <select
                 value={thresholdColumn}
                 onChange={(e) => setThresholdColumn(e.target.value)}
-                aria-label="임계값 변수"
+                aria-label={t("임계값 변수")}
               >
-                <option value="">피처 수</option>
+                <option value="">{t("피처 수")}</option>
                 {numeric.map((c) => (
                   <option key={c.name} value={c.name}>
                     {c.name}
@@ -1343,31 +1406,31 @@ function ClusterDialog({ dialog }: { dialog: Extract<Dialog, { kind: "cluster" }
               </select>
             </label>
             <label>
-              지역별 최소 합계
+              {t("지역별 최소 합계")}
               <input
                 type="number"
                 value={threshold}
                 onChange={(e) => setThreshold(e.target.value)}
-                placeholder={thresholdColumn ? "예: 50000" : "예: 10 (피처 수)"}
-                aria-label="최소 합계"
+                placeholder={thresholdColumn ? t("예: 50000") : t("예: 10 (피처 수)")}
+                aria-label={t("최소 합계")}
               />
             </label>
           </div>
         ) : (
           <div className="grid2">
             <label>
-              군집 수
-              <input type="number" min={2} value={k} onChange={(e) => setK(e.target.value)} aria-label="군집 수" />
+              {t("군집 수")}
+              <input type="number" min={2} value={k} onChange={(e) => setK(e.target.value)} aria-label={t("군집 수")} />
             </label>
             {method === "skater" && (
               <label>
-                군집별 최소 피처 수
+                {t("군집별 최소 피처 수")}
                 <input
                   type="number"
                   min={1}
                   value={floor}
                   onChange={(e) => setFloor(e.target.value)}
-                  placeholder="제한 없음"
+                  placeholder={t("제한 없음")}
                 />
               </label>
             )}
@@ -1378,7 +1441,7 @@ function ClusterDialog({ dialog }: { dialog: Extract<Dialog, { kind: "cluster" }
             {!meta.spatial && (
               <label className="check">
                 <input type="checkbox" checked={useWeights} onChange={(e) => setUseWeights(e.target.checked)} />
-                공간 조각 수 계산 (군집이 몇 덩어리로 흩어졌는지)
+                {t("공간 조각 수 계산 (군집이 몇 덩어리로 흩어졌는지)")}
               </label>
             )}
             {(meta.spatial || useWeights) && <WeightsSelect ds={ds} value={weightsId} onChange={setWeightsId} />}
@@ -1387,7 +1450,7 @@ function ClusterDialog({ dialog }: { dialog: Extract<Dialog, { kind: "cluster" }
           <NoWeights datasetId={ds.info.id} />
         ) : null}
         <label>
-          결과 열 접두어
+          {t("결과 열 접두어")}
           <input
             value={prefix}
             onChange={(e) => setPrefix(e.target.value)}
@@ -1407,11 +1470,13 @@ function ClusterDialog({ dialog }: { dialog: Extract<Dialog, { kind: "cluster" }
       </div>
       {slow && (
         <p className="hint warn-text">
-          관측치가 {n.toLocaleString()}개라 계산이 오래 걸릴 수 있음. 진행 중에 하단 상태 표시줄에서 취소할 수 있음.
+          {t("관측치가 {n}개라 계산이 오래 걸릴 수 있음. 진행 중에 하단 상태 표시줄에서 취소할 수 있음.", { n })}
         </p>
       )}
-      {job && <p className="hint">다른 분석이 실행 중임. 끝난 뒤에 실행할 수 있음.</p>}
-      <p className="hint">군집 번호(_GRP, 큰 군집부터 1번)가 새 열로 저장되고, 요약은 오른쪽 결과 패널에 표시됨.</p>
+      {job && <p className="hint">{t("다른 분석이 실행 중임. 끝난 뒤에 실행할 수 있음.")}</p>}
+      <p className="hint">
+        {t("군집 번호(_GRP, 큰 군집부터 1번)가 새 열로 저장되고, 요약은 오른쪽 결과 패널에 표시됨.")}
+      </p>
     </Modal>
   );
 }
@@ -1459,33 +1524,37 @@ function ZonalDialog({ datasetId }: { datasetId: string }) {
 
   return (
     <Modal
-      title="존 통계"
+      title={t("존 통계")}
       onClose={close}
       footer={
         <>
-          <button onClick={close}>취소</button>
+          <button onClick={close}>{t("취소")}</button>
           <button className="primary" onClick={submit} disabled={!canRun}>
-            실행
+            {t("실행")}
           </button>
         </>
       }
     >
       <div className="form">
         <p className="hint">
-          {ds.info.name}의 폴리곤마다 래스터 값을 요약해 새 열로 붙임. 셀이 폴리곤에 걸친 면적 비율로 가중함
-          (exactextract).
+          {t(
+            "{name}의 폴리곤마다 래스터 값을 요약해 새 열로 붙임. 셀이 폴리곤에 걸친 면적 비율로 가중함 (exactextract).",
+            { name: ds.info.name },
+          )}
         </p>
-        {!isPolygon && <p className="hint warn-text">폴리곤 레이어에만 쓸 수 있음. 먼저 격자를 만들어 쓸 수 있음.</p>}
+        {!isPolygon && (
+          <p className="hint warn-text">{t("폴리곤 레이어에만 쓸 수 있음. 먼저 격자를 만들어 쓸 수 있음.")}</p>
+        )}
         <div className="grid2">
           <label>
-            래스터
+            {t("래스터")}
             <select
               value={rasterId}
               onChange={(e) => {
                 setRasterId(e.target.value);
                 setBand(1);
               }}
-              aria-label="래스터"
+              aria-label={t("래스터")}
             >
               {rasterOrder.map((id) => (
                 <option key={id} value={id}>
@@ -1495,8 +1564,8 @@ function ZonalDialog({ datasetId }: { datasetId: string }) {
             </select>
           </label>
           <label>
-            밴드
-            <select value={band} onChange={(e) => setBand(Number(e.target.value))} aria-label="밴드">
+            {t("밴드")}
+            <select value={band} onChange={(e) => setBand(Number(e.target.value))} aria-label={t("밴드")}>
               {raster?.info.band_names.map((name, i) => (
                 <option key={i} value={i + 1}>
                   {name}
@@ -1505,22 +1574,24 @@ function ZonalDialog({ datasetId }: { datasetId: string }) {
             </select>
           </label>
         </div>
-        <div className="field-label">통계 — {stats.length}개 선택</div>
-        <div className="var-list" role="group" aria-label="존 통계 항목">
+        <div className="field-label">{t("통계 — {n}개 선택", { n: stats.length })}</div>
+        <div className="var-list" role="group" aria-label={t("존 통계 항목")}>
           {ZONAL_STATS.map((s) => (
             <label key={s.id} className="check">
               <input type="checkbox" checked={stats.includes(s.id)} onChange={() => toggle(s.id)} />
-              {s.label}
+              {t(s.label)}
             </label>
           ))}
         </div>
         <label>
-          결과 열 접두어
+          {t("결과 열 접두어")}
           <input value={prefix} onChange={(e) => setPrefix(e.target.value)} placeholder="ZS" />
         </label>
       </div>
-      {job && <p className="hint">다른 분석이 실행 중임. 끝난 뒤에 실행할 수 있음.</p>}
-      <p className="hint">결과 열: 접두어_MEAN, 접두어_MIN 등. 래스터 밖이거나 값이 없는 폴리곤은 빈 값이 됨.</p>
+      {job && <p className="hint">{t("다른 분석이 실행 중임. 끝난 뒤에 실행할 수 있음.")}</p>}
+      <p className="hint">
+        {t("결과 열: 접두어_MEAN, 접두어_MIN 등. 래스터 밖이거나 값이 없는 폴리곤은 빈 값이 됨.")}
+      </p>
     </Modal>
   );
 }
@@ -1566,8 +1637,11 @@ function FishnetDialog() {
   const submit = async () => {
     const path = await pickSavePath(
       [{ name: "GeoPackage", extensions: ["gpkg"] }],
-      "격자 저장 위치",
-      `${dirname(basePath)}/${sourceName}_${shape === "hexagon" ? "육각" : "격자"}${cellSize}m.gpkg`,
+      t("격자 저장 위치"),
+      `${dirname(basePath)}/` +
+        (shape === "hexagon"
+          ? t("{name}_육각{size}m.gpkg", { name: sourceName, size: cellSize })
+          : t("{name}_격자{size}m.gpkg", { name: sourceName, size: cellSize })),
     );
     if (!path) return;
     close();
@@ -1588,71 +1662,84 @@ function FishnetDialog() {
 
   return (
     <Modal
-      title="격자 만들기"
+      title={t("격자 만들기")}
       onClose={close}
       footer={
         <>
-          <button onClick={close}>취소</button>
+          <button onClick={close}>{t("취소")}</button>
           <button className="primary" onClick={() => void submit()} disabled={!(size > 0) || !basePath || !!job}>
-            만들기…
+            {t("만들기…")}
           </button>
         </>
       }
     >
       <div className="form">
         <p className="hint">
-          자료 범위를 덮는 격자를 GeoPackage로 저장하고 새 레이어로 엶. 래스터를 격자로 집계하면 ESDA(LISA 등)를
-          적용할 수 있음.
+          {t(
+            "자료 범위를 덮는 격자를 GeoPackage로 저장하고 새 레이어로 엶. 래스터를 격자로 집계하면 ESDA(LISA 등)를 적용할 수 있음.",
+          )}
         </p>
         <label>
-          범위
-          <select value={source} onChange={(e) => setSource(e.target.value)} aria-label="격자 범위">
+          {t("범위")}
+          <select value={source} onChange={(e) => setSource(e.target.value)} aria-label={t("격자 범위")}>
             {rasterOrder.map((rid) => (
               <option key={rid} value={`r:${rid}`}>
-                래스터: {rasters[rid]?.info.name}
+                {t("래스터: {name}", { name: rasters[rid]?.info.name ?? "" })}
               </option>
             ))}
             {order.map((did) => (
               <option key={did} value={`d:${did}`}>
-                레이어: {datasets[did]?.info.name}
+                {t("레이어: {name}", { name: datasets[did]?.info.name ?? "" })}
               </option>
             ))}
           </select>
         </label>
         <div className="grid2">
           <label>
-            모양
-            <select value={shape} onChange={(e) => setShape(e.target.value as typeof shape)} aria-label="격자 모양">
-              <option value="square">정사각형</option>
-              <option value="hexagon">육각형</option>
+            {t("모양")}
+            <select value={shape} onChange={(e) => setShape(e.target.value as typeof shape)} aria-label={t("격자 모양")}>
+              <option value="square">{t("정사각형")}</option>
+              <option value="hexagon">{t("육각형")}</option>
             </select>
           </label>
           <label>
-            {shape === "square" ? "셀 크기 (m)" : "한 변 길이 (m)"}
-            <input type="number" min={1} value={cellSize} onChange={(e) => setCellSize(e.target.value)} aria-label="셀 크기" />
+            {shape === "square" ? t("셀 크기 (m)") : t("한 변 길이 (m)")}
+            <input
+              type="number"
+              min={1}
+              value={cellSize}
+              onChange={(e) => setCellSize(e.target.value)}
+              aria-label={t("셀 크기")}
+            />
           </label>
         </div>
         {estimate !== null && (
           <p className={`hint ${estimate > 500_000 ? "warn-text" : ""}`}>
-            약 {estimate.toLocaleString()}개 셀{estimate > 500_000 ? " — 너무 많으면 표시·분석이 느려짐" : ""}
+            {estimate > 500_000
+              ? t("약 {n}개 셀 — 너무 많으면 표시·분석이 느려짐", { n: estimate })
+              : t("약 {n}개 셀", { n: estimate })}
           </p>
         )}
         {sourceDs?.info.geometry_type === "polygon" && (
           <label className="check">
             <input type="checkbox" checked={clip} onChange={(e) => setClip(e.target.checked)} />
-            폴리곤과 겹치는 셀만 남기기
+            {t("폴리곤과 겹치는 셀만 남기기")}
           </label>
         )}
         {rasterOrder.length > 0 && (
           <>
             <label className="check">
               <input type="checkbox" checked={withZonal} onChange={(e) => setWithZonal(e.target.checked)} />
-              만든 뒤 바로 존 통계 계산 (평균·최솟값·최댓값·표준편차)
+              {t("만든 뒤 바로 존 통계 계산 (평균·최솟값·최댓값·표준편차)")}
             </label>
             {withZonal && (
               <label>
-                존 통계 래스터
-                <select value={zonalRaster} onChange={(e) => setZonalRaster(e.target.value)} aria-label="존 통계 래스터">
+                {t("존 통계 래스터")}
+                <select
+                  value={zonalRaster}
+                  onChange={(e) => setZonalRaster(e.target.value)}
+                  aria-label={t("존 통계 래스터")}
+                >
                   {rasterOrder.map((rid) => (
                     <option key={rid} value={rid}>
                       {rasters[rid]?.info.name}
@@ -1663,6 +1750,116 @@ function FishnetDialog() {
             )}
           </>
         )}
+      </div>
+    </Modal>
+  );
+}
+
+// ---- 조건 선택 ---------------------------------------------------------------
+
+function QueryDialog({ datasetId }: { datasetId: string }) {
+  const ds = useApp((s) => s.datasets[datasetId]);
+  const querySelect = useApp((s) => s.querySelect);
+  const [expr, setExpr] = useState("");
+  const [mode, setMode] = useState<SelectMode>("replace");
+  if (!ds) return null;
+  const insert = (text: string) => setExpr((cur) => (cur ? `${cur} ${text}` : text));
+  const quote = (name: string) => (/^[A-Za-z_][A-Za-z0-9_]*$/.test(name) ? name : `\`${name}\``);
+
+  const submit = async () => {
+    if (await querySelect(ds.info.id, expr, mode)) close();
+  };
+
+  return (
+    <Modal
+      title={t("조건 선택")}
+      onClose={close}
+      footer={
+        <>
+          <button onClick={close}>{t("취소")}</button>
+          <button className="primary" onClick={() => void submit()} disabled={!expr.trim()}>
+            {t("선택")}
+          </button>
+        </>
+      }
+    >
+      <div className="form">
+        <label>
+          {t("조건식")}
+          <textarea
+            value={expr}
+            onChange={(e) => setExpr(e.target.value)}
+            rows={3}
+            placeholder="`인구` > 5000 and `구분` == '도심'"
+            aria-label={t("조건식")}
+            autoFocus
+          />
+        </label>
+        <div className="field-label">{t("열 (누르면 식에 넣음)")}</div>
+        <div className="chip-list">
+          {ds.info.columns.map((c) => (
+            <button key={c.name} className="chip" onClick={() => insert(quote(c.name))}>
+              {c.name}
+            </button>
+          ))}
+        </div>
+        <div className="chip-list">
+          {[">", ">=", "<", "<=", "==", "!=", "and", "or", "not"].map((op) => (
+            <button key={op} className="chip op" onClick={() => insert(op)}>
+              {op}
+            </button>
+          ))}
+        </div>
+        <label>
+          {t("선택 방식")}
+          <select value={mode} onChange={(e) => setMode(e.target.value as SelectMode)} aria-label={t("선택 방식")}>
+            <option value="replace">{t("새로 선택")}</option>
+            <option value="add">{t("기존 선택에 추가")}</option>
+          </select>
+        </label>
+        <p className="hint">
+          {t(
+            "pandas 조건식 문법임. 한글·공백이 있는 열 이름은 백틱(`)으로, 문자열 값은 작은따옴표로 감쌈. 예: `소득` >= 300 and `구분` == '도심'",
+          )}
+        </p>
+      </div>
+    </Modal>
+  );
+}
+
+// ---- 정보 ---------------------------------------------------------------------
+
+function AboutDialog() {
+  const [version, setVersion] = useState("");
+  const [engineInfo, setEngineInfo] = useState("");
+  useEffect(() => {
+    void appVersion().then(setVersion);
+    engine
+      .health()
+      .then((h) => setEngineInfo(`${h.version} · Python ${h.python} · GDAL ${h.gdal} · PROJ ${h.proj}`))
+      .catch(() => setEngineInfo("–"));
+  }, []);
+  const repo = "https://github.com/SeaViewer91/GeoStat";
+  return (
+    <Modal title={t("GeoStat 정보")} onClose={close} footer={<button onClick={close}>{t("닫기")}</button>}>
+      <div className="form about">
+        <p>
+          <strong>GeoStat {version}</strong>
+          <br />
+          {t("macOS용 공간통계 분석 데스크톱 앱")}
+        </p>
+        <p className="muted small">
+          {t("분석 엔진")}: {engineInfo}
+        </p>
+        <p className="small">
+          {t("PySAL(libpysal·esda·spreg·mgwr·spopt), GeoPandas, GDAL, rasterio, exactextract, deck.gl, MapLibre, Tauri로 만듦")}
+        </p>
+        <p className="small">MIT License · © 2026 Suho Bak</p>
+        <div className="row">
+          <button onClick={() => void openExternal(repo)}>GitHub</button>
+          <button onClick={() => void openExternal(`${repo}/issues`)}>{t("문제 알리기")}</button>
+          <button onClick={() => void openExternal(`${repo}/releases`)}>{t("릴리스 노트")}</button>
+        </div>
       </div>
     </Modal>
   );

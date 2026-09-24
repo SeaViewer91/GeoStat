@@ -5,6 +5,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import { t } from "../i18n";
 import { maskToIds } from "../lib/binary";
 import { engine, type RowsPage } from "../lib/engine";
 import { useActive, useApp, type LoadedDataset } from "../store";
@@ -22,7 +23,7 @@ export function AttributeTable({ height }: Props) {
   if (!ds) {
     return (
       <section className="table-panel" style={{ height }}>
-        <div className="muted pad">데이터를 열면 속성 테이블이 표시됨</div>
+        <div className="muted pad">{t("데이터를 열면 속성 테이블이 표시됨")}</div>
       </section>
     );
   }
@@ -135,8 +136,8 @@ function TableView({ ds, height }: { ds: LoadedDataset; height: number }) {
       <div className="table-toolbar">
         <strong>{ds.info.name}</strong>
         <span className="muted">
-          {selectedOnly ? `선택 ${total.toLocaleString()}행` : `${total.toLocaleString()}행`}
-          {!selectedOnly && ds.selectedCount > 0 && ` · 선택 ${ds.selectedCount.toLocaleString()}`}
+          {selectedOnly ? t("선택 {n}행", { n: total }) : t("{n}행", { n: total })}
+          {!selectedOnly && ds.selectedCount > 0 && ` · ${t("선택 {n}", { n: ds.selectedCount })}`}
         </span>
         <label className="check">
           <input
@@ -144,11 +145,14 @@ function TableView({ ds, height }: { ds: LoadedDataset; height: number }) {
             checked={selectedOnly}
             onChange={(e) => setSelectedOnly(e.target.checked)}
           />
-          선택 항목만
+          {t("선택 항목만")}
         </label>
         <div className="spacer" />
-        <button onClick={() => showDialog({ kind: "field", datasetId: id })}>계산 필드 추가…</button>
-        <button onClick={() => showDialog({ kind: "export", datasetId: id })}>내보내기…</button>
+        <button onClick={() => showDialog({ kind: "query", datasetId: id })} title={t("속성 조건으로 피처를 선택함")}>
+          {t("조건 선택…")}
+        </button>
+        <button onClick={() => showDialog({ kind: "field", datasetId: id })}>{t("계산 필드 추가…")}</button>
+        <button onClick={() => showDialog({ kind: "export", datasetId: id })}>{t("내보내기…")}</button>
       </div>
       <div className="table-scroll" ref={scroller} onScroll={(e) => setScrollTop(e.currentTarget.scrollTop)}>
         <div className="thead">
@@ -158,7 +162,11 @@ function TableView({ ds, height }: { ds: LoadedDataset; height: number }) {
               key={c.name}
               className={`th ${c.kind === "numeric" ? "num" : ""} ${c.derived ? "derived" : ""}`}
               onClick={() => toggleSort(c.name)}
-              title={c.derived ? `계산 필드: ${c.expression}` : `${c.dtype} · 클릭하면 정렬함`}
+              title={
+                c.derived
+                  ? t("계산 필드: {expr}", { expr: c.expression ?? "" })
+                  : t("{dtype} · 클릭하면 정렬함", { dtype: c.dtype })
+              }
             >
               {c.name}
               {sort?.column === c.name ? (sort.desc ? " ▼" : " ▲") : ""}

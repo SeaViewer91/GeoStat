@@ -61,7 +61,11 @@ def main(exe: str) -> None:
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         text=True,
-        env={"GEOSTAT_ENGINE_TOKEN": TOKEN, "PATH": "/usr/bin:/bin"},
+        env={
+            "GEOSTAT_ENGINE_TOKEN": TOKEN,
+            "PATH": "/usr/bin:/bin",
+            "GEOSTAT_SAMPLE_DIR": str(tmp / "samples"),
+        },
     )
     try:
         line = proc.stdout.readline()
@@ -198,6 +202,16 @@ def main(exe: str) -> None:
         )
         assert grid["n_rows"] > 0, grid
         print("래스터 타일·오버뷰·존 통계·격자(rasterio, exactextract) 확인함")
+
+        samples = call(port, "/files/samples")
+        assert len(samples) == 4, samples
+        for sample in samples:
+            path = call(port, f"/files/samples/{sample['id']}/copy", {})["path"]
+            if sample["id"] == "terrain":
+                call(port, "/rasters/open", {"path": path})
+            else:
+                call(port, "/datasets/open", {"path": path})
+        print("샘플 데이터 4종 복사·열기 확인함")
 
         csv = tmp / "점.csv"
         csv.write_text("이름,경도,위도\n가,129.0,35.1\n", encoding="cp949")
