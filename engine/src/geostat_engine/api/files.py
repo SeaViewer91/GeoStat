@@ -10,6 +10,7 @@ from pydantic import BaseModel
 
 from geostat_engine.auth import require_token
 from geostat_engine.errors import EngineError
+from geostat_engine.io.raster import is_raster
 from geostat_engine.io.table import inspect_table, is_table
 from geostat_engine.io.vector import list_layers
 
@@ -41,7 +42,7 @@ class TableInfo(BaseModel):
 
 class InspectResponse(BaseModel):
     path: str
-    kind: Literal["vector", "table"]
+    kind: Literal["vector", "table", "raster"]
     layers: list[str] = []
     table: TableInfo | None = None
 
@@ -51,6 +52,8 @@ def inspect(body: InspectRequest) -> InspectResponse:
     path = Path(body.path).expanduser()
     if not path.exists():
         raise EngineError("file_not_found", f"파일이 없음: {path}")
+    if is_raster(path):
+        return InspectResponse(path=str(path), kind="raster")
     if is_table(path):
         info = inspect_table(path, encoding=body.encoding, sheet=body.sheet)
         return InspectResponse(path=str(path), kind="table", table=TableInfo(**info.__dict__))

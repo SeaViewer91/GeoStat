@@ -22,8 +22,21 @@ VERSION = 1
 EXTENSION = ".gstproj"
 
 
+def _portable_path(path: Path, base: Path) -> tuple[str, str]:
+    """(프로젝트 기준 상대 경로, 절대 경로). 드라이브가 달라 상대 경로를 못 만들면 절대 경로만 씀."""
+    abs_path = path.resolve()
+    try:
+        rel = os.path.relpath(abs_path, base.resolve())
+    except ValueError:
+        rel = str(abs_path)
+    return rel, str(abs_path)
+
+
 def build_project(
-    project_path: Path, datasets: list[tuple[Dataset, Any]], ui: Any
+    project_path: Path,
+    datasets: list[tuple[Dataset, Any]],
+    ui: Any,
+    rasters: list[tuple[Any, Any]] | None = None,
 ) -> dict[str, Any]:
     base = project_path.parent
     entries = []
@@ -57,12 +70,19 @@ def build_project(
                 "ui": ds_ui,
             }
         )
+    raster_entries = []
+    for r, r_ui in rasters or []:
+        rel, abs_path = _portable_path(r.path, base)
+        raster_entries.append(
+            {"id": r.id, "name": r.name, "path": rel, "abs_path": abs_path, "ui": r_ui}
+        )
     return {
         "format": FORMAT,
         "version": VERSION,
         "app_version": __version__,
         "saved_at": datetime.now(UTC).isoformat(timespec="seconds"),
         "datasets": entries,
+        "rasters": raster_entries,
         "ui": ui,
     }
 
@@ -112,11 +132,11 @@ def resolve_source_path(project_path: Path, source: dict[str, Any]) -> Path:
 
 
 # ---- 결과 캐시 ------------------------------------------------------------------
-# 회귀(특히 MGWR)·군집(AZP 등)은 다시 계산하는 데 오래 걸리므로 결과 열을 프로젝트 옆 폴더에 Parquet으로 저장함.
+# 회귀(특히 MGWR)·군집(AZP 등)·존 통계는 다시 계산하는 데 오래 걸리므로 결과 열을 프로젝트 옆 폴더에 Parquet으로 저장함.
 # 열 때 행 수와 열 이름이 맞으면 캐시를 쓰고, 없거나 맞지 않으면 다시 계산함.
 
 
-CACHED_METHODS = ("regression", "cluster")
+CACHED_METHODS = ("regression", "cluster", "zonal")
 
 
 def cache_dir(project_path: Path) -> Path:

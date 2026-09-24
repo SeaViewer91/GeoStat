@@ -19,6 +19,10 @@ import {
   type LocalParams,
   type RegressionSpec,
   type ClusterSpec,
+  type FishnetSpec,
+  type RasterInfo,
+  type RasterStyle,
+  type ZonalSpec,
   isClusterReport,
   type MoranResult,
   type TableOptions,
@@ -70,6 +74,33 @@ export interface LoadedDataset {
   activeWeightsId: string | null;
 }
 
+export interface LoadedRaster {
+  info: RasterInfo;
+  visible: boolean;
+  style: RasterStyle;
+}
+
+/** 래스터 기본 표시: 밴드 3개 이상이면 1·2·3 RGB, 아니면 1밴드 색상표. 값 범위는 2~98% 백분위 */
+export function defaultRasterStyle(info: RasterInfo): RasterStyle {
+  const range = (b: number): [number, number] => {
+    const st = info.stats[b - 1];
+    if (info.categorical) return [st?.min ?? 0, st?.max ?? 1];
+    return [st?.p2 ?? st?.min ?? 0, st?.p98 ?? st?.max ?? 1];
+  };
+  const bands = info.count >= 3 ? [1, 2, 3] : [1];
+  return {
+    bands,
+    vmin: bands.map((b) => range(b)[0]),
+    vmax: bands.map((b) => range(b)[1]),
+    colormap: info.categorical ? "spectral" : "viridis",
+    opacity: 0.85,
+    resampling: info.categorical ? "nearest" : "bilinear",
+  };
+}
+
+/** 이 개수를 넘으면 지도 표시가 느려질 수 있다고 알림 */
+export const LARGE_FEATURES = 500_000;
+
 export type ChartKind = "histogram" | "scatter" | "box" | "moran";
 
 export interface ChartSpec {
@@ -97,6 +128,8 @@ export type Dialog =
   | { kind: "joincount"; datasetId: string }
   | { kind: "regression"; datasetId: string }
   | { kind: "cluster"; datasetId: string }
+  | { kind: "zonal"; datasetId: string }
+  | { kind: "fishnet" }
   | { kind: "chart"; datasetId: string; chart: ChartKind };
 
 /** 프로젝트 파일에 저장하는 화면 설정 */
@@ -106,6 +139,7 @@ interface ProjectUi {
   activeIndex: number;
 }
 type SavedChart = Omit<ChartSpec, "id" | "datasetId" | "moran">;
+type RasterUi = { visible: boolean; style: RasterStyle };
 interface DatasetUi {
   visible: boolean;
   style: StyleSpec | null;
@@ -128,6 +162,18 @@ interface AppState {
   busy: string | null;
   error: EngineError | null;
   notices: { id: number; text: string }[];
+
+  // 래스터 (벡터 레이어 아래에 그림)
+  rasters: Record<string, LoadedRaster>;
+  rasterOrder: string[];
+  openRaster: (path: string) => Promise<void>;
+  closeRaster: (id: string) => Promise<void>;
+  toggleRasterVisible: (id: string) => void;
+  setRasterStyle: (id: string, style: Partial<RasterStyle>) => void;
+  buildOverviews: (id: string) => Promise<void>;
+  zoomToRaster: (id: string) => void;
+  startZonal: (id: string, spec: ZonalSpec) => Promise<boolean>;
+  makeFishnet: (spec: FishnetSpec) => Promise<string | null>;
 
   // 파일·데이터셋
   openFile: (path: string) => Promise<void>;
@@ -283,6 +329,8 @@ export const useApp = create<AppState>((set, get) => {
     datasets: {},
     order: [],
     activeId: null,
+    rasters: {},
+    rasterOrder: [],
     tool: "pan",
     basemap: "none",
     view: { longitude: 127.8, latitude: 36.3, zoom: 6 },
@@ -293,12 +341,74 @@ export const useApp = create<AppState>((set, get) => {
     error: null,
     notices: [],
 
+    // ---- 래스터 ----------------------------------------------------------------
+
+    openRaster: async (path) => {
+      const info = await run("래스터 여는 중…", () => engine.openRaster(path));
+      if (!info) return;
+      set((s) => ({
+        rasters: { ...s.rasters, [info.id]: { info, visible: true, style: defaultRasterStyle(info) } },
+        rasterOrder: [info.id, ...s.rasterOrder],
+      }));
+      requestFit(info.bounds_wgs84);
+      if (info.needs_overviews) {
+        get().notify(
+          `${info.name}: ${info.width.toLocaleString()}×${info.height.toLocaleString()} 크기에 오버뷰가 없어 축소 표시가 느림. 래스터 패널에서 '오버뷰 만들기'를 권함`,
+        );
+      }
+    },
+
+    closeRaster: async (id) => {
+      await run("래스터 닫는 중…", () => engine.closeRaster(id));
+      set((s) => {
+        const { [id]: _removed, ...rest } = s.rasters;
+        return { rasters: rest, rasterOrder: s.rasterOrder.filter((x) => x !== id) };
+      });
+    },
+
+    toggleRasterVisible: (id) =>
+      set((s) => {
+        const r = s.rasters[id];
+        return r ? { rasters: { ...s.rasters, [id]: { ...r, visible: !r.visible } } } : {};
+      }),
+
+    setRasterStyle: (id, style) =>
+      set((s) => {
+        const r = s.rasters[id];
+        return r ? { rasters: { ...s.rasters, [id]: { ...r, style: { ...r.style, ...style } } } } : {};
+      }),
+
+    buildOverviews: async (id) => {
+      const info = await run("오버뷰 만드는 중… (크기에 따라 수십 초 걸릴 수 있음)", () => engine.buildOverviews(id));
+      if (!info) return;
+      set((s) => {
+        const r = s.rasters[id];
+        return r ? { rasters: { ...s.rasters, [id]: { ...r, info } } } : {};
+      });
+      get().notify(`${info.name}: 오버뷰 ${info.overviews.length}단계를 만듦 (원본 옆 .ovr 파일)`);
+    },
+
+    zoomToRaster: (id) => requestFit(get().rasters[id]?.info.bounds_wgs84 ?? null),
+
+    startZonal: (id, spec) => get().runJob(id, () => engine.startZonal(id, spec)),
+
+    makeFishnet: async (spec) => {
+      const info = await run("격자 만드는 중…", () => engine.fishnet(spec));
+      if (!info) return null;
+      await run(`지오메트리 불러오는 중… (${info.n_rows.toLocaleString()}개)`, () => addLoaded(info));
+      requestFit(info.bounds_wgs84);
+      get().notify(`격자 ${info.n_rows.toLocaleString()}개를 만듦: ${info.path}`);
+      return info.id;
+    },
+
     // ---- 파일·데이터셋 -------------------------------------------------------
 
     openFile: async (path) => {
       const inspection = await run("파일 확인 중…", () => engine.inspect(path));
       if (!inspection) return;
-      if (inspection.kind === "table") {
+      if (inspection.kind === "raster") {
+        await get().openRaster(path);
+      } else if (inspection.kind === "table") {
         set({ dialog: { kind: "table", path, inspection } });
       } else if (inspection.layers.length > 1) {
         set({ dialog: { kind: "layers", path, layers: inspection.layers } });
@@ -313,6 +423,11 @@ export const useApp = create<AppState>((set, get) => {
         set({ busy: `지오메트리 불러오는 중… (${info.n_rows.toLocaleString()}개)` });
         const loaded = await addLoaded(info);
         if (loaded.table) requestFit(info.bounds_wgs84);
+        if (info.n_rows > LARGE_FEATURES) {
+          get().notify(
+            `피처가 ${info.n_rows.toLocaleString()}개라 지도 이동·선택이 느릴 수 있음 (권장 ${LARGE_FEATURES.toLocaleString()}개 이하)`,
+          );
+        }
       });
     },
 
@@ -479,9 +594,11 @@ export const useApp = create<AppState>((set, get) => {
       }
       const { info, analysis } = job.result;
       await get().updateInfo(info);
-      set((s) => ({
-        reports: [...s.reports.filter((r) => r.analysis.id !== analysis.id), { datasetId: id, analysis }],
-      }));
+      if (analysis.report) {
+        set((s) => ({
+          reports: [...s.reports.filter((r) => r.analysis.id !== analysis.id), { datasetId: id, analysis }],
+        }));
+      }
       await get().showResultMap(id, analysis);
       get().notify(`${analysis.description} 완료 (${job.elapsed.toFixed(1)}초)`);
       return true;
@@ -509,6 +626,10 @@ export const useApp = create<AppState>((set, get) => {
     showResultMap: async (id, analysis, variable) => {
       const outs = analysis.outputs;
       const report = analysis.report;
+      if (analysis.method === "zonal") {
+        await get().applyStyle(id, { column: outs[0], method: "quantile", k: 5 });
+        return;
+      }
       if (!report) return;
       if (isClusterReport(report)) {
         await get().applyStyle(id, { column: outs[0], method: "unique_values", k: 5 });
@@ -610,7 +731,12 @@ export const useApp = create<AppState>((set, get) => {
         };
         return { id, ui: dsUi };
       });
-      const result = await run("프로젝트 저장 중…", () => engine.saveProject(path, datasets, ui));
+      const rasters = s.rasterOrder.map((id) => {
+        const r = s.rasters[id];
+        const rUi: RasterUi = { visible: r.visible, style: r.style };
+        return { id, ui: rUi };
+      });
+      const result = await run("프로젝트 저장 중…", () => engine.saveProject(path, datasets, ui, rasters));
       if (result) {
         set({ projectPath: result.path });
         get().notify(`프로젝트를 저장함: ${result.path}`);
@@ -619,8 +745,35 @@ export const useApp = create<AppState>((set, get) => {
 
     openProject: async (path) => {
       await run("프로젝트 여는 중…", async () => {
-        const project = await engine.openProject<ProjectUi | null, DatasetUi | null>(path);
-        set({ datasets: {}, order: [], activeId: null, charts: [], reports: [], projectPath: project.path });
+        const project = await engine.openProject<ProjectUi | null, DatasetUi | null, RasterUi | null>(path);
+        set({
+          datasets: {},
+          order: [],
+          activeId: null,
+          rasters: {},
+          rasterOrder: [],
+          charts: [],
+          reports: [],
+          projectPath: project.path,
+        });
+        const rasters: Record<string, LoadedRaster> = {};
+        const rasterOrder: string[] = [];
+        for (const item of project.rasters ?? []) {
+          if (!item.info) {
+            get().notify(`열지 못한 래스터: ${item.error}`);
+            continue;
+          }
+          // 밴드 수가 바뀌었으면 저장된 표시 설정 대신 기본값을 씀
+          const saved = item.ui?.style;
+          const valid = saved && saved.bands.every((b) => b >= 1 && b <= item.info!.count);
+          rasters[item.info.id] = {
+            info: item.info,
+            visible: item.ui?.visible ?? true,
+            style: valid ? saved : defaultRasterStyle(item.info),
+          };
+          rasterOrder.push(item.info.id);
+        }
+        set({ rasters, rasterOrder });
         // 목록 앞쪽이 위에 그려지므로 뒤에서부터 추가함
         const opened: string[] = [];
         for (const item of [...project.datasets].reverse()) {

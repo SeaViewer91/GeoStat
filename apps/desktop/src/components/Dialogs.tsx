@@ -11,6 +11,7 @@ import {
   type LocalMethod,
   type ClusterMethod,
   type ClusterSpec,
+  type ZonalStat,
   type RegressionModel,
   type RegressionSpec,
   type WeightsSpec,
@@ -42,6 +43,10 @@ export function DialogHost() {
       return <RegressionDialog dialog={dialog} />;
     case "cluster":
       return <ClusterDialog dialog={dialog} />;
+    case "zonal":
+      return <ZonalDialog datasetId={dialog.datasetId} />;
+    case "fishnet":
+      return <FishnetDialog />;
     case "chart":
     case "moran":
       return <ChartDialog dialog={dialog.kind === "moran" ? { ...dialog, kind: "chart", chart: "moran" } : dialog} />;
@@ -1407,6 +1412,258 @@ function ClusterDialog({ dialog }: { dialog: Extract<Dialog, { kind: "cluster" }
       )}
       {job && <p className="hint">다른 분석이 실행 중임. 끝난 뒤에 실행할 수 있음.</p>}
       <p className="hint">군집 번호(_GRP, 큰 군집부터 1번)가 새 열로 저장되고, 요약은 오른쪽 결과 패널에 표시됨.</p>
+    </Modal>
+  );
+}
+
+// ---- 존 통계 -----------------------------------------------------------------
+
+const ZONAL_STATS: { id: ZonalStat; label: string }[] = [
+  { id: "mean", label: "평균" },
+  { id: "min", label: "최솟값" },
+  { id: "max", label: "최댓값" },
+  { id: "stdev", label: "표준편차" },
+  { id: "sum", label: "합계" },
+  { id: "median", label: "중앙값" },
+  { id: "q25", label: "하위 25%" },
+  { id: "q75", label: "상위 25%" },
+  { id: "count", label: "셀 수 (면적 가중)" },
+  { id: "majority", label: "최빈값 (범주 자료)" },
+  { id: "variety", label: "값 종류 수 (범주 자료)" },
+];
+
+function ZonalDialog({ datasetId }: { datasetId: string }) {
+  const ds = useApp((s) => s.datasets[datasetId]);
+  const rasters = useApp((s) => s.rasters);
+  const rasterOrder = useApp((s) => s.rasterOrder);
+  const job = useApp((s) => s.job);
+  const startZonal = useApp((s) => s.startZonal);
+  const [rasterId, setRasterId] = useState(rasterOrder[0] ?? "");
+  const raster = rasters[rasterId];
+  const [band, setBand] = useState(1);
+  const [stats, setStats] = useState<ZonalStat[]>(
+    raster?.info.categorical ? ["majority", "variety", "count"] : ["mean", "min", "max", "stdev", "count"],
+  );
+  const [prefix, setPrefix] = useState("");
+  if (!ds) return null;
+  const isPolygon = ds.info.geometry_type === "polygon";
+  const toggle = (id: ZonalStat) => setStats((cur) => (cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id]));
+  const canRun = isPolygon && !!raster && stats.length > 0 && !job;
+
+  const submit = () => {
+    close();
+    // 고른 순서가 아니라 목록 순서로 열을 만듦
+    const ordered = ZONAL_STATS.map((s) => s.id).filter((id) => stats.includes(id));
+    void startZonal(ds.info.id, { raster_id: rasterId, band, stats: ordered, prefix: prefix.trim() || null });
+  };
+
+  return (
+    <Modal
+      title="존 통계"
+      onClose={close}
+      footer={
+        <>
+          <button onClick={close}>취소</button>
+          <button className="primary" onClick={submit} disabled={!canRun}>
+            실행
+          </button>
+        </>
+      }
+    >
+      <div className="form">
+        <p className="hint">
+          {ds.info.name}의 폴리곤마다 래스터 값을 요약해 새 열로 붙임. 셀이 폴리곤에 걸친 면적 비율로 가중함
+          (exactextract).
+        </p>
+        {!isPolygon && <p className="hint warn-text">폴리곤 레이어에만 쓸 수 있음. 먼저 격자를 만들어 쓸 수 있음.</p>}
+        <div className="grid2">
+          <label>
+            래스터
+            <select
+              value={rasterId}
+              onChange={(e) => {
+                setRasterId(e.target.value);
+                setBand(1);
+              }}
+              aria-label="래스터"
+            >
+              {rasterOrder.map((id) => (
+                <option key={id} value={id}>
+                  {rasters[id]?.info.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            밴드
+            <select value={band} onChange={(e) => setBand(Number(e.target.value))} aria-label="밴드">
+              {raster?.info.band_names.map((name, i) => (
+                <option key={i} value={i + 1}>
+                  {name}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+        <div className="field-label">통계 — {stats.length}개 선택</div>
+        <div className="var-list" role="group" aria-label="존 통계 항목">
+          {ZONAL_STATS.map((s) => (
+            <label key={s.id} className="check">
+              <input type="checkbox" checked={stats.includes(s.id)} onChange={() => toggle(s.id)} />
+              {s.label}
+            </label>
+          ))}
+        </div>
+        <label>
+          결과 열 접두어
+          <input value={prefix} onChange={(e) => setPrefix(e.target.value)} placeholder="ZS" />
+        </label>
+      </div>
+      {job && <p className="hint">다른 분석이 실행 중임. 끝난 뒤에 실행할 수 있음.</p>}
+      <p className="hint">결과 열: 접두어_MEAN, 접두어_MIN 등. 래스터 밖이거나 값이 없는 폴리곤은 빈 값이 됨.</p>
+    </Modal>
+  );
+}
+
+// ---- 격자 만들기 ---------------------------------------------------------------
+
+function FishnetDialog() {
+  const datasets = useApp((s) => s.datasets);
+  const order = useApp((s) => s.order);
+  const activeId = useApp((s) => s.activeId);
+  const rasters = useApp((s) => s.rasters);
+  const rasterOrder = useApp((s) => s.rasterOrder);
+  const makeFishnet = useApp((s) => s.makeFishnet);
+  const startZonal = useApp((s) => s.startZonal);
+  const job = useApp((s) => s.job);
+  // 범위 원본: "d:<데이터셋 id>" 또는 "r:<래스터 id>"
+  const [source, setSource] = useState(
+    rasterOrder[0] ? `r:${rasterOrder[0]}` : activeId ? `d:${activeId}` : `d:${order[0] ?? ""}`,
+  );
+  const [cellSize, setCellSize] = useState("1000");
+  const [shape, setShape] = useState<"square" | "hexagon">("square");
+  const [clip, setClip] = useState(true);
+  const [zonalRaster, setZonalRaster] = useState(rasterOrder[0] ?? "");
+  const [withZonal, setWithZonal] = useState(rasterOrder.length > 0);
+  const [kind, id] = [source.slice(0, 1), source.slice(2)];
+  const sourceDs = kind === "d" ? datasets[id] : undefined;
+  const sourceRaster = kind === "r" ? rasters[id] : undefined;
+  const size = Number(cellSize);
+  const sourceName = sourceDs?.info.name ?? sourceRaster?.info.name ?? "격자";
+  const basePath = sourceDs?.info.path ?? sourceRaster?.info.path ?? "";
+
+  // 대략적인 셀 수 (m 단위 좌표계 기준 범위 / 셀 면적). 경위도 범위는 1도 ≈ 111 km로 환산함
+  const estimate = (() => {
+    const b = sourceDs?.info.bounds_wgs84 ?? sourceRaster?.info.bounds_wgs84;
+    if (!b || !(size > 0)) return null;
+    const lat = (b[1] + b[3]) / 2;
+    const w = (b[2] - b[0]) * 111_320 * Math.cos((lat * Math.PI) / 180);
+    const h = (b[3] - b[1]) * 110_540;
+    const area = shape === "square" ? size * size : ((3 * Math.sqrt(3)) / 2) * size * size;
+    return Math.round((w * h) / area);
+  })();
+
+  const submit = async () => {
+    const path = await pickSavePath(
+      [{ name: "GeoPackage", extensions: ["gpkg"] }],
+      "격자 저장 위치",
+      `${dirname(basePath)}/${sourceName}_${shape === "hexagon" ? "육각" : "격자"}${cellSize}m.gpkg`,
+    );
+    if (!path) return;
+    close();
+    const newId = await makeFishnet({
+      dataset_id: kind === "d" ? id : null,
+      raster_id: kind === "r" ? id : null,
+      cell_size: size,
+      shape,
+      clip,
+      path,
+    });
+    if (newId && withZonal && zonalRaster) {
+      const info = rasters[zonalRaster]?.info;
+      const stats: ZonalStat[] = info?.categorical ? ["majority", "variety", "count"] : ["mean", "min", "max", "stdev", "count"];
+      await startZonal(newId, { raster_id: zonalRaster, band: 1, stats });
+    }
+  };
+
+  return (
+    <Modal
+      title="격자 만들기"
+      onClose={close}
+      footer={
+        <>
+          <button onClick={close}>취소</button>
+          <button className="primary" onClick={() => void submit()} disabled={!(size > 0) || !basePath || !!job}>
+            만들기…
+          </button>
+        </>
+      }
+    >
+      <div className="form">
+        <p className="hint">
+          자료 범위를 덮는 격자를 GeoPackage로 저장하고 새 레이어로 엶. 래스터를 격자로 집계하면 ESDA(LISA 등)를
+          적용할 수 있음.
+        </p>
+        <label>
+          범위
+          <select value={source} onChange={(e) => setSource(e.target.value)} aria-label="격자 범위">
+            {rasterOrder.map((rid) => (
+              <option key={rid} value={`r:${rid}`}>
+                래스터: {rasters[rid]?.info.name}
+              </option>
+            ))}
+            {order.map((did) => (
+              <option key={did} value={`d:${did}`}>
+                레이어: {datasets[did]?.info.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <div className="grid2">
+          <label>
+            모양
+            <select value={shape} onChange={(e) => setShape(e.target.value as typeof shape)} aria-label="격자 모양">
+              <option value="square">정사각형</option>
+              <option value="hexagon">육각형</option>
+            </select>
+          </label>
+          <label>
+            {shape === "square" ? "셀 크기 (m)" : "한 변 길이 (m)"}
+            <input type="number" min={1} value={cellSize} onChange={(e) => setCellSize(e.target.value)} aria-label="셀 크기" />
+          </label>
+        </div>
+        {estimate !== null && (
+          <p className={`hint ${estimate > 500_000 ? "warn-text" : ""}`}>
+            약 {estimate.toLocaleString()}개 셀{estimate > 500_000 ? " — 너무 많으면 표시·분석이 느려짐" : ""}
+          </p>
+        )}
+        {sourceDs?.info.geometry_type === "polygon" && (
+          <label className="check">
+            <input type="checkbox" checked={clip} onChange={(e) => setClip(e.target.checked)} />
+            폴리곤과 겹치는 셀만 남기기
+          </label>
+        )}
+        {rasterOrder.length > 0 && (
+          <>
+            <label className="check">
+              <input type="checkbox" checked={withZonal} onChange={(e) => setWithZonal(e.target.checked)} />
+              만든 뒤 바로 존 통계 계산 (평균·최솟값·최댓값·표준편차)
+            </label>
+            {withZonal && (
+              <label>
+                존 통계 래스터
+                <select value={zonalRaster} onChange={(e) => setZonalRaster(e.target.value)} aria-label="존 통계 래스터">
+                  {rasterOrder.map((rid) => (
+                    <option key={rid} value={rid}>
+                      {rasters[rid]?.info.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+          </>
+        )}
+      </div>
     </Modal>
   );
 }

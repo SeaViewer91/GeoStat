@@ -22,6 +22,8 @@ dependencies = [
     "spreg>=1.8",
     "mgwr>=2.2",
     "spopt>=0.6",
+    "rasterio>=1.4",
+    "exactextract>=0.2",
 ]
 
 [project.scripts]

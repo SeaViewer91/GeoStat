@@ -352,3 +352,112 @@ def run_cluster_sync(
     payload = prepare_cluster(ds, spec)
     result = cluster.run(payload, lambda _p, _m: None)
     return apply_cluster(ds, spec, result, record_id=record_id)
+
+
+# ---- 래스터·존 통계·격자 ---------------------------------------------------------
+
+
+def open_raster(state: AppState, path: str | Path, name: str | None = None):
+    from geostat_engine.io import raster as raster_io
+
+    path = Path(path).expanduser()
+    if not path.exists():
+        raise EngineError("file_not_found", f"파일이 없음: {path}")
+    info = raster_io.describe(path)
+    return state.add_raster(name or path.stem, path, info)
+
+
+def prepare_zonal(state: AppState, ds: Dataset, spec: dict[str, Any]) -> dict[str, Any]:
+    from geostat_engine.analysis import zonal
+
+    raster = state.get_raster(spec["raster_id"])
+    return zonal.prepare(ds.gdf, raster, spec)
+
+
+def apply_zonal(
+    ds: Dataset,
+    spec: dict[str, Any],
+    result: dict[str, Any],
+    record_id: str | None = None,
+) -> AnalysisRecord:
+    from geostat_engine.analysis import zonal
+
+    prefix = (spec.get("prefix") or "ZS").strip()
+    outputs = _attach_columns(ds, prefix, result["columns"])
+    labels = ", ".join(zonal.STATS[s][2] for s in spec["stats"])
+    desc = f"존 통계: {spec.get('raster_name', '래스터')} 밴드 {spec.get('band', 1)} ({labels})"
+    record = AnalysisRecord(
+        id=record_id or _next_id("a", [a.id for a in ds.analyses]),
+        method="zonal",
+        params={**spec, "prefix": prefix},
+        outputs=outputs,
+        description=desc,
+        summary=dict(result.get("summary", {})),
+    )
+    ds.analyses.append(record)
+    return record
+
+
+def run_zonal_sync(
+    ds: Dataset, spec: dict[str, Any], record_id: str | None = None
+) -> AnalysisRecord:
+    """프로젝트 다시 열기용: 원본 래스터 경로로 바로 다시 계산함."""
+    from geostat_engine.analysis import zonal
+    from geostat_engine.io import raster as raster_io
+    from geostat_engine.state import RasterEntry
+
+    path = Path(spec["raster_path"])
+    if not path.exists():
+        raise EngineError("source_missing", f"래스터 파일을 찾을 수 없음: {path}")
+    entry = RasterEntry(id="tmp", name=path.stem, path=path, info=raster_io.describe(path))
+    payload = zonal.prepare(ds.gdf, entry, spec)
+    result = zonal.run(payload, lambda _p, _m: None)
+    return apply_zonal(ds, spec, result, record_id=record_id)
+
+
+def make_fishnet(state: AppState, spec: dict[str, Any]) -> Dataset:
+    """자료 범위를 덮는 격자를 만들어 GeoPackage로 저장하고 새 데이터셋으로 엶."""
+    from pyproj import CRS
+
+    from geostat_engine.analysis import grid
+
+    out = Path(spec["path"]).expanduser()
+    if out.suffix.lower() != ".gpkg":
+        out = out.with_suffix(".gpkg")
+    if not out.parent.exists():
+        raise EngineError("folder_not_found", f"폴더가 없음: {out.parent}")
+    clip = None
+    if spec.get("raster_id"):
+        raster = state.get_raster(spec["raster_id"])
+        src_crs = CRS.from_user_input(raster.info["crs"])
+        target = grid.metric_crs(src_crs, tuple(raster.info["bounds_wgs84"]))
+        import geopandas as gpd
+        from shapely.geometry import box
+
+        footprint = gpd.GeoSeries([box(*raster.info["bounds"])], crs=src_crs).to_crs(target)
+        bounds = tuple(footprint.total_bounds)
+        clip = footprint.iloc[0] if src_crs != target else None
+        source_name = raster.name
+    else:
+        ds = state.get(spec["dataset_id"])
+        if ds.gdf.crs is None:
+            raise EngineError("missing_crs", "좌표계가 없는 자료로는 격자를 만들 수 없음")
+        wgs = tuple(ds.gdf.total_bounds) if ds.gdf.crs.is_geographic else None
+        target = grid.metric_crs(ds.gdf.crs, wgs)
+        geoms = ds.gdf.geometry.to_crs(target)
+        bounds = tuple(geoms.total_bounds)
+        if spec.get("clip", True) and set(ds.gdf.geom_type.dropna()) <= {"Polygon", "MultiPolygon"}:
+            import shapely
+
+            clip = shapely.union_all(shapely.make_valid(geoms.values))
+        source_name = ds.name
+    gdf = grid.make_grid(
+        bounds, target, float(spec["cell_size"]), shape=spec.get("shape", "square"), clip=clip
+    )
+    try:
+        gdf.to_file(out, layer="grid", engine="pyogrio")
+    except Exception as exc:
+        raise EngineError("write_failed", f"격자를 저장하지 못함: {exc}") from exc
+    size = f"{float(spec['cell_size']):g}m"
+    kind = "육각" if spec.get("shape") == "hexagon" else "격자"
+    return open_source(state, out, name=spec.get("name") or f"{source_name}_{kind}{size}")

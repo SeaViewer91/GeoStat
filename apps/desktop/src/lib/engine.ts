@@ -76,7 +76,7 @@ export interface TableInspection {
 
 export interface FileInspection {
   path: string;
-  kind: "vector" | "table";
+  kind: "vector" | "table" | "raster";
   layers: string[];
   table: TableInspection | null;
 }
@@ -390,10 +390,85 @@ export interface OpenedProjectDataset<U = unknown> {
   warnings: string[];
 }
 
-export interface OpenedProject<U = unknown, D = unknown> {
+export interface OpenedProject<U = unknown, D = unknown, R = unknown> {
   path: string;
   ui: U;
   datasets: OpenedProjectDataset<D>[];
+  rasters: { info: RasterInfo | null; ui: R; error: string | null }[];
+}
+
+// ---- 래스터 ----
+
+export interface BandStats {
+  min: number | null;
+  max: number | null;
+  p2: number | null;
+  p98: number | null;
+  mean: number | null;
+  std: number | null;
+}
+
+export interface RasterInfo {
+  id: string;
+  name: string;
+  path: string;
+  width: number;
+  height: number;
+  count: number;
+  dtype: string;
+  crs: string;
+  crs_name: string;
+  res: [number, number];
+  nodata: number | null;
+  bounds: [number, number, number, number];
+  bounds_wgs84: [number, number, number, number];
+  overviews: number[];
+  needs_overviews: boolean;
+  band_names: string[];
+  stats: BandStats[];
+  categorical: boolean;
+}
+
+export type RasterColormap = "viridis" | "magma" | "terrain" | "gray" | "rdylgn" | "spectral" | "blues" | "rdbu_r";
+
+/** 래스터 표시 설정. bands가 3개면 RGB 합성, 1개면 색상표를 씀 */
+export interface RasterStyle {
+  bands: number[];
+  vmin: number[];
+  vmax: number[];
+  colormap: RasterColormap;
+  opacity: number;
+  resampling: "bilinear" | "nearest";
+}
+
+export type ZonalStat =
+  | "mean"
+  | "sum"
+  | "min"
+  | "max"
+  | "stdev"
+  | "median"
+  | "q25"
+  | "q75"
+  | "count"
+  | "majority"
+  | "variety";
+
+export interface ZonalSpec {
+  raster_id: string;
+  band: number;
+  stats: ZonalStat[];
+  prefix?: string | null;
+}
+
+export interface FishnetSpec {
+  dataset_id?: string | null;
+  raster_id?: string | null;
+  cell_size: number;
+  shape: "square" | "hexagon";
+  clip: boolean;
+  path: string;
+  name?: string | null;
 }
 
 /** 엔진이 돌려준 오류. code로 UI 분기(예: crs_missing → 좌표계 지정 창)를 함 */
@@ -533,10 +608,41 @@ export const engine = {
   exportDataset: (id: string, path: string, opts: { epsg?: number | null; encoding?: string | null }) =>
     post<ExportResult>(`${ds(id)}/export`, { path, ...opts }),
 
-  saveProject: (path: string, datasets: { id: string; ui: unknown }[], ui: unknown) =>
-    post<{ path: string; n_datasets: number }>("/project/save", { path, datasets, ui }),
+  saveProject: (
+    path: string,
+    datasets: { id: string; ui: unknown }[],
+    ui: unknown,
+    rasters: { id: string; ui: unknown }[] = [],
+  ) => post<{ path: string; n_datasets: number }>("/project/save", { path, datasets, ui, rasters }),
 
-  openProject: <U, D>(path: string) => post<OpenedProject<U, D>>("/project/open", { path }),
+  openProject: <U, D, R>(path: string) => post<OpenedProject<U, D, R>>("/project/open", { path }),
+
+  // ---- 래스터 ----
+  openRaster: (path: string, name?: string) => post<RasterInfo>("/rasters/open", { path, name }),
+  closeRaster: (id: string) => request(`/rasters/${encodeURIComponent(id)}`, { method: "DELETE" }),
+  buildOverviews: (id: string) => post<RasterInfo>(`/rasters/${encodeURIComponent(id)}/overviews`, {}),
+  /** 타일 하나를 이미지로 받음. 래스터 밖이면 null */
+  rasterTile: async (
+    id: string,
+    tile: { x: number; y: number; z: number },
+    style: RasterStyle,
+    signal?: AbortSignal,
+  ): Promise<ImageBitmap | null> => {
+    const q = new URLSearchParams({
+      bands: style.bands.join(","),
+      vmin: style.vmin.join(","),
+      vmax: style.vmax.join(","),
+      colormap: style.colormap,
+      resampling: style.resampling,
+    });
+    const res = await request(`/rasters/${encodeURIComponent(id)}/tiles/${tile.z}/${tile.x}/${tile.y}.png?${q}`, {
+      signal,
+    });
+    if (res.status === 204) return null;
+    return createImageBitmap(await res.blob());
+  },
+  startZonal: (id: string, spec: ZonalSpec) => post<JobInfo>(`${ds(id)}/zonal`, spec),
+  fishnet: (spec: FishnetSpec) => post<DatasetInfo>("/grid/fishnet", spec),
 
   // ---- 공간가중치 ----
   weights: (id: string) => json<WeightsInfo[]>(`${ds(id)}/weights`),

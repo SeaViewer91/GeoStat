@@ -13,7 +13,16 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from geostat_engine import __version__
-from geostat_engine.api import cluster, datasets, files, health, project, regression, spatial
+from geostat_engine.api import (
+    cluster,
+    datasets,
+    files,
+    health,
+    project,
+    rasters,
+    regression,
+    spatial,
+)
 from geostat_engine.auth import set_token
 from geostat_engine.errors import install_error_handlers
 from geostat_engine.jobs import JobManager
@@ -61,6 +70,7 @@ def create_app(token: str, ready_line: str | None = None, warmup: bool = False) 
     app.include_router(spatial.router)
     app.include_router(regression.router)
     app.include_router(cluster.router)
+    app.include_router(rasters.router)
     app.include_router(project.router)
     return app
 

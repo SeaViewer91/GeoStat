@@ -65,3 +65,16 @@ jobs:
         working-directory: apps/desktop/src-tauri
       - run: cargo clippy --all-targets -- -D warnings
         working-directory: apps/desktop/src-tauri
+
+  bundle:
+    name: 엔진 번들 스모크 테스트 (macOS)
+    runs-on: macos-latest
+    # 번들 빌드는 오래 걸리므로 main 푸시에서만 돌림
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.2.0
+      # PyInstaller로 엔진을 빌드한 뒤 smoke_test.py로 실제 실행 파일을 확인함
+      # (pyogrio·rasterio가 각자 GDAL을 들고 오므로 macOS 번들에서 충돌이 없는지 여기서 확인함)
+      - run: packaging/build-engine.sh
+      - run: du -sh packaging/build/engine/geostat-engine

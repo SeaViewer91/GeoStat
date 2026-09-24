@@ -3,11 +3,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import DeckGL, { type DeckGLRef } from "@deck.gl/react";
 import { WebMercatorViewport, type Layer, type PickingInfo } from "@deck.gl/core";
-import {
-  GeoArrowPathLayer,
-  GeoArrowPolygonLayer,
-  GeoArrowScatterplotLayer,
-} from "@geoarrow/deck.gl-geoarrow";
+import { GeoArrowPathLayer, GeoArrowPolygonLayer, GeoArrowScatterplotLayer } from "@geoarrow/deck.gl-geoarrow";
+import { TileLayer } from "@deck.gl/geo-layers";
+import { BitmapLayer } from "@deck.gl/layers";
 import { Map as BaseMap } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 // 삼각분할 워커를 CDN 대신 앱에 포함시킴 (오프라인 동작, CSP 준수)
@@ -23,8 +21,9 @@ import {
   splitColorData,
   type RGBA,
 } from "../lib/geoarrow";
+import { engine } from "../lib/engine";
 import { DEFAULT_FILL, MISSING_COLOR, SELECTED_FILL, classColors } from "../lib/palette";
-import { useApp, type Basemap, type LoadedDataset, type SelectMode } from "../store";
+import { useApp, type Basemap, type LoadedDataset, type LoadedRaster, type SelectMode } from "../store";
 
 const OUTLINE_COLOR: RGBA = [255, 255, 255, 110];
 const OUTLINE_ON_BASEMAP: RGBA = [60, 60, 60, 120];
@@ -41,14 +40,15 @@ const BASEMAP_STYLE: Record<Exclude<Basemap, "none">, string> = {
 const DRAG_THRESHOLD_PX = 4;
 
 type Gesture =
-  | { kind: "box"; x0: number; y0: number; x1: number; y1: number }
-  | { kind: "lasso"; points: [number, number][] };
+  { kind: "box"; x0: number; y0: number; x1: number; y1: number } | { kind: "lasso"; points: [number, number][] };
 
 export function MapCanvas() {
   const deckRef = useRef<DeckGLRef>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const datasets = useApp((s) => s.datasets);
   const order = useApp((s) => s.order);
+  const rasters = useApp((s) => s.rasters);
+  const rasterOrder = useApp((s) => s.rasterOrder);
   const activeId = useApp((s) => s.activeId);
   const tool = useApp((s) => s.tool);
   const basemap = useApp((s) => s.basemap);
@@ -79,15 +79,19 @@ export function MapCanvas() {
     setView({ longitude, latitude, zoom: Math.min(zoom, 18) });
   }, [fitRequest, setView]);
 
-  // 레이어 목록 앞쪽이 위에 그려지도록 역순으로 쌓음
+  // 레이어 목록 앞쪽이 위에 그려지도록 역순으로 쌓음. 래스터는 항상 벡터 아래에 둠
   const layers = useMemo(() => {
     const out: Layer[] = [];
+    for (const id of [...rasterOrder].reverse()) {
+      const r = rasters[id];
+      if (r?.visible) out.push(makeRasterLayer(r));
+    }
     for (const id of [...order].reverse()) {
       const ds = datasets[id];
       if (ds?.table && ds.visible) out.push(...makeLayers(ds, basemap !== "none"));
     }
     return out;
-  }, [datasets, order, basemap]);
+  }, [datasets, order, basemap, rasters, rasterOrder]);
 
   const active = activeId ? datasets[activeId] : undefined;
 
@@ -123,9 +127,7 @@ export function MapCanvas() {
     if (!areaTool || e.button !== 0) return;
     const [x, y] = localPoint(e);
     (e.target as Element).setPointerCapture(e.pointerId);
-    setGesture(
-      areaTool === "box" ? { kind: "box", x0: x, y0: y, x1: x, y1: y } : { kind: "lasso", points: [[x, y]] },
-    );
+    setGesture(areaTool === "box" ? { kind: "box", x0: x, y0: y, x1: x, y1: y } : { kind: "lasso", points: [[x, y]] });
   };
 
   const onPointerMove = (e: React.PointerEvent) => {
@@ -226,7 +228,11 @@ function makeLayers(ds: LoadedDataset, onBasemap: boolean): Layer[] {
   const { info, table, selection, selectedCount, theme } = ds;
   if (!table) return [];
   const themeColors = theme
-    ? { classes: theme.classes, colors: classColors(theme.scheme, theme.labels, 225, theme.colors), missing: MISSING_COLOR }
+    ? {
+        classes: theme.classes,
+        colors: classColors(theme.scheme, theme.labels, 225, theme.colors),
+        missing: MISSING_COLOR,
+      }
     : null;
   const rgba = featureColors(info.n_rows, selection, selectedCount, themeColors, DEFAULT_FILL, SELECTED_FILL);
   const colors = splitColorData(table, rgba);
@@ -278,6 +284,38 @@ function makeLayers(ds: LoadedDataset, onBasemap: boolean): Layer[] {
           radiusMinPixels: 2,
         });
     }
+  });
+}
+
+/** 래스터: 엔진이 만든 256px 타일을 받아 그림. 표시 설정이 바뀌면 레이어 id가 바뀌어 타일을 새로 받음 */
+function makeRasterLayer(r: LoadedRaster): Layer {
+  const { info, style } = r;
+  const key = [
+    style.bands.join("."),
+    style.vmin.join("."),
+    style.vmax.join("."),
+    style.colormap,
+    style.resampling,
+  ].join("|");
+  return new TileLayer<ImageBitmap | null>({
+    id: `raster-${info.id}-${key}`,
+    extent: info.bounds_wgs84,
+    tileSize: 256,
+    minZoom: 0,
+    maxZoom: 22,
+    maxRequests: 8,
+    opacity: style.opacity,
+    getTileData: ({ index, signal }) => engine.rasterTile(info.id, index, style, signal),
+    renderSubLayers: (props) => {
+      const { boundingBox } = props.tile;
+      if (!props.data) return null;
+      return new BitmapLayer({
+        id: `${props.id}-bitmap`,
+        image: props.data,
+        bounds: [boundingBox[0][0], boundingBox[0][1], boundingBox[1][0], boundingBox[1][1]],
+        opacity: style.opacity,
+      });
+    },
   });
 }
 

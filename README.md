@@ -9,6 +9,8 @@ GWR/MGWR, 한국 좌표계·한글 UI, 래스터·대용량 데이터 지원을 
 
 [Releases](https://github.com/SeaViewer91/GeoStat/releases)에서 `.dmg`를 받아 `GeoStat.app`을 응용 프로그램 폴더로 옮김.
 
+macOS 14(Sonoma) 이상, Apple Silicon 맥이 필요함.
+
 Apple 공증을 받지 않은 앱이라 첫 실행 때 "확인되지 않은 개발자" 경고가 뜸. 아래 중 하나로 한 번만 허용하면 됨.
 
 - **시스템 설정 → 개인정보 보호 및 보안** 맨 아래의 **"그래도 열기"** 클릭
@@ -28,7 +30,7 @@ Apple 공증을 받지 않은 앱이라 첫 실행 때 "확인되지 않은 개�
 - ✅ **연동 차트**: 히스토그램·산점도·박스플롯·Moran 산점도와 지도·테이블 간 선택 연동
 - ✅ **공간회귀**: OLS(공간진단·LM 검정·White 강건 표준오차), Spatial Lag/Error(ML·GM), 직접·간접 효과, **GWR/MGWR**(유의성 마스크 계수 지도), 모형 비교표(AICc·잔차 Moran's I), 진행률·취소, 텍스트 보고서
 - ✅ **공간군집화**: SKATER, Max-p, AZP, Region K-Means, Ward(공간 제약)와 비교용 K-평균·계층적 군집. 군집 지도, 군집별 프로필·제곱합 비, 공간 조각 수
-- 🚧 **래스터**: GeoTIFF/COG 표시, 존 통계 산출
+- ✅ **래스터**: GeoTIFF/COG 표시(색상표·RGB 합성·오버뷰), 존 통계(면적 가중), 정사각·육각 격자 만들기 → 격자 단위 ESDA
 
 ## 사용법
 
@@ -106,6 +108,12 @@ cd apps/desktop && npm run typecheck
 ```bash
 packaging/build-engine.sh    # 엔진만 PyInstaller로 빌드하고 스모크 테스트함
 packaging/macos/release.sh   # 엔진 빌드 → ad-hoc 서명 → .app/.dmg 생성
+```
+
+### 성능 측정
+
+```bash
+cd engine && uv run python ../scripts/benchmark.py --n 100000   # 열기·가중치·LISA·GWR 시간을 표로 출력함
 ```
 
 ### 샘플 데이터 생성

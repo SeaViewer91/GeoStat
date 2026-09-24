@@ -17,9 +17,9 @@ hiddenimports += collect_submodules("geostat_engine")
 
 datas = []
 binaries = []
-# 컴파일 확장 모듈끼리 서로 임포트하는 경우(pyogrio._io → pyogrio._geometry 등)와
-# GDAL(gdal_data)·PROJ(proj.db) 데이터 파일까지 통째로 모음
-for pkg in ("pyogrio", "pyproj", "shapely"):
+# 컴파일 확장 모듈끼리 서로 임포트하는 경우(pyogrio._io → pyogrio._geometry, rasterio._base →
+# rasterio.serde 등)와 GDAL(gdal_data)·PROJ(proj.db) 데이터 파일까지 통째로 모음
+for pkg in ("pyogrio", "pyproj", "shapely", "rasterio", "exactextract"):
     pkg_datas, pkg_binaries, pkg_hidden = collect_all(pkg)
     datas += pkg_datas
     binaries += pkg_binaries

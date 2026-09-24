@@ -6,6 +6,7 @@ import { dirname, pickSavePath } from "../lib/dialogs";
 import { engine, type ClassifyMethod } from "../lib/engine";
 import { MISSING_COLOR, classColors, rgbaCss } from "../lib/palette";
 import { useActive, useApp, type LoadedDataset, type StyleSpec } from "../store";
+import { RasterPanel } from "./RasterPanel";
 
 type ColumnFilter = (c: { name: string; kind: string; origin: string }) => boolean;
 const isNumeric: ColumnFilter = (c) => c.kind === "numeric";
@@ -35,6 +36,7 @@ export function Sidebar() {
   return (
     <aside className="sidebar">
       <LayerList />
+      <RasterPanel />
       <StylePanel />
       <WeightsPanel />
     </aside>

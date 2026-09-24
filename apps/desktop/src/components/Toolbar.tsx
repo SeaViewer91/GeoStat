@@ -109,6 +109,7 @@ export function Toolbar({ chartsOpen, onToggleCharts }: ToolbarProps) {
   const invertSelection = useApp((s) => s.invertSelection);
   const projectPath = useApp((s) => s.projectPath);
   const showDialog = useApp((s) => s.showDialog);
+  const hasRaster = useApp((s) => s.rasterOrder.length > 0);
 
   return (
     <header className="toolbar">
@@ -178,6 +179,17 @@ export function Toolbar({ chartsOpen, onToggleCharts }: ToolbarProps) {
               showDialog({ kind: "cluster", datasetId: activeId });
             },
             disabled: !activeId || !!busy,
+          },
+          "-",
+          {
+            label: "존 통계 (래스터 → 폴리곤)…",
+            onClick: () => activeId && showDialog({ kind: "zonal", datasetId: activeId }),
+            disabled: !activeId || !!busy || !hasRaster,
+          },
+          {
+            label: "격자 만들기 (정사각·육각)…",
+            onClick: () => showDialog({ kind: "fishnet" }),
+            disabled: !!busy || (!activeId && !hasRaster),
           },
           "-",
           {

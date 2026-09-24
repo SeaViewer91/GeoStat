@@ -7,7 +7,26 @@ import { open, save } from "@tauri-apps/plugin-dialog";
 
 export const DATA_FILTER = {
   name: "공간 데이터",
-  extensions: ["shp", "gpkg", "geojson", "json", "fgb", "kml", "gml", "csv", "tsv", "txt", "xlsx", "xls"],
+  extensions: [
+    "shp",
+    "gpkg",
+    "geojson",
+    "json",
+    "fgb",
+    "kml",
+    "gml",
+    "csv",
+    "tsv",
+    "txt",
+    "xlsx",
+    "xls",
+    "tif",
+    "tiff",
+    "img",
+    "vrt",
+    "asc",
+    "jp2",
+  ],
 };
 export const PROJECT_FILTER = { name: "GeoStat 프로젝트", extensions: ["gstproj"] };
 export const EXPORT_FILTERS = [

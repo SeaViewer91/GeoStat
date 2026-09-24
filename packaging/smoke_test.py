@@ -25,7 +25,10 @@ def call(port: int, path: str, body: dict | None = None) -> dict:
     req = urllib.request.Request(
         f"http://127.0.0.1:{port}{path}",
         data=json.dumps(body).encode() if body is not None else None,
-        headers={"Authorization": f"Bearer {TOKEN}", "Content-Type": "application/json"},
+        headers={
+            "Authorization": f"Bearer {TOKEN}",
+            "Content-Type": "application/json",
+        },
         method="POST" if body is not None else "GET",
     )
     with urllib.request.urlopen(req, timeout=180) as r:
@@ -79,7 +82,9 @@ def main(exe: str) -> None:
 
         for method in ("quantile", "natural_breaks", "box_plot"):
             body = call(
-                port, f"/datasets/{info['id']}/classify", {"column": "값", "method": method, "k": 2}
+                port,
+                f"/datasets/{info['id']}/classify",
+                {"column": "값", "method": method, "k": 2},
             )
             assert body["counts"], body
         print("단계 구분(mapclassify) 확인함")
@@ -89,7 +94,12 @@ def main(exe: str) -> None:
         lisa = call(
             port,
             f"/datasets/{info['id']}/esda/local",
-            {"method": "lisa", "column": "값", "weights_id": w["id"], "permutations": 99},
+            {
+                "method": "lisa",
+                "column": "값",
+                "weights_id": w["id"],
+                "permutations": 99,
+            },
         )
         assert lisa["outputs"] == ["LISA_I", "LISA_CL", "LISA_P"], lisa
         print("공간가중치·LISA(libpysal, esda, numba) 확인함")
@@ -115,7 +125,12 @@ def main(exe: str) -> None:
             job = call(
                 port,
                 f"/datasets/{info['id']}/cluster",
-                {"method": method, "variables": ["값", "X좌표"], "n_clusters": 3, **wid},
+                {
+                    "method": method,
+                    "variables": ["값", "X좌표"],
+                    "n_clusters": 3,
+                    **wid,
+                },
             )
             t_job = time.time()
             while job["status"] == "running" and time.time() - t_job < 120:
@@ -124,6 +139,65 @@ def main(exe: str) -> None:
             assert job["status"] == "done", job
             assert job["result"]["analysis"]["report"]["k"] == 3
         print("군집 작업 프로세스(spopt, scikit-learn) 확인함")
+
+        # 래스터: 격자와 같은 범위의 GeoTIFF → 타일 PNG, 존 통계(exactextract), 격자 만들기
+        import numpy as np
+        import rasterio
+        from rasterio.transform import from_origin
+
+        tif = tmp / "고도.tif"
+        with rasterio.open(
+            tif,
+            "w",
+            driver="GTiff",
+            width=600,
+            height=600,
+            count=1,
+            dtype="float32",
+            crs="EPSG:5186",
+            transform=from_origin(200000, 556000, 10, 10),
+            nodata=-9999,
+        ) as dst:
+            dst.write(np.tile(np.arange(600, dtype="float32"), (600, 1)), 1)
+        r = call(port, "/rasters/open", {"path": str(tif)})
+        assert r["count"] == 1 and r["crs"] == "EPSG:5186", r
+        import math
+
+        lon = (r["bounds_wgs84"][0] + r["bounds_wgs84"][2]) / 2
+        lat = (r["bounds_wgs84"][1] + r["bounds_wgs84"][3]) / 2
+        tx = int((lon + 180) / 360 * 4096)
+        ty = int((1 - math.asinh(math.tan(math.radians(lat))) / math.pi) / 2 * 4096)
+        req = urllib.request.Request(
+            f"http://127.0.0.1:{port}/rasters/{r['id']}/tiles/12/{tx}/{ty}.png?vmin=0&vmax=599",
+            headers={"Authorization": f"Bearer {TOKEN}"},
+        )
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            png = resp.read()
+            assert resp.status == 200 and png[:4] == b"\x89PNG", resp.status
+        ovr = call(port, f"/rasters/{r['id']}/overviews", {})
+        assert ovr["overviews"], ovr
+        job = call(
+            port,
+            f"/datasets/{info['id']}/zonal",
+            {"raster_id": r["id"], "stats": ["mean"]},
+        )
+        t_job = time.time()
+        while job["status"] == "running" and time.time() - t_job < 120:
+            time.sleep(0.3)
+            job = call(port, f"/jobs/{job['id']}")
+        assert job["status"] == "done", job
+        grid = call(
+            port,
+            "/grid/fishnet",
+            {
+                "raster_id": r["id"],
+                "cell_size": 1000,
+                "shape": "hexagon",
+                "path": str(tmp / "hex.gpkg"),
+            },
+        )
+        assert grid["n_rows"] > 0, grid
+        print("래스터 타일·오버뷰·존 통계·격자(rasterio, exactextract) 확인함")
 
         csv = tmp / "점.csv"
         csv.write_text("이름,경도,위도\n가,129.0,35.1\n", encoding="cp949")

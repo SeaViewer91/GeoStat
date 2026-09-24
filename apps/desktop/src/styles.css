@@ -1150,3 +1150,34 @@ button.on-soft {
   border-radius: 2px;
   vertical-align: -1px;
 }
+
+/* ---- 래스터 패널 ---- */
+
+.raster-style {
+  margin-top: 8px;
+}
+
+.grid3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+}
+
+.raster-style .row > input {
+  flex: 1;
+  min-width: 0;
+}
+
+.raster-style .band-tag {
+  width: 28px;
+}
+
+.raster-legend .ramp {
+  height: 10px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+}
+
+.raster-legend .row {
+  display: flex;
+}

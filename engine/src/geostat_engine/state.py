@@ -83,10 +83,44 @@ class Dataset:
         }
 
 
+@dataclass
+class RasterEntry:
+    """불러온 래스터. 픽셀은 메모리에 올리지 않고 타일·존 통계 때마다 파일에서 읽음."""
+
+    id: str
+    name: str
+    path: Path
+    info: dict[str, Any]
+
+
 class AppState:
     def __init__(self) -> None:
         self._datasets: dict[str, Dataset] = {}
+        self._rasters: dict[str, RasterEntry] = {}
         self._lock = threading.Lock()
+
+    # ---- 래스터 ----
+
+    def add_raster(self, name: str, path: Path, info: dict[str, Any]) -> RasterEntry:
+        entry = RasterEntry(id="r" + uuid.uuid4().hex[:11], name=name, path=path, info=info)
+        with self._lock:
+            self._rasters[entry.id] = entry
+        return entry
+
+    def get_raster(self, raster_id: str) -> RasterEntry:
+        try:
+            return self._rasters[raster_id]
+        except KeyError:
+            raise NotFound("raster_not_found", f"래스터가 없음: {raster_id}") from None
+
+    def remove_raster(self, raster_id: str) -> None:
+        with self._lock:
+            self._rasters.pop(raster_id, None)
+
+    def list_rasters(self) -> list[RasterEntry]:
+        return list(self._rasters.values())
+
+    # ---- 벡터 데이터셋 ----
 
     def add(self, ds_kwargs: dict) -> Dataset:
         ds = Dataset(id=uuid.uuid4().hex[:12], **ds_kwargs)
@@ -110,3 +144,4 @@ class AppState:
     def clear(self) -> None:
         with self._lock:
             self._datasets.clear()
+            self._rasters.clear()
