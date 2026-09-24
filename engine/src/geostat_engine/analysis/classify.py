@@ -1,4 +1,4 @@
-"""주제도 단계 구분 (GeoDa 지도 유형과 같은 7종).
+"""주제도 단계 구분 (GeoDa 지도 유형과 같은 7종 + 0 기준 발산 지도).
 
 mapclassify로 계급 경계를 구하고, 피처별 계급 번호와 범례용 라벨을 만듦.
 값이 없는 피처(NaN)의 계급 번호는 -1임.
@@ -27,6 +27,7 @@ Method = Literal[
     "std_mean",
     "percentile",
     "box_plot",
+    "zero_centered",
     "unique_values",
     "lisa_cluster",
     "gi_cluster",
@@ -105,6 +106,8 @@ def classify(series: pd.Series, method: Method, k: int = 5) -> Classification:
             else:
                 c = mc.FisherJenks(y, k=k)
             labels = _range_labels(y.min(), c.bins)
+        elif method == "zero_centered":
+            return _zero_centered(name, values, valid, y, k)
         elif method in _FIXED_SCHEMES:
             # 계급 수가 고정된 GeoDa 지도 유형. mapclassify는 빈 계급을 없애 라벨과 어긋나므로 직접 계산함
             return _fixed_scheme(method, name, values, valid, y)
@@ -161,6 +164,84 @@ def _fixed_scheme(
         counts=[int(v) for v in np.bincount(yb, minlength=6)],
         classes=classes,
         n_missing=int((~valid).sum()),
+    )
+
+
+# 0 기준 발산 색 (RdBu): 음수는 파랑, 양수는 빨강. 0에 가까울수록 옅음
+_NEG_RAMP = ["#2166ac", "#4393c3", "#92c5de", "#d1e5f0"]
+_POS_RAMP = ["#fddbc7", "#f4a582", "#d6604d", "#b2182b"]
+
+
+def _ramp(stops: list[str], n: int) -> list[str]:
+    """색 목록에서 n개를 고르게 뽑음 (끝점 포함, 부족하면 보간함)."""
+    rgb = [tuple(int(h[i : i + 2], 16) for i in (1, 3, 5)) for h in stops]
+    if n == 1:
+        return [stops[len(stops) // 2]]  # 한 계급뿐이면 중간 진하기 색을 씀
+    out = []
+    for i in range(n):
+        pos = i / (n - 1) * (len(rgb) - 1)
+        lo = int(pos)
+        hi = min(lo + 1, len(rgb) - 1)
+        t = pos - lo
+        c = [round(a + (b - a) * t) for a, b in zip(rgb[lo], rgb[hi], strict=True)]
+        out.append("#{:02x}{:02x}{:02x}".format(*c))
+    return out
+
+
+def _side_bins(v: np.ndarray, n: int) -> np.ndarray:
+    """한쪽 부호 값의 분위수 경계(상한값). 동일 값이 많으면 계급이 줄어듦."""
+    if n <= 0 or v.size == 0:
+        return np.array([])
+    q = np.unique(np.quantile(v, np.linspace(0, 1, n + 1)[1:]))
+    return q
+
+
+def _zero_centered(
+    name: str, values: np.ndarray, valid: np.ndarray, y: np.ndarray, k: int
+) -> Classification:
+    """0을 경계로 음수·양수를 나눠 각각 분위수로 구분함. GWR 계수·잔차처럼 부호가 중요한 값용.
+
+    계급 수는 음수·양수 개수 비율대로 나누되 부호가 있으면 한쪽에 최소 1계급을 줌.
+    """
+    n_neg, n_pos = int((y < 0).sum()), int((y >= 0).sum())
+    if n_neg and n_pos:
+        k_neg = min(k - 1, max(1, round(k * n_neg / y.size)))
+        k_pos = k - k_neg
+    else:
+        k_neg, k_pos = (k, 0) if n_neg else (0, k)
+    neg_bins = _side_bins(y[y < 0], k_neg)
+    if neg_bins.size:
+        neg_bins[-1] = min(neg_bins[-1], -np.finfo(float).tiny)  # 음수 쪽 상한은 0 미만
+    pos_bins = _side_bins(y[y >= 0], k_pos)
+    bins = np.concatenate([neg_bins, pos_bins])
+    # 음수 쪽 마지막 경계 뒤에 0을 넣지 않고, 음수 계급은 "< 0"으로 닫음
+    yb = np.searchsorted(bins, y, side="left")
+    yb = np.minimum(yb, len(bins) - 1)
+    edges = [float(y.min()), *[float(b) for b in bins]]
+    labels = []
+    for i in range(len(bins)):
+        lo, hi = edges[i], edges[i + 1]
+        if i == len(neg_bins) - 1:
+            hi_txt = "0 미만"
+            labels.append(f"{_fmt(lo)} – {hi_txt}")
+        elif i == len(neg_bins) and neg_bins.size:
+            labels.append(f"0 – {_fmt(hi)}")
+        else:
+            labels.append(f"{_fmt(lo)} – {_fmt(hi)}")
+    colors = _ramp(_NEG_RAMP, len(neg_bins)) if neg_bins.size else []
+    colors += _ramp(_POS_RAMP, len(pos_bins)) if pos_bins.size else []
+    classes = np.full(values.size, -1, dtype=np.int16)
+    classes[valid] = yb
+    return Classification(
+        method="zero_centered",
+        column=name,
+        scheme="diverging",
+        breaks=[float(b) for b in bins],
+        labels=labels,
+        counts=[int(c) for c in np.bincount(yb, minlength=len(bins))],
+        classes=classes,
+        n_missing=int((~valid).sum()),
+        colors=list(colors),
     )
 
 

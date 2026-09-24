@@ -19,14 +19,14 @@ Apple 공증을 받지 않은 앱이라 첫 실행 때 "확인되지 않은 개�
 ✅ 구현됨 · 🚧 개발 예정
 
 - ✅ **데이터 입력**: Shapefile, GeoPackage, GeoJSON, FlatGeobuf, CSV·엑셀(X·Y 좌표) 지원. cp949 DBF·CSV 자동 처리, 한국 좌표계 프리셋 제공
-- ✅ **주제도**: 분위수·등간격·자연 분류·표준편차·백분위·박스·고유값 지도, 범례 클릭 선택, 배경지도(OpenFreeMap)
+- ✅ **주제도**: 분위수·등간격·자연 분류·표준편차·백분위·박스·0 기준 발산·고유값 지도, 범례 클릭 선택, 배경지도(OpenFreeMap)
 - ✅ **속성 테이블**: 정렬, 선택 연동, 계산 필드(식), 내보내기(GeoPackage·Shapefile·GeoJSON·CSV, 좌표계 변환)
 - ✅ **선택**: 클릭·사각형·올가미, 지도·테이블·범례 간 연동
 - ✅ **프로젝트**: `.gstproj`로 저장·열기 (원본 경로와 작업 과정을 기록해 재현함)
 - ✅ **공간가중치**: Queen/Rook(고차), 거리, KNN, 커널. 연결성 히스토그램, 섬 탐지, GeoDa `.gal`/`.gwt` 호환
 - ✅ **ESDA**: Moran's I(단변량·이변량), LISA, Getis-Ord Gi*, Local Geary, Join Count. FDR·Bonferroni 보정, 군집·유의성 지도
 - ✅ **연동 차트**: 히스토그램·산점도·박스플롯·Moran 산점도와 지도·테이블 간 선택 연동
-- ✅ **공간회귀**: OLS(공간진단·LM 검정), Spatial Lag/Error(ML), **GWR/MGWR**(유의성 마스크 계수 지도), 진행률·취소, 텍스트 보고서
+- ✅ **공간회귀**: OLS(공간진단·LM 검정·White 강건 표준오차), Spatial Lag/Error(ML·GM), 직접·간접 효과, **GWR/MGWR**(유의성 마스크 계수 지도), 모형 비교표(AICc·잔차 Moran's I), 진행률·취소, 텍스트 보고서
 - 🚧 **공간군집화**: SKATER, Max-p, AZP, Region K-Means, Ward 제공
 - 🚧 **래스터**: GeoTIFF/COG 표시, 존 통계 산출
 

@@ -21,6 +21,7 @@ const METHODS: { id: ClassifyMethod; label: string; hasK: boolean; filter: Colum
   { id: "std_mean", label: "표준편차", hasK: false, filter: isNumeric },
   { id: "percentile", label: "백분위", hasK: false, filter: isNumeric },
   { id: "box_plot", label: "박스 지도 (1.5 IQR)", hasK: false, filter: isNumeric },
+  { id: "zero_centered", label: "0 기준 발산 (계수·잔차)", hasK: true, filter: isNumeric },
   { id: "unique_values", label: "고유값", hasK: false, filter: any },
   { id: "lisa_cluster", label: "LISA 군집 지도", hasK: false, filter: isCluster },
   { id: "gi_cluster", label: "Gi* 핫스팟 지도", hasK: false, filter: isCluster },
@@ -133,6 +134,7 @@ function StyleEditor({ ds }: { ds: LoadedDataset }) {
     if (ds.style) {
       setMethod(ds.style.method);
       setColumn(ds.style.column);
+      setK(ds.style.k);
       setUseMask(!!ds.style.mask || !ds.style.column.includes("_B_"));
     }
   }, [ds.style]);

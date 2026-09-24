@@ -275,6 +275,8 @@ def apply_regression(
     desc = f"{report['title']}: {spec['y']} ~ {' + '.join(spec['x'])}"
     if weights_name:
         desc += f" (W={weights_name})"
+    if spec.get("robust") == "white":
+        desc += " [White 강건 표준오차]"
     record = AnalysisRecord(
         id=record_id or _next_id("a", [a.id for a in ds.analyses]),
         method="regression",

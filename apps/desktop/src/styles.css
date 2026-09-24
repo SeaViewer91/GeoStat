@@ -1033,6 +1033,39 @@ button.on-soft {
   background: var(--accent-soft);
 }
 
+.result-table.nowrap {
+  font-size: 11px;
+}
+
+.result-table.nowrap th,
+.result-table.nowrap td {
+  white-space: nowrap;
+  padding: 3px 3px;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.result-table.nowrap .stars {
+  width: auto;
+  min-width: 14px;
+}
+
+.result-table tr.best td {
+  background: var(--accent-soft);
+}
+
+.badge {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 0 4px;
+  border-radius: 3px;
+  font-size: 10px;
+  color: #fff;
+  background: var(--accent);
+}
+
 .report-card h4 {
   margin: 10px 0 2px;
   font-size: 11px;

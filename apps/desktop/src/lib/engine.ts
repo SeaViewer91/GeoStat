@@ -88,6 +88,7 @@ export type ClassifyMethod =
   | "std_mean"
   | "percentile"
   | "box_plot"
+  | "zero_centered"
   | "unique_values"
   | "lisa_cluster"
   | "gi_cluster"
@@ -190,7 +191,7 @@ export interface LocalResult {
   n_islands: number;
 }
 
-export type RegressionModel = "ols" | "lag" | "error" | "gwr" | "mgwr";
+export type RegressionModel = "ols" | "lag" | "error" | "lag_gm" | "error_gm" | "gwr" | "mgwr";
 
 export interface RegressionSpec {
   model: RegressionModel;
@@ -202,6 +203,7 @@ export interface RegressionSpec {
   criterion?: "AICc" | "AIC" | "BIC" | "CV";
   bandwidth?: number | null;
   alpha?: number;
+  robust?: "white" | null;
   prefix?: string | null;
 }
 
@@ -234,6 +236,26 @@ export interface DiagRow {
   df: number | null;
 }
 
+/** 공간시차 모형의 직접·간접·총 효과 */
+export interface ImpactRow {
+  name: string;
+  direct: number | null;
+  indirect: number | null;
+  total: number | null;
+}
+
+/** 모형 비교표용 공통 적합도. GM 추정은 로그우도·AICc가 없음 */
+export interface FitMetrics {
+  r2: number | null;
+  r2_label: string;
+  loglik: number | null;
+  aicc: number | null;
+  n_params: number | null;
+  moran_i: number | null;
+  moran_z: number | null;
+  moran_p: number | null;
+}
+
 export interface RegressionReport {
   model: RegressionModel;
   title: string;
@@ -245,6 +267,8 @@ export interface RegressionReport {
   stat_label: "t" | "z";
   diagnostics: DiagRow[];
   local: LocalCoefRow[] | null;
+  impacts: { method: string; rows: ImpactRow[] } | null;
+  fit: FitMetrics | null;
   notes: string[];
 }
 

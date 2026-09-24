@@ -1,9 +1,11 @@
-"""회귀 분석: OLS(공간진단 포함), 공간시차·공간오차 모형(spreg), GWR·MGWR(mgwr).
+"""회귀 분석: OLS(공간진단 포함), 공간시차·공간오차 모형(spreg ML·GM), GWR·MGWR(mgwr).
 
 실행은 두 단계로 나눔
   prepare() : 엔진 프로세스에서 데이터를 검사하고 계산에 필요한 배열만 모음
   run()     : 별도 작업 프로세스에서 계산함 (취소하려면 프로세스를 끝내면 됨)
 결과는 JSON으로 보낼 수 있는 보고서(report)와 속성 테이블에 붙일 열(columns)로 돌려줌.
+보고서의 fit 항목은 모형 비교표용 공통 적합도(R², 로그우도, AICc, 잔차 Moran's I)임.
+AICc는 mgwr와 같이 σ²까지 모수로 세어 계산하므로 OLS·ML·GWR·MGWR 값을 서로 비교할 수 있음.
 """
 
 from __future__ import annotations
@@ -21,19 +23,33 @@ import pandas as pd
 
 from geostat_engine.errors import EngineError
 
-Model = Literal["ols", "lag", "error", "gwr", "mgwr"]
-MODELS: tuple[str, ...] = ("ols", "lag", "error", "gwr", "mgwr")
+Model = Literal["ols", "lag", "error", "lag_gm", "error_gm", "gwr", "mgwr"]
+MODELS: tuple[str, ...] = ("ols", "lag", "error", "lag_gm", "error_gm", "gwr", "mgwr")
 MODEL_LABELS = {
     "ols": "OLS (최소제곱)",
     "lag": "공간시차 모형 (Spatial Lag, ML)",
     "error": "공간오차 모형 (Spatial Error, ML)",
+    "lag_gm": "공간시차 모형 (Spatial Lag, GM·2SLS)",
+    "error_gm": "공간오차 모형 (Spatial Error, GM·이분산 강건)",
     "gwr": "지리가중회귀 (GWR)",
     "mgwr": "다중척도 지리가중회귀 (MGWR)",
 }
-DEFAULT_PREFIX = {"ols": "OLS", "lag": "LAG", "error": "ERR", "gwr": "GWR", "mgwr": "MGWR"}
+DEFAULT_PREFIX = {
+    "ols": "OLS",
+    "lag": "LAG",
+    "error": "ERR",
+    "lag_gm": "LAGGM",
+    "error_gm": "ERRGM",
+    "gwr": "GWR",
+    "mgwr": "MGWR",
+}
+# 공간가중치가 꼭 있어야 하는 모형
+WEIGHTS_REQUIRED = ("lag", "error", "lag_gm", "error_gm")
 
 # 이 관측치 수를 넘으면 ML 추정에 희소 행렬(LU) 방식을 씀 (full은 n×n 행렬을 만들어 메모리가 큼)
 ML_FULL_MAX_N = 2000
+# 잔차 Moran's I 순열 검정 횟수
+RESID_MORAN_PERMUTATIONS = 999
 # GWR·MGWR 최소 관측치 수 (대역폭 탐색에 필요한 이웃 수를 확보하기 위함)
 GWR_MIN_N = 20
 # GWR·MGWR 권장 최대 관측치 수 (넘으면 경고만 함)
@@ -96,7 +112,7 @@ def prepare(
         )
 
     notes: list[str] = []
-    if model in ("lag", "error") and weights is None:
+    if model in WEIGHTS_REQUIRED and weights is None:
         raise EngineError("weights_required", "공간시차·공간오차 모형은 공간가중치가 필요함")
     if weights is not None:
         n_islands = sum(1 for i in range(weights.n) if weights.cardinalities[i] == 0)
@@ -128,6 +144,8 @@ def prepare(
             "bandwidth": spec.get("bandwidth"),
             "alpha": float(spec.get("alpha", 0.05)),
             "white_test": bool(spec.get("white_test", True)),
+            "robust": spec.get("robust") if spec.get("robust") == "white" else None,
+            "seed": int(spec.get("seed", 123456789)),
         },
         "notes": notes,
     }
@@ -138,19 +156,72 @@ def prepare(
 
 def run(payload: dict[str, Any], progress: Progress) -> dict[str, Any]:
     model = payload["model"]
-    with warnings.catch_warnings():
+    # spreg는 효과 계산 중 모형 이름을 print하므로 표준출력을 버림 (엔진 stdout은 준비 신호용)
+    with warnings.catch_warnings(), contextlib.redirect_stdout(io.StringIO()):
         warnings.simplefilter("ignore")
         if model == "ols":
             out = _ols(payload, progress)
         elif model in ("lag", "error"):
             out = _ml(payload, progress)
+        elif model in ("lag_gm", "error_gm"):
+            out = _gm(payload, progress)
         else:
             out = _gwr(payload, progress)
+        _residual_moran(payload, out, progress)
     out["report"]["notes"] = payload["notes"] + out["report"].get("notes", [])
     return out
 
 
+def aicc(loglik: float, n_params: int, n: int) -> float | None:
+    """AICc = -2LL + 2Kn/(n-K-1). K는 σ²를 포함한 모수 수임 (mgwr·Fotheringham 방식)."""
+    if n - n_params - 1 <= 0:
+        return None
+    return _f(-2.0 * loglik + 2.0 * n_params * n / (n - n_params - 1))
+
+
+def _fit(
+    r2: Any, loglik: Any = None, n_params: int | None = None, n: int = 0, r2_label: str = "R²"
+) -> dict[str, Any]:
+    ll = _f(loglik)
+    return {
+        "r2": _f(r2),
+        "r2_label": r2_label,
+        "loglik": ll,
+        "aicc": aicc(ll, n_params, n) if ll is not None and n_params else None,
+        "n_params": n_params,
+        "moran_i": None,
+        "moran_z": None,
+        "moran_p": None,
+    }
+
+
+def _residual_moran(payload: dict[str, Any], out: dict[str, Any], progress: Progress) -> None:
+    """공간가중치가 있으면 잔차의 Moran's I를 순열 검정으로 계산해 fit·진단에 넣음."""
+    w = payload["weights"]
+    resid = out["columns"].get("RESID")
+    if w is None or resid is None:
+        return
+    import esda
+
+    progress(None, "잔차 Moran's I 계산 중")
+    w.transform = "r"
+    np.random.seed(payload["options"]["seed"])
+    mi = esda.Moran(np.asarray(resid, dtype="float64"), w, permutations=RESID_MORAN_PERMUTATIONS)
+    rep = out["report"]
+    rep["fit"].update({"moran_i": _f(mi.I), "moran_z": _f(mi.z_sim), "moran_p": _f(mi.p_sim)})
+    if payload["model"] != "ols":  # OLS는 spreg 해석적 검정이 이미 진단에 있음
+        label = f"잔차 Moran's I (순열 {RESID_MORAN_PERMUTATIONS}회)"
+        rep["diagnostics"].append(_diag("공간 의존성", label, mi.I, mi.p_sim))
+        rep["diagnostics"].append(_diag("공간 의존성", "잔차 Moran's I (z)", mi.z_sim))
+        if mi.p_sim <= 0.05:
+            rep["notes"].append(
+                "잔차에 공간 자기상관이 남아 있음 (p ≤ 0.05) → 모형 설정을 다시 검토할 만함"
+            )
+
+
 def _f(v: Any) -> float | None:
+    if isinstance(v, np.ndarray) and v.size == 1:
+        v = v.item()  # spreg는 일부 추정값을 (1,) 또는 (1,1) 배열로 줌
     try:
         v = float(v)
     except (TypeError, ValueError):
@@ -177,6 +248,8 @@ def _base_report(payload: dict[str, Any], model: str) -> dict[str, Any]:
         "stat_label": "t",
         "diagnostics": [],
         "local": None,
+        "impacts": None,
+        "fit": None,
         "notes": [],
     }
 
@@ -199,12 +272,15 @@ def _ols(payload: dict[str, Any], progress: Progress) -> dict[str, Any]:
         "name_x": names,
         "white_test": opts["white_test"],
     }
+    if opts["robust"]:
+        kw["robust"] = opts["robust"]
     if w is not None:
         w.transform = "r"
         kw.update({"w": w, "spat_diag": True, "moran": True})
     m = spreg.OLS(y, X, **kw)
 
     rep = _base_report(payload, "ols")
+    rep["fit"] = _fit(m.r2, m.logll, m.k + 1, m.n)
     rep["summary"] = [
         ["관측치", m.n],
         ["변수 수 (상수 포함)", m.k],
@@ -214,8 +290,10 @@ def _ols(payload: dict[str, Any], progress: Progress) -> dict[str, Any]:
         ["F 유의확률", _f(m.f_stat[1])],
         ["로그우도", _f(m.logll)],
         ["AIC", _f(m.aic)],
+        ["AICc", rep["fit"]["aicc"]],
         ["SC (BIC)", _f(m.schwarz)],
         ["잔차 분산 (σ²)", _f(m.sig2)],
+        ["표준오차", "White 이분산 강건" if opts["robust"] else "일반 (OLS)"],
     ]
     rep["coefficients"] = _coef_rows(m.name_x, m.betas, m.std_err, m.t_stat)
     d = rep["diagnostics"]
@@ -279,12 +357,13 @@ def _ml(payload: dict[str, Any], progress: Progress) -> dict[str, Any]:
     n = X.shape[0]
     method = "full" if n <= ML_FULL_MAX_N else "LU"
     kw = {"name_y": payload["y_name"], "name_x": payload["x_names"], "method": method}
+    impacts_method = "full" if n <= ML_FULL_MAX_N else "power"
 
     progress(None, "비교용 OLS 추정 중")
     ols = spreg.OLS(y, X)
     progress(None, f"최대우도 추정 중 ({method})")
     if model == "lag":
-        m = spreg.ML_Lag(y, X, w, **kw)
+        m = spreg.ML_Lag(y, X, w, spat_impacts=impacts_method, **kw)
         param, param_name = m.rho, "ρ (공간시차 계수)"
     else:
         m = spreg.ML_Error(y, X, w, **kw)
@@ -295,12 +374,15 @@ def _ml(payload: dict[str, Any], progress: Progress) -> dict[str, Any]:
     lr = 2 * (m.logll - ols.logll)
     from scipy import stats
 
+    # 모수 수: 계수(상수·ρ/λ 포함) + σ²
+    rep["fit"] = _fit(m.pr2, m.logll, len(np.ravel(m.betas)) + 1, n, "유사 R²")
     rep["summary"] = [
         ["관측치", m.n],
         [param_name, _f(param)],
         ["유사 R² (Pseudo R²)", _f(m.pr2)],
         ["로그우도", _f(m.logll)],
         ["AIC", _f(m.aic)],
+        ["AICc", rep["fit"]["aicc"]],
         ["SC (BIC)", _f(m.schwarz)],
         ["OLS 로그우도", _f(ols.logll)],
         ["OLS AIC", _f(ols.aic)],
@@ -318,10 +400,92 @@ def _ml(payload: dict[str, Any], progress: Progress) -> dict[str, Any]:
     bp = _breusch_pagan(u, X)
     rep["diagnostics"].append(_diag("이분산성", "Breusch-Pagan", bp[0], bp[1], X.shape[1]))
     if model == "lag":
+        rep["impacts"] = _impacts(m, payload["x_names"], impacts_method)
         rep["notes"].append(
-            "공간시차 모형의 계수는 파급효과 때문에 한계효과와 같지 않음 (직접·간접 효과 해석 필요)"
+            "공간시차 모형의 계수는 파급효과 때문에 한계효과와 같지 않음 → 직접·간접·총 효과 표로 해석함"
         )
     return {"report": rep, "columns": {"PRED": np.ravel(m.predy), "RESID": u}}
+
+
+def _impacts(m, x_names: list[str], method: str) -> dict[str, Any]:
+    """공간시차 모형의 직접·간접·총 효과 (LeSage & Pace 2009). 계수 × 승수로 구함."""
+    direct, indirect, total = (float(v) for v in m.sp_multipliers[method])
+    betas = np.ravel(m.betas)[1 : 1 + len(x_names)]  # 상수 다음부터 독립변수
+    return {
+        "method": "정확 계산 (역행렬)" if method == "full" else "멱급수 근사",
+        "rows": [
+            {
+                "name": name,
+                "direct": _f(b * direct),
+                "indirect": _f(b * indirect),
+                "total": _f(b * total),
+            }
+            for name, b in zip(x_names, betas, strict=True)
+        ],
+    }
+
+
+def _gm(payload: dict[str, Any], progress: Progress) -> dict[str, Any]:
+    """일반화 적률(GM) 추정. 정규성 가정이 없고 대용량에서도 빠름 (Kelejian & Prucha)."""
+    import spreg
+
+    model = payload["model"]
+    y = payload["y"].reshape(-1, 1)
+    X = payload["X"]
+    w = payload["weights"]
+    w.transform = "r"
+    n = X.shape[0]
+    kw = {"name_y": payload["y_name"], "name_x": payload["x_names"]}
+    rep = _base_report(payload, model)
+    rep["stat_label"] = "z"
+
+    if model == "lag_gm":
+        impacts_method = "full" if n <= ML_FULL_MAX_N else "power"
+        progress(None, "2단계 최소제곱(2SLS) 추정 중 (도구변수: WX)")
+        m = spreg.GM_Lag(y, X, w=w, spat_diag=True, spat_impacts=impacts_method, **kw)
+        rho = float(np.ravel(m.rho)[0])
+        rep["fit"] = _fit(m.pr2, n=n, r2_label="유사 R²")
+        rep["summary"] = [
+            ["관측치", m.n],
+            ["ρ (공간시차 계수)", _f(rho)],
+            ["유사 R² (Pseudo R²)", _f(m.pr2)],
+            ["공간 유사 R² (축약형)", _f(getattr(m, "pr2_e", None))],
+            ["잔차 분산 (σ²)", _f(m.sig2)],
+            ["추정 방식", "2SLS · 도구변수 WX"],
+        ]
+        names = list(m.name_z)
+        names[-1] = "ρ (W_y)"
+        rep["coefficients"] = _coef_rows(names, m.betas, m.std_err, m.z_stat)
+        ak = getattr(m, "ak_test", None)
+        if ak is not None:
+            rep["diagnostics"].append(
+                _diag("공간 의존성", "Anselin-Kelejian (잔차 공간 의존성)", ak[0], ak[1], 1)
+            )
+        if abs(rho) < 1:
+            rep["impacts"] = _impacts(m, payload["x_names"], impacts_method)
+            rep["notes"].append(
+                "공간시차 모형의 계수는 파급효과 때문에 한계효과와 같지 않음 → 직접·간접·총 효과 표로 해석함"
+            )
+        else:
+            rep["notes"].append(
+                "ρ 추정값이 (-1, 1) 범위를 벗어남 → 공간 유사 R²·직접·간접 효과를 계산하지 않음. "
+                "도구변수가 약하거나 모형 설정이 맞지 않을 수 있음"
+            )
+    else:
+        progress(None, "GMM 추정 중 (이분산 강건)")
+        m = spreg.GM_Error_Het(y, X, w, **kw)
+        rep["fit"] = _fit(m.pr2, n=n, r2_label="유사 R²")
+        rep["summary"] = [
+            ["관측치", m.n],
+            ["λ (공간오차 계수)", _f(np.ravel(m.betas)[-1])],
+            ["유사 R² (Pseudo R²)", _f(m.pr2)],
+            ["추정 방식", "GMM · 이분산 강건 (Arraiz 외 2010)"],
+        ]
+        names = list(m.name_x)
+        names[-1] = "λ"
+        rep["coefficients"] = _coef_rows(names, m.betas, m.std_err, m.z_stat)
+    rep["notes"].append("GM 추정은 우도를 쓰지 않아 로그우도·AIC가 없음 (모형 비교는 ML 추정 권장)")
+    return {"report": rep, "columns": {"PRED": np.ravel(m.predy), "RESID": np.ravel(m.u)}}
 
 
 def _breusch_pagan(u: np.ndarray, X: np.ndarray) -> tuple[float, float]:
@@ -439,6 +603,24 @@ def _gwr(payload: dict[str, Any], progress: Progress) -> dict[str, Any]:
     sig = (filtered != 0).astype("int8")
 
     rep = _base_report(payload, model)
+    y_raw = np.ravel(y)
+    if model == "gwr":
+        pred = np.ravel(res.predy)
+        llf, aicc_v, aic_v = float(res.llf), float(res.aicc), float(res.aic)
+    else:
+        # 표준화 척도의 예측값·우도를 원래 척도로 되돌림 (ln σ_y만큼 우도가 옮겨감)
+        sd = float(y_raw.std())
+        pred = np.ravel(res.predy) * sd + y_raw.mean()
+        shift = n * math.log(sd)
+        llf, aicc_v, aic_v = (
+            float(res.llf) - shift,
+            float(res.aicc) + 2 * shift,
+            float(res.aic) + 2 * shift,
+        )
+    resid = y_raw - pred
+    rep["fit"] = _fit(res.R2, llf, None, n)
+    rep["fit"]["aicc"] = _f(aicc_v)
+    rep["fit"]["n_params"] = _f(res.tr_S + 1)
     unit = "개 이웃" if not fixed else " (거리 단위)"
     rep["summary"] = [
         ["관측치", n],
@@ -453,13 +635,17 @@ def _gwr(payload: dict[str, Any], progress: Progress) -> dict[str, Any]:
     rep["summary"] += [
         ["R²", _f(res.R2)],
         ["수정 R²", _f(res.adj_R2)],
-        ["AICc", _f(res.aicc)],
-        ["AIC", _f(res.aic)],
+        ["로그우도", _f(llf)],
+        ["AICc", _f(aicc_v)],
+        ["AIC", _f(aic_v)],
         ["유효 모수 수 (ENP)", _f(res.ENP)],
-        ["잔차 제곱합", _f(res.resid_ss)],
+        ["잔차 제곱합", _f(float(resid @ resid))],
     ]
     if model == "mgwr":
         rep["notes"].append("MGWR 계수는 표준화한 변수 기준임 (단위 1 표준편차당 변화)")
+        rep["notes"].append(
+            "로그우도·AICc·잔차 제곱합은 원래 척도로 환산한 값임 (다른 모형과 비교 가능)"
+        )
 
     adj_alpha = np.ravel(res.adj_alpha) if model == "gwr" else None
     local_rows = []
@@ -497,13 +683,8 @@ def _gwr(payload: dict[str, Any], progress: Progress) -> dict[str, Any]:
         columns[f"SIG_{key}"] = sig[:, j]
     if model == "gwr":
         columns["R2"] = np.ravel(res.localR2)
-        columns["PRED"] = np.ravel(res.predy)
-        columns["RESID"] = np.ravel(res.resid_response)
-    else:
-        # 표준화 척도의 예측값을 원래 척도로 되돌림
-        pred = np.ravel(res.predy) * y.std() + y.mean()
-        columns["PRED"] = pred
-        columns["RESID"] = np.ravel(y) - pred
+    columns["PRED"] = pred
+    columns["RESID"] = resid
     return {"report": rep, "columns": columns}
 
 
@@ -548,6 +729,14 @@ def report_text(report: dict[str, Any], description: str = "") -> str:
             lines.append(
                 f"{r['name']:<20}{_fmt(r['coef']):>14}{_fmt(r['se']):>14}"
                 f"{_fmt(r['stat'], 4):>10}{_fmt(r['p'], 4):>12}"
+            )
+    if report.get("impacts"):
+        imp = report["impacts"]
+        lines += ["", "-" * 72, f"직접·간접·총 효과 ({imp['method']})", "-" * 72]
+        lines.append(f"{'변수':<20}{'직접':>16}{'간접':>16}{'총':>16}")
+        for r in imp["rows"]:
+            lines.append(
+                f"{r['name']:<20}{_fmt(r['direct']):>16}{_fmt(r['indirect']):>16}{_fmt(r['total']):>16}"
             )
     if report.get("local"):
         lines += ["", "-" * 72, "지역 계수 요약", "-" * 72]

@@ -511,8 +511,9 @@ export const useApp = create<AppState>((set, get) => {
         if (!col) return;
         await get().applyStyle(id, {
           column: col,
-          method: "natural_breaks",
-          k: 5,
+          // 계수는 부호가 중요하므로 0을 경계로 음수=파랑, 양수=빨강으로 칠함
+          method: "zero_centered",
+          k: 6,
           mask: col.replace("_B_", "_SIG_"),
         });
       } else {

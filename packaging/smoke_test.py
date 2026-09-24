@@ -95,7 +95,8 @@ def main(exe: str) -> None:
         print("공간가중치·LISA(libpysal, esda, numba) 확인함")
 
         # 회귀는 별도 작업 프로세스(multiprocessing spawn)에서 돌아가므로 번들에서 따로 확인함
-        for model, extra in (("ols", {"weights_id": w["id"]}), ("gwr", {})):
+        wid = {"weights_id": w["id"]}
+        for model, extra in (("ols", wid), ("lag_gm", wid), ("gwr", wid)):
             job = call(
                 port,
                 f"/datasets/{info['id']}/regression",
@@ -106,6 +107,8 @@ def main(exe: str) -> None:
                 time.sleep(0.3)
                 job = call(port, f"/jobs/{job['id']}")
             assert job["status"] == "done", job
+            fit = job["result"]["analysis"]["report"]["fit"]
+            assert fit["moran_i"] is not None, fit  # 잔차 Moran's I (esda) 자동 계산
         print("회귀 작업 프로세스(spreg, mgwr) 확인함")
 
         csv = tmp / "점.csv"

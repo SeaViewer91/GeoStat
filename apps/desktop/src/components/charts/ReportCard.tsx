@@ -4,27 +4,35 @@ import { dirname, pickSavePath } from "../../lib/dialogs";
 import { engine, type DiagRow } from "../../lib/engine";
 import { useApp, type LoadedDataset, type ReportEntry } from "../../store";
 
-function num(v: number | string | null | undefined, digits = 4): string {
+export function num(v: number | string | null | undefined, digits = 4): string {
   if (v === null || v === undefined) return "–";
   if (typeof v === "string") return v;
   if (!Number.isFinite(v)) return "–";
   if (Number.isInteger(v) && Math.abs(v) < 1e12) return v.toLocaleString();
   if (v !== 0 && Math.abs(v) < 1e-3) return v.toExponential(2);
-  return Number(v.toPrecision(digits)).toLocaleString(undefined, { maximumFractionDigits: 6 });
+  return Number(v.toPrecision(digits)).toLocaleString(undefined, {
+    maximumFractionDigits: 6,
+  });
 }
 
-function pval(p: number | null): string {
+export function pval(p: number | null): string {
   if (p === null) return "–";
   return p < 0.001 ? "<0.001" : p.toFixed(3);
 }
 
 /** p값 유의 표시 (* 0.05, ** 0.01, *** 0.001) */
-function stars(p: number | null): string {
+export function stars(p: number | null): string {
   if (p === null) return "";
   return p < 0.001 ? "***" : p < 0.01 ? "**" : p < 0.05 ? "*" : "";
 }
 
-export function ReportCard({ ds, entry }: { ds: LoadedDataset; entry: ReportEntry }) {
+export function ReportCard({
+  ds,
+  entry,
+}: {
+  ds: LoadedDataset;
+  entry: ReportEntry;
+}) {
   const { analysis } = entry;
   const report = analysis.report!;
   const dismissReport = useApp((s) => s.dismissReport);
@@ -52,10 +60,13 @@ export function ReportCard({ ds, entry }: { ds: LoadedDataset; entry: ReportEntr
     }
   };
 
-  const groups = report.diagnostics.reduce<Record<string, DiagRow[]>>((acc, d) => {
-    (acc[d.group] ??= []).push(d);
-    return acc;
-  }, {});
+  const groups = report.diagnostics.reduce<Record<string, DiagRow[]>>(
+    (acc, d) => {
+      (acc[d.group] ??= []).push(d);
+      return acc;
+    },
+    {},
+  );
 
   return (
     <section className="chart-card report-card" data-testid="report-card">
@@ -63,7 +74,11 @@ export function ReportCard({ ds, entry }: { ds: LoadedDataset; entry: ReportEntr
         <span className="title" title={analysis.description}>
           {report.title}
         </span>
-        <button className="link" onClick={() => dismissReport(analysis.id)} aria-label="보고서 닫기">
+        <button
+          className="link"
+          onClick={() => dismissReport(analysis.id)}
+          aria-label="보고서 닫기"
+        >
           ✕
         </button>
       </header>
@@ -93,7 +108,10 @@ export function ReportCard({ ds, entry }: { ds: LoadedDataset; entry: ReportEntr
           </thead>
           <tbody>
             {report.coefficients.map((c) => (
-              <tr key={c.name} className={c.p !== null && c.p < 0.05 ? "sig" : ""}>
+              <tr
+                key={c.name}
+                className={c.p !== null && c.p < 0.05 ? "sig" : ""}
+              >
                 <td>{c.name}</td>
                 <td>{num(c.coef)}</td>
                 <td>{num(c.se)}</td>
@@ -108,10 +126,39 @@ export function ReportCard({ ds, entry }: { ds: LoadedDataset; entry: ReportEntr
         </table>
       )}
 
+      {report.impacts && (
+        <>
+          <h4>직접·간접·총 효과 ({report.impacts.method})</h4>
+          <table className="result-table compact" data-testid="impacts-table">
+            <thead>
+              <tr>
+                <th>변수</th>
+                <th>직접</th>
+                <th>간접 (파급)</th>
+                <th>총</th>
+              </tr>
+            </thead>
+            <tbody>
+              {report.impacts.rows.map((r) => (
+                <tr key={r.name}>
+                  <td>{r.name}</td>
+                  <td>{num(r.direct)}</td>
+                  <td>{num(r.indirect)}</td>
+                  <td>{num(r.total)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )}
+
       {report.local && (
         <>
           <h4>지역 계수 (행을 누르면 계수 지도로 바꿈)</h4>
-          <table className="result-table compact clickable" data-testid="local-table">
+          <table
+            className="result-table compact clickable"
+            data-testid="local-table"
+          >
             <thead>
               <tr>
                 <th>변수</th>
@@ -126,12 +173,20 @@ export function ReportCard({ ds, entry }: { ds: LoadedDataset; entry: ReportEntr
             <tbody>
               {report.local.map((r, j) => {
                 const key = j === 0 ? "CONST" : undefined;
-                const col = analysis.outputs.filter((c) => c.includes("_B_"))[j];
+                const col = analysis.outputs.filter((c) => c.includes("_B_"))[
+                  j
+                ];
                 return (
                   <tr
                     key={r.name}
                     className={col === currentMapColumn ? "on" : ""}
-                    onClick={() => showResultMap(ds.info.id, analysis, key ?? col?.split("_B_")[1])}
+                    onClick={() =>
+                      showResultMap(
+                        ds.info.id,
+                        analysis,
+                        key ?? col?.split("_B_")[1],
+                      )
+                    }
                   >
                     <td>{r.name}</td>
                     <td>{num(r.bandwidth)}</td>
@@ -154,10 +209,15 @@ export function ReportCard({ ds, entry }: { ds: LoadedDataset; entry: ReportEntr
           <table className="result-table compact">
             <tbody>
               {rows.map((d) => (
-                <tr key={d.name} className={d.p !== null && d.p < 0.05 ? "sig" : ""}>
+                <tr
+                  key={d.name}
+                  className={d.p !== null && d.p < 0.05 ? "sig" : ""}
+                >
                   <td>
                     {d.name}
-                    {d.df !== null && <span className="muted small"> (df {d.df})</span>}
+                    {d.df !== null && (
+                      <span className="muted small"> (df {d.df})</span>
+                    )}
                   </td>
                   <td>{num(d.value)}</td>
                   <td>
@@ -178,27 +238,53 @@ export function ReportCard({ ds, entry }: { ds: LoadedDataset; entry: ReportEntr
           ))}
         </ul>
       )}
-      <div className="muted small">* p&lt;0.05 · ** p&lt;0.01 · *** p&lt;0.001</div>
+      <div className="muted small">
+        * p&lt;0.05 · ** p&lt;0.01 · *** p&lt;0.001
+      </div>
 
       <div className="row wrap">
         {resid && (
-          <button onClick={() => useApp.getState().applyStyle(ds.info.id, { column: resid, method: "std_mean", k: 5 })}>
+          <button
+            onClick={() =>
+              useApp
+                .getState()
+                .applyStyle(ds.info.id, {
+                  column: resid,
+                  method: "std_mean",
+                  k: 5,
+                })
+            }
+          >
             잔차 지도
           </button>
         )}
         {resid && (
           <button
             disabled={!weightsId}
-            title={weightsId ? "활성 가중치로 잔차의 공간자기상관을 봄" : "공간가중치를 먼저 만들어야 함"}
+            title={
+              weightsId
+                ? "활성 가중치로 잔차의 공간자기상관을 봄"
+                : "공간가중치를 먼저 만들어야 함"
+            }
             onClick={() =>
               weightsId &&
-              addChart({ datasetId: ds.info.id, kind: "moran", x: resid, weightsId, permutations: 999 })
+              addChart({
+                datasetId: ds.info.id,
+                kind: "moran",
+                x: resid,
+                weightsId,
+                permutations: 999,
+              })
             }
           >
             잔차 Moran&apos;s I
           </button>
         )}
-        {isGwr && <button onClick={() => showResultMap(ds.info.id, analysis)}>계수 지도</button>}
+        {isGwr && (
+          <button onClick={() => showResultMap(ds.info.id, analysis)}>
+            계수 지도
+          </button>
+        )}
         <button onClick={save}>보고서 저장…</button>
       </div>
     </section>

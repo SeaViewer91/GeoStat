@@ -264,3 +264,114 @@ def test_mask_with_no_significant_features(client, auth, columbus) -> None:
         headers=auth,
     ).json()
     assert body["labels"] == ["유의하지 않음"] and body["counts"] == [49]
+
+
+# ---- P3 보완: GM 추정, 강건 표준오차, 효과 분해, 모형 비교 지표 ------------------------
+
+
+def _spreg_data():
+    import spreg
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        db = libpysal.io.open(str(COLUMBUS.with_suffix(".dbf")))
+        y = np.array(db.by_col("HOVAL")).reshape(-1, 1)
+        X = np.column_stack([db.by_col("INC"), db.by_col("CRIME")])
+        w = libpysal.weights.Queen.from_shapefile(str(COLUMBUS))
+    w.transform = "r"
+    return spreg, y, X, w
+
+
+@pytest.mark.parametrize("model", ["lag_gm", "error_gm"])
+def test_gm_models_match_spreg(client, auth, columbus, model) -> None:
+    spreg, y, X, w = _spreg_data()
+    ref = spreg.GM_Lag(y, X, w=w) if model == "lag_gm" else spreg.GM_Error_Het(y, X, w)
+    ds = _open(client, auth, columbus)
+    wid = _queen(client, auth, ds["id"])
+    res = _run(client, auth, ds["id"], model=model, y="HOVAL", x=["INC", "CRIME"], weights_id=wid)
+    rep = res["analysis"]["report"]
+    coefs = [c["coef"] for c in rep["coefficients"]]
+    assert coefs == pytest.approx(np.ravel(ref.betas).tolist(), rel=1e-6)
+    assert rep["fit"]["loglik"] is None and rep["fit"]["aicc"] is None
+    assert rep["fit"]["r2"] == pytest.approx(ref.pr2)
+    assert rep["fit"]["moran_i"] is not None
+    prefix = "LAGGM" if model == "lag_gm" else "ERRGM"
+    assert res["analysis"]["outputs"] == [f"{prefix}_PRED", f"{prefix}_RESID"]
+    if model == "lag_gm":
+        assert _diag(rep, "Anselin-Kelejian (잔차 공간 의존성)")["p"] is not None
+        assert rep["impacts"]["rows"][0]["name"] == "INC"
+
+
+def test_lag_impacts_decomposition(client, auth, columbus) -> None:
+    """총 효과 = β/(1-ρ), 직접 + 간접 = 총 효과."""
+    ds = _open(client, auth, columbus)
+    wid = _queen(client, auth, ds["id"])
+    res = _run(client, auth, ds["id"], model="lag", y="HOVAL", x=["INC", "CRIME"], weights_id=wid)
+    rep = res["analysis"]["report"]
+    rho = _summary(rep)["ρ (공간시차 계수)"]
+    betas = {c["name"]: c["coef"] for c in rep["coefficients"]}
+    for row in rep["impacts"]["rows"]:
+        assert row["total"] == pytest.approx(betas[row["name"]] / (1 - rho), rel=1e-6)
+        assert row["direct"] + row["indirect"] == pytest.approx(row["total"], rel=1e-9)
+        assert abs(row["direct"]) > abs(betas[row["name"]])  # 되먹임 효과로 직접 효과가 β보다 큼
+
+
+def test_ols_white_robust_se(client, auth, columbus) -> None:
+    spreg, y, X, _w = _spreg_data()
+    ref = spreg.OLS(y, X, robust="white")
+    ds = _open(client, auth, columbus)
+    res = _run(client, auth, ds["id"], model="ols", y="HOVAL", x=["INC", "CRIME"], robust="white")
+    rep = res["analysis"]["report"]
+    assert [c["se"] for c in rep["coefficients"]] == pytest.approx(np.ravel(ref.std_err).tolist())
+    assert _summary(rep)["표준오차"] == "White 이분산 강건"
+    assert "White 강건" in res["analysis"]["description"]
+
+
+def test_fit_metrics_are_comparable(client, auth, columbus) -> None:
+    """모형 비교표 지표: AICc는 mgwr 방식(σ² 포함)이고, 가중치가 있으면 모든 모형에 잔차 Moran's I가 붙음."""
+    from mgwr.diagnostics import get_AICc
+    from spglm.glm import GLM
+
+    _spreg, y, X, _w = _spreg_data()
+    ds = _open(client, auth, columbus)
+    wid = _queen(client, auth, ds["id"])
+    fits = {}
+    for model in ("ols", "lag", "gwr", "mgwr"):
+        res = _run(
+            client, auth, ds["id"], model=model, y="HOVAL", x=["INC", "CRIME"], weights_id=wid
+        )
+        fits[model] = res["analysis"]["report"]["fit"]
+    # OLS AICc = mgwr가 GWR 요약에 쓰는 전역 회귀 AICc
+    assert fits["ols"]["aicc"] == pytest.approx(get_AICc(GLM(y, X).fit()), rel=1e-9)
+    assert fits["ols"]["moran_i"] == pytest.approx(0.171310, abs=1e-5)
+    for f in fits.values():
+        assert f["moran_i"] is not None and 0 < f["moran_p"] <= 1
+    # MGWR은 원래 척도로 환산하므로 GWR·OLS와 같은 크기의 AICc를 가짐 (표준화 척도면 100 안팎)
+    assert abs(fits["mgwr"]["aicc"] - fits["gwr"]["aicc"]) < 20
+    assert fits["gwr"]["r2"] > fits["ols"]["r2"]
+
+
+def test_zero_centered_classification(client, auth, columbus) -> None:
+    ds = _open(client, auth, columbus)
+    client.post(
+        f"/datasets/{ds['id']}/fields",
+        json={"name": "dev", "expression": "`HOVAL` - `HOVAL`.mean()"},
+        headers=auth,
+    )
+    body = client.post(
+        f"/datasets/{ds['id']}/classify",
+        json={"column": "dev", "method": "zero_centered", "k": 6},
+        headers=auth,
+    ).json()
+    assert len(body["labels"]) == len(body["colors"]) == 6
+    assert sum(body["counts"]) == 49
+    neg = [i for i, label in enumerate(body["labels"]) if label.endswith("0 미만")]
+    assert len(neg) == 1
+    # 음수 계급은 파랑 계열, 양수 계급은 빨강 계열
+    blue = int(body["colors"][0][1:3], 16) < int(body["colors"][0][5:7], 16)
+    red = int(body["colors"][-1][1:3], 16) > int(body["colors"][-1][5:7], 16)
+    assert blue and red
+    classes = np.frombuffer(base64.b64decode(body["classes"]), dtype="<i2")
+    _spreg, y, _X, _w = _spreg_data()
+    values = np.ravel(y) - y.mean()
+    assert ((classes <= neg[0]) == (values < 0)).all()

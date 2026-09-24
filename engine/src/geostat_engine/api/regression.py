@@ -28,11 +28,12 @@ def _jobs(request: Request) -> JobManager:
 
 
 class RegressionRequest(BaseModel):
-    model: Literal["ols", "lag", "error", "gwr", "mgwr"]
+    model: Literal["ols", "lag", "error", "lag_gm", "error_gm", "gwr", "mgwr"]
     y: str
     x: list[str] = Field(min_length=1)
     weights_id: str | None = Field(
-        default=None, description="OLS 공간진단·공간시차·공간오차에 쓸 가중치"
+        default=None,
+        description="OLS 공간진단·공간시차·공간오차에 쓸 가중치. GWR·MGWR은 잔차 Moran's I에만 씀",
     )
     kernel: Literal["bisquare", "gaussian", "exponential"] = "bisquare"
     fixed: bool = Field(default=False, description="고정 대역폭 (False면 적응: 이웃 수)")
@@ -40,6 +41,7 @@ class RegressionRequest(BaseModel):
     bandwidth: float | None = Field(default=None, gt=0, description="GWR 대역폭 직접 지정")
     alpha: float = Field(default=0.05, gt=0, lt=1)
     white_test: bool = True
+    robust: Literal["white"] | None = Field(default=None, description="OLS 강건 표준오차")
     prefix: str | None = None
 
 
@@ -85,10 +87,9 @@ def _analysis_info(a) -> AnalysisInfo:
 def start_regression(dataset_id: str, body: RegressionRequest, request: Request) -> JobInfo:
     ds: Dataset = _state(request).get(dataset_id)
     spec = body.model_dump()
-    if body.model in ("lag", "error") and not body.weights_id:
+    if body.model in regression.WEIGHTS_REQUIRED and not body.weights_id:
         raise EngineError("weights_required", "공간시차·공간오차 모형은 공간가중치가 필요함")
-    if body.model in ("gwr", "mgwr"):
-        spec["weights_id"] = None  # GWR은 좌표로 커널 가중치를 따로 만듦
+    # GWR·MGWR은 좌표로 커널 가중치를 따로 만들고, 지정한 공간가중치는 잔차 Moran's I에만 씀
     payload = service.prepare_regression(ds, spec)
 
     def on_done(result: dict[str, Any]) -> dict[str, Any]:

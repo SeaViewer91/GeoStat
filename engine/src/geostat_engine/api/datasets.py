@@ -65,13 +65,16 @@ class ClassifyRequest(BaseModel):
         "std_mean",
         "percentile",
         "box_plot",
+        "zero_centered",
         "unique_values",
         "lisa_cluster",
         "gi_cluster",
         "geary_cluster",
         "significance",
     ]
-    k: int = Field(default=5, ge=2, le=12, description="계급 수 (분위·등간격·자연 분류만 해당)")
+    k: int = Field(
+        default=5, ge=2, le=12, description="계급 수 (분위·등간격·자연 분류·0 기준 발산만 해당)"
+    )
     mask: str | None = Field(
         default=None, description="0인 피처를 '유의하지 않음'으로 가릴 열 (GWR 유의성)"
     )

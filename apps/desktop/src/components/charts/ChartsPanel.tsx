@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { engine } from "../../lib/engine";
 import { useActive, useApp, type ChartKind, type ChartSpec, type LoadedDataset } from "../../store";
 import { BoxPlot, Histogram, MoranReference, Scatter } from "./Charts";
+import { ModelComparison } from "./ModelComparison";
 import { ReportCard } from "./ReportCard";
 
 const KINDS: { kind: ChartKind; label: string }[] = [
@@ -43,6 +44,7 @@ export function ChartsPanel({ onClose }: { onClose: () => void }) {
         ))}
       </div>
       {!ds && <p className="muted pad">데이터를 열면 차트를 추가할 수 있음</p>}
+      {ds && <ModelComparison entries={myReports} />}
       {ds && [...myReports].reverse().map((r) => <ReportCard key={r.analysis.id} ds={ds} entry={r} />)}
       {ds && mine.length === 0 && myReports.length === 0 && (
         <p className="muted pad">
