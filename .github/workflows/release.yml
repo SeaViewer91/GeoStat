@@ -50,6 +50,15 @@ jobs:
             exit 1
           }
 
+      # 로그를 내려받지 않아도 결과를 확인할 수 있게 파일 목록과 업데이트 매니페스트를 주석으로 남김
+      - name: 릴리스 파일 확인
+        run: |
+          ls -lh packaging/build/release | awk 'NR>1 {print $5, $9}' | awk '{printf "%s%%0A", $0}' > files.txt
+          echo "::notice title=릴리스 파일::$(cat files.txt)"
+          if [ -f packaging/build/release/latest.json ]; then
+            echo "::notice title=latest.json::$(awk '{printf "%s%%0A", $0}' packaging/build/release/latest.json)"
+          fi
+
       - name: 릴리스 만들기
         if: startsWith(github.ref, 'refs/tags/')
         env:
