@@ -43,6 +43,7 @@ done < <(find "$ENGINE_DIR/_internal" -type f -print0)
 echo "내부 바이너리 ${count}개 서명함"
 
 # 2. 주 실행 파일은 마지막에 서명함
-codesign "${OPTS[@]}" "${MAIN_OPTS[@]}" "$ENGINE_DIR/geostat-engine"
+# macOS 기본 bash 3.2는 set -u에서 빈 배열을 "정의되지 않음"으로 보므로 비었을 때를 따로 처리함
+codesign "${OPTS[@]}" ${MAIN_OPTS[@]+"${MAIN_OPTS[@]}"} "$ENGINE_DIR/geostat-engine"
 codesign --verify --strict --verbose=2 "$ENGINE_DIR/geostat-engine"
 echo "엔진 서명 완료"
