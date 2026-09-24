@@ -291,6 +291,13 @@ fn dev_command() -> Result<Option<Command>, String> {
 }
 
 fn spawn(mut cmd: Command, token: &str) -> Result<Child, String> {
+    // Windows: 엔진은 콘솔 프로그램이라 그냥 띄우면 검은 창이 뜨므로 창 없이 실행함
+    #[cfg(windows)]
+    {
+        use std::os::windows::process::CommandExt;
+        const CREATE_NO_WINDOW: u32 = 0x0800_0000;
+        cmd.creation_flags(CREATE_NO_WINDOW);
+    }
     cmd.arg("--exit-on-stdin-close")
         // 토큰은 명령줄 인수 대신 환경변수로 넘김 (ps로 노출되지 않게 함)
         .env("GEOSTAT_ENGINE_TOKEN", token)

@@ -14,7 +14,11 @@ CHANGELOG = Path(__file__).resolve().parents[1] / "CHANGELOG.md"
 
 def notes(version: str) -> str:
     text = CHANGELOG.read_text(encoding="utf-8")
-    m = re.search(rf"^## \[{re.escape(version)}\][^\n]*\n(.*?)(?=^## \[|\Z)", text, re.M | re.S)
+    m = re.search(
+        rf"^## \[{re.escape(version)}\][^\n]*\n(.*?)(?=^## \[|\Z)",
+        text,
+        re.MULTILINE | re.DOTALL,
+    )
     if not m:
         raise SystemExit(f"CHANGELOG.md에 {version} 항목이 없음")
     return m.group(1).strip()

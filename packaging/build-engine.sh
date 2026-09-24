@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 # 엔진을 PyInstaller onedir로 빌드하고 기본 동작을 확인함
 #
-# 결과: packaging/build/engine/geostat-engine/geostat-engine
+# 결과: packaging/build/engine/geostat-engine/geostat-engine (Windows는 .exe)
+# macOS·Linux·Windows(Git Bash) 공통
 # 사용: packaging/build-engine.sh [--skip-smoke-test]
 set -euo pipefail
+# Windows 콘솔 기본 인코딩(cp1252 등)에서도 한글 출력이 깨지지 않게 함
+export PYTHONUTF8=1 PYTHONIOENCODING=utf-8
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 OUT="$ROOT/packaging/build"
@@ -30,6 +33,7 @@ uv run pyinstaller "$ROOT/packaging/engine.spec" \
   --log-level WARN
 
 EXE="$OUT/engine/geostat-engine/geostat-engine"
+case "$(uname -s)" in MINGW* | MSYS* | CYGWIN*) EXE="$EXE.exe" ;; esac  # Windows(Git Bash)
 echo "빌드 완료: $EXE ($(du -sh "$OUT/engine/geostat-engine" | cut -f1))"
 
 if [[ "${1:-}" != "--skip-smoke-test" ]]; then

@@ -12,18 +12,27 @@ concurrency:
 
 jobs:
   engine:
-    name: 엔진 테스트 (Python)
-    runs-on: ubuntu-latest
+    name: 엔진 테스트 (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     defaults:
       run:
+        shell: bash
         working-directory: engine
+    env:
+      PYTHONUTF8: "1" # Windows 콘솔 인코딩에서도 한글 출력이 깨지지 않게 함
     steps:
       - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v10.2.0 # 이 액션은 v10 같은 주 버전 태그를 제공하지 않음
       - run: uv sync
-      - run: uv run ruff check src tests
-      - run: uv run ruff format --check src tests
-      - run: uv run pytest -q
+      - if: runner.os == 'Linux'
+        run: |
+          uv run ruff check src tests
+          uv run ruff format --check src tests
+      - run: ../scripts/ci/annotate.sh "엔진 테스트 실패 (${{ matrix.os }})" uv run pytest -q -rf
 
   frontend:
     name: 프론트엔드 타입 검사·빌드
@@ -43,10 +52,15 @@ jobs:
       - run: npm run build
 
   shell:
-    name: Tauri 셸 검사 (macOS)
-    runs-on: macos-latest
+    name: Tauri 셸 검사 (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     defaults:
       run:
+        shell: bash
         working-directory: apps/desktop
     steps:
       - uses: actions/checkout@v7
@@ -65,25 +79,26 @@ jobs:
       - run: npm ci && npm run build
       - run: cargo fmt --check
         working-directory: apps/desktop/src-tauri
-      - run: cargo clippy --all-targets -- -D warnings
+      - run: ../../../scripts/ci/annotate.sh "clippy 실패 (${{ matrix.os }})" cargo clippy --all-targets -- -D warnings
         working-directory: apps/desktop/src-tauri
 
   bundle:
-    name: 엔진 번들 스모크 테스트 (macOS)
-    runs-on: macos-latest
+    name: 엔진 번들 스모크 테스트 (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     # 번들 빌드는 오래 걸리므로 PR에서는 돌리지 않음 (main 푸시·수동 실행에서만)
     if: github.event_name != 'pull_request'
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v10.2.0
       # PyInstaller로 엔진을 빌드한 뒤 smoke_test.py로 실제 실행 파일을 확인함
-      # (pyogrio·rasterio가 각자 GDAL을 들고 오므로 macOS 번들에서 충돌이 없는지 여기서 확인함)
+      # (pyogrio·rasterio가 각자 GDAL을 들고 오므로 번들에서 충돌이 없는지 여기서 확인함)
       # 실패하면 로그 끝부분을 주석(annotation)으로 남겨 로그를 내려받지 않고도 원인을 볼 수 있게 함
-      - run: |
-          set -o pipefail
-          packaging/build-engine.sh 2>&1 | tee build.log || {
-            tail -n 40 build.log | cut -c1-300 | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}' > tail.txt
-            echo "::error title=엔진 번들 실패::$(cat tail.txt)"
-            exit 1
-          }
+      - run: scripts/ci/annotate.sh "엔진 번들 실패 (${{ matrix.os }})" packaging/build-engine.sh
       - run: du -sh packaging/build/engine/geostat-engine

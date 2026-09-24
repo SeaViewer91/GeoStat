@@ -1,6 +1,6 @@
 # GeoStat 사용 설명서
 
-GeoStat은 macOS용 공간통계 분석 앱임. GeoDa와 같은 탐색적 공간자료분석(ESDA), 공간회귀, 공간군집화에
+GeoStat은 macOS·Windows용 공간통계 분석 앱임. GeoDa와 같은 탐색적 공간자료분석(ESDA), 공간회귀, 공간군집화에
 GWR·MGWR, 한국 좌표계·한글 자료, 래스터 존 통계를 더했음. 이 문서는 0.9 버전 기준임.
 
 - [1. 설치와 첫 실행](#1-설치와-첫-실행)
@@ -22,6 +22,8 @@ GWR·MGWR, 한국 좌표계·한글 자료, 래스터 존 통계를 더했음. �
 
 ## 1. 설치와 첫 실행
 
+### macOS
+
 **요구 사항**: macOS 14(Sonoma) 이상, Apple Silicon(M1 이후) 맥
 
 1. [Releases](https://github.com/SeaViewer91/GeoStat/releases)에서 `GeoStat_<버전>_aarch64.dmg`를 받음
@@ -29,6 +31,18 @@ GWR·MGWR, 한국 좌표계·한글 자료, 래스터 존 통계를 더했음. �
 3. 처음 열면 "확인되지 않은 개발자" 경고가 뜸. Apple 공증을 받지 않은 앱이기 때문임. 아래 중 하나로 한 번만 허용함
    - **시스템 설정 → 개인정보 보호 및 보안** 맨 아래 **"그래도 열기"**
    - 터미널: `xattr -dr com.apple.quarantine /Applications/GeoStat.app`
+
+### Windows
+
+**요구 사항**: Windows 10·11 64비트
+
+1. [Releases](https://github.com/SeaViewer91/GeoStat/releases)에서 `GeoStat_<버전>_x64-setup.exe`를 받아 실행함
+2. 코드 서명 인증서가 없어 "Windows의 PC 보호" 창이 뜰 수 있음. **추가 정보 → 실행**을 누름
+3. 관리자 권한 없이 현재 사용자 계정에 설치되고, 시작 메뉴에 GeoStat이 생김
+
+Windows에서는 이 설명서의 ⌘를 **Ctrl**로 읽으면 됨 (예: ⌘O → Ctrl+O, ⇧⌘S → Ctrl+Shift+S).
+
+### 공통
 
 첫 실행은 분석 엔진을 준비하느라 10~20초 걸릴 수 있음. 하단 상태 표시줄 오른쪽에 `엔진 <버전> · GDAL …`이 보이면 준비된 것임.
 

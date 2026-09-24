@@ -22,7 +22,7 @@ export async function findUpdate(): Promise<AvailableUpdate | null> {
     install: async (onProgress) => {
       let total = 0;
       let received = 0;
-      await update.downloadAndInstall((event) => {
+      await update.download((event) => {
         if (event.event === "Started") {
           total = event.data.contentLength ?? 0;
           onProgress(total ? 0 : null);
@@ -31,6 +31,10 @@ export async function findUpdate(): Promise<AvailableUpdate | null> {
           onProgress(total ? received / total : null);
         }
       });
+      // 설치 전에 엔진을 끔. Windows는 실행 중인 엔진 파일을 덮어쓰지 못해 설치가 실패하기 때문임
+      const { invoke } = await import("@tauri-apps/api/core");
+      await invoke("shutdown_engine");
+      await update.install(); // Windows는 여기서 설치 프로그램이 앱을 닫고 설치한 뒤 다시 켬
       const { relaunch } = await import("@tauri-apps/plugin-process");
       await relaunch();
     },

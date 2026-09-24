@@ -11,7 +11,6 @@
 
 from __future__ import annotations
 
-import json
 import re
 import sys
 from pathlib import Path
@@ -52,7 +51,9 @@ def set_version(version: str) -> None:
         text = path.read_text(encoding="utf-8")
         new = re.sub(PATTERNS[name], rf"\g<1>{version}\g<3>", text, count=1)
         path.write_text(new, encoding="utf-8")
-    print(f"버전을 {version}(으)로 바꿈. engine/uv.lock·Cargo.lock·package-lock.json도 갱신해야 함")
+    print(
+        f"버전을 {version}(으)로 바꿈. engine/uv.lock·Cargo.lock·package-lock.json도 갱신해야 함"
+    )
 
 
 def main(argv: list[str]) -> None:

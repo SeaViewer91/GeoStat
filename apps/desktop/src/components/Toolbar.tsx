@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { t } from "../i18n";
+import { platformKeys, t } from "../i18n";
 import { DATA_FILTER, PROJECT_FILTER, dirname, pickOpenPath, pickSavePath } from "../lib/dialogs";
 import { engine, type SampleInfo } from "../lib/engine";
 import { renderMapPng } from "../lib/mapExport";
@@ -116,7 +116,7 @@ function Menu({ label, items }: { label: string; items: MenuItem[] }) {
                 }}
               >
                 <span>{t(item.label)}</span>
-                {item.shortcut && <kbd>{item.shortcut}</kbd>}
+                {item.shortcut && <kbd>{platformKeys(item.shortcut)}</kbd>}
               </button>
             ),
           )}

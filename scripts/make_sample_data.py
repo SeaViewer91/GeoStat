@@ -55,7 +55,9 @@ def make_seoul_grid() -> Path:
     )
     path = OUT / "seoul_grid_cp949.shp"
     gdf.to_file(path, encoding="CP949", engine="pyogrio")
-    path.with_suffix(".cpg").unlink(missing_ok=True)  # 국내 자료처럼 .cpg 없는 상태로 만듦
+    path.with_suffix(".cpg").unlink(
+        missing_ok=True
+    )  # 국내 자료처럼 .cpg 없는 상태로 만듦
     return path
 
 

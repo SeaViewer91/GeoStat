@@ -14,7 +14,10 @@ gdal_data = base / "pyogrio" / "gdal_data"
 if gdal_data.is_dir():
     os.environ["GDAL_DATA"] = str(gdal_data)
 
-for proj_dir in (base / "pyproj" / "proj_dir" / "share" / "proj", base / "pyogrio" / "proj_data"):
+for proj_dir in (
+    base / "pyproj" / "proj_dir" / "share" / "proj",
+    base / "pyogrio" / "proj_data",
+):
     if (proj_dir / "proj.db").is_file():
         os.environ["PROJ_DATA"] = str(proj_dir)
         os.environ["PROJ_LIB"] = str(proj_dir)  # PROJ 9 이전 호환용

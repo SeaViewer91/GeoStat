@@ -1,6 +1,6 @@
 [project]
 name = "geostat-engine"
-version = "0.9.1"
+version = "0.9.2"
 description = "GeoStat 공간통계 분석 엔진"
 readme = "README.md"
 license = "MIT"

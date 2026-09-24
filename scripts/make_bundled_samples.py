@@ -21,9 +21,15 @@ import shapely
 from rasterio.transform import from_origin
 
 warnings.simplefilter("ignore")
-import libpysal  # noqa: E402
+import libpysal
 
-OUT = Path(__file__).resolve().parents[1] / "engine" / "src" / "geostat_engine" / "samples"
+OUT = (
+    Path(__file__).resolve().parents[1]
+    / "engine"
+    / "src"
+    / "geostat_engine"
+    / "samples"
+)
 rng = np.random.default_rng(2026)
 
 
@@ -38,13 +44,30 @@ def smooth(ny: int, nx: int, sigma: float) -> np.ndarray:
 
 def georgia() -> None:
     gdf = gpd.read_file(libpysal.examples.get_path("G_utm.shp")).set_crs(26917)
-    keep = ["AreaKey", "Latitude", "Longitud", "TotPop90", "PctRural", "PctBach", "PctEld",
-            "PctFB", "PctPov", "PctBlack", "geometry"]
-    gdf[[c for c in keep if c in gdf.columns]].to_file(OUT / "georgia.gpkg", layer="georgia", engine="pyogrio")
+    keep = [
+        "AreaKey",
+        "Latitude",
+        "Longitud",
+        "TotPop90",
+        "PctRural",
+        "PctBach",
+        "PctEld",
+        "PctFB",
+        "PctPov",
+        "PctBlack",
+        "geometry",
+    ]
+    gdf[[c for c in keep if c in gdf.columns]].to_file(
+        OUT / "georgia.gpkg", layer="georgia", engine="pyogrio"
+    )
 
 
 def nc_sids() -> None:
-    gdf = gpd.read_file(libpysal.examples.get_path("sids2.shp")).set_crs(4267).to_crs(4326)
+    gdf = (
+        gpd.read_file(libpysal.examples.get_path("sids2.shp"))
+        .set_crs(4267)
+        .to_crs(4326)
+    )
     gdf.to_file(OUT / "nc_sids.gpkg", layer="nc_sids", engine="pyogrio")
 
 
@@ -60,7 +83,9 @@ def seoul_grid() -> None:
             "격자ID": [f"G{i:04d}" for i in range(n)],
             "인구": np.round(5000 + 1500 * field + rng.normal(0, 300, n)).astype(int),
             "소득": np.round(300 + 40 * field + rng.normal(0, 15, n), 1),
-            "녹지율": np.clip(np.round(30 - 12 * field + rng.normal(0, 5, n), 1), 0, 100),
+            "녹지율": np.clip(
+                np.round(30 - 12 * field + rng.normal(0, 5, n), 1), 0, 100
+            ),
             "구분": np.where(field > 0, "도심", "외곽"),
         },
         geometry=shapely.box(x0, y0, x0 + 500, y0 + 500),
@@ -78,9 +103,19 @@ def terrain() -> None:
     base += 150 * np.exp(-(((xx - 520) / 160) ** 2 + ((yy - 260) / 140) ** 2))  # 산
     base = np.maximum(base, 0).astype("float32")
     with rasterio.open(
-        OUT / "terrain.tif", "w", driver="GTiff", width=n, height=n, count=1, dtype="float32",
-        crs="EPSG:5186", transform=from_origin(188_000, 562_000, 25, 25), nodata=-9999,
-        compress="deflate", predictor=3, tiled=True,
+        OUT / "terrain.tif",
+        "w",
+        driver="GTiff",
+        width=n,
+        height=n,
+        count=1,
+        dtype="float32",
+        crs="EPSG:5186",
+        transform=from_origin(188_000, 562_000, 25, 25),
+        nodata=-9999,
+        compress="deflate",
+        predictor=3,
+        tiled=True,
     ) as dst:
         dst.write(base, 1)
         dst.set_band_description(1, "고도 (가상, m)")

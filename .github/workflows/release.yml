@@ -1,7 +1,8 @@
 name: Release
 
-# v로 시작하는 태그(예: v0.9.0)를 푸시하면 macOS 앱을 빌드해 GitHub Release 초안(draft)으로 올림.
-# 받은 dmg로 실행을 확인한 뒤 GitHub에서 "Publish release"를 눌러야 공개되고 자동 업데이트 대상이 됨.
+# v로 시작하는 태그(예: v0.9.2)를 푸시하면 macOS(Apple Silicon)·Windows(x64) 앱을 빌드해
+# 한 GitHub Release 초안(draft)에 함께 올림. 설치 파일로 실행을 확인한 뒤 GitHub에서
+# "Publish release"를 눌러야 공개되고 자동 업데이트 대상이 됨.
 # 수동 실행(workflow_dispatch)은 릴리스를 만들지 않고 빌드 결과만 아티팩트로 남김 (시험용).
 on:
   push:
@@ -16,10 +17,25 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  macos:
-    name: macOS 앱 빌드·릴리스 (Apple Silicon)
-    runs-on: macos-latest
-    timeout-minutes: 90
+  build:
+    name: 앱 빌드 (${{ matrix.name }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: macOS
+            os: macos-latest
+            script: packaging/macos/release.sh
+          - name: Windows
+            os: windows-latest
+            script: packaging/windows/release.sh
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: bash
+    env:
+      PYTHONUTF8: "1"
     steps:
       - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v10.2.0
@@ -35,46 +51,48 @@ jobs:
 
       - name: 태그와 앱 버전 일치 확인
         if: startsWith(github.ref, 'refs/tags/')
-        run: python3 scripts/version.py --check "$GITHUB_REF_NAME"
+        run: uv run --no-project python scripts/version.py --check "$GITHUB_REF_NAME"
 
-      # 엔진 빌드·스모크 테스트 → 엔진 서명 → 앱·dmg·업데이트 파일 생성
+      # 엔진 빌드·스모크 테스트 → (macOS) 서명 → 앱·설치 파일·업데이트 파일 생성
+      # 실패하면 로그 끝부분을 주석(annotation)으로 남김
       - name: 앱 빌드
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
-        # 실패하면 로그 끝부분을 주석(annotation)으로 남김
-        run: |
-          set -o pipefail
-          packaging/macos/release.sh 2>&1 | tee build.log || {
-            grep -v "replacing existing signature" build.log | tail -n 40 | cut -c1-300 | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}' > tail.txt
-            echo "::error title=앱 빌드 실패::$(cat tail.txt)"
-            exit 1
-          }
+        run: scripts/ci/annotate.sh "앱 빌드 실패 (${{ matrix.name }})" ${{ matrix.script }}
 
-      # 로그를 내려받지 않아도 결과를 확인할 수 있게 파일 목록과 업데이트 매니페스트를 주석으로 남김
+      # 로그를 내려받지 않아도 결과를 확인할 수 있게 파일 목록을 주석으로 남김
       - name: 릴리스 파일 확인
         run: |
           ls -lh packaging/build/release | awk 'NR>1 {print $5, $9}' | awk '{printf "%s%%0A", $0}' > files.txt
-          echo "::notice title=릴리스 파일::$(cat files.txt)"
-          if [ -f packaging/build/release/latest.json ]; then
-            echo "::notice title=latest.json::$(awk '{printf "%s%%0A", $0}' packaging/build/release/latest.json)"
-          fi
+          echo "::notice title=릴리스 파일 (${{ matrix.name }})::$(cat files.txt)"
 
+      - uses: actions/upload-artifact@v7
+        with:
+          name: release-${{ matrix.name }}
+          path: packaging/build/release/
+          retention-days: 7
+
+  publish:
+    name: 릴리스 초안 만들기
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          path: parts
+      # 플랫폼별 latest.json을 하나로 합치고 SHA256SUMS를 이어 붙임
+      - run: python3 scripts/merge_release.py dist parts/release-macOS parts/release-Windows
+      - name: 업데이트 매니페스트 확인
+        run: echo "::notice title=latest.json::$(awk '{printf "%s%%0A", $0}' dist/latest.json)"
       - name: 릴리스 만들기
-        if: startsWith(github.ref, 'refs/tags/')
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
           python3 scripts/release_notes.py "$VERSION" > notes.md
           cat packaging/release-install-note.md >> notes.md
-          gh release create "$GITHUB_REF_NAME" packaging/build/release/* \
+          gh release create "$GITHUB_REF_NAME" dist/* \
             --title "GeoStat $VERSION" --notes-file notes.md --verify-tag --draft
-
-      - name: 빌드 결과 보관 (수동 실행)
-        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
-        uses: actions/upload-artifact@v7
-        with:
-          name: geostat-macos
-          path: packaging/build/release/
-          retention-days: 7

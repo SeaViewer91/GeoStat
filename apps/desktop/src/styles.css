@@ -11,7 +11,7 @@
   --danger: #b42318;
   --select: #fff1c2;
   color-scheme: light dark;
-  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", system-ui,
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Malgun Gothic", system-ui,
     sans-serif;
   font-size: 13px;
   color: var(--text);

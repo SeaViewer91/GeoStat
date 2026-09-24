@@ -15,6 +15,12 @@ fn restart_engine(engine: tauri::State<'_, Engine>) {
     engine.restart();
 }
 
+/// 엔진을 끔. 업데이트 설치 직전에 불러 엔진 파일이 잠기지 않게 함 (Windows는 실행 중인 파일을 덮어쓸 수 없음)
+#[tauri::command]
+fn shutdown_engine(engine: tauri::State<'_, Engine>) {
+    engine.shutdown();
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     // RUST_LOG로 조절 가능. 기본은 info 수준을 stderr로 출력함
@@ -32,7 +38,11 @@ pub fn run() {
             app.manage(engine);
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![engine_info, restart_engine])
+        .invoke_handler(tauri::generate_handler![
+            engine_info,
+            restart_engine,
+            shutdown_engine
+        ])
         .build(tauri::generate_context!())
         .expect("GeoStat 앱을 초기화하지 못함")
         .run(|app, event| {

@@ -30,7 +30,9 @@ def voronoi_polygons(n: int, seed: int = 0) -> gpd.GeoDataFrame:
     rng = np.random.default_rng(seed)
     size = 100_000.0
     pts = rng.uniform(0, size, (n, 2)) + [900_000, 1_700_000]
-    polys = shapely.voronoi_polygons(shapely.multipoints(pts), extend_to=shapely.box(*pts.min(0), *pts.max(0)))
+    polys = shapely.voronoi_polygons(
+        shapely.multipoints(pts), extend_to=shapely.box(*pts.min(0), *pts.max(0))
+    )
     polys = shapely.get_parts(polys)
     frame = shapely.box(*pts.min(0), *pts.max(0))
     polys = shapely.intersection(polys, frame)
@@ -38,7 +40,11 @@ def voronoi_polygons(n: int, seed: int = 0) -> gpd.GeoDataFrame:
     x, y = shapely.get_x(c), shapely.get_y(c)
     field = np.sin(x / 7000) + np.cos(y / 9000) + rng.normal(0, 0.5, len(polys))
     return gpd.GeoDataFrame(
-        {"value": field, "x1": rng.normal(size=len(polys)), "x2": x / 1e5 + rng.normal(0, 0.1, len(polys))},
+        {
+            "value": field,
+            "x1": rng.normal(size=len(polys)),
+            "x2": x / 1e5 + rng.normal(0, 0.1, len(polys)),
+        },
         geometry=polys,
         crs=5179,
     )
@@ -74,7 +80,6 @@ def main() -> None:
     args = ap.parse_args()
 
     from fastapi.testclient import TestClient
-
     from geostat_engine.server import create_app
 
     tmp = Path(tempfile.mkdtemp(prefix="geostat-bench-"))
@@ -88,10 +93,15 @@ def main() -> None:
     print(f"\n[{len(gdf):,}개 폴리곤]")
     ds = t.run(
         "열기 (GeoPackage 읽기)",
-        lambda: client.post("/datasets/open", json={"path": str(path)}, headers=AUTH).json(),
+        lambda: client.post(
+            "/datasets/open", json={"path": str(path)}, headers=AUTH
+        ).json(),
         "목표: 열기+지오메트리 < 5초",
     )
-    geo = t.run("지오메트리 전송 (GeoArrow IPC)", lambda: client.get(f"/datasets/{ds['id']}/geometry", headers=AUTH))
+    geo = t.run(
+        "지오메트리 전송 (GeoArrow IPC)",
+        lambda: client.get(f"/datasets/{ds['id']}/geometry", headers=AUTH),
+    )
     print(f"    지오메트리 {len(geo.content) / 1e6:,.1f} MB")
     t.run(
         "주제도 분류 (자연 분류 5단계)",
@@ -103,14 +113,21 @@ def main() -> None:
     )
     w = t.run(
         "Queen 가중치",
-        lambda: client.post(f"/datasets/{ds['id']}/weights", json={"type": "queen"}, headers=AUTH).json(),
+        lambda: client.post(
+            f"/datasets/{ds['id']}/weights", json={"type": "queen"}, headers=AUTH
+        ).json(),
         "목표: < 10초",
     )
     t.run(
         "LISA (순열 999회)",
         lambda: client.post(
             f"/datasets/{ds['id']}/esda/local",
-            json={"method": "lisa", "column": "value", "weights_id": w["id"], "permutations": 999},
+            json={
+                "method": "lisa",
+                "column": "value",
+                "weights_id": w["id"],
+                "permutations": 999,
+            },
             headers=AUTH,
         ).json(),
         "목표: < 30초",
@@ -120,7 +137,9 @@ def main() -> None:
         small = gdf.sample(n=min(args.gwr_n, len(gdf)), random_state=1)
         spath = tmp / "gwr.gpkg"
         small.to_file(spath, layer="gwr", engine="pyogrio")
-        sds = client.post("/datasets/open", json={"path": str(spath)}, headers=AUTH).json()
+        sds = client.post(
+            "/datasets/open", json={"path": str(spath)}, headers=AUTH
+        ).json()
         print(f"\n[GWR {len(small):,}개]")
 
         def gwr():

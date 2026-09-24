@@ -1,6 +1,6 @@
 # GeoStat
 
-macOS용 공간통계 분석 데스크톱 앱임. GeoDa 수준의 탐색적 공간자료분석(ESDA), 공간회귀, 공간군집화에
+macOS·Windows용 공간통계 분석 데스크톱 앱임. GeoDa 수준의 탐색적 공간자료분석(ESDA), 공간회귀, 공간군집화에
 GWR/MGWR, 한국 좌표계·한글 자료, 래스터 존 통계를 더했음. ([English guide](docs/manual.en.md))
 
 > 0.9는 첫 공개 베타임. 문제를 찾으면 [Issues](https://github.com/SeaViewer91/GeoStat/issues)에 알려 주면 됨.
@@ -9,9 +9,12 @@ GWR/MGWR, 한국 좌표계·한글 자료, 래스터 존 통계를 더했음. ([
 
 ## 설치
 
-[Releases](https://github.com/SeaViewer91/GeoStat/releases)에서 `GeoStat_<버전>_aarch64.dmg`를 받아 `GeoStat.app`을 응용 프로그램 폴더로 옮김.
+[Releases](https://github.com/SeaViewer91/GeoStat/releases)에서 운영체제에 맞는 파일을 받음.
 
-macOS 14(Sonoma) 이상, Apple Silicon 맥이 필요함.
+- **macOS**: macOS 14(Sonoma) 이상, Apple Silicon 맥. `GeoStat_<버전>_aarch64.dmg`
+- **Windows**: Windows 10·11 64비트. `GeoStat_<버전>_x64-setup.exe`를 실행하면 관리자 권한 없이 설치됨. 인증서 서명이 없어 "Windows의 PC 보호" 창이 뜨면 **추가 정보 → 실행**을 누름
+
+아래는 macOS 첫 실행 안내임.
 
 Apple 공증을 받지 않은 앱이라 첫 실행 때 "확인되지 않은 개발자" 경고가 뜸. 아래 중 하나로 한 번만 허용하면 됨.
 
@@ -120,7 +123,7 @@ python3 scripts/version.py 1.0.0     # 앱·엔진 버전을 한꺼번에 바꿈
 git tag v1.0.0 && git push origin v1.0.0
 ```
 
-태그를 푸시하면 GitHub Actions(`release.yml`)가 macOS에서 엔진·앱을 빌드해 Release **초안**에 dmg와 자동 업데이트 파일(`latest.json` 등)을 올림. 초안의 dmg로 실행을 확인한 뒤 **Publish release**를 누르면 공개되고, 설치된 앱들이 업데이트를 받음.
+태그를 푸시하면 GitHub Actions(`release.yml`)가 macOS·Windows에서 각각 엔진·앱을 빌드해 Release **초안**에 dmg와 자동 업데이트 파일(`latest.json` 등)을 올림. 초안의 dmg로 실행을 확인한 뒤 **Publish release**를 누르면 공개되고, 설치된 앱들이 업데이트를 받음.
 업데이트 파일 서명에는 저장소 비밀값 `TAURI_SIGNING_PRIVATE_KEY`, `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`가 필요함.
 
 ### 성능 측정

@@ -1,6 +1,6 @@
 # GeoStat User Guide
 
-GeoStat is a spatial statistics desktop app for macOS. It covers what GeoDa does — exploratory spatial data
+GeoStat is a spatial statistics desktop app for macOS and Windows. It covers what GeoDa does — exploratory spatial data
 analysis (ESDA), spatial regression and spatial clustering — and adds GWR/MGWR, Korean coordinate systems and
 encodings, and raster zonal statistics. This guide describes version 0.9. A more detailed Korean guide is in
 [manual.md](manual.md).
@@ -9,13 +9,17 @@ encodings, and raster zonal statistics. This guide describes version 0.9. A more
 
 ## 1. Install
 
-**Requirements**: macOS 14 (Sonoma) or later on Apple Silicon (M1 or newer).
+**macOS** — macOS 14 (Sonoma) or later on Apple Silicon (M1 or newer):
 
 1. Download `GeoStat_<version>_aarch64.dmg` from [Releases](https://github.com/SeaViewer91/GeoStat/releases).
 2. Open the dmg and drag `GeoStat.app` into Applications.
 3. The app is not notarized by Apple, so the first launch shows an "unidentified developer" warning. Allow it once:
    - **System Settings → Privacy & Security → Open Anyway**, or
    - Terminal: `xattr -dr com.apple.quarantine /Applications/GeoStat.app`
+
+**Windows** — Windows 10 or 11, 64-bit: download and run `GeoStat_<version>_x64-setup.exe`. It installs for the
+current user without admin rights. The installer is not code-signed, so SmartScreen may show "Windows protected
+your PC" — click **More info → Run anyway**. On Windows, read ⌘ in this guide as **Ctrl** (⇧⌘S → Ctrl+Shift+S).
 
 The first launch can take 10–20 seconds while the analysis engine starts. When the status bar shows
 `Engine <version> · GDAL …`, it is ready. New versions are announced in the top-right corner; **Install and restart**

@@ -38,7 +38,7 @@ export function renderMapPng(opts: MapImageOptions): string {
   ctx.scale(scale, scale);
   const cssW = w / scale;
   const cssH = h / scale;
-  const font = '-apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif';
+  const font = '-apple-system, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif';
 
   if (opts.title) {
     ctx.font = `600 16px ${font}`;

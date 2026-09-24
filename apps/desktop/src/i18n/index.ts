@@ -22,6 +22,18 @@ function initialLang(): Lang {
 
 let current: Lang = initialLang();
 
+/** 맥이면 true. 단축키 표기(⌘·⇧)를 Windows에서는 Ctrl·Shift로 바꿀 때 씀 */
+export const IS_MAC = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+
+/** "⇧⌘O" → "Ctrl+Shift+O"처럼 맥 전용 기호를 바꿈 (맥에서는 그대로) */
+export function platformKeys(text: string): string {
+  if (IS_MAC) return text;
+  return text
+    .replace(/⇧⌘([A-Z])/g, "Ctrl+Shift+$1")
+    .replace(/⌘([A-Z])/g, "Ctrl+$1")
+    .replace(/⌘/g, "Ctrl");
+}
+
 export function getLang(): Lang {
   return current;
 }
@@ -40,7 +52,7 @@ type Vars = Record<string, string | number>;
 
 /** 한국어 문구를 현재 언어로 바꿈. vars의 값은 {이름} 자리에 들어감 */
 export function t(ko: string, vars?: Vars): string {
-  const text = current === "en" ? (EN[ko] ?? ko) : ko;
+  const text = platformKeys(current === "en" ? (EN[ko] ?? ko) : ko);
   if (!vars) return text;
   return text.replace(/\{(\w+)\}/g, (m, key: string) => {
     const v = vars[key];
