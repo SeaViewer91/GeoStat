@@ -74,7 +74,7 @@ def main(argv: list[str] | None = None) -> None:
     if token_generated:
         ready["token"] = token
 
-    app = create_app(token=token, ready_line=f"{READY_PREFIX} {_json(ready)}")
+    app = create_app(token=token, ready_line=f"{READY_PREFIX} {_json(ready)}", warmup=True)
 
     if args.exit_on_stdin_close:
         threading.Thread(target=_watch_stdin, name="stdin-watch", daemon=True).start()

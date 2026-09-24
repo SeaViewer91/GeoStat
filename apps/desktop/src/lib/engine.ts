@@ -6,7 +6,7 @@
 import { invoke, isTauri } from "@tauri-apps/api/core";
 import { tableFromIPC, type Table } from "apache-arrow";
 
-import { decodeInt16, encodeUint32 } from "./binary";
+import { decodeFloat64, decodeInt16, decodeUint32, encodeUint32 } from "./binary";
 
 export interface EngineConnection {
   url: string;
@@ -27,6 +27,7 @@ export interface ColumnInfo {
   kind: ColumnKind;
   derived: boolean;
   expression: string | null;
+  origin: "data" | "expression" | "analysis";
 }
 
 export type GeometryType = "point" | "line" | "polygon";
@@ -87,7 +88,11 @@ export type ClassifyMethod =
   | "std_mean"
   | "percentile"
   | "box_plot"
-  | "unique_values";
+  | "unique_values"
+  | "lisa_cluster"
+  | "gi_cluster"
+  | "geary_cluster"
+  | "significance";
 
 export type SchemeType = "sequential" | "diverging" | "qualitative";
 
@@ -99,8 +104,101 @@ export interface Classification {
   labels: string[];
   counts: number[];
   n_missing: number;
+  /** 고정 색 (군집·유의성 지도). null이면 색상표로 칠함 */
+  colors: string[] | null;
   /** 피처별 계급 번호 (-1 = 값 없음) */
   classes: Int16Array;
+}
+
+export type WeightsType = "queen" | "rook" | "knn" | "distance" | "kernel";
+
+export interface WeightsSpec {
+  type: WeightsType;
+  name?: string;
+  order?: number;
+  include_lower?: boolean;
+  k?: number;
+  threshold?: number | null;
+  inverse?: boolean;
+  power?: number;
+  function?: "triangular" | "uniform" | "quadratic" | "quartic" | "gaussian";
+  fixed?: boolean;
+}
+
+export interface WeightsSummary {
+  n: number;
+  min_neighbors: number;
+  max_neighbors: number;
+  mean_neighbors: number;
+  median_neighbors: number;
+  pct_nonzero: number;
+  n_islands: number;
+  islands: number[];
+  histogram: { neighbors: number; count: number }[];
+  symmetric: boolean;
+}
+
+export interface WeightsInfo {
+  id: string;
+  name: string;
+  type: string;
+  description: string;
+  spec: Record<string, unknown>;
+  summary: WeightsSummary;
+}
+
+export interface MoranResult {
+  column: string;
+  column_y: string | null;
+  weights: string;
+  I: number;
+  expected: number;
+  variance_norm: number | null;
+  z_norm: number | null;
+  p_norm: number | null;
+  z_sim: number | null;
+  p_sim: number | null;
+  permutations: number;
+  n: number;
+  sim_hist: { counts: number[]; edges: number[] } | null;
+  z: Float64Array;
+  lag: Float64Array;
+}
+
+export type LocalMethod = "lisa" | "lisa_bv" | "gi_star" | "local_geary";
+
+export interface LocalParams {
+  method: LocalMethod;
+  column: string;
+  column_y?: string | null;
+  weights_id: string;
+  permutations: number;
+  seed?: number | null;
+  alpha: number;
+  correction: "none" | "fdr" | "bonferroni";
+  prefix?: string | null;
+}
+
+export interface LocalResult {
+  info: DatasetInfo;
+  analysis_id: string;
+  outputs: [string, string, string];
+  cluster_method: ClassifyMethod;
+  description: string;
+  threshold: number;
+  counts: Record<string, number>;
+  n_islands: number;
+}
+
+export interface JoinCountResult {
+  bb: number;
+  bw: number;
+  ww: number;
+  joins: number;
+  p_sim_bb?: number;
+  p_sim_bw?: number;
+  mean_bb?: number;
+  mean_bw?: number;
 }
 
 export interface RowsPage {
@@ -280,4 +378,44 @@ export const engine = {
     post<{ path: string; n_datasets: number }>("/project/save", { path, datasets, ui }),
 
   openProject: <U, D>(path: string) => post<OpenedProject<U, D>>("/project/open", { path }),
+
+  // ---- 공간가중치 ----
+  weights: (id: string) => json<WeightsInfo[]>(`${ds(id)}/weights`),
+  createWeights: (id: string, spec: WeightsSpec) => post<WeightsInfo>(`${ds(id)}/weights`, spec),
+  loadWeights: (id: string, path: string, name?: string) =>
+    post<WeightsInfo>(`${ds(id)}/weights/load`, { path, name }),
+  saveWeights: (id: string, wid: string, path: string) =>
+    post<{ path: string }>(`${ds(id)}/weights/${wid}/save`, { path }),
+  deleteWeights: (id: string, wid: string) => request(`${ds(id)}/weights/${wid}`, { method: "DELETE" }),
+  weightsThreshold: (id: string) => json<{ threshold: number; note: string }>(`${ds(id)}/weights-threshold`),
+  neighbors: async (id: string, wid: string, ids: Uint32Array): Promise<Uint32Array> => {
+    const r = await post<{ ids: string; count: number }>(`${ds(id)}/weights/${wid}/neighbors`, {
+      ids: encodeUint32(ids),
+    });
+    return decodeUint32(r.ids);
+  },
+
+  // ---- ESDA ----
+  moran: async (
+    id: string,
+    p: { column: string; column_y?: string | null; weights_id: string; permutations: number },
+  ): Promise<MoranResult> => {
+    const r = await post<Omit<MoranResult, "z" | "lag"> & { z: string; lag: string }>(
+      `${ds(id)}/esda/moran`,
+      p,
+    );
+    return { ...r, z: decodeFloat64(r.z), lag: decodeFloat64(r.lag) };
+  },
+  joinCount: (id: string, p: { column: string; weights_id: string; permutations: number }) =>
+    post<JoinCountResult>(`${ds(id)}/esda/joincount`, p),
+  local: (id: string, p: LocalParams) => post<LocalResult>(`${ds(id)}/esda/local`, p),
+
+  /** 숫자 열 값 (Float64, 값 없음은 NaN). 차트용 */
+  columns: async (id: string, names: string[]): Promise<Record<string, Float64Array>> => {
+    const res = await request(`${ds(id)}/columns`, { method: "POST", body: JSON.stringify({ names }) });
+    const table = tableFromIPC(new Uint8Array(await res.arrayBuffer()));
+    const out: Record<string, Float64Array> = {};
+    for (const name of names) out[name] = table.getChild(name)!.toArray() as Float64Array;
+    return out;
+  },
 };

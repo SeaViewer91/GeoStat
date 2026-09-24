@@ -28,17 +28,21 @@ def call(port: int, path: str, body: dict | None = None) -> dict:
         headers={"Authorization": f"Bearer {TOKEN}", "Content-Type": "application/json"},
         method="POST" if body is not None else "GET",
     )
-    with urllib.request.urlopen(req, timeout=30) as r:
+    with urllib.request.urlopen(req, timeout=180) as r:
         return json.load(r)
 
 
 def main(exe: str) -> None:
     tmp = Path(tempfile.mkdtemp())
     shp = tmp / "한글_격자.shp"
+    # 3×3 격자 (국지 통계는 피처가 5개 이상이어야 함)
+    cells = [
+        box(200000 + i * 1000, 550000 + j * 1000, 201000 + i * 1000, 551000 + j * 1000)
+        for j in range(3)
+        for i in range(3)
+    ]
     gpd.GeoDataFrame(
-        {"이름": ["가", "나"], "값": [1.0, 2.0]},
-        geometry=[box(200000, 550000, 201000, 551000), box(201000, 550000, 202000, 551000)],
-        crs=5186,
+        {"이름": ["가"] + ["나"] * 8, "값": [float(v) for v in range(9)]}, geometry=cells, crs=5186
     ).to_file(shp, encoding="CP949", engine="pyogrio")
     shp.with_suffix(".cpg").unlink(missing_ok=True)
 
@@ -73,6 +77,16 @@ def main(exe: str) -> None:
             )
             assert body["counts"], body
         print("단계 구분(mapclassify) 확인함")
+
+        w = call(port, f"/datasets/{info['id']}/weights", {"type": "rook"})
+        assert w["summary"]["n"] == 9, w
+        lisa = call(
+            port,
+            f"/datasets/{info['id']}/esda/local",
+            {"method": "lisa", "column": "값", "weights_id": w["id"], "permutations": 99},
+        )
+        assert lisa["outputs"] == ["LISA_I", "LISA_CL", "LISA_P"], lisa
+        print("공간가중치·LISA(libpysal, esda, numba) 확인함")
 
         csv = tmp / "점.csv"
         csv.write_text("이름,경도,위도\n가,129.0,35.1\n", encoding="cp949")

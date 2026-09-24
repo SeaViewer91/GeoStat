@@ -40,6 +40,14 @@ def build_project(
                 "source": {**source, "path": rel or str(abs_path), "abs_path": str(abs_path)},
                 "crs_override": ds.crs_override,
                 "fields": [{"name": f.name, "expression": f.expression} for f in ds.fields],
+                "weights": [
+                    {"id": e.id, "name": e.name, "spec": _portable_spec(e.spec, base)}
+                    for e in ds.weights.values()
+                ],
+                "analyses": [
+                    {"id": a.id, "method": a.method, "params": a.params, "outputs": a.outputs}
+                    for a in ds.analyses
+                ],
                 "ui": ds_ui,
             }
         )
@@ -51,6 +59,18 @@ def build_project(
         "datasets": entries,
         "ui": ui,
     }
+
+
+def _portable_spec(spec: dict[str, Any], base: Path) -> dict[str, Any]:
+    """가중치 파일 경로는 프로젝트 기준 상대 경로로 바꿔 저장함."""
+    if spec.get("type") != "file":
+        return spec
+    abs_path = Path(spec["path"]).resolve()
+    try:
+        rel = os.path.relpath(abs_path, base.resolve())
+    except ValueError:
+        rel = str(abs_path)
+    return {**spec, "path": rel, "abs_path": str(abs_path)}
 
 
 def write_project(path: Path, project: dict[str, Any]) -> None:

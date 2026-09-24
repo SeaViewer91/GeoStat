@@ -14,8 +14,12 @@ import {
   type ClassifyMethod,
   type DatasetInfo,
   type FileInspection,
+  type LocalParams,
+  type MoranResult,
   type TableOptions,
+  type WeightsInfo,
 } from "./lib/engine";
+import { maskToIds } from "./lib/binary";
 
 export type SelectMode = "replace" | "add" | "toggle";
 export type Tool = "pan" | "box" | "lasso";
@@ -49,6 +53,23 @@ export interface LoadedDataset {
   theme: Classification | null;
   /** 속성 열이 바뀔 때마다 증가함 (테이블 캐시 무효화용) */
   revision: number;
+  weights: WeightsInfo[];
+  activeWeightsId: string | null;
+}
+
+export type ChartKind = "histogram" | "scatter" | "box" | "moran";
+
+export interface ChartSpec {
+  id: number;
+  datasetId: string;
+  kind: ChartKind;
+  x: string;
+  y?: string | null;
+  bins?: number;
+  /** Moran 산점도: 가중치와 결과 (결과는 저장하지 않고 다시 계산함) */
+  weightsId?: string;
+  permutations?: number;
+  moran?: MoranResult | null;
 }
 
 export type Dialog =
@@ -56,7 +77,12 @@ export type Dialog =
   | { kind: "table"; path: string; inspection: FileInspection }
   | { kind: "crs"; datasetId: string; reason: "missing" | "manual" }
   | { kind: "field"; datasetId: string }
-  | { kind: "export"; datasetId: string };
+  | { kind: "export"; datasetId: string }
+  | { kind: "weights"; datasetId: string }
+  | { kind: "moran"; datasetId: string }
+  | { kind: "local"; datasetId: string }
+  | { kind: "joincount"; datasetId: string }
+  | { kind: "chart"; datasetId: string; chart: ChartKind };
 
 /** 프로젝트 파일에 저장하는 화면 설정 */
 interface ProjectUi {
@@ -64,9 +90,12 @@ interface ProjectUi {
   view: ViewState;
   activeIndex: number;
 }
+type SavedChart = Omit<ChartSpec, "id" | "datasetId" | "moran">;
 interface DatasetUi {
   visible: boolean;
   style: StyleSpec | null;
+  activeWeightsId?: string | null;
+  charts?: SavedChart[];
 }
 
 interface AppState {
@@ -102,6 +131,18 @@ interface AppState {
   // 주제도
   applyStyle: (id: string, style: StyleSpec | null) => Promise<void>;
 
+  // 공간가중치·분석
+  refreshWeights: (id: string, activeId?: string | null) => Promise<void>;
+  setActiveWeights: (id: string, weightsId: string) => void;
+  removeWeights: (id: string, weightsId: string) => Promise<void>;
+  selectNeighbors: (id: string) => Promise<void>;
+  runLocal: (id: string, params: LocalParams) => Promise<boolean>;
+
+  // 차트
+  charts: ChartSpec[];
+  addChart: (chart: Omit<ChartSpec, "id">) => Promise<void>;
+  removeChart: (chartId: number) => void;
+
   // 선택
   select: (id: string, indices: ArrayLike<number>, mode: SelectMode) => void;
   selectClass: (id: string, klass: number, mode: SelectMode) => void;
@@ -124,6 +165,7 @@ interface AppState {
 }
 
 let noticeSeq = 0;
+let chartSeq = 0;
 
 function toEngineError(err: unknown): EngineError {
   return err instanceof EngineError ? err : new EngineError("unknown", String(err));
@@ -166,6 +208,8 @@ function newDataset(info: DatasetInfo, geo: Awaited<ReturnType<typeof loadGeomet
     style: null,
     theme: null,
     revision: 0,
+    weights: [],
+    activeWeightsId: null,
   };
 }
 
@@ -250,7 +294,12 @@ export const useApp = create<AppState>((set, get) => {
       set((s) => {
         const { [id]: _removed, ...rest } = s.datasets;
         const order = s.order.filter((x) => x !== id);
-        return { datasets: rest, order, activeId: s.activeId === id ? (order[0] ?? null) : s.activeId };
+        return {
+          datasets: rest,
+          order,
+          activeId: s.activeId === id ? (order[0] ?? null) : s.activeId,
+          charts: s.charts.filter((c) => c.datasetId !== id),
+        };
       });
     },
 
@@ -308,6 +357,83 @@ export const useApp = create<AppState>((set, get) => {
       });
     },
 
+    // ---- 공간가중치·분석 ---------------------------------------------------------
+
+    refreshWeights: async (id, activeId) => {
+      const list = await engine.weights(id);
+      const ds = get().datasets[id];
+      if (!ds) return;
+      const keep = activeId ?? ds.activeWeightsId;
+      patch(id, {
+        weights: list,
+        activeWeightsId: list.some((w) => w.id === keep) ? keep! : (list[list.length - 1]?.id ?? null),
+      });
+    },
+
+    setActiveWeights: (id, weightsId) => patch(id, { activeWeightsId: weightsId }),
+
+    removeWeights: async (id, weightsId) => {
+      await run("가중치 삭제 중…", async () => {
+        await engine.deleteWeights(id, weightsId);
+        await get().refreshWeights(id);
+      });
+    },
+
+    selectNeighbors: async (id) => {
+      const ds = get().datasets[id];
+      if (!ds?.activeWeightsId || ds.selectedCount === 0) return;
+      const ids = await run("이웃 찾는 중…", () =>
+        engine.neighbors(id, ds.activeWeightsId!, maskToIds(ds.selection)),
+      );
+      if (ids) {
+        get().select(id, ids, "add");
+        get().notify(`이웃 ${ids.length.toLocaleString()}개를 선택에 추가함`);
+      }
+    },
+
+    runLocal: async (id, params) => {
+      const label = { lisa: "LISA", lisa_bv: "이변량 LISA", gi_star: "Gi*", local_geary: "Local Geary" }[
+        params.method
+      ];
+      const result = await run(`${label} 계산 중… (순열 ${params.permutations}회)`, () =>
+        engine.local(id, params),
+      );
+      if (!result) return false;
+      await get().updateInfo(result.info);
+      await get().applyStyle(id, { column: result.outputs[1], method: result.cluster_method, k: 5 });
+      const sig = Object.entries(result.counts)
+        .filter(([code]) => code !== "0" && code !== "5")
+        .reduce((a, [, n]) => a + n, 0);
+      get().notify(
+        `${result.description}: 유의한 피처 ${sig.toLocaleString()}개 (p ≤ ${result.threshold.toPrecision(3)})` +
+          (result.n_islands ? `, 이웃 없는 피처 ${result.n_islands}개` : ""),
+      );
+      return true;
+    },
+
+    // ---- 차트 ----------------------------------------------------------------
+
+    charts: [],
+
+    addChart: async (chart) => {
+      let spec: ChartSpec = { ...chart, id: ++chartSeq };
+      if (chart.kind === "moran") {
+        const moran = await run("Moran's I 계산 중…", () =>
+          engine.moran(chart.datasetId, {
+            column: chart.x,
+            column_y: chart.y ?? null,
+            weights_id: chart.weightsId!,
+            permutations: chart.permutations ?? 999,
+          }),
+        );
+        if (!moran) return;
+        spec = { ...spec, moran };
+      }
+      set((s) => ({ charts: [...s.charts, spec] }));
+    },
+
+    removeChart: (chartId) => set((s) => ({ charts: s.charts.filter((c) => c.id !== chartId) })),
+
     // ---- 선택 ----------------------------------------------------------------
 
     select: (id, indices, mode) => {
@@ -349,7 +475,15 @@ export const useApp = create<AppState>((set, get) => {
       };
       const datasets = s.order.map((id) => {
         const ds = s.datasets[id];
-        const dsUi: DatasetUi = { visible: ds.visible, style: ds.style };
+        const charts: SavedChart[] = s.charts
+          .filter((c) => c.datasetId === id)
+          .map(({ id: _i, datasetId: _d, moran: _m, ...rest }) => rest);
+        const dsUi: DatasetUi = {
+          visible: ds.visible,
+          style: ds.style,
+          activeWeightsId: ds.activeWeightsId,
+          charts,
+        };
         return { id, ui: dsUi };
       });
       const result = await run("프로젝트 저장 중…", () => engine.saveProject(path, datasets, ui));
@@ -362,7 +496,7 @@ export const useApp = create<AppState>((set, get) => {
     openProject: async (path) => {
       await run("프로젝트 여는 중…", async () => {
         const project = await engine.openProject<ProjectUi | null, DatasetUi | null>(path);
-        set({ datasets: {}, order: [], activeId: null, projectPath: project.path });
+        set({ datasets: {}, order: [], activeId: null, charts: [], projectPath: project.path });
         // 목록 앞쪽이 위에 그려지므로 뒤에서부터 추가함
         const opened: string[] = [];
         for (const item of [...project.datasets].reverse()) {
@@ -372,7 +506,9 @@ export const useApp = create<AppState>((set, get) => {
           }
           const dsUi = item.ui ?? { visible: true, style: null };
           await addLoaded(item.info, { visible: dsUi.visible });
+          await get().refreshWeights(item.info.id, dsUi.activeWeightsId ?? null);
           if (dsUi.style) await get().applyStyle(item.info.id, dsUi.style);
+          for (const c of dsUi.charts ?? []) await get().addChart({ ...c, datasetId: item.info.id });
           item.warnings.forEach((w) => get().notify(`${item.info!.name}: ${w}`));
           opened.unshift(item.info.id);
         }

@@ -23,9 +23,9 @@ Apple 공증을 받지 않은 앱이라 첫 실행 때 "확인되지 않은 개�
 - ✅ **속성 테이블**: 정렬, 선택 연동, 계산 필드(식), 내보내기(GeoPackage·Shapefile·GeoJSON·CSV, 좌표계 변환)
 - ✅ **선택**: 클릭·사각형·올가미, 지도·테이블·범례 간 연동
 - ✅ **프로젝트**: `.gstproj`로 저장·열기 (원본 경로와 작업 과정을 기록해 재현함)
-- 🚧 **공간가중치**: Queen/Rook, 거리, KNN, 커널 지원. GeoDa `.gal`/`.gwt`와 호환됨
-- 🚧 **ESDA**: Global/Local Moran's I, Getis-Ord Gi*, Local Geary, Join Count 제공
-- 🚧 **연동 차트**: 히스토그램·산점도·박스플롯·Moran 산점도와 지도 간 선택 연동
+- ✅ **공간가중치**: Queen/Rook(고차), 거리, KNN, 커널. 연결성 히스토그램, 섬 탐지, GeoDa `.gal`/`.gwt` 호환
+- ✅ **ESDA**: Moran's I(단변량·이변량), LISA, Getis-Ord Gi*, Local Geary, Join Count. FDR·Bonferroni 보정, 군집·유의성 지도
+- ✅ **연동 차트**: 히스토그램·산점도·박스플롯·Moran 산점도와 지도·테이블 간 선택 연동
 - 🚧 **공간회귀**: OLS 공간진단, Spatial Lag/Error, **GWR/MGWR** 제공
 - 🚧 **공간군집화**: SKATER, Max-p, AZP, Region K-Means, Ward 제공
 - 🚧 **래스터**: GeoTIFF/COG 표시, 존 통계 산출
@@ -41,6 +41,7 @@ Apple 공증을 받지 않은 앱이라 첫 실행 때 "확인되지 않은 개�
 | 선택 도구 해제 | Esc |
 | 기존 선택에 추가 | ⌘를 누른 채 클릭·끌기 |
 | 속성 테이블 열기·닫기 | ⌘T |
+| 차트 패널 열기·닫기 | ⌘J |
 
 계산 필드 식은 pandas 문법을 씀. 한글·공백이 있는 열 이름은 백틱으로 감쌈 (예: `` `인구` / `면적` * 1000 ``, `` log(`소득`) ``, `` (`인구` > 5000) * 1 ``).
 

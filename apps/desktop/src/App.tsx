@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { AttributeTable } from "./components/AttributeTable";
+import { ChartsPanel } from "./components/charts/ChartsPanel";
 import { DialogHost } from "./components/Dialogs";
 import { MapCanvas } from "./components/MapCanvas";
 import { Sidebar } from "./components/Sidebar";
@@ -18,10 +19,17 @@ export function App() {
   const dismissNotice = useApp((s) => s.dismissNotice);
   const [tableHeight, setTableHeight] = useState(DEFAULT_TABLE);
   const [tableOpen, setTableOpen] = useState(true);
+  const [chartsOpen, setChartsOpen] = useState(false);
+  const toggleCharts = useCallback((open?: boolean) => setChartsOpen((v) => open ?? !v), []);
   const dragStart = useRef<{ y: number; h: number } | null>(null);
 
   const toggleTable = useCallback(() => setTableOpen((v) => !v), []);
-  useShortcuts(toggleTable);
+  useShortcuts(toggleTable, toggleCharts);
+  // 차트가 추가되면 패널을 엶
+  const chartCount = useApp((s) => s.charts.length);
+  useEffect(() => {
+    if (chartCount > 0) setChartsOpen(true);
+  }, [chartCount]);
 
   // 테이블 패널 높이 조절 (경계선을 끌어서)
   const onDividerDown = (e: React.PointerEvent) => {
@@ -36,8 +44,8 @@ export function App() {
 
   return (
     <div className="app">
-      <Toolbar />
-      <div className="main">
+      <Toolbar chartsOpen={chartsOpen} onToggleCharts={toggleCharts} />
+      <div className={`main${chartsOpen ? " with-charts" : ""}`}>
         <Sidebar />
         <div className="center">
           <main className="workspace">
@@ -72,6 +80,7 @@ export function App() {
             </>
           )}
         </div>
+        {chartsOpen && <ChartsPanel onClose={() => setChartsOpen(false)} />}
       </div>
       <StatusBar />
       <DialogHost />
@@ -79,8 +88,8 @@ export function App() {
   );
 }
 
-/** 단축키: ⌘O 데이터 열기, ⇧⌘O 프로젝트 열기, ⌘S 저장, ⇧⌘S 다른 이름으로, ⌘T 테이블, B·L·Esc 선택 도구 */
-function useShortcuts(toggleTable: () => void) {
+/** 단축키: ⌘O 데이터 열기, ⇧⌘O 프로젝트 열기, ⌘S 저장, ⇧⌘S 다른 이름으로, ⌘T 테이블, ⌘J 차트, B·L·Esc 선택 도구 */
+function useShortcuts(toggleTable: () => void, toggleCharts: () => void) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const s = useApp.getState();
@@ -98,6 +107,9 @@ function useShortcuts(toggleTable: () => void) {
       } else if (mod && e.key.toLowerCase() === "t") {
         e.preventDefault();
         toggleTable();
+      } else if (mod && e.key.toLowerCase() === "j") {
+        e.preventDefault();
+        toggleCharts();
       } else if (!typing && !mod && !s.dialog) {
         if (e.key === "b" || e.key === "B") s.setTool(s.tool === "box" ? "pan" : "box");
         else if (e.key === "l" || e.key === "L") s.setTool(s.tool === "lasso" ? "pan" : "lasso");
@@ -108,5 +120,5 @@ function useShortcuts(toggleTable: () => void) {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [toggleTable]);
+  }, [toggleTable, toggleCharts]);
 }

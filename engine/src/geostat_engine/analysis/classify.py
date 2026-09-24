@@ -28,6 +28,10 @@ Method = Literal[
     "percentile",
     "box_plot",
     "unique_values",
+    "lisa_cluster",
+    "gi_cluster",
+    "geary_cluster",
+    "significance",
 ]
 SchemeType = Literal["sequential", "diverging", "qualitative"]
 
@@ -47,6 +51,7 @@ class Classification:
     counts: list[int]
     classes: np.ndarray  # int16, 피처별 계급 번호 (-1 = 값 없음)
     n_missing: int
+    colors: list[str] | None = None  # 고정 색 (군집·유의성 지도). None이면 앱이 색상표로 칠함
 
 
 def _fmt(v: float) -> str:
@@ -69,6 +74,10 @@ def classify(series: pd.Series, method: Method, k: int = 5) -> Classification:
     name = str(series.name)
     if method == "unique_values":
         return _unique(series, name)
+    if method in _CODE_MAPS:
+        return _code_map(series, name, method)
+    if method == "significance":
+        return _significance(series, name)
 
     if not pd.api.types.is_numeric_dtype(series) or pd.api.types.is_bool_dtype(series):
         raise EngineError("not_numeric", f"숫자 열이 아님: {name}")
@@ -151,6 +160,88 @@ def _fixed_scheme(
         counts=[int(v) for v in np.bincount(yb, minlength=6)],
         classes=classes,
         n_missing=int((~valid).sum()),
+    )
+
+
+# 군집 지도: 저장된 군집 코드 → (라벨, 색). 색은 GeoDa 관례를 따름
+_CODE_MAPS: dict[str, list[tuple[int, str, str]]] = {
+    "lisa_cluster": [
+        (0, "유의하지 않음", "#eeeeee"),
+        (1, "High-High", "#ff0000"),
+        (2, "Low-Low", "#0000ff"),
+        (3, "Low-High", "#a7adf9"),
+        (4, "High-Low", "#f4ada8"),
+        (5, "이웃 없음", "#464646"),
+    ],
+    "gi_cluster": [
+        (0, "유의하지 않음", "#eeeeee"),
+        (1, "핫스팟 (High)", "#ff0000"),
+        (2, "콜드스팟 (Low)", "#0000ff"),
+        (5, "이웃 없음", "#464646"),
+    ],
+    "geary_cluster": [
+        (0, "유의하지 않음", "#eeeeee"),
+        (1, "High-High", "#b2182b"),
+        (2, "Low-Low", "#ef8a62"),
+        (3, "기타 양(+)의 연관", "#fddbc7"),
+        (4, "음(-)의 연관", "#67adc7"),
+        (5, "이웃 없음", "#464646"),
+    ],
+}
+
+# 유의성 지도: p값 구간 (GeoDa와 같은 경계)
+_SIG_LEVELS = [
+    (0.0001, "p ≤ 0.0001", "#1a9641"),
+    (0.001, "p ≤ 0.001", "#3ca94f"),
+    (0.01, "p ≤ 0.01", "#76c35b"),
+    (0.05, "p ≤ 0.05", "#a6d96a"),
+]
+
+
+def _code_map(series: pd.Series, name: str, method: str) -> Classification:
+    entries = _CODE_MAPS[method]
+    values = pd.to_numeric(series, errors="coerce").to_numpy(dtype="float64", na_value=np.nan)
+    lookup = {code: i for i, (code, _l, _c) in enumerate(entries)}
+    classes = np.full(values.size, -1, dtype=np.int16)
+    for code, idx in lookup.items():
+        classes[values == code] = idx
+    counts = np.bincount(classes[classes >= 0], minlength=len(entries))
+    return Classification(
+        method=method,
+        column=name,
+        scheme="qualitative",
+        breaks=[],
+        labels=[label for _c, label, _col in entries],
+        counts=[int(c) for c in counts],
+        classes=classes,
+        n_missing=int((classes < 0).sum()),
+        colors=[color for _c, _l, color in entries],
+    )
+
+
+def _significance(series: pd.Series, name: str) -> Classification:
+    p = pd.to_numeric(series, errors="coerce").to_numpy(dtype="float64", na_value=np.nan)
+    if np.nanmax(p, initial=0) > 1 or np.nanmin(p, initial=0) < 0:
+        raise EngineError("not_pvalue", f"p값(0~1) 열이 아님: {name}")
+    classes = np.full(p.size, -1, dtype=np.int16)
+    valid = ~np.isnan(p)
+    classes[valid] = len(_SIG_LEVELS)  # 유의하지 않음
+    # 큰 기준부터 덮어써서 가장 작은 구간이 남게 함
+    for i in range(len(_SIG_LEVELS) - 1, -1, -1):
+        classes[valid & (p <= _SIG_LEVELS[i][0])] = i
+    labels = [label for _t, label, _c in _SIG_LEVELS] + ["유의하지 않음"]
+    colors = [c for _t, _l, c in _SIG_LEVELS] + ["#eeeeee"]
+    counts = np.bincount(classes[classes >= 0], minlength=len(labels))
+    return Classification(
+        method="significance",
+        column=name,
+        scheme="qualitative",
+        breaks=[t for t, _l, _c in _SIG_LEVELS],
+        labels=labels,
+        counts=[int(c) for c in counts],
+        classes=classes,
+        n_missing=int((~valid).sum()),
+        colors=colors,
     )
 
 

@@ -66,6 +66,10 @@ class ClassifyRequest(BaseModel):
         "percentile",
         "box_plot",
         "unique_values",
+        "lisa_cluster",
+        "gi_cluster",
+        "geary_cluster",
+        "significance",
     ]
     k: int = Field(default=5, ge=2, le=12, description="계급 수 (분위·등간격·자연 분류만 해당)")
 
@@ -98,6 +102,7 @@ class ColumnInfo(BaseModel):
     kind: Literal["numeric", "string", "boolean", "datetime", "other"]
     derived: bool = False
     expression: str | None = None
+    origin: Literal["data", "expression", "analysis"] = "data"
 
 
 class DatasetInfo(BaseModel):
@@ -131,6 +136,7 @@ class ClassifyResponse(BaseModel):
     labels: list[str]
     counts: list[int]
     n_missing: int
+    colors: list[str] | None = Field(default=None, description="고정 색 (군집·유의성 지도)")
     classes: str = Field(
         description="피처별 계급 번호. Int16 리틀엔디언 배열의 base64 (-1 = 값 없음)"
     )
@@ -186,13 +192,15 @@ def dataset_info(ds: Dataset) -> DatasetInfo:
     gdf = ds.gdf
     geom_col = gdf.geometry.name
     derived = {f.name: f.expression for f in ds.fields}
+    analysis = {c: a.description for a in ds.analyses for c in a.outputs}
     columns = [
         ColumnInfo(
             name=str(c),
             dtype=str(gdf[c].dtype),
             kind=_column_kind(gdf[c]),
-            derived=c in derived,
-            expression=derived.get(c),
+            derived=c in derived or c in analysis,
+            expression=derived.get(c) or analysis.get(c),
+            origin="expression" if c in derived else "analysis" if c in analysis else "data",
         )
         for c in gdf.columns
         if c != geom_col
@@ -322,6 +330,7 @@ def classify_column(dataset_id: str, body: ClassifyRequest, request: Request) ->
         labels=result.labels,
         counts=result.counts,
         n_missing=result.n_missing,
+        colors=result.colors,
         classes=base64.b64encode(result.classes.astype("<i2").tobytes()).decode("ascii"),
     )
 

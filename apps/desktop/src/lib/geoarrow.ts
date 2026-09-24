@@ -104,7 +104,7 @@ export function featureColors(
   highlight: RGBA,
 ): Uint8Array {
   const rgba = new Uint8Array(n * 4);
-  const dimAlpha = 55;
+  const dimAlpha = 70;
   for (let i = 0; i < n; i++) {
     let c: RGBA;
     let a: number;
@@ -146,6 +146,35 @@ export function splitColorData(
     offset += len;
   }
   return chunks;
+}
+
+/**
+ * 선택 강조용 외곽선 색·두께. 주제도 위에서 선택한 피처가 흐려진 다른 계급 색과 헷갈리지 않도록
+ * 선택된 피처에만 진한 외곽선을 줌.
+ */
+export function outlineData(
+  table: arrow.Table,
+  selection: Uint8Array,
+  selectedCount: number,
+  base: RGBA,
+  highlight: RGBA,
+): { colors: arrow.Data<arrow.FixedSizeList<arrow.Uint8>>[]; widths: arrow.Data<arrow.Float32>[] } {
+  const n = table.numRows;
+  const rgba = new Uint8Array(n * 4);
+  const width = new Float32Array(n);
+  for (let i = 0; i < n; i++) {
+    const on = selectedCount > 0 && selection[i] === 1;
+    const c = on ? highlight : base;
+    rgba.set(c, i * 4);
+    width[i] = on ? 2.5 : 0.5;
+  }
+  const widths: arrow.Data<arrow.Float32>[] = [];
+  let offset = 0;
+  for (const batch of table.batches) {
+    widths.push(arrow.makeData({ type: new arrow.Float32(), data: width.subarray(offset, offset + batch.numRows) }));
+    offset += batch.numRows;
+  }
+  return { colors: splitColorData(table, rgba), widths };
 }
 
 /** 중심점(cx, cy) 열을 [x0, y0, x1, y1, …] 배열로 읽음 */

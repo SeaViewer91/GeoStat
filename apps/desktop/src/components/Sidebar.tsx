@@ -2,18 +2,30 @@
 
 import { useEffect, useState } from "react";
 
-import type { ClassifyMethod } from "../lib/engine";
+import { dirname, pickSavePath } from "../lib/dialogs";
+import { engine, type ClassifyMethod } from "../lib/engine";
 import { MISSING_COLOR, classColors, rgbaCss } from "../lib/palette";
 import { useActive, useApp, type LoadedDataset, type StyleSpec } from "../store";
 
-const METHODS: { id: ClassifyMethod; label: string; hasK: boolean; numeric: boolean }[] = [
-  { id: "quantile", label: "분위수", hasK: true, numeric: true },
-  { id: "equal_interval", label: "등간격", hasK: true, numeric: true },
-  { id: "natural_breaks", label: "자연 분류 (Jenks)", hasK: true, numeric: true },
-  { id: "std_mean", label: "표준편차", hasK: false, numeric: true },
-  { id: "percentile", label: "백분위", hasK: false, numeric: true },
-  { id: "box_plot", label: "박스 지도 (1.5 IQR)", hasK: false, numeric: true },
-  { id: "unique_values", label: "고유값", hasK: false, numeric: false },
+type ColumnFilter = (c: { name: string; kind: string; origin: string }) => boolean;
+const isNumeric: ColumnFilter = (c) => c.kind === "numeric";
+const any: ColumnFilter = () => true;
+// 분석 결과 열 이름 규칙: <접두어>_CL(군집 코드), <접두어>_P(p값)
+const isCluster: ColumnFilter = (c) => c.origin === "analysis" && c.name.endsWith("_CL");
+const isPValue: ColumnFilter = (c) => c.kind === "numeric" && (c.name.endsWith("_P") || /p_?val/i.test(c.name));
+
+const METHODS: { id: ClassifyMethod; label: string; hasK: boolean; filter: ColumnFilter }[] = [
+  { id: "quantile", label: "분위수", hasK: true, filter: isNumeric },
+  { id: "equal_interval", label: "등간격", hasK: true, filter: isNumeric },
+  { id: "natural_breaks", label: "자연 분류 (Jenks)", hasK: true, filter: isNumeric },
+  { id: "std_mean", label: "표준편차", hasK: false, filter: isNumeric },
+  { id: "percentile", label: "백분위", hasK: false, filter: isNumeric },
+  { id: "box_plot", label: "박스 지도 (1.5 IQR)", hasK: false, filter: isNumeric },
+  { id: "unique_values", label: "고유값", hasK: false, filter: any },
+  { id: "lisa_cluster", label: "LISA 군집 지도", hasK: false, filter: isCluster },
+  { id: "gi_cluster", label: "Gi* 핫스팟 지도", hasK: false, filter: isCluster },
+  { id: "geary_cluster", label: "Local Geary 군집 지도", hasK: false, filter: isCluster },
+  { id: "significance", label: "유의성 지도 (p값)", hasK: false, filter: isPValue },
 ];
 
 const GEOM_ICON = { point: "•", line: "╱", polygon: "▰" } as const;
@@ -23,6 +35,7 @@ export function Sidebar() {
     <aside className="sidebar">
       <LayerList />
       <StylePanel />
+      <WeightsPanel />
     </aside>
   );
 }
@@ -103,14 +116,19 @@ function StyleEditor({ ds }: { ds: LoadedDataset }) {
   const applyStyle = useApp((s) => s.applyStyle);
   const busy = useApp((s) => s.busy);
   const showDialog = useApp((s) => s.showDialog);
-  const numericCols = ds.info.columns.filter((c) => c.kind === "numeric");
-  const allCols = ds.info.columns;
-
   const [method, setMethod] = useState<ClassifyMethod>(ds.style?.method ?? "quantile");
   const meta = METHODS.find((m) => m.id === method)!;
-  const candidates = meta.numeric ? numericCols : allCols;
+  const candidates = ds.info.columns.filter(meta.filter);
   const [column, setColumn] = useState<string>(ds.style?.column ?? candidates[0]?.name ?? "");
   const [k, setK] = useState<number>(ds.style?.k ?? 5);
+
+  // 분석을 실행해 주제도가 바뀌면 설정 칸도 따라감
+  useEffect(() => {
+    if (ds.style) {
+      setMethod(ds.style.method);
+      setColumn(ds.style.column);
+    }
+  }, [ds.style]);
 
   // 방법을 바꿨을 때 현재 열이 맞지 않으면 첫 후보로 바꿈
   useEffect(() => {
@@ -132,11 +150,11 @@ function StyleEditor({ ds }: { ds: LoadedDataset }) {
         <label>
           변수
           <select value={column} onChange={(e) => setColumn(e.target.value)} aria-label="변수">
-            {candidates.length === 0 && <option value="">(숫자 열 없음)</option>}
+            {candidates.length === 0 && <option value="">(해당 열 없음)</option>}
             {candidates.map((c) => (
               <option key={c.name} value={c.name}>
                 {c.name}
-                {c.derived ? " (계산)" : ""}
+                {c.origin === "expression" ? " (계산)" : c.origin === "analysis" ? " (분석)" : ""}
               </option>
             ))}
           </select>
@@ -206,7 +224,7 @@ function StyleEditor({ ds }: { ds: LoadedDataset }) {
 function Legend({ ds }: { ds: LoadedDataset }) {
   const theme = ds.theme!;
   const selectClass = useApp((s) => s.selectClass);
-  const colors = classColors(theme.scheme, theme.labels);
+  const colors = classColors(theme.scheme, theme.labels, 225, theme.colors);
   const methodLabel = METHODS.find((m) => m.id === theme.method)?.label ?? theme.method;
 
   return (
@@ -234,6 +252,123 @@ function Legend({ ds }: { ds: LoadedDataset }) {
           </li>
         )}
       </ul>
+    </div>
+  );
+}
+
+function WeightsPanel() {
+  const ds = useActive();
+  const showDialog = useApp((s) => s.showDialog);
+  const setActiveWeights = useApp((s) => s.setActiveWeights);
+  const removeWeights = useApp((s) => s.removeWeights);
+  const selectNeighbors = useApp((s) => s.selectNeighbors);
+  const notify = useApp((s) => s.notify);
+  const fail = useApp((s) => s.fail);
+  if (!ds || !ds.table) return null;
+  const w = ds.weights.find((x) => x.id === ds.activeWeightsId);
+
+  const save = async () => {
+    if (!w) return;
+    const binary = w.type === "queen" || w.type === "rook";
+    const path = await pickSavePath(
+      [binary ? { name: "GeoDa GAL", extensions: ["gal"] } : { name: "GeoDa GWT", extensions: ["gwt"] }],
+      "가중치 저장",
+      `${dirname(ds.info.path)}/${ds.info.name}_${w.name}.${binary ? "gal" : "gwt"}`,
+    );
+    if (!path) return;
+    try {
+      const r = await engine.saveWeights(ds.info.id, w.id, path);
+      notify(`가중치를 저장함: ${r.path}`);
+    } catch (err) {
+      fail(err);
+    }
+  };
+
+  return (
+    <section className="panel" data-testid="weights-panel">
+      <h2>공간가중치</h2>
+      {ds.weights.length === 0 ? (
+        <p className="muted">
+          아직 없음.{" "}
+          <button className="link" onClick={() => showDialog({ kind: "weights", datasetId: ds.info.id })}>
+            만들기…
+          </button>
+        </p>
+      ) : (
+        <>
+          <div className="row">
+            <select
+              value={ds.activeWeightsId ?? ""}
+              onChange={(e) => setActiveWeights(ds.info.id, e.target.value)}
+              aria-label="활성 가중치"
+            >
+              {ds.weights.map((x) => (
+                <option key={x.id} value={x.id}>
+                  {x.name}
+                </option>
+              ))}
+            </select>
+            <button onClick={() => showDialog({ kind: "weights", datasetId: ds.info.id })} title="새 가중치">
+              +
+            </button>
+          </div>
+          {w && (
+            <>
+              <p className="muted small">{w.description}</p>
+              <dl className="info">
+                <dt>이웃 수</dt>
+                <dd>
+                  평균 {w.summary.mean_neighbors.toFixed(2)} · 최소 {w.summary.min_neighbors} · 최대{" "}
+                  {w.summary.max_neighbors}
+                </dd>
+                <dt>비영 비율</dt>
+                <dd>{w.summary.pct_nonzero.toFixed(2)}%</dd>
+                {w.summary.n_islands > 0 && (
+                  <>
+                    <dt className="warn-text">섬</dt>
+                    <dd className="warn-text">
+                      이웃 없는 피처 {w.summary.n_islands}개{" "}
+                      <button
+                        className="link"
+                        onClick={() => useApp.getState().select(ds.info.id, w.summary.islands, "replace")}
+                      >
+                        선택
+                      </button>
+                    </dd>
+                  </>
+                )}
+              </dl>
+              <ConnectivityBars histogram={w.summary.histogram} />
+              <div className="row wrap">
+                <button
+                  onClick={() => selectNeighbors(ds.info.id)}
+                  disabled={ds.selectedCount === 0}
+                  title="선택한 피처의 이웃을 선택에 추가함"
+                >
+                  이웃 선택
+                </button>
+                <button onClick={save}>저장…</button>
+                <button onClick={() => removeWeights(ds.info.id, w.id)}>삭제</button>
+              </div>
+            </>
+          )}
+        </>
+      )}
+    </section>
+  );
+}
+
+/** 이웃 수 분포 (연결성 히스토그램) */
+function ConnectivityBars({ histogram }: { histogram: { neighbors: number; count: number }[] }) {
+  const max = Math.max(...histogram.map((h) => h.count));
+  return (
+    <div className="conn-bars" aria-label="이웃 수 분포">
+      {histogram.map((h) => (
+        <div key={h.neighbors} className="conn-bar" title={`이웃 ${h.neighbors}개: ${h.count.toLocaleString()}개 피처`}>
+          <div className="fill" style={{ height: `${Math.max(4, (h.count / max) * 100)}%` }} />
+          <span>{h.neighbors}</span>
+        </div>
+      ))}
     </div>
   );
 }

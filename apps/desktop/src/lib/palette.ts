@@ -43,11 +43,18 @@ function sequential(k: number): [number, number, number][] {
   });
 }
 
-/** 계급 수와 색상표 종류에 맞는 RGBA 목록 */
-export function classColors(scheme: SchemeType, labels: string[], alpha = 225): RGBA[] {
+/** 계급 수와 색상표 종류에 맞는 RGBA 목록. 고정 색(fixed)이 있으면 그대로 씀 */
+export function classColors(
+  scheme: SchemeType,
+  labels: string[],
+  alpha = 225,
+  fixed?: string[] | null,
+): RGBA[] {
   const k = labels.length;
   let rgb: [number, number, number][];
-  if (scheme === "diverging") {
+  if (fixed && fixed.length === k) {
+    rgb = fixed.map(hexToRgb);
+  } else if (scheme === "diverging") {
     rgb = (k === 6 ? DIVERGING6 : DIVERGING6.slice(0, k)).map(hexToRgb);
   } else if (scheme === "qualitative") {
     rgb = labels.map((label, i) =>
@@ -58,6 +65,11 @@ export function classColors(scheme: SchemeType, labels: string[], alpha = 225): 
   }
   return rgb.map(([r, g, b]) => [r, g, b, alpha]);
 }
+
+/** 차트 색: 지도와 같은 기본색·선택색을 씀 */
+export const CHART_BASE = "rgba(70, 130, 180, 0.55)";
+export const CHART_BASE_SOLID = "rgb(70, 130, 180)";
+export const CHART_SELECTED = "rgb(242, 180, 0)";
 
 export function rgbaCss([r, g, b, a]: RGBA): string {
   return `rgba(${r}, ${g}, ${b}, ${(a / 255).toFixed(2)})`;

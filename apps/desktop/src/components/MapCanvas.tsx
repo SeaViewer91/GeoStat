@@ -19,6 +19,7 @@ import {
   featureColors,
   featuresInBox,
   featuresInPolygon,
+  outlineData,
   splitColorData,
   type RGBA,
 } from "../lib/geoarrow";
@@ -27,6 +28,8 @@ import { useApp, type Basemap, type LoadedDataset, type SelectMode } from "../st
 
 const OUTLINE_COLOR: RGBA = [255, 255, 255, 110];
 const OUTLINE_ON_BASEMAP: RGBA = [60, 60, 60, 120];
+// 주제도 위 선택 피처의 외곽선 (지도 선택색보다 진하게 해 흐려진 채움색과 구분함)
+const OUTLINE_SELECTED: RGBA = [20, 20, 20, 255];
 
 // OpenFreeMap: API 키 없이 쓸 수 있는 OpenStreetMap 벡터 타일
 const BASEMAP_STYLE: Record<Exclude<Basemap, "none">, string> = {
@@ -223,10 +226,14 @@ function makeLayers(ds: LoadedDataset, onBasemap: boolean): Layer[] {
   const { info, table, selection, selectedCount, theme } = ds;
   if (!table) return [];
   const themeColors = theme
-    ? { classes: theme.classes, colors: classColors(theme.scheme, theme.labels), missing: MISSING_COLOR }
+    ? { classes: theme.classes, colors: classColors(theme.scheme, theme.labels, 225, theme.colors), missing: MISSING_COLOR }
     : null;
   const rgba = featureColors(info.n_rows, selection, selectedCount, themeColors, DEFAULT_FILL, SELECTED_FILL);
   const colors = splitColorData(table, rgba);
+  // 주제도가 있을 때만 선택 외곽선을 따로 줌 (단일 색 지도는 채움색으로 선택을 표시함)
+  const outline = theme
+    ? outlineData(table, selection, selectedCount, onBasemap ? OUTLINE_ON_BASEMAP : OUTLINE_COLOR, OUTLINE_SELECTED)
+    : null;
   // 색이 바뀌면 GPU 버퍼만 다시 만들도록 트리거를 줌
   const trigger = [selection, theme];
 
@@ -235,7 +242,7 @@ function makeLayers(ds: LoadedDataset, onBasemap: boolean): Layer[] {
       id: `ds-${info.id}-b${b}`,
       data: batch,
       pickable: true,
-      updateTriggers: { getFillColor: trigger, getColor: trigger },
+      updateTriggers: { getFillColor: trigger, getColor: trigger, getLineColor: trigger, getLineWidth: trigger },
     };
     switch (info.geometry_type) {
       case "polygon":
@@ -244,7 +251,8 @@ function makeLayers(ds: LoadedDataset, onBasemap: boolean): Layer[] {
           filled: true,
           stroked: true,
           getFillColor: colors[b],
-          getLineColor: onBasemap ? OUTLINE_ON_BASEMAP : OUTLINE_COLOR,
+          getLineColor: outline ? outline.colors[b] : onBasemap ? OUTLINE_ON_BASEMAP : OUTLINE_COLOR,
+          ...(outline ? { getLineWidth: outline.widths[b] } : {}),
           lineWidthUnits: "pixels",
           lineWidthMinPixels: 0.5,
           _subLayerProps: { fill: { earcutWorkerUrl, earcutWorkerPoolSize: 4 } },
@@ -261,7 +269,9 @@ function makeLayers(ds: LoadedDataset, onBasemap: boolean): Layer[] {
           ...common,
           getFillColor: colors[b],
           stroked: true,
-          getLineColor: [255, 255, 255, 180],
+          getLineColor: outline ? outline.colors[b] : [255, 255, 255, 180],
+          ...(outline ? { getLineWidth: outline.widths[b] } : {}),
+          lineWidthUnits: "pixels",
           lineWidthMinPixels: 0.5,
           radiusUnits: "pixels",
           getRadius: 4,

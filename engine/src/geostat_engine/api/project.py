@@ -103,7 +103,30 @@ def open_project(body: OpenRequest, request: Request) -> OpenResponse:
                 service.assign_crs(ds, int(entry["crs_override"]))
             except EngineError as exc:
                 warnings.append(f"좌표계 지정 실패: {exc.message}")
+        # 계산 필드 → 가중치 → 분석 순으로 재적용함. 분석 결과 열을 쓰는 계산 필드는 분석 뒤에 한 번 더 시도함
+        pending_fields = []
         for f in entry.get("fields", []):
+            try:
+                service.set_field(ds, f["name"], f["expression"])
+            except EngineError:
+                pending_fields.append(f)
+        for wspec in entry.get("weights", []):
+            spec = dict(wspec.get("spec", {}))
+            if spec.get("type") == "file":
+                # 상대 경로 → 절대 경로 순으로 찾음
+                cand = path.parent / spec.get("path", "")
+                spec["path"] = str(cand if cand.exists() else Path(spec.get("abs_path", "")))
+                spec.pop("abs_path", None)
+            try:
+                service.create_weights(ds, spec, name=wspec.get("name"), weights_id=wspec.get("id"))
+            except EngineError as exc:
+                warnings.append(f"공간가중치 '{wspec.get('name')}' 재생성 실패: {exc.message}")
+        for a in entry.get("analyses", []):
+            try:
+                service.run_local(ds, a["params"], record_id=a.get("id"))
+            except EngineError as exc:
+                warnings.append(f"분석 '{a.get('method')}' 재실행 실패: {exc.message}")
+        for f in pending_fields:
             try:
                 service.set_field(ds, f["name"], f["expression"])
             except EngineError as exc:

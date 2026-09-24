@@ -41,3 +41,21 @@ export function maskToIds(mask: Uint8Array): Uint32Array {
   for (let i = 0; i < mask.length; i++) if (mask[i]) ids[k++] = i;
   return ids;
 }
+
+/** 리틀엔디언 Float64 base64 → Float64Array */
+export function decodeFloat64(b64: string): Float64Array {
+  const bytes = fromBase64(b64);
+  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  const out = new Float64Array(bytes.byteLength / 8);
+  for (let i = 0; i < out.length; i++) out[i] = view.getFloat64(i * 8, true);
+  return out;
+}
+
+/** 리틀엔디언 Uint32 base64 → Uint32Array */
+export function decodeUint32(b64: string): Uint32Array {
+  const bytes = fromBase64(b64);
+  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  const out = new Uint32Array(bytes.byteLength / 4);
+  for (let i = 0; i < out.length; i++) out[i] = view.getUint32(i * 4, true);
+  return out;
+}
