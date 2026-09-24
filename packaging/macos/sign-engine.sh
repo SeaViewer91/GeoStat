@@ -31,7 +31,12 @@ fi
 count=0
 while IFS= read -r -d '' f; do
   if file -b "$f" | grep -q "Mach-O"; then
-    codesign "${OPTS[@]}" "$f"
+    # 이미 서명된 파일은 "replacing existing signature"를 출력하므로 실패할 때만 출력을 보여 줌
+    if ! out=$(codesign "${OPTS[@]}" "$f" 2>&1); then
+      echo "서명 실패: $f" >&2
+      echo "$out" >&2
+      exit 1
+    fi
     count=$((count + 1))
   fi
 done < <(find "$ENGINE_DIR/_internal" -type f -print0)

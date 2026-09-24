@@ -45,7 +45,7 @@ jobs:
         run: |
           set -o pipefail
           packaging/macos/release.sh 2>&1 | tee build.log || {
-            tail -n 40 build.log | cut -c1-300 | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}' > tail.txt
+            grep -v "replacing existing signature" build.log | tail -n 40 | cut -c1-300 | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}' > tail.txt
             echo "::error title=앱 빌드 실패::$(cat tail.txt)"
             exit 1
           }
