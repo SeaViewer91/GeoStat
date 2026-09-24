@@ -120,7 +120,7 @@ python3 scripts/version.py 1.0.0     # 앱·엔진 버전을 한꺼번에 바꿈
 git tag v1.0.0 && git push origin v1.0.0
 ```
 
-태그를 푸시하면 GitHub Actions(`release.yml`)가 macOS에서 엔진·앱을 빌드해 Release에 dmg와 자동 업데이트 파일(`latest.json` 등)을 올림.
+태그를 푸시하면 GitHub Actions(`release.yml`)가 macOS에서 엔진·앱을 빌드해 Release **초안**에 dmg와 자동 업데이트 파일(`latest.json` 등)을 올림. 초안의 dmg로 실행을 확인한 뒤 **Publish release**를 누르면 공개되고, 설치된 앱들이 업데이트를 받음.
 업데이트 파일 서명에는 저장소 비밀값 `TAURI_SIGNING_PRIVATE_KEY`, `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`가 필요함.
 
 ### 성능 측정

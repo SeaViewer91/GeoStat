@@ -1,6 +1,7 @@
 name: Release
 
-# v로 시작하는 태그(예: v0.9.0)를 푸시하면 macOS 앱을 빌드해 GitHub Release에 올림.
+# v로 시작하는 태그(예: v0.9.0)를 푸시하면 macOS 앱을 빌드해 GitHub Release 초안(draft)으로 올림.
+# 받은 dmg로 실행을 확인한 뒤 GitHub에서 "Publish release"를 눌러야 공개되고 자동 업데이트 대상이 됨.
 # 수동 실행(workflow_dispatch)은 릴리스를 만들지 않고 빌드 결과만 아티팩트로 남김 (시험용).
 on:
   push:
@@ -68,7 +69,7 @@ jobs:
           python3 scripts/release_notes.py "$VERSION" > notes.md
           cat packaging/release-install-note.md >> notes.md
           gh release create "$GITHUB_REF_NAME" packaging/build/release/* \
-            --title "GeoStat $VERSION" --notes-file notes.md --verify-tag
+            --title "GeoStat $VERSION" --notes-file notes.md --verify-tag --draft
 
       - name: 빌드 결과 보관 (수동 실행)
         if: ${{ !startsWith(github.ref, 'refs/tags/') }}
