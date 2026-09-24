@@ -2,7 +2,7 @@
 
 형식은 [Keep a Changelog](https://keepachangelog.com/ko/1.1.0/)를 따르고, 버전은 [유의적 버전](https://semver.org/lang/ko/)을 씀.
 
-## [0.9.2] - 2026-09-24
+## [0.9.2] - 2026-09-25
 
 ### 추가
 - Windows 10·11(64비트) 설치 프로그램. macOS와 같은 기능이며 자동 업데이트도 지원함
