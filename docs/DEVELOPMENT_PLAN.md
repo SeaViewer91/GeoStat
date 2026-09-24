@@ -324,6 +324,8 @@ GeoStat/
 - [x] 프로젝트: 래스터 경로·표시 설정 저장, 존 통계 결과 캐시(없으면 래스터 경로로 재계산)
 - [x] 대용량: 50만 피처 초과 시 경고, 성능 측정 스크립트(`scripts/benchmark.py`)
 - [x] CI: main 푸시 때 macOS에서 엔진 번들을 빌드하고 스모크 테스트를 돌림 (pyogrio·rasterio의 GDAL 동시 번들 확인)
+  - 첫 실행에서 실제로 충돌을 잡음: pyproj가 rasterio의 libproj(기호 이름을 바꿔 빌드한 것)를 불러와 엔진이 시작되지 않았음. PyInstaller가 휠마다 들고 오는 같은 이름의 dylib을 하나로 합치기 때문임
+  - 해결: macOS 번들 빌드 때 전용 가상환경(복사 방식)에서 `<패키지>/.dylibs/` 라이브러리 이름을 패키지별로 바꾸고 참조 경로를 고친 뒤 ad-hoc 재서명함 (`packaging/macos/dedupe_dylibs.py`). 이후 macOS 스모크 테스트 통과
 
 성능 측정 (클라우드 2코어 x86 기준, 보로노이 폴리곤 10만 개, `scripts/benchmark.py`)
 
