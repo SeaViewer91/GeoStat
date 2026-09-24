@@ -104,8 +104,8 @@ export interface Classification {
   labels: string[];
   counts: number[];
   n_missing: number;
-  /** 고정 색 (군집·유의성 지도). null이면 색상표로 칠함 */
-  colors: string[] | null;
+  /** 고정 색 (군집·유의성 지도). 전체가 null이거나 항목이 null이면 색상표로 칠함 */
+  colors: (string | null)[] | null;
   /** 피처별 계급 번호 (-1 = 값 없음) */
   classes: Int16Array;
 }
@@ -188,6 +188,86 @@ export interface LocalResult {
   threshold: number;
   counts: Record<string, number>;
   n_islands: number;
+}
+
+export type RegressionModel = "ols" | "lag" | "error" | "gwr" | "mgwr";
+
+export interface RegressionSpec {
+  model: RegressionModel;
+  y: string;
+  x: string[];
+  weights_id?: string | null;
+  kernel?: "bisquare" | "gaussian" | "exponential";
+  fixed?: boolean;
+  criterion?: "AICc" | "AIC" | "BIC" | "CV";
+  bandwidth?: number | null;
+  alpha?: number;
+  prefix?: string | null;
+}
+
+export interface CoefRow {
+  name: string;
+  coef: number | null;
+  se: number | null;
+  stat: number | null;
+  p: number | null;
+}
+
+export interface LocalCoefRow {
+  name: string;
+  bandwidth: number;
+  mean: number | null;
+  sd: number | null;
+  min: number | null;
+  q1: number | null;
+  median: number | null;
+  q3: number | null;
+  max: number | null;
+  pct_significant: number | null;
+}
+
+export interface DiagRow {
+  group: string;
+  name: string;
+  value: number | null;
+  p: number | null;
+  df: number | null;
+}
+
+export interface RegressionReport {
+  model: RegressionModel;
+  title: string;
+  y: string;
+  x: string[];
+  n: number;
+  summary: [string, number | string | null][];
+  coefficients: CoefRow[];
+  stat_label: "t" | "z";
+  diagnostics: DiagRow[];
+  local: LocalCoefRow[] | null;
+  notes: string[];
+}
+
+export interface AnalysisInfo {
+  id: string;
+  method: string;
+  description: string;
+  outputs: string[];
+  params: Record<string, unknown>;
+  report: RegressionReport | null;
+}
+
+export interface JobInfo {
+  id: string;
+  kind: string;
+  title: string;
+  dataset_id: string;
+  status: "running" | "done" | "failed" | "cancelled";
+  progress: number | null;
+  message: string;
+  elapsed: number;
+  result: { info: DatasetInfo; analysis: AnalysisInfo } | null;
+  error: { code: string; message: string } | null;
 }
 
 export interface JoinCountResult {
@@ -357,10 +437,11 @@ export const engine = {
     column: string,
     method: ClassifyMethod,
     k: number,
+    mask?: string | null,
   ): Promise<Classification> => {
     const body = await post<Omit<Classification, "classes"> & { classes: string }>(
       `${ds(id)}/classify`,
-      { column, method, k },
+      { column, method, k, mask: mask ?? null },
     );
     return { ...body, classes: decodeInt16(body.classes) };
   },
@@ -409,6 +490,14 @@ export const engine = {
   joinCount: (id: string, p: { column: string; weights_id: string; permutations: number }) =>
     post<JoinCountResult>(`${ds(id)}/esda/joincount`, p),
   local: (id: string, p: LocalParams) => post<LocalResult>(`${ds(id)}/esda/local`, p),
+
+  // ---- 회귀·작업 ----
+  startRegression: (id: string, spec: RegressionSpec) => post<JobInfo>(`${ds(id)}/regression`, spec),
+  job: (jobId: string) => json<JobInfo>(`/jobs/${jobId}`),
+  cancelJob: (jobId: string) => json<JobInfo>(`/jobs/${jobId}`, { method: "DELETE" }),
+  analyses: (id: string) => json<AnalysisInfo[]>(`${ds(id)}/analyses`),
+  saveReport: (id: string, analysisId: string, path: string) =>
+    post<{ path: string }>(`${ds(id)}/analyses/${analysisId}/report`, { path }),
 
   /** 숫자 열 값 (Float64, 값 없음은 NaN). 차트용 */
   columns: async (id: string, names: string[]): Promise<Record<string, Float64Array>> => {

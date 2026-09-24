@@ -14,7 +14,10 @@ import {
   type ClassifyMethod,
   type DatasetInfo,
   type FileInspection,
+  type AnalysisInfo,
+  type JobInfo,
   type LocalParams,
+  type RegressionSpec,
   type MoranResult,
   type TableOptions,
   type WeightsInfo,
@@ -35,6 +38,14 @@ export interface StyleSpec {
   column: string;
   method: ClassifyMethod;
   k: number;
+  /** 이 열이 0인 피처를 '유의하지 않음'으로 가림 (GWR 계수 지도) */
+  mask?: string | null;
+}
+
+/** 결과 패널에 띄울 회귀 보고서 */
+export interface ReportEntry {
+  datasetId: string;
+  analysis: AnalysisInfo;
 }
 
 export interface LoadedDataset {
@@ -82,6 +93,7 @@ export type Dialog =
   | { kind: "moran"; datasetId: string }
   | { kind: "local"; datasetId: string }
   | { kind: "joincount"; datasetId: string }
+  | { kind: "regression"; datasetId: string }
   | { kind: "chart"; datasetId: string; chart: ChartKind };
 
 /** 프로젝트 파일에 저장하는 화면 설정 */
@@ -137,6 +149,15 @@ interface AppState {
   removeWeights: (id: string, weightsId: string) => Promise<void>;
   selectNeighbors: (id: string) => Promise<void>;
   runLocal: (id: string, params: LocalParams) => Promise<boolean>;
+
+  // 회귀·작업
+  job: JobInfo | null;
+  reports: ReportEntry[];
+  startRegression: (id: string, spec: RegressionSpec) => Promise<boolean>;
+  cancelJob: () => Promise<void>;
+  loadReports: (id: string) => Promise<void>;
+  dismissReport: (analysisId: string) => void;
+  showResultMap: (id: string, analysis: AnalysisInfo, variable?: string) => Promise<void>;
 
   // 차트
   charts: ChartSpec[];
@@ -299,6 +320,7 @@ export const useApp = create<AppState>((set, get) => {
           order,
           activeId: s.activeId === id ? (order[0] ?? null) : s.activeId,
           charts: s.charts.filter((c) => c.datasetId !== id),
+          reports: s.reports.filter((r) => r.datasetId !== id),
         };
       });
     },
@@ -352,7 +374,7 @@ export const useApp = create<AppState>((set, get) => {
         return;
       }
       await run("단계 구분 중…", async () => {
-        const theme = await engine.classify(id, style.column, style.method, style.k);
+        const theme = await engine.classify(id, style.column, style.method, style.k, style.mask);
         patch(id, { style, theme });
       });
     },
@@ -409,6 +431,94 @@ export const useApp = create<AppState>((set, get) => {
           (result.n_islands ? `, 이웃 없는 피처 ${result.n_islands}개` : ""),
       );
       return true;
+    },
+
+    // ---- 회귀·작업 ---------------------------------------------------------------
+
+    job: null,
+    reports: [],
+
+    startRegression: async (id, spec) => {
+      let job: JobInfo;
+      try {
+        job = await engine.startRegression(id, spec);
+      } catch (err) {
+        set({ error: toEngineError(err) });
+        return false;
+      }
+      set({ job, error: null });
+      // 작업이 끝날 때까지 진행률을 주기적으로 받음
+      while (job.status === "running") {
+        await new Promise((r) => setTimeout(r, 300));
+        try {
+          job = await engine.job(job.id);
+        } catch (err) {
+          set({ job: null, error: toEngineError(err) });
+          return false;
+        }
+        if (get().job?.id !== job.id) return false; // 다른 작업으로 바뀜
+        set({ job });
+      }
+      set({ job: null });
+      if (job.status === "cancelled") {
+        get().notify(`${job.title} — 취소함`);
+        return false;
+      }
+      if (job.status === "failed" || !job.result) {
+        set({ error: new EngineError(job.error?.code ?? "job_failed", job.error?.message ?? "작업 실패") });
+        return false;
+      }
+      const { info, analysis } = job.result;
+      await get().updateInfo(info);
+      set((s) => ({
+        reports: [...s.reports.filter((r) => r.analysis.id !== analysis.id), { datasetId: id, analysis }],
+      }));
+      await get().showResultMap(id, analysis);
+      get().notify(`${analysis.description} 완료 (${job.elapsed.toFixed(1)}초)`);
+      return true;
+    },
+
+    cancelJob: async () => {
+      const job = get().job;
+      if (!job) return;
+      try {
+        await engine.cancelJob(job.id);
+      } catch (err) {
+        set({ error: toEngineError(err) });
+      }
+    },
+
+    loadReports: async (id) => {
+      const analyses = await engine.analyses(id);
+      const mine = analyses.filter((a) => a.report).map((analysis) => ({ datasetId: id, analysis }));
+      set((s) => ({ reports: [...s.reports.filter((r) => r.datasetId !== id), ...mine] }));
+    },
+
+    dismissReport: (analysisId) =>
+      set((s) => ({ reports: s.reports.filter((r) => r.analysis.id !== analysisId) })),
+
+    showResultMap: async (id, analysis, variable) => {
+      const outs = analysis.outputs;
+      const report = analysis.report;
+      if (!report) return;
+      if (report.model === "gwr" || report.model === "mgwr") {
+        // 계수 지도: 지정한 변수(없으면 첫 독립변수)의 지역 계수, 유의하지 않은 곳은 가림
+        const coefCols = outs.filter((c) => c.includes("_B_"));
+        const col =
+          (variable && coefCols.find((c) => c.endsWith(`_B_${variable}`))) ||
+          coefCols.find((c) => !c.endsWith("_B_CONST")) ||
+          coefCols[0];
+        if (!col) return;
+        await get().applyStyle(id, {
+          column: col,
+          method: "natural_breaks",
+          k: 5,
+          mask: col.replace("_B_", "_SIG_"),
+        });
+      } else {
+        const resid = outs.find((c) => c.endsWith("_RESID"));
+        if (resid) await get().applyStyle(id, { column: resid, method: "std_mean", k: 5 });
+      }
     },
 
     // ---- 차트 ----------------------------------------------------------------
@@ -496,7 +606,7 @@ export const useApp = create<AppState>((set, get) => {
     openProject: async (path) => {
       await run("프로젝트 여는 중…", async () => {
         const project = await engine.openProject<ProjectUi | null, DatasetUi | null>(path);
-        set({ datasets: {}, order: [], activeId: null, charts: [], projectPath: project.path });
+        set({ datasets: {}, order: [], activeId: null, charts: [], reports: [], projectPath: project.path });
         // 목록 앞쪽이 위에 그려지므로 뒤에서부터 추가함
         const opened: string[] = [];
         for (const item of [...project.datasets].reverse()) {
@@ -507,6 +617,7 @@ export const useApp = create<AppState>((set, get) => {
           const dsUi = item.ui ?? { visible: true, style: null };
           await addLoaded(item.info, { visible: dsUi.visible });
           await get().refreshWeights(item.info.id, dsUi.activeWeightsId ?? null);
+          await get().loadReports(item.info.id);
           if (dsUi.style) await get().applyStyle(item.info.id, dsUi.style);
           for (const c of dsUi.charts ?? []) await get().addChart({ ...c, datasetId: item.info.id });
           item.warnings.forEach((w) => get().notify(`${item.info!.name}: ${w}`));

@@ -45,7 +45,13 @@ def build_project(
                     for e in ds.weights.values()
                 ],
                 "analyses": [
-                    {"id": a.id, "method": a.method, "params": a.params, "outputs": a.outputs}
+                    {
+                        "id": a.id,
+                        "method": a.method,
+                        "params": a.params,
+                        "outputs": a.outputs,
+                        **({"report": a.summary["report"]} if "report" in a.summary else {}),
+                    }
                     for a in ds.analyses
                 ],
                 "ui": ds_ui,
@@ -103,3 +109,45 @@ def resolve_source_path(project_path: Path, source: dict[str, Any]) -> Path:
         if str(cand) and cand.exists():
             return cand.resolve()
     raise EngineError("source_missing", f"원본 파일을 찾을 수 없음: {source.get('abs_path')}")
+
+
+# ---- 결과 캐시 ------------------------------------------------------------------
+# 회귀(특히 MGWR)는 다시 계산하는 데 오래 걸리므로 결과 열을 프로젝트 옆 폴더에 Parquet으로 저장함.
+# 열 때 행 수와 열 이름이 맞으면 캐시를 쓰고, 없거나 맞지 않으면 다시 계산함.
+
+
+def cache_dir(project_path: Path) -> Path:
+    return project_path.with_suffix(".gstcache")
+
+
+def write_cache(project_path: Path, datasets: list[Dataset]) -> None:
+    import pyarrow as pa
+    import pyarrow.parquet as pq
+
+    folder = cache_dir(project_path)
+    for index, ds in enumerate(datasets):
+        cols = [c for a in ds.analyses if a.method == "regression" for c in a.outputs]
+        target = folder / f"dataset{index}.parquet"
+        if not cols:
+            target.unlink(missing_ok=True)
+            continue
+        folder.mkdir(exist_ok=True)
+        table = pa.table({c: ds.gdf[c].to_numpy() for c in cols})
+        pq.write_table(table, target)
+
+
+def read_cache(
+    project_path: Path, index: int, n_rows: int, columns: list[str]
+) -> dict[str, Any] | None:
+    import pyarrow.parquet as pq
+
+    target = cache_dir(project_path) / f"dataset{index}.parquet"
+    if not target.exists():
+        return None
+    try:
+        table = pq.read_table(target, columns=columns)
+    except Exception:  # noqa: BLE001 - 파일이 깨졌거나 열이 없으면 다시 계산함
+        return None
+    if table.num_rows != n_rows:
+        return None
+    return {c: table.column(c).to_numpy() for c in columns}

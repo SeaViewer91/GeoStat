@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
+import numpy as np
 from pyproj import CRS
 
 from geostat_engine.analysis import esda_ops
@@ -226,3 +227,72 @@ def _column(ds: Dataset, name: str):
     if name not in ds.gdf.columns or name == ds.gdf.geometry.name:
         raise EngineError("column_not_found", f"열이 없음: {name}")
     return ds.gdf[name]
+
+
+# ---- 회귀 분석 (결과를 열로 저장) -------------------------------------------------
+
+
+def prepare_regression(ds: Dataset, spec: dict[str, Any]) -> dict[str, Any]:
+    """작업 프로세스로 보낼 계산 입력을 만듦. 입력 검사 오류는 여기서 바로 알려줌."""
+    from geostat_engine.analysis import regression
+
+    weights = ds.get_weights(spec["weights_id"]).w if spec.get("weights_id") else None
+    coords = None
+    if spec.get("model") in ("gwr", "mgwr"):
+        coords, _note = weights_mod._metric_points(ds.gdf)
+    return regression.prepare(ds.gdf, spec, weights, coords)
+
+
+def apply_regression(
+    ds: Dataset, spec: dict[str, Any], result: dict[str, Any], record_id: str | None = None
+) -> AnalysisRecord:
+    """계산 결과 열을 데이터셋에 붙이고 분석 기록을 남김. 같은 접두어의 이전 결과는 대체함."""
+    from geostat_engine.analysis import regression
+
+    model = spec["model"]
+    prefix = (spec.get("prefix") or regression.DEFAULT_PREFIX[model]).strip()
+    columns = {f"{prefix}_{key}": np.asarray(values) for key, values in result["columns"].items()}
+    for values in columns.values():
+        if len(values) != len(ds.gdf):
+            raise EngineError(
+                "row_mismatch", "결과 행 수가 데이터와 다름. 데이터가 바뀌었을 수 있음"
+            )
+
+    previous = [a for a in ds.analyses if set(a.outputs) & set(columns)]
+    owned = {c for a in previous for c in a.outputs}
+    for col in columns:
+        if col in ds.gdf.columns and col not in owned:
+            raise EngineError("name_exists", f"이미 있는 열 이름임: {col}. 다른 접두어를 써야 함")
+    for a in previous:
+        remove_field(ds, a.outputs[0])
+    for col, values in columns.items():
+        ds.gdf[col] = values
+
+    report = result["report"]
+    weights_name = (
+        ds.weights[spec["weights_id"]].name if spec.get("weights_id") in ds.weights else None
+    )
+    desc = f"{report['title']}: {spec['y']} ~ {' + '.join(spec['x'])}"
+    if weights_name:
+        desc += f" (W={weights_name})"
+    record = AnalysisRecord(
+        id=record_id or _next_id("a", [a.id for a in ds.analyses]),
+        method="regression",
+        params={**spec, "prefix": prefix},
+        outputs=list(columns),
+        description=desc,
+        summary={"report": report},
+    )
+    ds.analyses.append(record)
+    return record
+
+
+def run_regression_sync(
+    ds: Dataset, spec: dict[str, Any], record_id: str | None = None
+) -> AnalysisRecord:
+    """작업 프로세스 없이 바로 계산함 (프로젝트 다시 열기·테스트용)."""
+    from geostat_engine.analysis import regression
+
+    payload = prepare_regression(ds, spec)
+    result = regression.run(payload, lambda _p, _m: None)
+    return apply_regression(ds, spec, result, record_id=record_id)

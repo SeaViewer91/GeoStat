@@ -9,6 +9,8 @@ import {
   type FileInspection,
   type JoinCountResult,
   type LocalMethod,
+  type RegressionModel,
+  type RegressionSpec,
   type WeightsSpec,
   type WeightsType,
 } from "../lib/engine";
@@ -34,6 +36,8 @@ export function DialogHost() {
       return <LocalDialog dialog={dialog} />;
     case "joincount":
       return <JoinCountDialog dialog={dialog} />;
+    case "regression":
+      return <RegressionDialog dialog={dialog} />;
     case "chart":
     case "moran":
       return <ChartDialog dialog={dialog.kind === "moran" ? { ...dialog, kind: "chart", chart: "moran" } : dialog} />;
@@ -959,6 +963,183 @@ function JoinCountDialog({ dialog }: { dialog: Extract<Dialog, { kind: "joincoun
           </tbody>
         </table>
       )}
+    </Modal>
+  );
+}
+
+// ---- 회귀 분석 ---------------------------------------------------------------
+
+const REG_MODELS: { id: RegressionModel; label: string; hint: string }[] = [
+  { id: "ols", label: "OLS (최소제곱)", hint: "기본 회귀. 가중치를 고르면 잔차 Moran's I와 LM 검정으로 공간 의존성을 진단함" },
+  { id: "lag", label: "공간시차 모형 (Spatial Lag)", hint: "주변 지역의 종속변수 값이 영향을 주는 경우 (y = ρWy + Xβ + ε)" },
+  { id: "error", label: "공간오차 모형 (Spatial Error)", hint: "빠진 변수 등으로 오차가 공간적으로 얽힌 경우 (u = λWu + ε)" },
+  { id: "gwr", label: "지리가중회귀 (GWR)", hint: "계수가 지역마다 다르다고 보고 위치별 회귀를 추정함. 모든 변수가 같은 대역폭을 씀" },
+  { id: "mgwr", label: "다중척도 GWR (MGWR)", hint: "변수마다 다른 대역폭(영향 범위)을 추정함. 계산이 오래 걸림" },
+];
+
+function RegressionDialog({ dialog }: { dialog: Extract<Dialog, { kind: "regression" }> }) {
+  const ds = useApp((s) => s.datasets[dialog.datasetId]);
+  const job = useApp((s) => s.job);
+  const startRegression = useApp((s) => s.startRegression);
+  const numeric = ds?.info.columns.filter((c) => c.kind === "numeric" && c.origin !== "analysis") ?? [];
+  const [model, setModel] = useState<RegressionModel>("ols");
+  const [y, setY] = useState(numeric[0]?.name ?? "");
+  const [xs, setXs] = useState<string[]>([]);
+  const [weightsId, setWeightsId] = useState(ds?.activeWeightsId ?? ds?.weights[0]?.id ?? "");
+  const [useWeights, setUseWeights] = useState(true);
+  const [kernel, setKernel] = useState<NonNullable<RegressionSpec["kernel"]>>("bisquare");
+  const [fixed, setFixed] = useState(false);
+  const [criterion, setCriterion] = useState<NonNullable<RegressionSpec["criterion"]>>("AICc");
+  const [manualBw, setManualBw] = useState("");
+  const [prefix, setPrefix] = useState("");
+  if (!ds) return null;
+  const meta = REG_MODELS.find((m) => m.id === model)!;
+  const isGwr = model === "gwr" || model === "mgwr";
+  const needsWeights = model === "lag" || model === "error";
+  const n = ds.info.n_rows;
+  const heavy = (model === "gwr" && n > 10000) || (model === "mgwr" && n > 5000);
+
+  const toggleX = (name: string) =>
+    setXs((cur) => (cur.includes(name) ? cur.filter((c) => c !== name) : [...cur, name]));
+
+  const submit = () => {
+    const spec: RegressionSpec = {
+      model,
+      y,
+      x: xs,
+      weights_id: !isGwr && (needsWeights || useWeights) && weightsId ? weightsId : null,
+      prefix: prefix.trim() || null,
+    };
+    if (isGwr) {
+      Object.assign(spec, { kernel, fixed, criterion });
+      if (model === "gwr" && manualBw) spec.bandwidth = Number(manualBw);
+    }
+    close();
+    void startRegression(ds.info.id, spec);
+  };
+
+  const canRun = !!y && xs.length > 0 && !xs.includes(y) && (!needsWeights || !!weightsId) && !job;
+
+  return (
+    <Modal
+      title="회귀 분석"
+      onClose={close}
+      footer={
+        <>
+          <button onClick={close}>취소</button>
+          <button className="primary" onClick={submit} disabled={!canRun}>
+            실행
+          </button>
+        </>
+      }
+    >
+      <div className="form">
+        <label>
+          모형
+          <select value={model} onChange={(e) => setModel(e.target.value as RegressionModel)} aria-label="회귀 모형">
+            {REG_MODELS.map((m) => (
+              <option key={m.id} value={m.id}>
+                {m.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <p className="hint">{meta.hint}</p>
+        <label>
+          종속변수 (y)
+          <select value={y} onChange={(e) => setY(e.target.value)} aria-label="종속변수">
+            {numeric.map((c) => (
+              <option key={c.name} value={c.name}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <div className="field-label">독립변수 (x) — {xs.length}개 선택</div>
+        <div className="var-list" role="group" aria-label="독립변수">
+          {numeric
+            .filter((c) => c.name !== y)
+            .map((c) => (
+              <label key={c.name} className="check">
+                <input type="checkbox" checked={xs.includes(c.name)} onChange={() => toggleX(c.name)} />
+                {c.name}
+                {c.origin === "expression" ? " (계산)" : ""}
+              </label>
+            ))}
+        </div>
+        {!isGwr &&
+          (ds.weights.length ? (
+            <>
+              {model === "ols" && (
+                <label className="check">
+                  <input type="checkbox" checked={useWeights} onChange={(e) => setUseWeights(e.target.checked)} />
+                  공간 진단 (잔차 Moran&apos;s I, LM 검정)
+                </label>
+              )}
+              {(needsWeights || useWeights) && <WeightsSelect ds={ds} value={weightsId} onChange={setWeightsId} />}
+            </>
+          ) : needsWeights || model === "ols" ? (
+            needsWeights ? (
+              <NoWeights datasetId={ds.info.id} />
+            ) : (
+              <p className="hint">공간가중치를 만들면 OLS 잔차의 공간 의존성도 진단할 수 있음.</p>
+            )
+          ) : null)}
+        {isGwr && (
+          <div className="grid2">
+            <label>
+              커널
+              <select value={kernel} onChange={(e) => setKernel(e.target.value as typeof kernel)} aria-label="커널">
+                <option value="bisquare">bisquare (권장)</option>
+                <option value="gaussian">gaussian</option>
+                <option value="exponential">exponential</option>
+              </select>
+            </label>
+            <label>
+              대역폭 선택 기준
+              <select value={criterion} onChange={(e) => setCriterion(e.target.value as typeof criterion)}>
+                <option value="AICc">AICc (권장)</option>
+                <option value="AIC">AIC</option>
+                <option value="BIC">BIC</option>
+                <option value="CV">교차검증 (CV)</option>
+              </select>
+            </label>
+            <label className="check span2">
+              <input type="checkbox" checked={fixed} onChange={(e) => setFixed(e.target.checked)} />
+              고정 대역폭 (거리). 끄면 적응 대역폭 (이웃 수)
+            </label>
+            {model === "gwr" && (
+              <label className="span2">
+                대역폭 직접 지정 (비우면 자동 탐색)
+                <input
+                  type="number"
+                  value={manualBw}
+                  onChange={(e) => setManualBw(e.target.value)}
+                  placeholder={fixed ? "거리 (m)" : "이웃 수"}
+                />
+              </label>
+            )}
+          </div>
+        )}
+        <label>
+          결과 열 접두어
+          <input
+            value={prefix}
+            onChange={(e) => setPrefix(e.target.value)}
+            placeholder={{ ols: "OLS", lag: "LAG", error: "ERR", gwr: "GWR", mgwr: "MGWR" }[model]}
+          />
+        </label>
+      </div>
+      {heavy && (
+        <p className="hint warn-text">
+          관측치가 {n.toLocaleString()}개라 계산이 오래 걸릴 수 있음. 진행 중에 하단 상태 표시줄에서 취소할 수 있음.
+        </p>
+      )}
+      {job && <p className="hint">다른 분석이 실행 중임. 끝난 뒤에 실행할 수 있음.</p>}
+      <p className="hint">
+        예측값·잔차{isGwr ? "·지역 계수(_B_)·t값(_T_)·유의 여부(_SIG_)·지역 R²" : ""}가 새 열로 저장되고, 결과
+        보고서는 오른쪽 결과 패널에 표시됨.
+      </p>
     </Modal>
   );
 }

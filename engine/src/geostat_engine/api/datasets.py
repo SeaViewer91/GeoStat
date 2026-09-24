@@ -15,7 +15,7 @@ from pydantic import BaseModel, Field
 from pyproj import CRS, Transformer
 
 from geostat_engine import service
-from geostat_engine.analysis.classify import classify
+from geostat_engine.analysis.classify import classify, classify_masked
 from geostat_engine.auth import require_token
 from geostat_engine.errors import EngineError
 from geostat_engine.io.export import export_dataset
@@ -72,6 +72,9 @@ class ClassifyRequest(BaseModel):
         "significance",
     ]
     k: int = Field(default=5, ge=2, le=12, description="계급 수 (분위·등간격·자연 분류만 해당)")
+    mask: str | None = Field(
+        default=None, description="0인 피처를 '유의하지 않음'으로 가릴 열 (GWR 유의성)"
+    )
 
 
 class RowsRequest(BaseModel):
@@ -136,7 +139,9 @@ class ClassifyResponse(BaseModel):
     labels: list[str]
     counts: list[int]
     n_missing: int
-    colors: list[str] | None = Field(default=None, description="고정 색 (군집·유의성 지도)")
+    colors: list[str | None] | None = Field(
+        default=None, description="고정 색 (군집·유의성 지도). null 항목은 색상표 사용"
+    )
     classes: str = Field(
         description="피처별 계급 번호. Int16 리틀엔디언 배열의 base64 (-1 = 값 없음)"
     )
@@ -321,7 +326,12 @@ def query_rows(dataset_id: str, body: RowsRequest, request: Request) -> RowsResp
 @router.post("/{dataset_id}/classify", response_model=ClassifyResponse)
 def classify_column(dataset_id: str, body: ClassifyRequest, request: Request) -> ClassifyResponse:
     ds = _state(request).get(dataset_id)
-    result = classify(_column(ds, body.column), body.method, k=body.k)
+    if body.mask:
+        result = classify_masked(
+            _column(ds, body.column), _column(ds, body.mask), body.method, k=body.k
+        )
+    else:
+        result = classify(_column(ds, body.column), body.method, k=body.k)
     return ClassifyResponse(
         column=result.column,
         method=result.method,

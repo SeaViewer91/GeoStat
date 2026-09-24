@@ -13,9 +13,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from geostat_engine import __version__
-from geostat_engine.api import datasets, files, health, project, spatial
+from geostat_engine.api import datasets, files, health, project, regression, spatial
 from geostat_engine.auth import set_token
 from geostat_engine.errors import install_error_handlers
+from geostat_engine.jobs import JobManager
 from geostat_engine.state import AppState
 
 # WebView 출처 목록. macOS Tauri는 tauri://localhost, 개발 서버는 localhost:1420을 씀
@@ -37,9 +38,12 @@ def create_app(token: str, ready_line: str | None = None, warmup: bool = False) 
         if warmup:
             threading.Thread(target=_warmup, name="jit-warmup", daemon=True).start()
         yield
+        # 엔진이 끝나면 실행 중인 작업 프로세스도 정리함
+        app.state.jobs.shutdown()
 
     app = FastAPI(title="GeoStat Engine", version=__version__, lifespan=lifespan)
     app.state.geostat = AppState()
+    app.state.jobs = JobManager()
     set_token(app, token)
 
     app.add_middleware(
@@ -55,6 +59,7 @@ def create_app(token: str, ready_line: str | None = None, warmup: bool = False) 
     app.include_router(files.router)
     app.include_router(datasets.router)
     app.include_router(spatial.router)
+    app.include_router(regression.router)
     app.include_router(project.router)
     return app
 

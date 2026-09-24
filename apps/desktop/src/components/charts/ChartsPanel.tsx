@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { engine } from "../../lib/engine";
 import { useActive, useApp, type ChartKind, type ChartSpec, type LoadedDataset } from "../../store";
 import { BoxPlot, Histogram, MoranReference, Scatter } from "./Charts";
+import { ReportCard } from "./ReportCard";
 
 const KINDS: { kind: ChartKind; label: string }[] = [
   { kind: "histogram", label: "히스토그램" },
@@ -16,13 +17,15 @@ const KINDS: { kind: ChartKind; label: string }[] = [
 export function ChartsPanel({ onClose }: { onClose: () => void }) {
   const ds = useActive();
   const charts = useApp((s) => s.charts);
+  const reports = useApp((s) => s.reports);
   const showDialog = useApp((s) => s.showDialog);
   const mine = ds ? charts.filter((c) => c.datasetId === ds.info.id) : [];
+  const myReports = ds ? reports.filter((r) => r.datasetId === ds.info.id) : [];
 
   return (
     <aside className="charts-panel" data-testid="charts-panel">
       <div className="charts-head">
-        <h2>차트</h2>
+        <h2>결과·차트</h2>
         <div className="spacer" />
         <button className="link" onClick={onClose} title="차트 패널 닫기">
           닫기
@@ -40,7 +43,8 @@ export function ChartsPanel({ onClose }: { onClose: () => void }) {
         ))}
       </div>
       {!ds && <p className="muted pad">데이터를 열면 차트를 추가할 수 있음</p>}
-      {ds && mine.length === 0 && (
+      {ds && [...myReports].reverse().map((r) => <ReportCard key={r.analysis.id} ds={ds} entry={r} />)}
+      {ds && mine.length === 0 && myReports.length === 0 && (
         <p className="muted pad">
           차트에서 끌어 선택하면 지도·테이블에도 반영됨. 지도에서 선택해도 차트에 강조됨.
         </p>

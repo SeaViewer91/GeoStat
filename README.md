@@ -26,7 +26,7 @@ Apple 공증을 받지 않은 앱이라 첫 실행 때 "확인되지 않은 개�
 - ✅ **공간가중치**: Queen/Rook(고차), 거리, KNN, 커널. 연결성 히스토그램, 섬 탐지, GeoDa `.gal`/`.gwt` 호환
 - ✅ **ESDA**: Moran's I(단변량·이변량), LISA, Getis-Ord Gi*, Local Geary, Join Count. FDR·Bonferroni 보정, 군집·유의성 지도
 - ✅ **연동 차트**: 히스토그램·산점도·박스플롯·Moran 산점도와 지도·테이블 간 선택 연동
-- 🚧 **공간회귀**: OLS 공간진단, Spatial Lag/Error, **GWR/MGWR** 제공
+- ✅ **공간회귀**: OLS(공간진단·LM 검정), Spatial Lag/Error(ML), **GWR/MGWR**(유의성 마스크 계수 지도), 진행률·취소, 텍스트 보고서
 - 🚧 **공간군집화**: SKATER, Max-p, AZP, Region K-Means, Ward 제공
 - 🚧 **래스터**: GeoTIFF/COG 표시, 존 통계 산출
 

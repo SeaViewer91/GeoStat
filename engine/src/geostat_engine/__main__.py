@@ -50,6 +50,9 @@ def _watch_stdin() -> None:
         while sys.stdin.buffer.read(1024):
             pass
     finally:
+        from geostat_engine.jobs import terminate_all
+
+        terminate_all()  # 계산 중인 작업 프로세스도 함께 끝냄
         os._exit(0)
 
 

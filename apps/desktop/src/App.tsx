@@ -26,7 +26,7 @@ export function App() {
   const toggleTable = useCallback(() => setTableOpen((v) => !v), []);
   useShortcuts(toggleTable, toggleCharts);
   // 차트가 추가되면 패널을 엶
-  const chartCount = useApp((s) => s.charts.length);
+  const chartCount = useApp((s) => s.charts.length + s.reports.length);
   useEffect(() => {
     if (chartCount > 0) setChartsOpen(true);
   }, [chartCount]);

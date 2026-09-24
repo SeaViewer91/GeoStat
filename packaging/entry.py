@@ -31,7 +31,7 @@ def _run_child(kind: str, target: str, rest: list[str]) -> None:
         sys.argv = [sys.argv[0], *rest]
         runpy.run_module(target, run_name="__main__", alter_sys=True)
     else:
-        if "joblib" not in target and "loky" not in target:
+        if not any(key in target for key in ("joblib", "loky", "multiprocessing")):
             sys.exit("허용하지 않는 코드")
         sys.argv = ["-c", *rest]
         exec(compile(target, "<string>", "exec"), {"__name__": "__main__"})  # noqa: S102

@@ -48,12 +48,25 @@ export function classColors(
   scheme: SchemeType,
   labels: string[],
   alpha = 225,
-  fixed?: string[] | null,
+  fixed?: (string | null)[] | null,
 ): RGBA[] {
+  // 일부 계급만 고정 색이면(예: GWR 계수 지도의 '유의하지 않음') 나머지로 색상표를 만들어 채움
+  if (fixed && fixed.length === labels.length && fixed.some((c) => c === null)) {
+    const free = labels.filter((_, i) => fixed[i] === null);
+    const palette = classColors(scheme, free, alpha);
+    let j = 0;
+    return fixed.map((c) => {
+      if (c !== null) {
+        const [r, g, b] = hexToRgb(c);
+        return [r, g, b, alpha] as RGBA;
+      }
+      return palette[j++];
+    });
+  }
   const k = labels.length;
   let rgb: [number, number, number][];
   if (fixed && fixed.length === k) {
-    rgb = fixed.map(hexToRgb);
+    rgb = (fixed as string[]).map(hexToRgb);
   } else if (scheme === "diverging") {
     rgb = (k === 6 ? DIVERGING6 : DIVERGING6.slice(0, k)).map(hexToRgb);
   } else if (scheme === "qualitative") {

@@ -162,6 +162,16 @@ export function Toolbar({ chartsOpen, onToggleCharts }: ToolbarProps) {
           },
           "-",
           {
+            label: "회귀 분석 (OLS · 공간회귀 · GWR · MGWR)…",
+            onClick: () => {
+              if (!activeId) return;
+              onToggleCharts(true);
+              showDialog({ kind: "regression", datasetId: activeId });
+            },
+            disabled: !activeId || !!busy,
+          },
+          "-",
+          {
             label: "계산 필드 추가…",
             onClick: () => activeId && showDialog({ kind: "field", datasetId: activeId }),
             disabled: !activeId,

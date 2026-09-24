@@ -35,14 +35,20 @@ def call(port: int, path: str, body: dict | None = None) -> dict:
 def main(exe: str) -> None:
     tmp = Path(tempfile.mkdtemp())
     shp = tmp / "한글_격자.shp"
-    # 3×3 격자 (국지 통계는 피처가 5개 이상이어야 함)
+    # 6×6 격자 (국지 통계는 5개, GWR은 20개 이상 필요함)
     cells = [
         box(200000 + i * 1000, 550000 + j * 1000, 201000 + i * 1000, 551000 + j * 1000)
-        for j in range(3)
-        for i in range(3)
+        for j in range(6)
+        for i in range(6)
     ]
     gpd.GeoDataFrame(
-        {"이름": ["가"] + ["나"] * 8, "값": [float(v) for v in range(9)]}, geometry=cells, crs=5186
+        {
+            "이름": ["가"] + ["나"] * 35,
+            "값": [float(v % 7) + v * 0.1 for v in range(36)],
+            "X좌표": [float(v % 6) for v in range(36)],
+        },
+        geometry=cells,
+        crs=5186,
     ).to_file(shp, encoding="CP949", engine="pyogrio")
     shp.with_suffix(".cpg").unlink(missing_ok=True)
 
@@ -79,7 +85,7 @@ def main(exe: str) -> None:
         print("단계 구분(mapclassify) 확인함")
 
         w = call(port, f"/datasets/{info['id']}/weights", {"type": "rook"})
-        assert w["summary"]["n"] == 9, w
+        assert w["summary"]["n"] == 36, w
         lisa = call(
             port,
             f"/datasets/{info['id']}/esda/local",
@@ -87,6 +93,20 @@ def main(exe: str) -> None:
         )
         assert lisa["outputs"] == ["LISA_I", "LISA_CL", "LISA_P"], lisa
         print("공간가중치·LISA(libpysal, esda, numba) 확인함")
+
+        # 회귀는 별도 작업 프로세스(multiprocessing spawn)에서 돌아가므로 번들에서 따로 확인함
+        for model, extra in (("ols", {"weights_id": w["id"]}), ("gwr", {})):
+            job = call(
+                port,
+                f"/datasets/{info['id']}/regression",
+                {"model": model, "y": "값", "x": ["X좌표"], **extra},
+            )
+            t_job = time.time()
+            while job["status"] == "running" and time.time() - t_job < 120:
+                time.sleep(0.3)
+                job = call(port, f"/jobs/{job['id']}")
+            assert job["status"] == "done", job
+        print("회귀 작업 프로세스(spreg, mgwr) 확인함")
 
         csv = tmp / "점.csv"
         csv.write_text("이름,경도,위도\n가,129.0,35.1\n", encoding="cp949")

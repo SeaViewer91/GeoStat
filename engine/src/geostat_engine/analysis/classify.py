@@ -51,7 +51,8 @@ class Classification:
     counts: list[int]
     classes: np.ndarray  # int16, 피처별 계급 번호 (-1 = 값 없음)
     n_missing: int
-    colors: list[str] | None = None  # 고정 색 (군집·유의성 지도). None이면 앱이 색상표로 칠함
+    # 고정 색 (군집·유의성 지도). None이면 앱이 색상표로 칠함. 항목이 None이면 그 계급만 색상표를 씀
+    colors: list[str | None] | None = None
 
 
 def _fmt(v: float) -> str:
@@ -270,4 +271,51 @@ def _unique(series: pd.Series, name: str) -> Classification:
         counts=class_counts,
         classes=classes,
         n_missing=int(missing.sum()),
+    )
+
+
+MASK_LABEL = "유의하지 않음"
+MASK_COLOR = "#d4d4d4"
+
+
+def classify_masked(
+    series: pd.Series, mask: pd.Series, method: Method, k: int = 5
+) -> Classification:
+    """마스크 값이 0인 피처를 '유의하지 않음' 계급으로 따로 빼고, 계급 경계는 나머지(유의한 피처)로만 구함.
+
+    GWR 계수 지도용. 유의하지 않은 값까지 경계 계산에 넣으면 보이는 계급 대부분이 비어 버림.
+    """
+    m = pd.to_numeric(mask, errors="coerce").to_numpy(dtype="float64", na_value=np.nan)
+    hidden = m == 0
+    original_missing = series.isna().to_numpy()
+    if (~hidden & ~original_missing).sum() == 0:
+        # 유의한 피처가 없으면 전부 '유의하지 않음'으로 칠함 (오류 대신 결과 그 자체를 보여줌)
+        classes = np.where(original_missing, -1, 0).astype(np.int16)
+        return Classification(
+            method=method,
+            column=str(series.name),
+            scheme="qualitative",
+            breaks=[],
+            labels=[MASK_LABEL],
+            counts=[int((classes == 0).sum())],
+            classes=classes,
+            n_missing=int(original_missing.sum()),
+            colors=[MASK_COLOR],
+        )
+    result = classify(series.where(~hidden), method, k=k)
+    k_eff = len(result.labels)
+    classes = result.classes.copy()
+    classes[hidden & ~original_missing] = k_eff
+    counts = np.bincount(classes[classes >= 0], minlength=k_eff + 1)
+    colors = list(result.colors) if result.colors else [None] * k_eff
+    return Classification(
+        method=result.method,
+        column=result.column,
+        scheme=result.scheme,
+        breaks=result.breaks,
+        labels=[*result.labels, MASK_LABEL],
+        counts=[int(c) for c in counts[: k_eff + 1]],
+        classes=classes,
+        n_missing=int(original_missing.sum()),
+        colors=[*colors, MASK_COLOR],
     )

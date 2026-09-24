@@ -19,6 +19,8 @@ dependencies = [
     "libpysal>=4.12",
     "esda>=2.6",
     "numba>=0.60",
+    "spreg>=1.8",
+    "mgwr>=2.2",
 ]
 
 [project.scripts]

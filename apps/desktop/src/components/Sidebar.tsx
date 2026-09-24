@@ -121,12 +121,19 @@ function StyleEditor({ ds }: { ds: LoadedDataset }) {
   const candidates = ds.info.columns.filter(meta.filter);
   const [column, setColumn] = useState<string>(ds.style?.column ?? candidates[0]?.name ?? "");
   const [k, setK] = useState<number>(ds.style?.k ?? 5);
+  const [useMask, setUseMask] = useState<boolean>(true);
+  // GWR 계수 열(<접두어>_B_<변수>)이면 같은 이름 규칙의 유의 여부 열(_SIG_)로 가릴 수 있음
+  const maskColumn =
+    column.includes("_B_") && ds.info.columns.some((c) => c.name === column.replace("_B_", "_SIG_"))
+      ? column.replace("_B_", "_SIG_")
+      : null;
 
   // 분석을 실행해 주제도가 바뀌면 설정 칸도 따라감
   useEffect(() => {
     if (ds.style) {
       setMethod(ds.style.method);
       setColumn(ds.style.column);
+      setUseMask(!!ds.style.mask || !ds.style.column.includes("_B_"));
     }
   }, [ds.style]);
 
@@ -137,7 +144,7 @@ function StyleEditor({ ds }: { ds: LoadedDataset }) {
 
   const apply = () => {
     if (!column) return;
-    const style: StyleSpec = { column, method, k };
+    const style: StyleSpec = { column, method, k, mask: maskColumn && useMask ? maskColumn : null };
     void applyStyle(ds.info.id, style);
   };
 
@@ -169,6 +176,12 @@ function StyleEditor({ ds }: { ds: LoadedDataset }) {
             ))}
           </select>
         </label>
+        {maskColumn && meta.id !== "unique_values" && (
+          <label className="check">
+            <input type="checkbox" checked={useMask} onChange={(e) => setUseMask(e.target.checked)} />
+            유의하지 않은 지역 가리기
+          </label>
+        )}
         {meta.hasK && (
           <label>
             계급 수
