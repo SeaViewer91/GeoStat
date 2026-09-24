@@ -13,6 +13,7 @@ import secrets
 import socket
 import sys
 import threading
+import time
 
 import uvicorn
 
@@ -44,9 +45,38 @@ def _parse_args(argv: list[str] | None) -> argparse.Namespace:
     return p.parse_args(argv)
 
 
+def _wait_stdin_pipe_closed_windows() -> bool:
+    """Windows: stdin 파이프가 닫힐 때까지 PeekNamedPipe로 확인하며 기다림.
+
+    동기 파이프에 ReadFile을 걸어 두면 같은 파일 객체에 대한 다른 호출이 모두 줄을 서게 되어,
+    작업 프로세스(multiprocessing spawn)를 띄울 때 자식 프로세스가 시작 단계에서 멈추거나
+    부모 프로세스를 열지 못함(WinError 87). 그래서 읽기를 걸어 두지 않고 주기적으로 상태만 확인함.
+    stdin이 파이프가 아니면 False를 반환함.
+    """
+    import _winapi
+    import msvcrt
+
+    try:
+        handle = msvcrt.get_osfhandle(sys.stdin.fileno())
+    except (AttributeError, OSError, ValueError):
+        return False
+    if _winapi.GetFileType(handle) != 3:  # FILE_TYPE_PIPE
+        return False
+    while True:
+        try:
+            avail, _ = _winapi.PeekNamedPipe(handle, 0)
+        except OSError:
+            return True  # ERROR_BROKEN_PIPE 등: 앱이 파이프를 닫았음
+        if avail:
+            _winapi.ReadFile(handle, avail)  # 들어온 만큼만 읽어 버림 (기다리지 않음)
+        time.sleep(0.5)
+
+
 def _watch_stdin() -> None:
     # 부모 프로세스가 죽으면 파이프가 닫혀 read()가 EOF를 반환함 → 즉시 종료
     try:
+        if sys.platform == "win32" and _wait_stdin_pipe_closed_windows():
+            return
         while sys.stdin.buffer.read(1024):
             pass
     finally:
