@@ -9,7 +9,18 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 OUT="$ROOT/packaging/build"
 
 cd "$ROOT/engine"
-uv sync --group build --frozen 2>/dev/null || uv sync --group build
+if [[ "$(uname)" == "Darwin" ]]; then
+  # macOS: 휠마다 들고 오는 같은 이름의 dylib(libproj 등)이 번들에서 충돌하지 않도록
+  # 번들 전용 가상환경을 복사 방식으로 만들고 dylib 이름을 패키지별로 바꿈 (개발 환경·uv 캐시는 그대로 둠)
+  export UV_PROJECT_ENVIRONMENT="$OUT/venv"
+  export UV_LINK_MODE=copy
+  rm -rf "$OUT/venv"
+  uv sync --group build --frozen 2>/dev/null || uv sync --group build
+  SITE="$(uv run python -c 'import sysconfig; print(sysconfig.get_paths()["purelib"])')"
+  uv run python "$ROOT/packaging/macos/dedupe_dylibs.py" "$SITE"
+else
+  uv sync --group build --frozen 2>/dev/null || uv sync --group build
+fi
 
 rm -rf "$OUT/engine" "$OUT/work"
 uv run pyinstaller "$ROOT/packaging/engine.spec" \
