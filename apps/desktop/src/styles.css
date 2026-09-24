@@ -698,10 +698,6 @@ label.check {
 
 /* ---- 차트 패널 ---- */
 
-.main.with-charts {
-  grid-template-columns: 280px minmax(0, 1fr) 360px;
-}
-
 .charts-panel {
   background: var(--panel);
   border-left: 1px solid var(--border);
@@ -1229,4 +1225,19 @@ button.on-soft {
 
 .chip.op {
   font-family: ui-monospace, Menlo, monospace;
+}
+
+/* ---- 좌우 패널 경계선 (끌어서 너비 조절) ---- */
+
+.v-splitter {
+  width: 5px;
+  cursor: col-resize;
+  background: var(--border);
+  touch-action: none;
+  transition: background 0.15s;
+}
+
+.v-splitter:hover,
+.v-splitter.dragging {
+  background: var(--accent);
 }

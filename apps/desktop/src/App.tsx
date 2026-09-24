@@ -4,6 +4,7 @@ import { AttributeTable } from "./components/AttributeTable";
 import { ChartsPanel } from "./components/charts/ChartsPanel";
 import { DialogHost } from "./components/Dialogs";
 import { MapCanvas } from "./components/MapCanvas";
+import { PanelSplitter, usePanelWidth } from "./components/PanelSplitter";
 import { Sidebar } from "./components/Sidebar";
 import { StatusBar } from "./components/StatusBar";
 import { Toolbar, openDataFlow, openProjectFlow, saveProjectFlow } from "./components/Toolbar";
@@ -13,6 +14,9 @@ import { useApp } from "./store";
 
 const MIN_TABLE = 90;
 const DEFAULT_TABLE = 240;
+// 좌우 패널 너비 (px): 기본값, 최솟값, 최댓값
+const LEFT = { initial: 280, min: 200, max: 560 };
+const RIGHT = { initial: 360, min: 260, max: 900 };
 
 export function App() {
   const error = useApp((s) => s.error);
@@ -22,6 +26,14 @@ export function App() {
   const [tableHeight, setTableHeight] = useState(DEFAULT_TABLE);
   const [tableOpen, setTableOpen] = useState(true);
   const [chartsOpen, setChartsOpen] = useState(false);
+  const [leftWidth, setLeftWidth] = usePanelWidth("geostat.leftWidth", LEFT.initial, LEFT.min, LEFT.max);
+  const [rightWidth, setRightWidth] = usePanelWidth("geostat.rightWidth", RIGHT.initial, RIGHT.min, RIGHT.max);
+  const columns = `${leftWidth}px 5px minmax(0, 1fr)${chartsOpen ? ` 5px ${rightWidth}px` : ""}`;
+  // 가운데 지도가 이 너비보다 좁아지지 않게 패널 너비를 제한함
+  const MIN_CENTER = 320;
+  const resizeLeft = (w: number) =>
+    setLeftWidth(Math.min(w, window.innerWidth - MIN_CENTER - 5 - (chartsOpen ? rightWidth + 5 : 0)));
+  const resizeRight = (w: number) => setRightWidth(Math.min(w, window.innerWidth - MIN_CENTER - 10 - leftWidth));
   const toggleCharts = useCallback((open?: boolean) => setChartsOpen((v) => open ?? !v), []);
   const dragStart = useRef<{ y: number; h: number } | null>(null);
 
@@ -61,8 +73,15 @@ export function App() {
   return (
     <div className="app">
       <Toolbar chartsOpen={chartsOpen} onToggleCharts={toggleCharts} />
-      <div className={`main${chartsOpen ? " with-charts" : ""}`}>
+      <div className="main" style={{ gridTemplateColumns: columns }}>
         <Sidebar />
+        <PanelSplitter
+          direction={1}
+          width={leftWidth}
+          onResize={resizeLeft}
+          onReset={() => setLeftWidth(LEFT.initial)}
+          label={t("왼쪽 패널 너비")}
+        />
         <div className="center">
           <main className="workspace">
             <MapCanvas />
@@ -119,7 +138,18 @@ export function App() {
             </>
           )}
         </div>
-        {chartsOpen && <ChartsPanel onClose={() => setChartsOpen(false)} />}
+        {chartsOpen && (
+          <>
+            <PanelSplitter
+              direction={-1}
+              width={rightWidth}
+              onResize={resizeRight}
+              onReset={() => setRightWidth(RIGHT.initial)}
+              label={t("오른쪽 패널 너비")}
+            />
+            <ChartsPanel onClose={() => setChartsOpen(false)} />
+          </>
+        )}
       </div>
       <StatusBar />
       <DialogHost />

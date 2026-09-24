@@ -1,6 +1,9 @@
 // 영어 사전: 한국어 원문 → 영어. 없는 문구는 한국어로 보임
 // 화면 문구(src/**)와 엔진이 보내는 고정 라벨(보고서·범례 등)을 함께 담음. scripts/check_i18n.mjs로 빠진 문구를 확인함
 export const EN: Record<string, string> = {
+  "끌어서 너비 조절, 두 번 누르면 기본 너비": "Drag to resize, double-click to reset",
+  "왼쪽 패널 너비": "Left panel width",
+  "오른쪽 패널 너비": "Right panel width",
   " (계산)": " (calculated)",
   "(계산)": "(calculated)",
   "(분석)": "(analysis)",

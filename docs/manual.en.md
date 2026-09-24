@@ -31,6 +31,8 @@ downloads, verifies the signature and installs them. Switch the interface langua
 | Right panel | Charts and analysis reports (⌘J) |
 | Status bar | Feature and selection counts, progress and **Cancel** for running jobs, engine version |
 
+Drag the borders between the side panels and the map to resize the panels; double-click a border to reset it. Widths are remembered.
+
 The layer you click in the layer list is the *active layer*; classification, the attribute table and analysis
 menus apply to it.
 

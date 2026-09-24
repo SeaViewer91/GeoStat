@@ -16,6 +16,7 @@
 - 공간회귀: OLS(공간진단), Spatial Lag·Error(ML·GM), 직접·간접 효과, GWR·MGWR, 모형 비교표
 - 공간군집화: SKATER, Max-p, AZP, Region K-Means, Ward(공간 제약), K-평균·계층적 군집
 - 프로젝트 저장·열기(결과 캐시), 한/영 화면, 자동 업데이트, 샘플 데이터, 사용 설명서
+- 좌우 패널 너비 조절 (경계선 끌기, 두 번 누르면 기본값, 너비 기억)
 
 ### 알려진 제약
 - macOS 14 이상, Apple Silicon 맥만 지원함
