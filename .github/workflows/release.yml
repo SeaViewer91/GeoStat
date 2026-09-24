@@ -41,7 +41,14 @@ jobs:
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
-        run: packaging/macos/release.sh
+        # 실패하면 로그 끝부분을 주석(annotation)으로 남김
+        run: |
+          set -o pipefail
+          packaging/macos/release.sh 2>&1 | tee build.log || {
+            tail -n 40 build.log | cut -c1-300 | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}' > tail.txt
+            echo "::error title=앱 빌드 실패::$(cat tail.txt)"
+            exit 1
+          }
 
       - name: 릴리스 만들기
         if: startsWith(github.ref, 'refs/tags/')
