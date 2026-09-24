@@ -18,7 +18,7 @@ encodings, and raster zonal statistics. This guide describes version 0.9. A more
    - Terminal: `xattr -dr com.apple.quarantine /Applications/GeoStat.app`
 
 The first launch can take 10–20 seconds while the analysis engine starts. When the status bar shows
-`Engine 0.9.0 · GDAL …`, it is ready. New versions are announced in the top-right corner; **Install and restart**
+`Engine <version> · GDAL …`, it is ready. New versions are announced in the top-right corner; **Install and restart**
 downloads, verifies the signature and installs them. Switch the interface language under **Help → 한국어 / English**.
 
 ## 2. Window layout
