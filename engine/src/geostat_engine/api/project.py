@@ -126,8 +126,8 @@ def open_project(body: OpenRequest, request: Request) -> OpenResponse:
                 warnings.append(f"공간가중치 '{wspec.get('name')}' 재생성 실패: {exc.message}")
         for a in entry.get("analyses", []):
             try:
-                if a.get("method") == "regression":
-                    _restore_regression(path, index, ds, a, warnings)
+                if a.get("method") in ("regression", "cluster"):
+                    _restore_job_result(path, index, ds, a, warnings)
                 else:
                     service.run_local(ds, a["params"], record_id=a.get("id"))
             except EngineError as exc:
@@ -142,17 +142,19 @@ def open_project(body: OpenRequest, request: Request) -> OpenResponse:
     return OpenResponse(path=str(path), ui=project.get("ui"), datasets=opened)
 
 
-def _restore_regression(path: Path, index: int, ds, entry: dict, warnings: list[str]) -> None:
-    """저장된 결과 캐시가 맞으면 그대로 붙이고, 아니면 다시 계산함."""
+def _restore_job_result(path: Path, index: int, ds, entry: dict, warnings: list[str]) -> None:
+    """회귀·군집 결과: 저장된 결과 캐시가 맞으면 그대로 붙이고, 아니면 다시 계산함."""
+    method = entry["method"]
     params = entry["params"]
     outputs = entry.get("outputs", [])
     prefix = params.get("prefix", "")
+    apply = service.apply_regression if method == "regression" else service.apply_cluster
+    run_sync = service.run_regression_sync if method == "regression" else service.run_cluster_sync
     cached = read_cache(path, index, len(ds.gdf), outputs) if outputs else None
     if cached is not None and entry.get("report"):
         keys = {c[len(prefix) + 1 :]: v for c, v in cached.items()}
-        service.apply_regression(
-            ds, params, {"report": entry["report"], "columns": keys}, record_id=entry.get("id")
-        )
+        apply(ds, params, {"report": entry["report"], "columns": keys}, record_id=entry.get("id"))
         return
-    warnings.append(f"{params.get('model', '회귀')} 결과 캐시가 없어 다시 계산함")
-    service.run_regression_sync(ds, params, record_id=entry.get("id"))
+    name = params.get("model") or params.get("method") or method
+    warnings.append(f"{name} 결과 캐시가 없어 다시 계산함")
+    run_sync(ds, params, record_id=entry.get("id"))

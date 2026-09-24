@@ -112,8 +112,11 @@ def resolve_source_path(project_path: Path, source: dict[str, Any]) -> Path:
 
 
 # ---- 결과 캐시 ------------------------------------------------------------------
-# 회귀(특히 MGWR)는 다시 계산하는 데 오래 걸리므로 결과 열을 프로젝트 옆 폴더에 Parquet으로 저장함.
+# 회귀(특히 MGWR)·군집(AZP 등)은 다시 계산하는 데 오래 걸리므로 결과 열을 프로젝트 옆 폴더에 Parquet으로 저장함.
 # 열 때 행 수와 열 이름이 맞으면 캐시를 쓰고, 없거나 맞지 않으면 다시 계산함.
+
+
+CACHED_METHODS = ("regression", "cluster")
 
 
 def cache_dir(project_path: Path) -> Path:
@@ -126,7 +129,7 @@ def write_cache(project_path: Path, datasets: list[Dataset]) -> None:
 
     folder = cache_dir(project_path)
     for index, ds in enumerate(datasets):
-        cols = [c for a in ds.analyses if a.method == "regression" for c in a.outputs]
+        cols = [c for a in ds.analyses if a.method in CACHED_METHODS for c in a.outputs]
         target = folder / f"dataset{index}.parquet"
         if not cols:
             target.unlink(missing_ok=True)

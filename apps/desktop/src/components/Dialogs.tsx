@@ -9,6 +9,8 @@ import {
   type FileInspection,
   type JoinCountResult,
   type LocalMethod,
+  type ClusterMethod,
+  type ClusterSpec,
   type RegressionModel,
   type RegressionSpec,
   type WeightsSpec,
@@ -38,6 +40,8 @@ export function DialogHost() {
       return <JoinCountDialog dialog={dialog} />;
     case "regression":
       return <RegressionDialog dialog={dialog} />;
+    case "cluster":
+      return <ClusterDialog dialog={dialog} />;
     case "chart":
     case "moran":
       return <ChartDialog dialog={dialog.kind === "moran" ? { ...dialog, kind: "chart", chart: "moran" } : dialog} />;
@@ -1159,6 +1163,250 @@ function RegressionDialog({ dialog }: { dialog: Extract<Dialog, { kind: "regress
         예측값·잔차{isGwr ? "·지역 계수(_B_)·t값(_T_)·유의 여부(_SIG_)·지역 R²" : ""}가 새 열로 저장되고, 결과
         보고서는 오른쪽 결과 패널에 표시됨.
       </p>
+    </Modal>
+  );
+}
+
+// ---- 군집 분석 ---------------------------------------------------------------
+
+const CLUSTER_METHODS: {
+  id: ClusterMethod;
+  label: string;
+  spatial: boolean;
+  hint: string;
+}[] = [
+  {
+    id: "skater",
+    label: "SKATER",
+    spatial: true,
+    hint: "이웃 그래프의 최소 신장 트리를 잘라 연결된 지역으로 나눔. 빠르고 안정적임",
+  },
+  {
+    id: "maxp",
+    label: "Max-p 지역화",
+    spatial: true,
+    hint: "지역마다 최소 합계(예: 인구 5만 이상)를 만족하면서 지역 수가 최대가 되게 나눔. 군집 수는 자동으로 정해짐. 계산이 무거움 (500개 이하 권장)",
+  },
+  {
+    id: "azp",
+    label: "AZP (자동 구역화)",
+    spatial: true,
+    hint: "경계 피처를 이웃 지역으로 옮겨 가며 지역 내 차이를 줄임. 시작점에 따라 결과가 달라질 수 있음 (시드 고정). 1,000개 이하 권장",
+  },
+  {
+    id: "region_kmeans",
+    label: "Region K-Means",
+    spatial: true,
+    hint: "연결 제약을 둔 K-평균. 관측치가 많으면 매우 느림 (1,000개 이하 권장)",
+  },
+  {
+    id: "ward_spatial",
+    label: "Ward 계층 군집 (공간 제약)",
+    spatial: true,
+    hint: "이웃끼리만 병합하는 Ward 계층 군집. 대용량에서도 빠름",
+  },
+  {
+    id: "kmeans",
+    label: "K-평균 (비공간)",
+    spatial: false,
+    hint: "위치를 고려하지 않는 K-평균. 공간 제약 결과와 비교하는 용도임",
+  },
+  {
+    id: "hierarchical",
+    label: "계층적 군집 Ward (비공간)",
+    spatial: false,
+    hint: "위치를 고려하지 않는 Ward 계층 군집",
+  },
+];
+
+function ClusterDialog({ dialog }: { dialog: Extract<Dialog, { kind: "cluster" }> }) {
+  const ds = useApp((s) => s.datasets[dialog.datasetId]);
+  const job = useApp((s) => s.job);
+  const startCluster = useApp((s) => s.startCluster);
+  const numeric = ds?.info.columns.filter((c) => c.kind === "numeric" && c.origin !== "analysis") ?? [];
+  const [method, setMethod] = useState<ClusterMethod>("skater");
+  const [vars, setVars] = useState<string[]>([]);
+  const [k, setK] = useState("5");
+  const [weightsId, setWeightsId] = useState(ds?.activeWeightsId ?? ds?.weights[0]?.id ?? "");
+  const [useWeights, setUseWeights] = useState(true);
+  const [standardize, setStandardize] = useState(true);
+  const [floor, setFloor] = useState("");
+  const [thresholdColumn, setThresholdColumn] = useState("");
+  const [threshold, setThreshold] = useState("");
+  const [prefix, setPrefix] = useState("");
+  if (!ds) return null;
+  const meta = CLUSTER_METHODS.find((m) => m.id === method)!;
+  const isMaxp = method === "maxp";
+  const n = ds.info.n_rows;
+  // 권장 관측치 수 (1,600개 격자 기준 AZP 약 3분, Max-p 10분 이상)
+  const slowLimit: Partial<Record<ClusterMethod, number>> = { maxp: 500, azp: 1000, region_kmeans: 1000, skater: 5000 };
+  const slow = n > (slowLimit[method] ?? Infinity);
+
+  const toggle = (name: string) =>
+    setVars((cur) => (cur.includes(name) ? cur.filter((c) => c !== name) : [...cur, name]));
+
+  const kNum = Number(k);
+  const thresholdNum = Number(threshold);
+  const canRun =
+    vars.length > 0 &&
+    (!meta.spatial || !!weightsId) &&
+    (isMaxp ? thresholdNum > 0 : Number.isInteger(kNum) && kNum >= 2 && kNum < n) &&
+    !job;
+
+  const submit = () => {
+    const spec: ClusterSpec = {
+      method,
+      variables: vars,
+      standardize,
+      weights_id: (meta.spatial || useWeights) && weightsId ? weightsId : null,
+      prefix: prefix.trim() || null,
+    };
+    if (isMaxp) {
+      spec.threshold = thresholdNum;
+      spec.threshold_column = thresholdColumn || null;
+    } else {
+      spec.n_clusters = kNum;
+    }
+    if (method === "skater" && floor) spec.floor = Number(floor);
+    close();
+    void startCluster(ds.info.id, spec);
+  };
+
+  return (
+    <Modal
+      title="군집 분석"
+      onClose={close}
+      footer={
+        <>
+          <button onClick={close}>취소</button>
+          <button className="primary" onClick={submit} disabled={!canRun}>
+            실행
+          </button>
+        </>
+      }
+    >
+      <div className="form">
+        <label>
+          방법
+          <select value={method} onChange={(e) => setMethod(e.target.value as ClusterMethod)} aria-label="군집 방법">
+            <optgroup label="공간 제약 (지역화)">
+              {CLUSTER_METHODS.filter((m) => m.spatial).map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.label}
+                </option>
+              ))}
+            </optgroup>
+            <optgroup label="비공간 (비교용)">
+              {CLUSTER_METHODS.filter((m) => !m.spatial).map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.label}
+                </option>
+              ))}
+            </optgroup>
+          </select>
+        </label>
+        <p className="hint">{meta.hint}</p>
+        <div className="field-label">변수 — {vars.length}개 선택</div>
+        <div className="var-list" role="group" aria-label="군집 변수">
+          {numeric.map((c) => (
+            <label key={c.name} className="check">
+              <input type="checkbox" checked={vars.includes(c.name)} onChange={() => toggle(c.name)} />
+              {c.name}
+              {c.origin === "expression" ? " (계산)" : ""}
+            </label>
+          ))}
+        </div>
+        <label className="check">
+          <input type="checkbox" checked={standardize} onChange={(e) => setStandardize(e.target.checked)} />
+          변수 표준화 (z점수) — 단위가 다른 변수를 함께 쓸 때 권장
+        </label>
+        {isMaxp ? (
+          <div className="grid2">
+            <label>
+              임계값 변수
+              <select
+                value={thresholdColumn}
+                onChange={(e) => setThresholdColumn(e.target.value)}
+                aria-label="임계값 변수"
+              >
+                <option value="">피처 수</option>
+                {numeric.map((c) => (
+                  <option key={c.name} value={c.name}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              지역별 최소 합계
+              <input
+                type="number"
+                value={threshold}
+                onChange={(e) => setThreshold(e.target.value)}
+                placeholder={thresholdColumn ? "예: 50000" : "예: 10 (피처 수)"}
+                aria-label="최소 합계"
+              />
+            </label>
+          </div>
+        ) : (
+          <div className="grid2">
+            <label>
+              군집 수
+              <input type="number" min={2} value={k} onChange={(e) => setK(e.target.value)} aria-label="군집 수" />
+            </label>
+            {method === "skater" && (
+              <label>
+                군집별 최소 피처 수
+                <input
+                  type="number"
+                  min={1}
+                  value={floor}
+                  onChange={(e) => setFloor(e.target.value)}
+                  placeholder="제한 없음"
+                />
+              </label>
+            )}
+          </div>
+        )}
+        {ds.weights.length ? (
+          <>
+            {!meta.spatial && (
+              <label className="check">
+                <input type="checkbox" checked={useWeights} onChange={(e) => setUseWeights(e.target.checked)} />
+                공간 조각 수 계산 (군집이 몇 덩어리로 흩어졌는지)
+              </label>
+            )}
+            {(meta.spatial || useWeights) && <WeightsSelect ds={ds} value={weightsId} onChange={setWeightsId} />}
+          </>
+        ) : meta.spatial ? (
+          <NoWeights datasetId={ds.info.id} />
+        ) : null}
+        <label>
+          결과 열 접두어
+          <input
+            value={prefix}
+            onChange={(e) => setPrefix(e.target.value)}
+            placeholder={
+              {
+                skater: "SKATER",
+                maxp: "MAXP",
+                azp: "AZP",
+                region_kmeans: "RKM",
+                ward_spatial: "WARDSP",
+                kmeans: "KMEANS",
+                hierarchical: "HCLUST",
+              }[method]
+            }
+          />
+        </label>
+      </div>
+      {slow && (
+        <p className="hint warn-text">
+          관측치가 {n.toLocaleString()}개라 계산이 오래 걸릴 수 있음. 진행 중에 하단 상태 표시줄에서 취소할 수 있음.
+        </p>
+      )}
+      {job && <p className="hint">다른 분석이 실행 중임. 끝난 뒤에 실행할 수 있음.</p>}
+      <p className="hint">군집 번호(_GRP, 큰 군집부터 1번)가 새 열로 저장되고, 요약은 오른쪽 결과 패널에 표시됨.</p>
     </Modal>
   );
 }

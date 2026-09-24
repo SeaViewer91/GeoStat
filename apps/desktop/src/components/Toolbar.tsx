@@ -170,6 +170,15 @@ export function Toolbar({ chartsOpen, onToggleCharts }: ToolbarProps) {
             },
             disabled: !activeId || !!busy,
           },
+          {
+            label: "군집 분석 (SKATER · Max-p · AZP · K-평균)…",
+            onClick: () => {
+              if (!activeId) return;
+              onToggleCharts(true);
+              showDialog({ kind: "cluster", datasetId: activeId });
+            },
+            disabled: !activeId || !!busy,
+          },
           "-",
           {
             label: "계산 필드 추가…",

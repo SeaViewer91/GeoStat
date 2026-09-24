@@ -1141,3 +1141,12 @@ button.on-soft {
     left: 100%;
   }
 }
+
+.swatch.inline {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 4px;
+  border-radius: 2px;
+  vertical-align: -1px;
+}

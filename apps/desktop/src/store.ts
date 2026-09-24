@@ -18,6 +18,8 @@ import {
   type JobInfo,
   type LocalParams,
   type RegressionSpec,
+  type ClusterSpec,
+  isClusterReport,
   type MoranResult,
   type TableOptions,
   type WeightsInfo,
@@ -42,7 +44,7 @@ export interface StyleSpec {
   mask?: string | null;
 }
 
-/** 결과 패널에 띄울 회귀 보고서 */
+/** 결과 패널에 띄울 회귀·군집 보고서 */
 export interface ReportEntry {
   datasetId: string;
   analysis: AnalysisInfo;
@@ -94,6 +96,7 @@ export type Dialog =
   | { kind: "local"; datasetId: string }
   | { kind: "joincount"; datasetId: string }
   | { kind: "regression"; datasetId: string }
+  | { kind: "cluster"; datasetId: string }
   | { kind: "chart"; datasetId: string; chart: ChartKind };
 
 /** 프로젝트 파일에 저장하는 화면 설정 */
@@ -154,6 +157,9 @@ interface AppState {
   job: JobInfo | null;
   reports: ReportEntry[];
   startRegression: (id: string, spec: RegressionSpec) => Promise<boolean>;
+  startCluster: (id: string, spec: ClusterSpec) => Promise<boolean>;
+  /** 작업을 시작하고 끝날 때까지 진행률을 받은 뒤 결과를 반영함 */
+  runJob: (id: string, start: () => Promise<JobInfo>) => Promise<boolean>;
   cancelJob: () => Promise<void>;
   loadReports: (id: string) => Promise<void>;
   dismissReport: (analysisId: string) => void;
@@ -438,10 +444,13 @@ export const useApp = create<AppState>((set, get) => {
     job: null,
     reports: [],
 
-    startRegression: async (id, spec) => {
+    startRegression: (id, spec) => get().runJob(id, () => engine.startRegression(id, spec)),
+    startCluster: (id, spec) => get().runJob(id, () => engine.startCluster(id, spec)),
+
+    runJob: async (id, start) => {
       let job: JobInfo;
       try {
-        job = await engine.startRegression(id, spec);
+        job = await start();
       } catch (err) {
         set({ error: toEngineError(err) });
         return false;
@@ -501,6 +510,10 @@ export const useApp = create<AppState>((set, get) => {
       const outs = analysis.outputs;
       const report = analysis.report;
       if (!report) return;
+      if (isClusterReport(report)) {
+        await get().applyStyle(id, { column: outs[0], method: "unique_values", k: 5 });
+        return;
+      }
       if (report.model === "gwr" || report.model === "mgwr") {
         // 계수 지도: 지정한 변수(없으면 첫 독립변수)의 지역 계수, 유의하지 않은 곳은 가림
         const coefCols = outs.filter((c) => c.includes("_B_"));

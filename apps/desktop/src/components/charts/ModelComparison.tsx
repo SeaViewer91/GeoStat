@@ -1,6 +1,6 @@
 // 모형 비교표: 같은 데이터셋에서 실행한 회귀 결과의 적합도를 한 표로 모음
 
-import type { RegressionModel } from "../../lib/engine";
+import { isRegressionReport, type RegressionModel, type RegressionReport } from "../../lib/engine";
 import { useApp, type ReportEntry } from "../../store";
 import { num, pval, stars } from "./ReportCard";
 
@@ -14,19 +14,18 @@ const SHORT: Record<RegressionModel, string> = {
   mgwr: "MGWR",
 };
 
+const reg = (e: ReportEntry) => e.analysis.report as RegressionReport;
+
 function label(entry: ReportEntry): string {
-  const r = entry.analysis.report!;
-  return (
-    SHORT[r.model] +
-    (entry.analysis.params.robust === "white" ? " · White" : "")
-  );
+  const r = reg(entry);
+  return SHORT[r.model] + (entry.analysis.params.robust === "white" ? " · White" : "");
 }
 
 /** 종속변수·관측치 수가 같은 모형끼리만 AICc를 비교할 수 있으므로 그 묶음에서 최솟값을 찾음 */
 function bestByGroup(entries: ReportEntry[]): Set<string> {
   const best = new Map<string, { id: string; aicc: number }>();
   for (const e of entries) {
-    const r = e.analysis.report!;
+    const r = reg(e);
     const aicc = r.fit?.aicc;
     if (aicc === null || aicc === undefined) continue;
     const key = `${r.y}|${r.n}`;
@@ -38,44 +37,22 @@ function bestByGroup(entries: ReportEntry[]): Set<string> {
 
 export function ModelComparison({ entries }: { entries: ReportEntry[] }) {
   const notify = useApp((s) => s.notify);
-  const rows = entries.filter((e) => e.analysis.report?.fit);
+  const rows = entries.filter((e) => isRegressionReport(e.analysis.report) && e.analysis.report.fit);
   if (rows.length < 2) return null;
   const best = bestByGroup(rows);
-  const ys = new Set(rows.map((e) => e.analysis.report!.y));
+  const ys = new Set(rows.map((e) => reg(e).y));
 
   const copy = async () => {
-    const header = [
-      "모형",
-      "종속변수",
-      "독립변수",
-      "n",
-      "R²",
-      "로그우도",
-      "AICc",
-      "잔차 Moran's I",
-      "p",
-    ];
+    const header = ["모형", "종속변수", "독립변수", "n", "R²", "로그우도", "AICc", "잔차 Moran's I", "p"];
     const lines = rows.map((e) => {
-      const r = e.analysis.report!;
+      const r = reg(e);
       const f = r.fit!;
-      return [
-        label(e),
-        r.y,
-        r.x.join(" + "),
-        r.n,
-        f.r2,
-        f.loglik,
-        f.aicc,
-        f.moran_i,
-        f.moran_p,
-      ]
+      return [label(e), r.y, r.x.join(" + "), r.n, f.r2, f.loglik, f.aicc, f.moran_i, f.moran_p]
         .map((v) => (v === null || v === undefined ? "" : String(v)))
         .join("\t");
     });
     try {
-      await navigator.clipboard.writeText(
-        [header.join("\t"), ...lines].join("\n"),
-      );
+      await navigator.clipboard.writeText([header.join("\t"), ...lines].join("\n"));
       notify("모형 비교표를 복사함 (엑셀에 붙여 넣을 수 있음)");
     } catch {
       notify("클립보드에 복사하지 못함");
@@ -105,15 +82,11 @@ export function ModelComparison({ entries }: { entries: ReportEntry[] }) {
           </thead>
           <tbody>
             {rows.map((e) => {
-              const r = e.analysis.report!;
+              const r = reg(e);
               const f = r.fit!;
               const isBest = best.has(e.analysis.id);
               return (
-                <tr
-                  key={e.analysis.id}
-                  className={isBest ? "best" : ""}
-                  title={e.analysis.description}
-                >
+                <tr key={e.analysis.id} className={isBest ? "best" : ""} title={e.analysis.description}>
                   <td>
                     {label(e)}
                     {isBest && <span className="badge">최적</span>}
@@ -134,9 +107,8 @@ export function ModelComparison({ entries }: { entries: ReportEntry[] }) {
         </table>
       </div>
       <p className="muted small">
-        AICc는 σ²를 모수로 포함해 계산함 (mgwr 방식). 종속변수·관측치가 같은
-        모형끼리 비교하며 낮을수록 좋음. 잔차 I는 순열 999회 검정이며, 유의하면
-        공간 의존성이 남아 있다는 뜻임. GM 추정은 우도가 없어 비교에서 빠짐.
+        AICc는 σ²를 모수로 포함해 계산함 (mgwr 방식). 종속변수·관측치가 같은 모형끼리 비교하며 낮을수록 좋음. 잔차 I는
+        순열 999회 검정이며, 유의하면 공간 의존성이 남아 있다는 뜻임. GM 추정은 우도가 없어 비교에서 빠짐.
       </p>
     </section>
   );

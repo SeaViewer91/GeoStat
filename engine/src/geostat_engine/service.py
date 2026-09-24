@@ -243,15 +243,9 @@ def prepare_regression(ds: Dataset, spec: dict[str, Any]) -> dict[str, Any]:
     return regression.prepare(ds.gdf, spec, weights, coords)
 
 
-def apply_regression(
-    ds: Dataset, spec: dict[str, Any], result: dict[str, Any], record_id: str | None = None
-) -> AnalysisRecord:
-    """계산 결과 열을 데이터셋에 붙이고 분석 기록을 남김. 같은 접두어의 이전 결과는 대체함."""
-    from geostat_engine.analysis import regression
-
-    model = spec["model"]
-    prefix = (spec.get("prefix") or regression.DEFAULT_PREFIX[model]).strip()
-    columns = {f"{prefix}_{key}": np.asarray(values) for key, values in result["columns"].items()}
+def _attach_columns(ds: Dataset, prefix: str, result_columns: dict[str, Any]) -> list[str]:
+    """작업 결과 열을 <접두어>_<키> 이름으로 붙임. 같은 열을 쓰던 이전 분석은 대체함."""
+    columns = {f"{prefix}_{key}": np.asarray(values) for key, values in result_columns.items()}
     for values in columns.values():
         if len(values) != len(ds.gdf):
             raise EngineError(
@@ -267,6 +261,18 @@ def apply_regression(
         remove_field(ds, a.outputs[0])
     for col, values in columns.items():
         ds.gdf[col] = values
+    return list(columns)
+
+
+def apply_regression(
+    ds: Dataset, spec: dict[str, Any], result: dict[str, Any], record_id: str | None = None
+) -> AnalysisRecord:
+    """계산 결과 열을 데이터셋에 붙이고 분석 기록을 남김. 같은 접두어의 이전 결과는 대체함."""
+    from geostat_engine.analysis import regression
+
+    model = spec["model"]
+    prefix = (spec.get("prefix") or regression.DEFAULT_PREFIX[model]).strip()
+    outputs = _attach_columns(ds, prefix, result["columns"])
 
     report = result["report"]
     weights_name = (
@@ -281,7 +287,7 @@ def apply_regression(
         id=record_id or _next_id("a", [a.id for a in ds.analyses]),
         method="regression",
         params={**spec, "prefix": prefix},
-        outputs=list(columns),
+        outputs=outputs,
         description=desc,
         summary={"report": report},
     )
@@ -298,3 +304,51 @@ def run_regression_sync(
     payload = prepare_regression(ds, spec)
     result = regression.run(payload, lambda _p, _m: None)
     return apply_regression(ds, spec, result, record_id=record_id)
+
+
+# ---- 군집 분석 (결과를 열로 저장) ------------------------------------------------
+
+
+def prepare_cluster(ds: Dataset, spec: dict[str, Any]) -> dict[str, Any]:
+    from geostat_engine.analysis import cluster
+
+    weights = ds.get_weights(spec["weights_id"]).w if spec.get("weights_id") else None
+    return cluster.prepare(ds.gdf, {**spec, "seed": spec.get("seed", DEFAULT_SEED)}, weights)
+
+
+def apply_cluster(
+    ds: Dataset, spec: dict[str, Any], result: dict[str, Any], record_id: str | None = None
+) -> AnalysisRecord:
+    from geostat_engine.analysis import cluster
+
+    method = spec["method"]
+    prefix = (spec.get("prefix") or cluster.DEFAULT_PREFIX[method]).strip()
+    outputs = _attach_columns(ds, prefix, result["columns"])
+    report = result["report"]
+    weights_name = (
+        ds.weights[spec["weights_id"]].name if spec.get("weights_id") in ds.weights else None
+    )
+    desc = f"{report['title']}: {', '.join(spec['variables'])} → {report['k']}개 군집"
+    if weights_name:
+        desc += f" (W={weights_name})"
+    record = AnalysisRecord(
+        id=record_id or _next_id("a", [a.id for a in ds.analyses]),
+        method="cluster",
+        params={**spec, "prefix": prefix, "seed": spec.get("seed", DEFAULT_SEED)},
+        outputs=outputs,
+        description=desc,
+        summary={"report": report},
+    )
+    ds.analyses.append(record)
+    return record
+
+
+def run_cluster_sync(
+    ds: Dataset, spec: dict[str, Any], record_id: str | None = None
+) -> AnalysisRecord:
+    """작업 프로세스 없이 바로 계산함 (프로젝트 다시 열기·테스트용)."""
+    from geostat_engine.analysis import cluster
+
+    payload = prepare_cluster(ds, spec)
+    result = cluster.run(payload, lambda _p, _m: None)
+    return apply_cluster(ds, spec, result, record_id=record_id)

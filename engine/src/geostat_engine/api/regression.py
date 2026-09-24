@@ -141,7 +141,12 @@ def save_report(
     path = Path(body.path).expanduser()
     if not path.parent.exists():
         raise EngineError("folder_not_found", f"폴더가 없음: {path.parent}")
-    text = regression.report_text(record.summary["report"], record.description)
+    if record.method == "cluster":
+        from geostat_engine.analysis import cluster
+
+        text = cluster.report_text(record.summary["report"], record.description)
+    else:
+        text = regression.report_text(record.summary["report"], record.description)
     try:
         path.write_text(text, encoding="utf-8")
     except OSError as exc:

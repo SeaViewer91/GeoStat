@@ -21,6 +21,7 @@ dependencies = [
     "numba>=0.60",
     "spreg>=1.8",
     "mgwr>=2.2",
+    "spopt>=0.6",
 ]
 
 [project.scripts]

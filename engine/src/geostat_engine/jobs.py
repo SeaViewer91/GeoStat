@@ -78,6 +78,10 @@ def _child_main(task: str, payload: dict[str, Any], out: Any) -> None:
             from geostat_engine.analysis import regression
 
             result = regression.run(payload, progress)
+        elif task == "cluster":
+            from geostat_engine.analysis import cluster
+
+            result = cluster.run(payload, progress)
         else:
             raise EngineError("invalid_task", f"알 수 없는 작업: {task}")
         out.put(("result", result))

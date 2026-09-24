@@ -272,13 +272,67 @@ export interface RegressionReport {
   notes: string[];
 }
 
+export type ClusterMethod =
+  | "skater"
+  | "maxp"
+  | "azp"
+  | "region_kmeans"
+  | "ward_spatial"
+  | "kmeans"
+  | "hierarchical";
+
+export interface ClusterSpec {
+  method: ClusterMethod;
+  variables: string[];
+  n_clusters?: number;
+  weights_id?: string | null;
+  standardize?: boolean;
+  floor?: number | null;
+  threshold_column?: string | null;
+  threshold?: number | null;
+  prefix?: string | null;
+}
+
+export interface ClusterRow {
+  id: number;
+  size: number;
+  within_ss: number | null;
+  /** 변수 순서대로 원래 값 평균 */
+  means: (number | null)[];
+  /** 변수별 표준화(z) 평균. 군집 프로필 색칠용 */
+  z_means: (number | null)[];
+  /** 공간적으로 이어진 조각 수 (가중치가 없으면 null) */
+  fragments: number | null;
+}
+
+export interface ClusterReport {
+  kind: "cluster";
+  method: ClusterMethod;
+  title: string;
+  variables: string[];
+  n: number;
+  k: number;
+  summary: [string, number | string | null][];
+  clusters: ClusterRow[];
+  ratio: number | null;
+  notes: string[];
+}
+
 export interface AnalysisInfo {
   id: string;
   method: string;
   description: string;
   outputs: string[];
   params: Record<string, unknown>;
-  report: RegressionReport | null;
+  report: RegressionReport | ClusterReport | null;
+}
+
+export function isClusterReport(r: AnalysisInfo["report"]): r is ClusterReport {
+  return !!r && (r as ClusterReport).kind === "cluster";
+}
+
+export function isRegressionReport(r: AnalysisInfo["report"]): r is RegressionReport {
+  return !!r && (r as ClusterReport).kind !== "cluster";
 }
 
 export interface JobInfo {
@@ -517,6 +571,7 @@ export const engine = {
 
   // ---- 회귀·작업 ----
   startRegression: (id: string, spec: RegressionSpec) => post<JobInfo>(`${ds(id)}/regression`, spec),
+  startCluster: (id: string, spec: ClusterSpec) => post<JobInfo>(`${ds(id)}/cluster`, spec),
   job: (jobId: string) => json<JobInfo>(`/jobs/${jobId}`),
   cancelJob: (jobId: string) => json<JobInfo>(`/jobs/${jobId}`, { method: "DELETE" }),
   analyses: (id: string) => json<AnalysisInfo[]>(`${ds(id)}/analyses`),

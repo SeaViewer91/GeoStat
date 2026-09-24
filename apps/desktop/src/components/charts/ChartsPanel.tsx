@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 
-import { engine } from "../../lib/engine";
+import { engine, isClusterReport } from "../../lib/engine";
 import { useActive, useApp, type ChartKind, type ChartSpec, type LoadedDataset } from "../../store";
 import { BoxPlot, Histogram, MoranReference, Scatter } from "./Charts";
+import { ClusterReportCard } from "./ClusterReportCard";
 import { ModelComparison } from "./ModelComparison";
 import { ReportCard } from "./ReportCard";
 
@@ -45,7 +46,16 @@ export function ChartsPanel({ onClose }: { onClose: () => void }) {
       </div>
       {!ds && <p className="muted pad">데이터를 열면 차트를 추가할 수 있음</p>}
       {ds && <ModelComparison entries={myReports} />}
-      {ds && [...myReports].reverse().map((r) => <ReportCard key={r.analysis.id} ds={ds} entry={r} />)}
+      {ds &&
+        [...myReports]
+          .reverse()
+          .map((r) =>
+            isClusterReport(r.analysis.report) ? (
+              <ClusterReportCard key={r.analysis.id} ds={ds} entry={r} />
+            ) : (
+              <ReportCard key={r.analysis.id} ds={ds} entry={r} />
+            ),
+          )}
       {ds && mine.length === 0 && myReports.length === 0 && (
         <p className="muted pad">
           차트에서 끌어 선택하면 지도·테이블에도 반영됨. 지도에서 선택해도 차트에 강조됨.

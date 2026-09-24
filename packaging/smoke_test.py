@@ -111,6 +111,20 @@ def main(exe: str) -> None:
             assert fit["moran_i"] is not None, fit  # 잔차 Moran's I (esda) 자동 계산
         print("회귀 작업 프로세스(spreg, mgwr) 확인함")
 
+        for method in ("skater", "azp", "kmeans"):
+            job = call(
+                port,
+                f"/datasets/{info['id']}/cluster",
+                {"method": method, "variables": ["값", "X좌표"], "n_clusters": 3, **wid},
+            )
+            t_job = time.time()
+            while job["status"] == "running" and time.time() - t_job < 120:
+                time.sleep(0.3)
+                job = call(port, f"/jobs/{job['id']}")
+            assert job["status"] == "done", job
+            assert job["result"]["analysis"]["report"]["k"] == 3
+        print("군집 작업 프로세스(spopt, scikit-learn) 확인함")
+
         csv = tmp / "점.csv"
         csv.write_text("이름,경도,위도\n가,129.0,35.1\n", encoding="cp949")
         insp = call(port, "/files/inspect", {"path": str(csv)})
