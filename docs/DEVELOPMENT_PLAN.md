@@ -19,7 +19,7 @@
 ### 1.2 비목표 (1.0 이전에는 하지 않음)
 - 편집 GIS 기능(디지타이징, 토폴로지 편집) — QGIS 영역
 - 시공간(space-time) 모델, 베이지안 공간모형(INLA 등)
-- Windows/Linux 빌드 (구조는 크로스플랫폼으로 두되 검증·배포는 macOS만)
+- Linux 빌드 (Windows는 0.9.2부터 배포함. 8장 참고)
 
 ---
 
@@ -359,6 +359,20 @@ GeoStat/
 - [x] macOS 최소 버전 14.0 (rasterio 휠 요구 사항)
 - [ ] 지도 분할 보기 (P1·P2 이월) → 1.0 이후
 - [ ] Intel 맥 빌드 → 요청이 있으면 x86_64 러너로 추가
+
+### 0.9.1·0.9.2 (2026-09-24~25)
+
+- [x] 0.9.1: 좌우 패널 너비 조절 (경계선 끌기, 두 번 누르면 기본값, 너비 기억)
+- [x] 0.9.2: Windows 10·11(x64) 설치 프로그램 추가 (NSIS, 사용자 단위 설치라 관리자 권한 불필요, WebView2 자동 설치)
+  - 소스는 macOS와 하나로 관리함. 플랫폼 차이는 `tauri.windows.conf.json`, `packaging/windows/release.sh`, 코드 안 `cfg(windows)`·`sys.platform` 분기로만 둠
+  - 엔진은 콘솔 창 없이 띄움(CREATE_NO_WINDOW). 업데이트 설치 전에 엔진을 먼저 종료함 (실행 중인 파일은 덮어쓸 수 없음)
+  - 단축키 표시는 Windows에서 Ctrl로 바꿈 (`platformKeys`), 글꼴에 맑은 고딕 추가
+  - 릴리스 워크플로: macOS·Windows를 매트릭스로 빌드하고 `scripts/merge_release.py`로 latest.json(`darwin-aarch64`·`windows-x86_64`)과 SHA256SUMS를 합쳐 한 릴리스 초안에 올림
+  - CI: 엔진 테스트(Ubuntu·Windows), 셸 검사(macOS·Windows), 엔진 번들 스모크 테스트(macOS·Windows). 실패하면 로그 끝부분을 주석으로 남김 (`scripts/ci/annotate.sh`)
+  - 잡은 문제: Windows 번들 엔진에서 작업 프로세스(회귀·군집·존 통계)가 시작하지 못함(WinError 87, 요청 멈춤). 앱 종료 감지용으로 stdin 파이프에 읽기를 걸어 두면 같은 파일 객체에 대한 호출이 줄을 서서 생긴 문제였음. Windows에서는 PeekNamedPipe로 0.5초마다 파이프 상태만 확인하도록 바꿈
+  - 설치 파일은 코드 서명하지 않음 → 첫 실행 때 SmartScreen에서 "추가 정보 → 실행"이 필요함
+- [ ] Windows 실제 PC에서 설치·업데이트 확인
+- [ ] Linux 배포판 → 요청이 있으면 추가
 
 ### 다음: 1.0
 
