@@ -37,23 +37,15 @@ def call(port: int, path: str, body: dict | None = None) -> dict:
 
 
 def _minimal_env(tmp: Path) -> dict[str, str]:
-    """개발 환경 변수에 기대지 않도록 최소한의 환경으로 엔진을 띄움 (앱이 띄울 때와 비슷하게)."""
+    """개발 환경 변수에 기대지 않도록 최소한의 환경으로 엔진을 띄움 (앱이 띄울 때와 비슷하게).
+
+    Windows는 앱(Tauri)이 사용자 환경 변수를 그대로 물려주므로 전체 환경을 쓰되,
+    개발 도구의 파이썬 경로(PYTHONPATH·VIRTUAL_ENV 등)만 빼서 번들이 자기 파일만 쓰는지 확인함.
+    """
     env = {"GEOSTAT_ENGINE_TOKEN": TOKEN, "GEOSTAT_SAMPLE_DIR": str(tmp / "samples")}
     if sys.platform == "win32":
-        # Windows에서 Python이 동작하려면 SYSTEMROOT 등이 있어야 함 (없으면 소켓·난수 초기화 실패)
-        keep = (
-            "SYSTEMROOT",
-            "WINDIR",
-            "TEMP",
-            "TMP",
-            "USERPROFILE",
-            "LOCALAPPDATA",
-            "APPDATA",
-        )
-        env.update({k: os.environ[k] for k in keep if k in os.environ})
-        env["PATH"] = os.path.join(
-            os.environ.get("SYSTEMROOT", r"C:\Windows"), "System32"
-        )
+        dev_only = ("PYTHONPATH", "PYTHONHOME", "VIRTUAL_ENV", "UV_PROJECT_ENVIRONMENT")
+        env = {k: v for k, v in os.environ.items() if k.upper() not in dev_only} | env
     else:
         env["PATH"] = "/usr/bin:/bin"
     return env
