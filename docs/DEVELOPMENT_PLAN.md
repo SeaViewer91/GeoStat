@@ -374,6 +374,19 @@ GeoStat/
 - [ ] Windows 실제 PC에서 설치·업데이트 확인
 - [ ] Linux 배포판 → 요청이 있으면 추가
 
+### 0.10.0 (2026-09-25) — 점 집계·비율 지도·시공간·보고서
+
+- [x] 점 집계 (`analysis/aggregate.py`): sjoin(intersects) 뒤 경계 위 점은 번호가 가장 작은 폴리곤 하나에만 넣음. 개수·㎢당 밀도·합계·평균·최솟값·최댓값·중앙값·표준편차. 좌표계가 다르면 점을 대상 좌표계로 바꿈. 프로젝트 캐시에 저장하고, 캐시가 없으면 원본 점 파일 경로로 다시 계산함
+- [x] 비율 지도 (`analysis/rates.py`, esda.smoothing): 원비율·초과위험·EB·공간 비율·공간 EB. 앱 가중치는 id_order가 없어 공간 비율 계산 전에 행 순서로 지정함 (번들 스모크 테스트에서 잡음)
+- [x] EB 비율 Moran's I·LISA (esda Moran_Rate·Moran_Local_Rate): sids2(SID79/BIR79) I = 0.1662로 GeoDa·esda 문서 값과 일치
+- [x] 시공간 (`analysis/timeseries.py`): 시간 변수 묶음(Dataset.time_groups, 프로젝트 저장), 열 이름 끝 연도로 자동 찾기, 긴 형태 pivot·기간별 파일 merge → GeoPackage, 기간별 Moran's I 추이, 기간별 LISA + 군집 전이표(인접 기간 합), 차분 Moran·LISA(column_base)
+- [x] 주제도: 기간 넘기기·재생, 모든 기간 같은 계급 경계(classify의 pool: 여러 열 값을 모아 경계를 구하고 이 열을 그 경계로 나눔)
+- [x] 분석 보고서 (`report.py`): 블록(제목·문단·표·그림) → HTML(자체 포함) / docx(python-docx, 동아시아 글꼴 지정). PyInstaller는 docx 템플릿을 collect_data_files로 포함
+- [x] 대화상자 공용 부품을 `components/dialogKit.tsx`로 분리하고 새 대화상자는 `AnalysisDialogs.tsx`에 둠
+- [x] 검증: 엔진 테스트 92개, 번들 스모크 테스트(Linux·macOS·Windows)에 점 집계·공간 EB·기간별 LISA·보고서 추가, 브라우저 개발 모드에서 Playwright로 대화상자·지도·보고서 흐름 확인
+- [ ] 시간 변수 묶음에서 열을 지우면 묶음이 남는 문제 (분석 때 '열이 없음' 오류로 드러남) → 묶음 자동 정리
+- [ ] 보고서 영어판 (엔진 문구 번역)
+
 ### 다음: 1.0
 
 - 0.9를 실제 자료로 써 보고 나온 문제 수정, 번들 용량 줄이기(pyogrio·rasterio GDAL 중복), 엔진 메시지 영어화 여부 결정
