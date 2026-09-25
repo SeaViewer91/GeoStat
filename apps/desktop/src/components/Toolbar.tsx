@@ -179,6 +179,11 @@ export function Toolbar({ chartsOpen, onToggleCharts }: ToolbarProps) {
             onClick: () => activeId && showDialog({ kind: "export", datasetId: activeId }),
             disabled: !activeId,
           },
+          {
+            label: "분석 보고서 내보내기 (Word·HTML)…",
+            onClick: () => showDialog({ kind: "report" }),
+            disabled: !activeId || !!busy,
+          },
         ]}
       />
       <Menu
@@ -207,6 +212,11 @@ export function Toolbar({ chartsOpen, onToggleCharts }: ToolbarProps) {
           {
             label: "Join Count (이진 변수)…",
             onClick: () => activeId && showDialog({ kind: "joincount", datasetId: activeId }),
+            disabled: !activeId || !!busy,
+          },
+          {
+            label: "비율 지도 · EB 보정…",
+            onClick: () => activeId && showDialog({ kind: "rates", datasetId: activeId }),
             disabled: !activeId || !!busy,
           },
           "-",
@@ -239,11 +249,37 @@ export function Toolbar({ chartsOpen, onToggleCharts }: ToolbarProps) {
             onClick: () => showDialog({ kind: "fishnet" }),
             disabled: !!busy || (!activeId && !hasRaster),
           },
+          {
+            label: "점 집계 (점 → 폴리곤)…",
+            onClick: () => activeId && showDialog({ kind: "aggregate", datasetId: activeId }),
+            disabled: !activeId || !!busy,
+          },
           "-",
           {
             label: "계산 필드 추가…",
             onClick: () => activeId && showDialog({ kind: "field", datasetId: activeId }),
             disabled: !activeId,
+          },
+        ]}
+      />
+      <Menu
+        label="시공간"
+        items={[
+          {
+            label: "시간 변수 묶음…",
+            onClick: () => activeId && showDialog({ kind: "timegroups", datasetId: activeId }),
+            disabled: !activeId || !!busy,
+          },
+          {
+            label: "기간별 자료 만들기 (긴 형태·기간별 파일)…",
+            onClick: () => activeId && showDialog({ kind: "reshape", datasetId: activeId }),
+            disabled: !activeId || !!busy,
+          },
+          "-",
+          {
+            label: "시공간 분석 (Moran 추이·기간별 LISA·차분 LISA)…",
+            onClick: () => activeId && showDialog({ kind: "timeseries", datasetId: activeId }),
+            disabled: !activeId || !!busy,
           },
         ]}
       />

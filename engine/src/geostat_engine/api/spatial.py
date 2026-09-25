@@ -163,6 +163,12 @@ def save_weights(
 class MoranRequest(BaseModel):
     column: str
     column_y: str | None = Field(default=None, description="이변량 Moran의 두 번째 변수")
+    column_base: str | None = Field(
+        default=None, description="차분 Moran: column − column_base (예: 2024년 − 2023년)"
+    )
+    rate_base: str | None = Field(
+        default=None, description="EB Moran: column(분자) / rate_base(분모) 비율로 계산"
+    )
     weights_id: str
     permutations: int = Field(default=999, ge=0)
     seed: int | None = service.DEFAULT_SEED
@@ -194,11 +200,13 @@ def _finite(v: float) -> float | None:
 def global_moran(dataset_id: str, body: MoranRequest, request: Request) -> MoranResponse:
     ds = _ds(request, dataset_id)
     entry = ds.get_weights(body.weights_id)
-    x = service._column(ds, body.column)
+    x = service.variable(ds, body.column, body.column_base)
     y = service._column(ds, body.column_y) if body.column_y else None
-    r = esda_ops.moran(x, entry.w, body.permutations, body.seed, y=y)
+    base = service._column(ds, body.rate_base) if body.rate_base else None
+    r = esda_ops.moran(x, entry.w, body.permutations, body.seed, y=y, rate_base=base)
+    column = str(x.name) if base is None else f"{body.column} / {body.rate_base} (EB)"
     return MoranResponse(
-        column=body.column,
+        column=column,
         column_y=body.column_y,
         weights=entry.name,
         I=r.I,
@@ -233,9 +241,11 @@ def join_count(dataset_id: str, body: JoinCountRequest, request: Request) -> dic
 
 
 class LocalRequest(BaseModel):
-    method: Literal["lisa", "lisa_bv", "gi_star", "local_geary"]
+    method: Literal["lisa", "lisa_bv", "lisa_eb", "gi_star", "local_geary"]
     column: str
     column_y: str | None = None
+    column_base: str | None = Field(default=None, description="차분: column − column_base")
+    rate_base: str | None = Field(default=None, description="EB 비율 LISA의 분모 열")
     weights_id: str
     permutations: int = Field(default=999, ge=99)
     seed: int | None = service.DEFAULT_SEED

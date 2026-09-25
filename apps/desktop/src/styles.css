@@ -1241,3 +1241,92 @@ button.on-soft {
 .v-splitter.dragging {
   background: var(--accent);
 }
+
+/* ---- 0.10: 시간 변수 묶음·시공간·점 집계 ---- */
+
+.group-box {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.group-box input[aria-label] {
+  min-width: 0;
+}
+
+.check-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  max-height: 160px;
+  overflow: auto;
+  padding: 4px 0;
+}
+
+.period-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.period-row select {
+  flex: 1;
+  min-width: 0;
+}
+
+.period-row .field-label {
+  margin: 0 4px 0 0;
+}
+
+td.nowrap,
+.result-table td.nowrap {
+  white-space: nowrap;
+}
+
+.result-table tbody tr.on td {
+  background: var(--accent-soft);
+}
+
+.result-table td.diag {
+  font-weight: 600;
+}
+
+.result-table td.strong {
+  color: var(--danger);
+}
+
+svg.trend {
+  width: 100%;
+  height: auto;
+  max-height: 140px;
+}
+
+svg.trend .line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+
+svg.trend .axis.zero {
+  stroke: var(--border);
+  stroke-dasharray: 3 3;
+}
+
+svg.trend .dot {
+  fill: var(--panel);
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+
+svg.trend .dot.sig {
+  fill: var(--accent);
+}
+
+svg.trend .tick {
+  fill: var(--muted);
+  font-size: 10px;
+}

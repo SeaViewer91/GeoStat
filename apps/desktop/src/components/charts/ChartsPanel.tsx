@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 
 import { t } from "../../i18n";
-import { engine, isClusterReport } from "../../lib/engine";
+import { engine, isClusterReport, isLisaTimeReport } from "../../lib/engine";
 import { useActive, useApp, type ChartKind, type ChartSpec, type LoadedDataset } from "../../store";
 import { BoxPlot, Histogram, MoranReference, Scatter } from "./Charts";
 import { ClusterReportCard } from "./ClusterReportCard";
+import { LisaTimeCard } from "./LisaTimeCard";
 import { ModelComparison } from "./ModelComparison";
 import { ReportCard } from "./ReportCard";
 
@@ -53,6 +54,8 @@ export function ChartsPanel({ onClose }: { onClose: () => void }) {
           .map((r) =>
             isClusterReport(r.analysis.report) ? (
               <ClusterReportCard key={r.analysis.id} ds={ds} entry={r} />
+            ) : isLisaTimeReport(r.analysis.report) ? (
+              <LisaTimeCard key={r.analysis.id} ds={ds} entry={r} />
             ) : (
               <ReportCard key={r.analysis.id} ds={ds} entry={r} />
             ),
@@ -95,7 +98,9 @@ function ChartCard({ ds, chart }: { ds: LoadedDataset; chart: ChartSpec }) {
         ? `${t("산점도")} · ${chart.x} × ${chart.y}`
         : chart.kind === "box"
           ? `${t("박스플롯")} · ${chart.x}`
-          : `${t("Moran 산점도")} · ${chart.x}${chart.y ? ` × ${chart.y}` : ""}`;
+          : `${t("Moran 산점도")} · ${chart.x}${chart.y ? ` × ${chart.y}` : ""}${chart.base ? ` − ${chart.base}` : ""}${
+              chart.rateBase ? ` / ${chart.rateBase} (EB)` : ""
+            }`;
   return (
     <section className="chart-card" data-testid="chart-card">
       <header>

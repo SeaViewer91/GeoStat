@@ -78,6 +78,10 @@ class ClassifyRequest(BaseModel):
     mask: str | None = Field(
         default=None, description="0인 피처를 '유의하지 않음'으로 가릴 열 (GWR 유의성)"
     )
+    pool: list[str] | None = Field(
+        default=None,
+        description="이 열들의 값을 모두 모아 계급 경계를 구함 (시간 변수 묶음의 모든 기간을 같은 경계로)",
+    )
 
 
 class RowsRequest(BaseModel):
@@ -124,6 +128,9 @@ class DatasetInfo(BaseModel):
     bounds_wgs84: tuple[float, float, float, float] | None
     columns: list[ColumnInfo]
     table: dict[str, Any] | None = None
+    time_groups: list[dict[str, Any]] = Field(
+        default=[], description="시간 변수 묶음 [{name, columns, labels}]"
+    )
 
 
 class RowsResponse(BaseModel):
@@ -226,6 +233,7 @@ def dataset_info(ds: Dataset) -> DatasetInfo:
         bounds_wgs84=_bounds_wgs84(gdf),
         columns=columns,
         table=ds.table,
+        time_groups=[g.as_dict() for g in ds.time_groups],
     )
 
 
@@ -334,7 +342,12 @@ def classify_column(dataset_id: str, body: ClassifyRequest, request: Request) ->
             _column(ds, body.column), _column(ds, body.mask), body.method, k=body.k
         )
     else:
-        result = classify(_column(ds, body.column), body.method, k=body.k)
+        pool = None
+        if body.pool:
+            pool = np.concatenate(
+                [_column(ds, c).to_numpy(dtype="float64", na_value=np.nan) for c in body.pool]
+            )
+        result = classify(_column(ds, body.column), body.method, k=body.k, pool=pool)
     return ClassifyResponse(
         column=result.column,
         method=result.method,

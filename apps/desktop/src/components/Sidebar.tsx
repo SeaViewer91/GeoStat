@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import { t } from "../i18n";
 import { dirname, pickSavePath } from "../lib/dialogs";
-import { engine, type ClassifyMethod } from "../lib/engine";
+import { engine, isLisaTimeReport, type ClassifyMethod } from "../lib/engine";
 import { MISSING_COLOR, classColors, rgbaCss } from "../lib/palette";
 import { useActive, useApp, type LoadedDataset, type StyleSpec } from "../store";
 import { RasterPanel } from "./RasterPanel";
@@ -126,6 +126,21 @@ function StyleEditor({ ds }: { ds: LoadedDataset }) {
   const [column, setColumn] = useState<string>(ds.style?.column ?? candidates[0]?.name ?? "");
   const [k, setK] = useState<number>(ds.style?.k ?? 5);
   const [useMask, setUseMask] = useState<boolean>(true);
+  const [samePeriodBreaks, setSamePeriodBreaks] = useState<boolean>(!!ds.style?.pool);
+  const [playing, setPlaying] = useState(false);
+  const reports = useApp((s) => s.reports);
+  // 이 열이 속한 기간 묶음: 시간 변수 묶음, 또는 기간별 LISA 결과의 기간별 군집 열
+  const series = (() => {
+    const g = ds.info.time_groups.find((x) => x.columns.includes(column));
+    if (g) return { columns: g.columns, labels: g.labels, poolable: true };
+    for (const r of reports) {
+      if (r.datasetId !== ds.info.id || !isLisaTimeReport(r.analysis.report)) continue;
+      const cols = r.analysis.outputs.slice(0, r.analysis.report.labels.length);
+      if (cols.includes(column)) return { columns: cols, labels: r.analysis.report.labels, poolable: false };
+    }
+    return null;
+  })();
+  const periodIndex = series ? series.columns.indexOf(column) : -1;
   // GWR 계수 열(<접두어>_B_<변수>)이면 같은 이름 규칙의 유의 여부 열(_SIG_)로 가릴 수 있음
   const maskColumn =
     column.includes("_B_") && ds.info.columns.some((c) => c.name === column.replace("_B_", "_SIG_"))
@@ -139,6 +154,7 @@ function StyleEditor({ ds }: { ds: LoadedDataset }) {
       setColumn(ds.style.column);
       setK(ds.style.k);
       setUseMask(!!ds.style.mask || !ds.style.column.includes("_B_"));
+      setSamePeriodBreaks(!!ds.style.pool);
     }
   }, [ds.style]);
 
@@ -147,11 +163,36 @@ function StyleEditor({ ds }: { ds: LoadedDataset }) {
     if (!candidates.some((c) => c.name === column)) setColumn(candidates[0]?.name ?? "");
   }, [method, candidates, column]);
 
+  const styleFor = (col: string): StyleSpec => ({
+    column: col,
+    method,
+    k,
+    mask: maskColumn && useMask ? maskColumn : null,
+    pool: series?.poolable && samePeriodBreaks && meta.filter === isNumeric ? series.columns : null,
+  });
+
   const apply = () => {
     if (!column) return;
-    const style: StyleSpec = { column, method, k, mask: maskColumn && useMask ? maskColumn : null };
-    void applyStyle(ds.info.id, style);
+    void applyStyle(ds.info.id, styleFor(column));
   };
+
+  /** 기간을 옮기고 같은 방법으로 바로 다시 칠함 */
+  const goPeriod = (i: number) => {
+    if (!series) return;
+    const col = series.columns[(i + series.columns.length) % series.columns.length];
+    setColumn(col);
+    if (ds.table) void applyStyle(ds.info.id, styleFor(col));
+  };
+
+  // 재생: 1.5초마다 다음 기간으로 넘김 (단계 구분이 끝난 뒤에 넘어가도록 busy면 기다림)
+  useEffect(() => {
+    if (!playing || !series) return;
+    const timer = setTimeout(() => {
+      if (!useApp.getState().busy) goPeriod(periodIndex + 1);
+    }, 1500);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playing, periodIndex, ds.theme]);
 
   const crs = ds.info.crs;
 
@@ -185,6 +226,41 @@ function StyleEditor({ ds }: { ds: LoadedDataset }) {
             ))}
           </select>
         </label>
+        {series && (
+          <div className="period-row" data-testid="period-stepper">
+            <span className="field-label">{t("기간")}</span>
+            <button onClick={() => goPeriod(periodIndex - 1)} disabled={!!busy} aria-label={t("이전 기간")}>
+              ◀
+            </button>
+            <select
+              value={periodIndex}
+              onChange={(e) => goPeriod(Number(e.target.value))}
+              aria-label={t("기간")}
+            >
+              {series.labels.map((lb, i) => (
+                <option key={lb} value={i}>
+                  {lb}
+                </option>
+              ))}
+            </select>
+            <button onClick={() => goPeriod(periodIndex + 1)} disabled={!!busy} aria-label={t("다음 기간")}>
+              ▶
+            </button>
+            <button
+              className={playing ? "on-soft" : ""}
+              onClick={() => setPlaying((v) => !v)}
+              title={t("기간을 차례로 넘겨 보기")}
+            >
+              {playing ? t("멈춤") : t("재생")}
+            </button>
+          </div>
+        )}
+        {series?.poolable && meta.filter === isNumeric && (
+          <label className="check">
+            <input type="checkbox" checked={samePeriodBreaks} onChange={(e) => setSamePeriodBreaks(e.target.checked)} />
+            {t("모든 기간 같은 계급 경계 (기간끼리 비교)")}
+          </label>
+        )}
         {maskColumn && meta.id !== "unique_values" && (
           <label className="check">
             <input type="checkbox" checked={useMask} onChange={(e) => setUseMask(e.target.checked)} />

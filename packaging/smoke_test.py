@@ -215,6 +215,57 @@ def main(exe: str) -> None:
         assert grid["n_rows"] > 0, grid
         print("래스터 타일·오버뷰·존 통계·격자(rasterio, exactextract) 확인함")
 
+        # 0.10: 점 집계·비율(EB)·시공간 LISA·보고서(HTML·Word)
+        from shapely.geometry import Point
+
+        pts = tmp / "점.gpkg"
+        gpd.GeoDataFrame(
+            {"무게": [1.0, 2.0, 3.0]},
+            geometry=[Point(200500, 550500), Point(200600, 550400), Point(201500, 551500)],
+            crs=5186,
+        ).to_file(pts, layer="pts", engine="pyogrio")
+        pinfo = call(port, "/datasets/open", {"path": str(pts)})
+        agg = call(
+            port,
+            f"/datasets/{info['id']}/aggregate",
+            {"source_id": pinfo["id"], "stats": [{"column": "무게", "stat": "sum"}]},
+        )
+        assert agg["analysis"]["outputs"] == ["PT_CNT", "PT_SUM_무게"], agg
+        call(port, f"/datasets/{info['id']}/fields", {"name": "분모", "expression": "`X좌표` + 1"})
+        call(
+            port,
+            f"/datasets/{info['id']}/rates",
+            {"method": "spatial_eb", "event": "PT_CNT", "base": "분모", "weights_id": w["id"]},
+        )
+        call(port, f"/datasets/{info['id']}/fields", {"name": "값2", "expression": "`값` * 2"})
+        req = urllib.request.Request(
+            f"http://127.0.0.1:{port}/datasets/{info['id']}/time-groups",
+            data=json.dumps(
+                {"groups": [{"name": "값", "columns": ["값", "값2"], "labels": ["1", "2"]}]}
+            ).encode(),
+            headers={"Authorization": f"Bearer {TOKEN}", "Content-Type": "application/json"},
+            method="PUT",
+        )
+        urllib.request.urlopen(req, timeout=60).close()
+        tl = call(
+            port,
+            f"/datasets/{info['id']}/timeseries/lisa",
+            {"group": "값", "weights_id": w["id"], "permutations": 99},
+        )
+        assert tl["analysis"]["report"]["kind"] == "lisa_time", tl
+        for fmt in ("html", "docx"):
+            out = call(
+                port,
+                "/report/export",
+                {
+                    "path": str(tmp / "보고서"),
+                    "format": fmt,
+                    "datasets": [{"dataset_id": info["id"]}],
+                },
+            )
+            assert Path(out["path"]).stat().st_size > 1000, out
+        print("점 집계·EB 비율·시공간 LISA·보고서(HTML·Word) 확인함")
+
         samples = call(port, "/files/samples")
         assert len(samples) == 4, samples
         for sample in samples:

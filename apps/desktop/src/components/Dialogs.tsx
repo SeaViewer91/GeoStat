@@ -1,6 +1,6 @@
 // 대화상자 모음: 레이어 선택, 표 불러오기(X·Y), 좌표계 지정, 계산 필드, 내보내기
 
-import { Fragment, useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState } from "react";
 
 import { CRS_PRESETS } from "../lib/crs";
 import { EXPORT_FILTERS, dirname, pickOpenPath, pickSavePath } from "../lib/dialogs";
@@ -19,7 +19,25 @@ import {
 } from "../lib/engine";
 import { t } from "../i18n";
 import { appVersion, openExternal } from "../lib/updater";
-import { useApp, type ChartKind, type Dialog, type LoadedDataset, type SelectMode } from "../store";
+import { useApp, type ChartKind, type Dialog, type SelectMode } from "../store";
+import {
+  AggregateDialog,
+  RatesDialog,
+  ReportDialog,
+  ReshapeDialog,
+  TimeGroupsDialog,
+  TimeSeriesDialog,
+} from "./AnalysisDialogs";
+import {
+  Modal,
+  NoWeights,
+  NumericSelect,
+  PermutationSelect,
+  WeightsSelect,
+  close,
+  firstNumeric,
+  tx,
+} from "./dialogKit";
 
 export function DialogHost() {
   const dialog = useApp((s) => s.dialog);
@@ -53,47 +71,22 @@ export function DialogHost() {
       return <QueryDialog datasetId={dialog.datasetId} />;
     case "about":
       return <AboutDialog />;
+    case "aggregate":
+      return <AggregateDialog datasetId={dialog.datasetId} />;
+    case "rates":
+      return <RatesDialog datasetId={dialog.datasetId} />;
+    case "timegroups":
+      return <TimeGroupsDialog datasetId={dialog.datasetId} />;
+    case "timeseries":
+      return <TimeSeriesDialog datasetId={dialog.datasetId} />;
+    case "reshape":
+      return <ReshapeDialog datasetId={dialog.datasetId} />;
+    case "report":
+      return <ReportDialog />;
     case "chart":
     case "moran":
       return <ChartDialog dialog={dialog.kind === "moran" ? { ...dialog, kind: "chart", chart: "moran" } : dialog} />;
   }
-}
-
-function Modal({
-  title,
-  children,
-  onClose,
-  footer,
-}: {
-  title: string;
-  children: ReactNode;
-  onClose: () => void;
-  footer: ReactNode;
-}) {
-  return (
-    <div className="modal-backdrop" onMouseDown={onClose}>
-      <div
-        className="modal"
-        role="dialog"
-        aria-label={title}
-        onMouseDown={(e) => e.stopPropagation()}
-        onKeyDown={(e) => e.key === "Escape" && onClose()}
-      >
-        <h3>{title}</h3>
-        <div className="modal-body">{children}</div>
-        <div className="modal-footer">{footer}</div>
-      </div>
-    </div>
-  );
-}
-
-const close = () => useApp.getState().showDialog(null);
-
-/** 번역문의 {이름} 자리에 강조·코드 같은 요소를 넣음 (언어마다 어순이 달라도 됨) */
-function tx(ko: string, parts: Record<string, ReactNode>): ReactNode[] {
-  return t(ko)
-    .split(/\{(\w+)\}/)
-    .map((s, i) => (i % 2 ? <Fragment key={i}>{parts[s] ?? `{${s}}`}</Fragment> : s));
 }
 
 // ---- 레이어 선택 ---------------------------------------------------------------
@@ -689,62 +682,6 @@ function WeightsDialog({ dialog }: { dialog: Extract<Dialog, { kind: "weights" }
 
 // ---- 공통 선택 요소 ---------------------------------------------------------------
 
-function NumericSelect({
-  ds,
-  value,
-  onChange,
-  label,
-}: {
-  ds: LoadedDataset;
-  value: string;
-  onChange: (v: string) => void;
-  label: string;
-}) {
-  const cols = ds.info.columns.filter((c) => c.kind === "numeric");
-  return (
-    <label>
-      {label}
-      <select value={value} onChange={(e) => onChange(e.target.value)} aria-label={label}>
-        {cols.map((c) => (
-          <option key={c.name} value={c.name}>
-            {c.name}
-            {c.origin !== "data" ? t(" (계산)") : ""}
-          </option>
-        ))}
-      </select>
-    </label>
-  );
-}
-
-function WeightsSelect({ ds, value, onChange }: { ds: LoadedDataset; value: string; onChange: (v: string) => void }) {
-  return (
-    <label>
-      {t("공간가중치")}
-      <select value={value} onChange={(e) => onChange(e.target.value)} aria-label={t("공간가중치")}>
-        {ds.weights.map((w) => (
-          <option key={w.id} value={w.id}>
-            {w.name} — {w.description}
-          </option>
-        ))}
-      </select>
-    </label>
-  );
-}
-
-function NoWeights({ datasetId }: { datasetId: string }) {
-  return (
-    <div className="notice-box">
-      {t("공간가중치가 아직 없음.")}{" "}
-      <button className="link" onClick={() => useApp.getState().showDialog({ kind: "weights", datasetId })}>
-        {t("가중치 만들기…")}
-      </button>
-    </div>
-  );
-}
-
-const firstNumeric = (ds: LoadedDataset | undefined) =>
-  ds?.info.columns.find((c) => c.kind === "numeric")?.name ?? "";
-
 // ---- 차트 추가 (Moran 산점도 포함) --------------------------------------------------
 
 const CHART_TITLES: Record<ChartKind, string> = {
@@ -760,7 +697,7 @@ function ChartDialog({ dialog }: { dialog: Extract<Dialog, { kind: "chart" }> })
   const [x, setX] = useState(firstNumeric(ds));
   const [y, setY] = useState(ds?.info.columns.filter((c) => c.kind === "numeric")[1]?.name ?? firstNumeric(ds));
   const [bins, setBins] = useState(10);
-  const [bivariate, setBivariate] = useState(false);
+  const [mode, setMode] = useState<"single" | "bivariate" | "diff" | "rate">("single");
   const [weightsId, setWeightsId] = useState(ds?.activeWeightsId ?? ds?.weights[0]?.id ?? "");
   const [permutations, setPermutations] = useState(999);
   if (!ds) return null;
@@ -773,7 +710,9 @@ function ChartDialog({ dialog }: { dialog: Extract<Dialog, { kind: "chart" }> })
       datasetId: ds.info.id,
       kind,
       x,
-      y: kind === "scatter" || (kind === "moran" && bivariate) ? y : null,
+      y: kind === "scatter" || (kind === "moran" && mode === "bivariate") ? y : null,
+      base: kind === "moran" && mode === "diff" ? y : null,
+      rateBase: kind === "moran" && mode === "rate" ? y : null,
       bins,
       weightsId: needsWeights ? weightsId : undefined,
       permutations: needsWeights ? permutations : undefined,
@@ -804,11 +743,18 @@ function ChartDialog({ dialog }: { dialog: Extract<Dialog, { kind: "chart" }> })
         )}
         {kind === "moran" && (
           <>
-            <label className="check">
-              <input type="checkbox" checked={bivariate} onChange={(e) => setBivariate(e.target.checked)} />
-              {t("이변량 Moran's I (두 번째 변수의 공간 시차와 비교)")}
+            <label>
+              {t("종류")}
+              <select value={mode} onChange={(e) => setMode(e.target.value as typeof mode)} aria-label={t("종류")}>
+                <option value="single">{t("단변량")}</option>
+                <option value="bivariate">{t("이변량 Moran's I (두 번째 변수의 공간 시차와 비교)")}</option>
+                <option value="diff">{t("차분 Moran's I (변수 − 기준 변수, 기간 사이 변화)")}</option>
+                <option value="rate">{t("EB 비율 Moran's I (분자 ÷ 분모)")}</option>
+              </select>
             </label>
-            {bivariate && <NumericSelect ds={ds} value={y} onChange={setY} label={t("두 번째 변수 (공간 시차)")} />}
+            {mode === "bivariate" && <NumericSelect ds={ds} value={y} onChange={setY} label={t("두 번째 변수 (공간 시차)")} />}
+            {mode === "diff" && <NumericSelect ds={ds} value={y} onChange={setY} label={t("기준 변수 (앞 기간)")} />}
+            {mode === "rate" && <NumericSelect ds={ds} value={y} onChange={setY} label={t("분모 (모집단·노력량 등)")} />}
             {ds.weights.length ? <WeightsSelect ds={ds} value={weightsId} onChange={setWeightsId} /> : <NoWeights datasetId={ds.info.id} />}
             <PermutationSelect value={permutations} onChange={setPermutations} />
           </>
@@ -818,26 +764,17 @@ function ChartDialog({ dialog }: { dialog: Extract<Dialog, { kind: "chart" }> })
   );
 }
 
-function PermutationSelect({ value, onChange }: { value: number; onChange: (v: number) => void }) {
-  return (
-    <label>
-      {t("순열 횟수 (유사 p값 계산)")}
-      <select value={value} onChange={(e) => onChange(Number(e.target.value))} aria-label={t("순열 횟수")}>
-        {[99, 199, 499, 999, 9999].map((n) => (
-          <option key={n} value={n}>
-            {n}
-          </option>
-        ))}
-      </select>
-    </label>
-  );
-}
-
 // ---- 국지 공간통계 -------------------------------------------------------------
 
 const LOCAL_METHODS: { id: LocalMethod; label: string; prefix: string; hint: string }[] = [
   { id: "lisa", label: "Local Moran (LISA)", prefix: "LISA", hint: "High-High·Low-Low 군집과 High-Low·Low-High 이상치를 찾음" },
   { id: "lisa_bv", label: "이변량 LISA", prefix: "BLISA", hint: "한 변수 값과 주변의 다른 변수 값 사이의 국지적 연관" },
+  {
+    id: "lisa_eb",
+    label: "EB 비율 LISA",
+    prefix: "EBLISA",
+    hint: "분자÷분모 비율을 EB 방식으로 표준화해 LISA를 구함. 분모가 작은 곳의 과장된 비율에 덜 흔들림",
+  },
   { id: "gi_star", label: "Getis-Ord Gi*", prefix: "GISTAR", hint: "값이 높은 곳이 모인 핫스팟과 낮은 곳의 콜드스팟" },
   { id: "local_geary", label: "Local Geary", prefix: "LGEARY", hint: "주변과 값이 비슷한지(양의 연관) 다른지(음의 연관)" },
 ];
@@ -862,6 +799,7 @@ function LocalDialog({ dialog }: { dialog: Extract<Dialog, { kind: "local" }> })
       method,
       column: x,
       column_y: method === "lisa_bv" ? y : null,
+      rate_base: method === "lisa_eb" ? y : null,
       weights_id: weightsId,
       permutations,
       alpha,
@@ -904,10 +842,13 @@ function LocalDialog({ dialog }: { dialog: Extract<Dialog, { kind: "local" }> })
           ds={ds}
           value={x}
           onChange={setX}
-          label={method === "lisa_bv" ? t("변수 (자기 값)") : t("변수")}
+          label={method === "lisa_bv" ? t("변수 (자기 값)") : method === "lisa_eb" ? t("분자 (사건 수·어획량 등)") : t("변수")}
         />
         {method === "lisa_bv" && (
           <NumericSelect ds={ds} value={y} onChange={setY} label={t("두 번째 변수 (주변 값)")} />
+        )}
+        {method === "lisa_eb" && (
+          <NumericSelect ds={ds} value={y} onChange={setY} label={t("분모 (모집단·노력량 등)")} />
         )}
         {ds.weights.length ? <WeightsSelect ds={ds} value={weightsId} onChange={setWeightsId} /> : <NoWeights datasetId={ds.info.id} />}
         <div className="grid2">

@@ -16,6 +16,8 @@ hiddenimports += collect_submodules("uvicorn")
 hiddenimports += collect_submodules("geostat_engine")
 
 datas = collect_data_files("geostat_engine")  # 샘플 데이터 (geostat_engine/samples)
+# python-docx는 빈 문서 틀(templates/default.docx)을 데이터 파일로 들고 있음 (Word 보고서 내보내기)
+datas += collect_data_files("docx")
 
 binaries = []
 # 컴파일 확장 모듈끼리 서로 임포트하는 경우(pyogrio._io → pyogrio._geometry, rasterio._base →

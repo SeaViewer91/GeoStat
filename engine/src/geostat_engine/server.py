@@ -22,6 +22,7 @@ from geostat_engine.api import (
     rasters,
     regression,
     spatial,
+    tools,
 )
 from geostat_engine.auth import set_token
 from geostat_engine.errors import install_error_handlers
@@ -71,6 +72,7 @@ def create_app(token: str, ready_line: str | None = None, warmup: bool = False) 
     app.include_router(regression.router)
     app.include_router(cluster.router)
     app.include_router(rasters.router)
+    app.include_router(tools.router)
     app.include_router(project.router)
     return app
 

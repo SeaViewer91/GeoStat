@@ -72,7 +72,10 @@ def _range_labels(lower: float, bins: np.ndarray) -> list[str]:
     return [f"{_fmt(edges[i])} – {_fmt(edges[i + 1])}" for i in range(len(bins))]
 
 
-def classify(series: pd.Series, method: Method, k: int = 5) -> Classification:
+def classify(
+    series: pd.Series, method: Method, k: int = 5, pool: np.ndarray | None = None
+) -> Classification:
+    """단계 구분. pool이 있으면 그 값들(예: 모든 기간의 값)로 경계를 구해 기간끼리 비교할 수 있게 함."""
     name = str(series.name)
     if method == "unique_values":
         return _unique(series, name)
@@ -91,33 +94,39 @@ def classify(series: pd.Series, method: Method, k: int = 5) -> Classification:
     if not 2 <= k <= 12:
         raise EngineError("invalid_k", "계급 수는 2~12 사이여야 함")
 
+    ref = y
+    if pool is not None:
+        ref = np.asarray(pool, dtype="float64")
+        ref = ref[np.isfinite(ref)]
+        if ref.size == 0:
+            ref = y
     scheme: SchemeType = "sequential"
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")  # 동일 값이 많을 때 계급 수가 줄었다는 경고 등
         if method == "quantile":
-            c = mc.Quantiles(y, k=k)
-            labels = _range_labels(y.min(), c.bins)
+            c = mc.Quantiles(ref, k=k)
         elif method == "equal_interval":
-            c = mc.EqualInterval(y, k=k)
-            labels = _range_labels(y.min(), c.bins)
+            c = mc.EqualInterval(ref, k=k)
         elif method == "natural_breaks":
-            if y.size > _JENKS_MAX_SAMPLE:
-                c = mc.FisherJenksSampled(y, k=k, pct=_JENKS_MAX_SAMPLE / y.size)
+            if ref.size > _JENKS_MAX_SAMPLE:
+                c = mc.FisherJenksSampled(ref, k=k, pct=_JENKS_MAX_SAMPLE / ref.size)
             else:
-                c = mc.FisherJenks(y, k=k)
-            labels = _range_labels(y.min(), c.bins)
+                c = mc.FisherJenks(ref, k=k)
         elif method == "zero_centered":
             return _zero_centered(name, values, valid, y, k)
         elif method in _FIXED_SCHEMES:
             # 계급 수가 고정된 GeoDa 지도 유형. mapclassify는 빈 계급을 없애 라벨과 어긋나므로 직접 계산함
-            return _fixed_scheme(method, name, values, valid, y)
+            return _fixed_scheme(method, name, values, valid, y, ref)
         else:
             raise EngineError("invalid_method", f"알 수 없는 분류 방법: {method}")
+    labels = _range_labels(ref.min(), c.bins)
 
-    classes = np.full(values.size, -1, dtype=np.int16)
-    classes[valid] = c.yb
     n = len(c.bins)
-    counts = np.bincount(c.yb, minlength=n)[:n]
+    # 경계를 다른 값(pool)으로 구했으면 이 열의 값을 그 경계로 다시 나눔 (범위 밖 값은 끝 계급)
+    yb = c.yb if ref is y else np.minimum(np.searchsorted(c.bins, y, side="left"), n - 1)
+    classes = np.full(values.size, -1, dtype=np.int16)
+    classes[valid] = yb
+    counts = np.bincount(yb, minlength=n)[:n]
     return Classification(
         method=method,
         column=name,
@@ -138,17 +147,23 @@ _FIXED_SCHEMES = {
 
 
 def _fixed_scheme(
-    method: str, name: str, values: np.ndarray, valid: np.ndarray, y: np.ndarray
+    method: str,
+    name: str,
+    values: np.ndarray,
+    valid: np.ndarray,
+    y: np.ndarray,
+    ref: np.ndarray | None = None,
 ) -> Classification:
-    """표준편차·백분위·박스 지도. 항상 6계급이며 비어 있는 계급도 유지함."""
+    """표준편차·백분위·박스 지도. 항상 6계급이며 비어 있는 계급도 유지함. 경계는 ref(기본 y)로 구함."""
+    r = y if ref is None else ref
     if method == "std_mean":
-        edges = y.mean() + np.array([-2, -1, 0, 1, 2]) * y.std(ddof=1 if y.size > 1 else 0)
+        edges = r.mean() + np.array([-2, -1, 0, 1, 2]) * r.std(ddof=1 if r.size > 1 else 0)
         yb = np.searchsorted(edges, y, side="right")
     elif method == "percentile":
-        edges = np.percentile(y, [1, 10, 50, 90, 99])
+        edges = np.percentile(r, [1, 10, 50, 90, 99])
         yb = np.searchsorted(edges, y, side="right")
     else:  # box_plot: 사분위수와 1.5×IQR 울타리 기준
-        q1, q2, q3 = np.percentile(y, [25, 50, 75])
+        q1, q2, q3 = np.percentile(r, [25, 50, 75])
         iqr = q3 - q1
         edges = np.array([q1 - 1.5 * iqr, q1, q2, q3, q3 + 1.5 * iqr])
         yb = np.searchsorted(edges[:4], y, side="right")

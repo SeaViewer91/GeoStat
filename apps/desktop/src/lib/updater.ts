@@ -59,3 +59,10 @@ export async function openExternal(url: string): Promise<void> {
     window.open(url, "_blank", "noopener");
   }
 }
+
+/** 저장한 파일을 Finder·탐색기에서 선택된 상태로 보여줌 (Tauri 앱에서만) */
+export async function revealInFolder(path: string): Promise<void> {
+  if (!isTauri()) return;
+  const { revealItemInDir } = await import("@tauri-apps/plugin-opener");
+  await revealItemInDir(path);
+}

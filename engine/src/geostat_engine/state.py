@@ -46,6 +46,18 @@ class AnalysisRecord:
 
 
 @dataclass
+class TimeGroup:
+    """시간 변수 묶음 (GeoDa의 시간 편집기와 같은 개념). 기간 순서대로 열 이름과 기간 이름을 둠."""
+
+    name: str
+    columns: list[str]
+    labels: list[str]
+
+    def as_dict(self) -> dict[str, Any]:
+        return {"name": self.name, "columns": list(self.columns), "labels": list(self.labels)}
+
+
+@dataclass
 class Dataset:
     id: str
     name: str
@@ -61,6 +73,7 @@ class Dataset:
     fields: list[DerivedField] = field(default_factory=list)
     weights: dict[str, WeightsEntry] = field(default_factory=dict)
     analyses: list[AnalysisRecord] = field(default_factory=list)
+    time_groups: list[TimeGroup] = field(default_factory=list)
     # 표시용 WGS84 사본과 대표점. 첫 요청 때 만들고 CRS가 바뀌면 비움
     _display: gpd.GeoDataFrame | None = field(default=None, repr=False)
 

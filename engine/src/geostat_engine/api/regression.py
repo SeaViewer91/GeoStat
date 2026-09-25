@@ -145,6 +145,10 @@ def save_report(
         from geostat_engine.analysis import cluster
 
         text = cluster.report_text(record.summary["report"], record.description)
+    elif record.method == "lisa_time":
+        from geostat_engine.report import lisa_time_text
+
+        text = lisa_time_text(record.summary["report"], record.description)
     else:
         text = regression.report_text(record.summary["report"], record.description)
     try:

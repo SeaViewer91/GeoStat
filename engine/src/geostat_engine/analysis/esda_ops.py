@@ -1,7 +1,8 @@
 """탐색적 공간자료분석 (esda).
 
 전역: Moran's I (단변량·이변량), Join Count
-국지: LISA (단변량·이변량), Getis-Ord Gi*, Local Geary
+국지: LISA (단변량·이변량·EB 비율), Getis-Ord Gi*, Local Geary
+EB 비율: 분자·분모로 구한 비율을 Assunção-Reis 방식으로 표준화해 Moran's I를 구함 (GeoDa의 EB Moran)
 
 군집 코드는 GeoDa와 같게 맞춤
   LISA   : 0 비유의, 1 High-High, 2 Low-Low, 3 Low-High, 4 High-Low, 5 이웃 없음
@@ -25,7 +26,7 @@ with warnings.catch_warnings():
     warnings.simplefilter("ignore")
     import esda
 
-LocalMethod = Literal["lisa", "lisa_bv", "gi_star", "local_geary"]
+LocalMethod = Literal["lisa", "lisa_bv", "lisa_eb", "gi_star", "local_geary"]
 Correction = Literal["none", "fdr", "bonferroni"]
 
 ISLAND = 5
@@ -88,13 +89,30 @@ class GlobalMoran:
 
 
 def moran(
-    x: pd.Series, w: Any, permutations: int, seed: int | None, y: pd.Series | None = None
+    x: pd.Series,
+    w: Any,
+    permutations: int,
+    seed: int | None,
+    y: pd.Series | None = None,
+    rate_base: pd.Series | None = None,
 ) -> GlobalMoran:
+    """전역 Moran's I. y가 있으면 이변량, rate_base가 있으면 x/rate_base 비율의 EB Moran's I."""
     permutations = _check_permutations(permutations)
-    xv = _values(x, str(x.name))
     wr = _row_standardized(w)
     if seed is not None:
         np.random.seed(seed)  # esda의 전역 Moran은 seed 인자가 없어 전역 난수를 고정함
+    if rate_base is not None:
+        from geostat_engine.analysis.rates import check_inputs
+
+        e, b = check_inputs(x, rate_base)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            m = esda.Moran_Rate(
+                e, b, wr, adjusted=True, transformation="r", permutations=permutations
+            )
+        xv = np.asarray(m.y, dtype="float64")
+        return _global_result(m, xv, xv, m.EI, m.VI_norm, m.z_norm, m.p_norm, wr, permutations)
+    xv = _values(x, str(x.name))
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         if y is None:
@@ -109,7 +127,20 @@ def moran(
             z_lag = yv
             expected = -1.0 / (len(xv) - 1)
             var, zn, pn = np.nan, np.nan, np.nan
+    return _global_result(m, z_src, z_lag, expected, var, zn, pn, wr, permutations)
 
+
+def _global_result(
+    m: Any,
+    z_src: np.ndarray,
+    z_lag: np.ndarray,
+    expected: float,
+    var: float,
+    zn: float,
+    pn: float,
+    wr: Any,
+    permutations: int,
+) -> GlobalMoran:
     zx = (z_src - z_src.mean()) / z_src.std()
     zy = (z_lag - z_lag.mean()) / z_lag.std()
     lag = wr.sparse @ zy
@@ -126,7 +157,7 @@ def moran(
         z_sim=float(m.z_sim) if permutations else None,
         p_sim=float(m.p_sim) if permutations else None,
         permutations=permutations,
-        n=len(xv),
+        n=len(z_src),
         z=zx,
         lag=lag,
         sim_hist=sim_hist,
@@ -238,6 +269,16 @@ def _run_local(method: str, xv: np.ndarray, w: Any, wr: Any, y: pd.Series | None
             yv = _values(y, str(y.name))
             r = esda.Moran_Local_BV(xv, yv, wr, transformation="r", geoda_quads=True, **common)
             stat, p, quad = r.Is, r.p_sim, r.q
+        elif method == "lisa_eb":
+            if y is None:
+                raise EngineError("missing_base", "EB 비율 LISA는 분모 변수가 필요함")
+            from geostat_engine.analysis.rates import check_inputs
+
+            e, b = check_inputs(pd.Series(xv, name="분자"), y)
+            r = esda.Moran_Local_Rate(
+                e, b, wr, adjusted=True, transformation="r", geoda_quads=True, **common
+            )
+            stat, p, quad = r.Is, r.p_sim, r.q
         elif method == "gi_star":
             wb = copy.deepcopy(w)
             wb.transform = "b"
@@ -290,18 +331,21 @@ def _finish(
 LOCAL_SUFFIXES = {
     "lisa": ("I", "CL", "P"),
     "lisa_bv": ("I", "CL", "P"),
+    "lisa_eb": ("I", "CL", "P"),
     "gi_star": ("Z", "CL", "P"),
     "local_geary": ("C", "CL", "P"),
 }
 LOCAL_DEFAULT_PREFIX = {
     "lisa": "LISA",
     "lisa_bv": "BLISA",
+    "lisa_eb": "EBLISA",
     "gi_star": "GISTAR",
     "local_geary": "LGEARY",
 }
 CLUSTER_METHOD = {
     "lisa": "lisa_cluster",
     "lisa_bv": "lisa_cluster",
+    "lisa_eb": "lisa_cluster",
     "gi_star": "gi_cluster",
     "local_geary": "geary_cluster",
 }

@@ -26,7 +26,14 @@ import {
   type RasterInfo,
   type RasterStyle,
   type ZonalSpec,
+  type AggregateSpec,
+  type RateSpec,
+  type LisaTimeSpec,
+  type PivotSpec,
+  type MergeSpec,
+  type TimeGroup,
   isClusterReport,
+  isLisaTimeReport,
   type MoranResult,
   type TableOptions,
   type WeightsInfo,
@@ -49,6 +56,8 @@ export interface StyleSpec {
   k: number;
   /** 이 열이 0인 피처를 '유의하지 않음'으로 가림 (GWR 계수 지도) */
   mask?: string | null;
+  /** 이 열들의 값을 모두 모아 계급 경계를 구함 (시간 변수 묶음의 모든 기간을 같은 경계로) */
+  pool?: string[] | null;
 }
 
 /** 결과 패널에 띄울 회귀·군집 보고서 */
@@ -113,6 +122,9 @@ export interface ChartSpec {
   x: string;
   y?: string | null;
   bins?: number;
+  /** Moran 산점도: 차분(x − base) 또는 EB 비율(x / rateBase) */
+  base?: string | null;
+  rateBase?: string | null;
   /** Moran 산점도: 가중치와 결과 (결과는 저장하지 않고 다시 계산함) */
   weightsId?: string;
   permutations?: number;
@@ -133,6 +145,12 @@ export type Dialog =
   | { kind: "cluster"; datasetId: string }
   | { kind: "zonal"; datasetId: string }
   | { kind: "fishnet" }
+  | { kind: "aggregate"; datasetId: string }
+  | { kind: "rates"; datasetId: string }
+  | { kind: "timegroups"; datasetId: string }
+  | { kind: "timeseries"; datasetId: string }
+  | { kind: "reshape"; datasetId: string }
+  | { kind: "report" }
   | { kind: "query"; datasetId: string }
   | { kind: "about" }
   | { kind: "chart"; datasetId: string; chart: ChartKind };
@@ -223,6 +241,14 @@ interface AppState {
   removeWeights: (id: string, weightsId: string) => Promise<void>;
   selectNeighbors: (id: string) => Promise<void>;
   runLocal: (id: string, params: LocalParams) => Promise<boolean>;
+
+  // 점 집계·비율·시공간·보고서
+  runAggregate: (id: string, spec: AggregateSpec) => Promise<boolean>;
+  runRates: (id: string, spec: RateSpec) => Promise<boolean>;
+  setTimeGroups: (id: string, groups: TimeGroup[]) => Promise<boolean>;
+  runLisaTime: (id: string, spec: LisaTimeSpec) => Promise<boolean>;
+  reshape: (kind: "pivot", spec: PivotSpec) => Promise<boolean>;
+  mergePeriods: (spec: MergeSpec) => Promise<boolean>;
 
   // 회귀·작업
   job: JobInfo | null;
@@ -605,7 +631,7 @@ export const useApp = create<AppState>((set, get) => {
         return;
       }
       await run(t("단계 구분 중…"), async () => {
-        const theme = await engine.classify(id, style.column, style.method, style.k, style.mask);
+        const theme = await engine.classify(id, style.column, style.method, style.k, style.mask, style.pool);
         patch(id, { style, theme });
       });
     },
@@ -645,9 +671,13 @@ export const useApp = create<AppState>((set, get) => {
     },
 
     runLocal: async (id, params) => {
-      const label = { lisa: "LISA", lisa_bv: t("이변량 LISA"), gi_star: "Gi*", local_geary: "Local Geary" }[
-        params.method
-      ];
+      const label = {
+        lisa: "LISA",
+        lisa_bv: t("이변량 LISA"),
+        lisa_eb: t("EB 비율 LISA"),
+        gi_star: "Gi*",
+        local_geary: "Local Geary",
+      }[params.method];
       const result = await run(t("{label} 계산 중… (순열 {n}회)", { label, n: params.permutations }), () =>
         engine.local(id, params),
       );
@@ -664,6 +694,65 @@ export const useApp = create<AppState>((set, get) => {
           p: result.threshold.toPrecision(3),
         }) + (result.n_islands ? t(", 이웃 없는 피처 {n}개", { n: result.n_islands }) : ""),
       );
+      return true;
+    },
+
+    // ---- 점 집계·비율·시공간 --------------------------------------------------------
+
+    runAggregate: async (id, spec) => {
+      const r = await run(t("점 집계 중…"), () => engine.aggregate(id, spec));
+      if (!r) return false;
+      await get().updateInfo(r.info);
+      await get().showResultMap(id, r.analysis);
+      get().notify([r.analysis.description, ...r.notes.map((n) => t(n))].join(" · "));
+      return true;
+    },
+
+    runRates: async (id, spec) => {
+      const r = await run(t("비율 계산 중…"), () => engine.rates(id, spec));
+      if (!r) return false;
+      await get().updateInfo(r.info);
+      await get().showResultMap(id, r.analysis);
+      get().notify(r.analysis.description);
+      return true;
+    },
+
+    setTimeGroups: async (id, groups) => {
+      const info = await run(t("시간 변수 묶음 저장 중…"), () => engine.setTimeGroups(id, groups));
+      if (!info) return false;
+      await get().updateInfo(info);
+      return true;
+    },
+
+    runLisaTime: async (id, spec) => {
+      const r = await run(t("기간별 LISA 계산 중… (순열 {n}회)", { n: spec.permutations }), () =>
+        engine.lisaTime(id, spec),
+      );
+      if (!r) return false;
+      await get().updateInfo(r.info);
+      set((s) => ({
+        reports: [...s.reports.filter((x) => x.analysis.id !== r.analysis.id), { datasetId: id, analysis: r.analysis }],
+      }));
+      await get().showResultMap(id, r.analysis);
+      get().notify(r.analysis.description);
+      return true;
+    },
+
+    reshape: async (_kind, spec) => {
+      const r = await run(t("기간별 자료로 바꾸는 중…"), () => engine.pivot(spec));
+      if (!r) return false;
+      await run(t("지오메트리 불러오는 중… ({n}개)", { n: r.info.n_rows }), () => addLoaded(r.info));
+      requestFit(r.info.bounds_wgs84);
+      get().notify([t("기간별 자료를 만듦: {path}", { path: r.info.path }), ...r.notes.map((n) => t(n))].join(" · "));
+      return true;
+    },
+
+    mergePeriods: async (spec) => {
+      const r = await run(t("기간별 자료를 잇는 중…"), () => engine.merge(spec));
+      if (!r) return false;
+      await run(t("지오메트리 불러오는 중… ({n}개)", { n: r.info.n_rows }), () => addLoaded(r.info));
+      requestFit(r.info.bounds_wgs84);
+      get().notify([t("기간별 자료를 만듦: {path}", { path: r.info.path }), ...r.notes.map((n) => t(n))].join(" · "));
       return true;
     },
 
@@ -739,11 +828,23 @@ export const useApp = create<AppState>((set, get) => {
     showResultMap: async (id, analysis, variable) => {
       const outs = analysis.outputs;
       const report = analysis.report;
-      if (analysis.method === "zonal") {
+      if (analysis.method === "zonal" || analysis.method === "aggregate") {
         await get().applyStyle(id, { column: outs[0], method: "quantile", k: 5 });
         return;
       }
+      if (analysis.method === "rate") {
+        const excess = analysis.params.method === "excess_risk";
+        // 초과위험은 1(평균과 같음)을 기준으로 보는 값이라 박스 지도, 나머지는 분위수로 칠함
+        await get().applyStyle(id, { column: outs[0], method: excess ? "box_plot" : "quantile", k: 5 });
+        return;
+      }
       if (!report) return;
+      if (isLisaTimeReport(report)) {
+        // 마지막 기간의 군집 지도. 주제도 패널에서 기간을 넘겨 볼 수 있음
+        const col = outs[outs.length - 2] ?? outs[0];
+        await get().applyStyle(id, { column: col, method: "lisa_cluster", k: 5 });
+        return;
+      }
       if (isClusterReport(report)) {
         await get().applyStyle(id, { column: outs[0], method: "unique_values", k: 5 });
         return;
@@ -780,6 +881,8 @@ export const useApp = create<AppState>((set, get) => {
           engine.moran(chart.datasetId, {
             column: chart.x,
             column_y: chart.y ?? null,
+            column_base: chart.base ?? null,
+            rate_base: chart.rateBase ?? null,
             weights_id: chart.weightsId!,
             permutations: chart.permutations ?? 999,
           }),

@@ -53,6 +53,15 @@ export interface DatasetInfo {
   bounds_wgs84: [number, number, number, number] | null;
   columns: ColumnInfo[];
   table: TableOptions | null;
+  /** 시간 변수 묶음 (기간 순서) */
+  time_groups: TimeGroup[];
+}
+
+/** 시간 변수 묶음: 같은 변수의 기간별 열 (예: 어획량_2022, 어획량_2023) */
+export interface TimeGroup {
+  name: string;
+  columns: string[];
+  labels: string[];
 }
 
 export interface HealthInfo {
@@ -167,11 +176,15 @@ export interface MoranResult {
   lag: Float64Array;
 }
 
-export type LocalMethod = "lisa" | "lisa_bv" | "gi_star" | "local_geary";
+export type LocalMethod = "lisa" | "lisa_bv" | "lisa_eb" | "gi_star" | "local_geary";
 
 export interface LocalParams {
   method: LocalMethod;
   column: string;
+  /** 차분: column − column_base (기간 사이의 변화) */
+  column_base?: string | null;
+  /** EB 비율 LISA의 분모 */
+  rate_base?: string | null;
   column_y?: string | null;
   weights_id: string;
   permutations: number;
@@ -325,15 +338,109 @@ export interface AnalysisInfo {
   description: string;
   outputs: string[];
   params: Record<string, unknown>;
-  report: RegressionReport | ClusterReport | null;
+  report: RegressionReport | ClusterReport | LisaTimeReport | null;
 }
 
 export function isClusterReport(r: AnalysisInfo["report"]): r is ClusterReport {
   return !!r && (r as ClusterReport).kind === "cluster";
 }
 
+export function isLisaTimeReport(r: AnalysisInfo["report"]): r is LisaTimeReport {
+  return !!r && (r as LisaTimeReport).kind === "lisa_time";
+}
+
 export function isRegressionReport(r: AnalysisInfo["report"]): r is RegressionReport {
-  return !!r && (r as ClusterReport).kind !== "cluster";
+  return !!r && !("kind" in r);
+}
+
+/** 기간별 LISA 보고서: 기간별 군집 수와 군집 전이표 */
+export interface LisaTimeReport {
+  kind: "lisa_time";
+  title: string;
+  group: string;
+  weights: string;
+  n: number;
+  alpha: number;
+  labels: string[];
+  categories: string[];
+  counts: number[][];
+  matrix: number[][];
+  n_changed: number;
+  n_stable_cluster: number;
+}
+
+export interface AggregateSpec {
+  source_id: string;
+  count: boolean;
+  density: boolean;
+  stats: { column: string; stat: "sum" | "mean" | "min" | "max" | "median" | "std" }[];
+  prefix?: string | null;
+}
+
+export type RateMethod = "raw" | "excess_risk" | "eb" | "spatial_rate" | "spatial_eb";
+
+export interface RateSpec {
+  method: RateMethod;
+  event: string;
+  base: string;
+  weights_id?: string | null;
+  multiplier: number;
+  name?: string | null;
+}
+
+export interface AnalysisResult {
+  info: DatasetInfo;
+  analysis: AnalysisInfo;
+  notes: string[];
+}
+
+export interface MoranSeriesRow {
+  label: string;
+  column: string;
+  I: number;
+  z_sim: number | null;
+  p_sim: number | null;
+  mean: number;
+}
+
+export interface MoranSeries {
+  group: string;
+  weights: string;
+  rows: MoranSeriesRow[];
+}
+
+export interface LisaTimeSpec {
+  group: string;
+  weights_id: string;
+  permutations: number;
+  alpha: number;
+  correction: "none" | "fdr" | "bonferroni";
+  prefix?: string | null;
+}
+
+export interface PivotSpec {
+  dataset_id: string;
+  id_column: string;
+  time_column: string;
+  value_columns: string[];
+  path: string;
+  name?: string | null;
+}
+
+export interface MergeSpec {
+  parts: { dataset_id: string; id_column: string; label: string }[];
+  value_columns: string[];
+  path: string;
+  name?: string | null;
+}
+
+export interface ReportExportSpec {
+  path: string;
+  format: "html" | "docx";
+  title: string;
+  datasets: { dataset_id: string; analysis_ids?: string[] | null }[];
+  images: { data: string; caption: string }[];
+  morans: Record<string, unknown>[];
 }
 
 export interface JobInfo {
@@ -619,10 +726,11 @@ export const engine = {
     method: ClassifyMethod,
     k: number,
     mask?: string | null,
+    pool?: string[] | null,
   ): Promise<Classification> => {
     const body = await post<Omit<Classification, "classes"> & { classes: string }>(
       `${ds(id)}/classify`,
-      { column, method, k, mask: mask ?? null },
+      { column, method, k, mask: mask ?? null, pool: pool ?? null },
     );
     return { ...body, classes: decodeInt16(body.classes) };
   },
@@ -700,7 +808,14 @@ export const engine = {
   // ---- ESDA ----
   moran: async (
     id: string,
-    p: { column: string; column_y?: string | null; weights_id: string; permutations: number },
+    p: {
+      column: string;
+      column_y?: string | null;
+      column_base?: string | null;
+      rate_base?: string | null;
+      weights_id: string;
+      permutations: number;
+    },
   ): Promise<MoranResult> => {
     const r = await post<Omit<MoranResult, "z" | "lag"> & { z: string; lag: string }>(
       `${ds(id)}/esda/moran`,
@@ -711,6 +826,19 @@ export const engine = {
   joinCount: (id: string, p: { column: string; weights_id: string; permutations: number }) =>
     post<JoinCountResult>(`${ds(id)}/esda/joincount`, p),
   local: (id: string, p: LocalParams) => post<LocalResult>(`${ds(id)}/esda/local`, p),
+
+  // ---- 점 집계·비율·시공간·보고서 ----
+  aggregate: (id: string, spec: AggregateSpec) => post<AnalysisResult>(`${ds(id)}/aggregate`, spec),
+  rates: (id: string, spec: RateSpec) => post<AnalysisResult>(`${ds(id)}/rates`, spec),
+  setTimeGroups: (id: string, groups: TimeGroup[]) =>
+    post<DatasetInfo>(`${ds(id)}/time-groups`, { groups }, "PUT"),
+  guessTimeGroups: (id: string) => json<TimeGroup[]>(`${ds(id)}/time-groups/guess`),
+  moranSeries: (id: string, p: { group: string; weights_id: string; permutations: number }) =>
+    post<MoranSeries>(`${ds(id)}/timeseries/moran`, p),
+  lisaTime: (id: string, spec: LisaTimeSpec) => post<AnalysisResult>(`${ds(id)}/timeseries/lisa`, spec),
+  pivot: (spec: PivotSpec) => post<{ info: DatasetInfo; notes: string[] }>("/timeseries/pivot", spec),
+  merge: (spec: MergeSpec) => post<{ info: DatasetInfo; notes: string[] }>("/timeseries/merge", spec),
+  exportReport: (spec: ReportExportSpec) => post<{ path: string }>("/report/export", spec),
 
   // ---- 회귀·작업 ----
   startRegression: (id: string, spec: RegressionSpec) => post<JobInfo>(`${ds(id)}/regression`, spec),

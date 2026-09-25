@@ -67,6 +67,7 @@ def build_project(
                     }
                     for a in ds.analyses
                 ],
+                "time_groups": [g.as_dict() for g in ds.time_groups],
                 "ui": ds_ui,
             }
         )
@@ -132,11 +133,11 @@ def resolve_source_path(project_path: Path, source: dict[str, Any]) -> Path:
 
 
 # ---- 결과 캐시 ------------------------------------------------------------------
-# 회귀(특히 MGWR)·군집(AZP 등)·존 통계는 다시 계산하는 데 오래 걸리므로 결과 열을 프로젝트 옆 폴더에 Parquet으로 저장함.
+# 회귀(특히 MGWR)·군집(AZP 등)·존 통계·점 집계는 다시 계산하는 데 오래 걸리므로 결과 열을 프로젝트 옆 폴더에 Parquet으로 저장함.
 # 열 때 행 수와 열 이름이 맞으면 캐시를 쓰고, 없거나 맞지 않으면 다시 계산함.
 
 
-CACHED_METHODS = ("regression", "cluster", "zonal")
+CACHED_METHODS = ("regression", "cluster", "zonal", "aggregate")
 
 
 def cache_dir(project_path: Path) -> Path:

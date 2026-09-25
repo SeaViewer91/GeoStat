@@ -2,7 +2,7 @@
 
 GeoStat is a spatial statistics desktop app for macOS and Windows. It covers what GeoDa does — exploratory spatial data
 analysis (ESDA), spatial regression and spatial clustering — and adds GWR/MGWR, Korean coordinate systems and
-encodings, and raster zonal statistics. This guide describes version 0.9. A more detailed Korean guide is in
+encodings, raster zonal statistics, point aggregation, rate smoothing (EB) and space-time analysis. This guide describes version 0.10. A more detailed Korean guide is in
 [manual.md](manual.md).
 
 > Error messages and text reports produced by the analysis engine are currently in Korean only.
@@ -60,6 +60,9 @@ unique values, and cluster/significance maps for local statistics. Click a legen
 (⌘-click adds). For GWR coefficient columns, **Hide non-significant areas** greys out locations that are not
 significant after multiple-testing correction.
 
+For a column in a time variable group (or a LISA-per-period result), a **Period** row appears: step with ◀ ▶ or press
+**Play**. **Same class breaks for all periods** pools all periods so colors can be compared between periods.
+
 ## 5. Attribute table and selection
 
 - Click a column header to sort; click a row to select it. Map, table, legend and charts share one selection.
@@ -78,9 +81,12 @@ distances. The panel shows a connectivity histogram and the number of isolates.
 
 ## 7. ESDA
 
-- **Moran's I · Moran scatter plot** (univariate and bivariate) with permutation inference; brushing the scatter plot selects on the map.
+- **Moran's I · Moran scatter plot** with permutation inference: univariate, bivariate, **differential** (variable −
+  base variable, change between two periods) and **EB rate** (numerator ÷ denominator standardized with the
+  Assunção–Reis method, like GeoDa's EB Moran). Brushing the scatter plot selects on the map.
 - **Local statistics**: LISA, Getis-Ord Gi*, Local Geary, with FDR or Bonferroni correction and a fixed random
   seed. Results are saved as columns (statistic, `_CL` cluster code, `_P` p-value) and a cluster map is drawn.
+- **EB rate LISA**: LISA on an EB-standardized rate (numerator and denominator).
 - **Join count** for binary variables.
 - **Charts**: histogram, scatter plot, box plot, Moran scatter plot — all linked to the map.
 
@@ -109,21 +115,60 @@ result is a `<prefix>_GRP` column (1 = largest cluster), a cluster map, and a re
 of squares ratio, per-cluster means (shaded red above / blue below the overall mean) and the number of spatial
 fragments per cluster. AZP, Max-p and Region K-Means need a connected neighbor graph — use KNN weights if there are islands.
 
-## 10. Rasters
+## 10. Point aggregation and rate maps
+
+**Spatial analysis → Aggregate points…** collects a point layer (survey sites, detections) into each polygon of the
+active polygon layer (grid or administrative areas): count (`<prefix>_CNT`), density per km² (`_DENS`) and sum,
+mean, min, max, median or standard deviation of point attributes (`_SUM_<column>` …). Coordinate systems are matched
+automatically, non-point layers are counted by representative point, and points on a shared boundary are counted
+once. Polygons without points get 0 for count and sum.
+
+**Spatial analysis → Rate maps · EB smoothing…** builds rates from a numerator (events, catch) and a denominator
+(population, effort), as in GeoDa's Rates menu: raw rate, excess risk (observed ÷ expected, drawn as a box map),
+empirical Bayes smoothing, spatial rate and spatial EB smoothing (the last two need spatial weights). A multiplier
+(per 1,000 …) can be applied. Use **EB rate** in the Moran scatter plot or local statistics for the spatial
+autocorrelation of a rate.
+
+## 11. Space-time analysis
+
+Everything works on **time variable groups** — the per-period columns of one variable.
+
+| Data layout | Example | How |
+|---|---|---|
+| Wide | `catch_2022`, `catch_2023` … columns | **Space-time → Time variable groups… → Detect from column names** (or add manually) |
+| Long | (site, year, catch) rows repeated every year | **Space-time → Create per-period data… → Long format**: pick ID, period and value columns |
+| Per-period files | `2022.shp`, `2023.shp` … | Open them all, then **Create per-period data… → Join per-period files**: ID column and period name per file |
+
+Converted data is saved as a GeoPackage, opened as a new layer and gets a time variable group per value. Groups are
+saved with the project.
+
+**Space-time → Space-time analysis…** offers:
+
+1. **Global Moran's I over time** — line chart and table per period (filled dots: p ≤ 0.05).
+2. **LISA per period and cluster transitions** — saves `TLISA_<period>_CL` and the number of changes (`TLISA_CHG`);
+   the results panel shows cluster counts per period and a transition table (earlier → next period). Click a period
+   to map it.
+3. **Differential LISA** — LISA of the change between two periods (later − earlier), like GeoDa's differential Moran.
+
+## 12. Rasters
 
 - Display settings in the **Raster** panel: band, colormap, value range (2–98 %, min–max, manual), opacity, RGB composite.
 - **Build overviews** creates an external `.ovr` next to large rasters so zoomed-out views are fast (the original file is untouched).
 - **Zonal statistics**: mean, min, max, standard deviation, sum, median, quartiles, count, majority and variety per polygon, weighted by cell coverage.
 - **Create grid (square/hexagon)**: square or hexagonal grid over a raster or layer extent, saved as GeoPackage; optionally run zonal statistics right away and continue with LISA on the grid.
 
-## 11. Projects and export
+## 13. Projects and export
 
 **File → Save project** (⌘S) writes a `.gstproj` file with source paths (relative and absolute) and every step
-(CRS assignment, computed fields, weights, analyses, map styles, charts, raster settings). Regression, clustering
-and zonal results are cached in a `.gstcache` folder next to the project so they are not recomputed.
+(CRS assignment, computed fields, weights, analyses, map styles, charts, raster settings). Regression, clustering,
+zonal and point-aggregation results are cached in a `.gstcache` folder next to the project so they are not recomputed.
 **File → Save map image (PNG)…** saves the current map with legend and attribution.
 
-## 12. Try it with the sample data
+**File → Export analysis report (Word · HTML)…** collects data information, calculated fields, spatial weights, time
+variable groups, the result tables of the analyses you ran and the current map into one .docx or .html document.
+Tables and text generated by the engine are in Korean.
+
+## 14. Try it with the sample data
 
 **Help → Sample: …** copies a sample into `Documents/GeoStat/샘플 데이터` and opens it.
 
@@ -132,7 +177,7 @@ and zonal results are cached in a `.gstcache` folder next to the project so they
 - **North Carolina SIDS (ESDA)**: queen weights, Moran's I and LISA of `SIDR79`.
 - **Seoul synthetic terrain (raster)**: create a 500 m grid over the raster with zonal statistics, then run LISA on `ZS_MEAN`.
 
-## 13. Shortcuts
+## 15. Shortcuts
 
 | Action | Keys |
 |---|---|
@@ -142,7 +187,7 @@ and zonal results are cached in a `.gstcache` folder next to the project so they
 | Box select / lasso select / pan tool | B / L / Esc |
 | Add to selection | ⌘ + click or drag |
 
-## 14. Troubleshooting
+## 16. Troubleshooting
 
 | Problem | Fix |
 |---|---|

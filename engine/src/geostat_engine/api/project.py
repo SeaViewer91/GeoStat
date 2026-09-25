@@ -145,10 +145,18 @@ def open_project(body: OpenRequest, request: Request) -> OpenResponse:
                 warnings.append(f"공간가중치 '{wspec.get('name')}' 재생성 실패: {exc.message}")
         for a in entry.get("analyses", []):
             try:
-                if a.get("method") in ("regression", "cluster"):
+                method = a.get("method")
+                if method in ("regression", "cluster"):
                     _restore_job_result(path, index, ds, a, warnings)
-                elif a.get("method") == "zonal":
+                elif method == "zonal":
                     _restore_zonal(path, index, ds, a, warnings)
+                elif method == "aggregate":
+                    _restore_aggregate(path, index, ds, a, warnings)
+                elif method == "rate":
+                    service.run_rate(ds, a["params"], record_id=a.get("id"))
+                elif method == "lisa_time":
+                    _set_groups(ds, entry, warnings)
+                    service.run_lisa_time(ds, a["params"], record_id=a.get("id"))
                 else:
                     service.run_local(ds, a["params"], record_id=a.get("id"))
             except EngineError as exc:
@@ -158,6 +166,7 @@ def open_project(body: OpenRequest, request: Request) -> OpenResponse:
                 service.set_field(ds, f["name"], f["expression"])
             except EngineError as exc:
                 warnings.append(f"계산 필드 '{f.get('name')}' 재계산 실패: {exc.message}")
+        _set_groups(ds, entry, warnings)
         opened.append(OpenedDataset(info=dataset_info(ds), ui=entry.get("ui"), warnings=warnings))
 
     return OpenResponse(path=str(path), ui=project.get("ui"), datasets=opened, rasters=rasters)
@@ -193,3 +202,33 @@ def _restore_zonal(path: Path, index: int, ds, entry: dict, warnings: list[str])
         return
     warnings.append("존 통계 결과 캐시가 없어 다시 계산함")
     service.run_zonal_sync(ds, params, record_id=entry.get("id"))
+
+
+def _set_groups(ds, entry: dict, warnings: list[str]) -> None:
+    """시간 변수 묶음을 다시 지정함. 열이 빠졌으면 경고만 남김."""
+    groups = entry.get("time_groups") or []
+    if not groups or ds.time_groups:
+        return
+    try:
+        service.set_time_groups(ds, groups)
+    except EngineError as exc:
+        warnings.append(f"시간 변수 묶음 복원 실패: {exc.message}")
+
+
+def _restore_aggregate(path: Path, index: int, ds, entry: dict, warnings: list[str]) -> None:
+    """점 집계: 캐시가 있으면 붙이고, 없으면 기록된 원본 경로를 다시 읽어 집계함."""
+    params = entry["params"]
+    outputs = entry.get("outputs", [])
+    cached = read_cache(path, index, len(ds.gdf), outputs) if outputs else None
+    if cached is not None:
+        service.apply_aggregate_cached(ds, params, cached, record_id=entry.get("id"))
+        return
+    source = dict(params.get("source") or {})
+    src_path = Path(source.get("path", ""))
+    if not src_path.exists():
+        # 원본을 프로젝트와 함께 옮긴 경우: 프로젝트 폴더에서 같은 이름의 파일을 찾음
+        cand = path.parent / src_path.name
+        if cand.exists():
+            source["path"] = str(cand)
+    warnings.append("점 집계 결과 캐시가 없어 원본을 다시 읽어 계산함")
+    service.rerun_aggregate(ds, {**params, "source": source}, record_id=entry.get("id"))
