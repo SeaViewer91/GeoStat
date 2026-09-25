@@ -754,6 +754,7 @@ function ChartDialog({ dialog }: { dialog: Extract<Dialog, { kind: "chart" }> })
             </label>
             {mode === "bivariate" && <NumericSelect ds={ds} value={y} onChange={setY} label={t("두 번째 변수 (공간 시차)")} />}
             {mode === "diff" && <NumericSelect ds={ds} value={y} onChange={setY} label={t("기준 변수 (앞 기간)")} />}
+            {mode === "diff" && <PreviousPeriod ds={ds} x={x} onPick={setY} />}
             {mode === "rate" && <NumericSelect ds={ds} value={y} onChange={setY} label={t("분모 (모집단·노력량 등)")} />}
             {ds.weights.length ? <WeightsSelect ds={ds} value={weightsId} onChange={setWeightsId} /> : <NoWeights datasetId={ds.info.id} />}
             <PermutationSelect value={permutations} onChange={setPermutations} />
@@ -761,6 +762,18 @@ function ChartDialog({ dialog }: { dialog: Extract<Dialog, { kind: "chart" }> })
         )}
       </div>
     </Modal>
+  );
+}
+
+/** 차분 Moran: 변수가 시간 변수 묶음에 있으면 바로 앞 기간을 기준 변수로 고르는 버튼 */
+function PreviousPeriod({ ds, x, onPick }: { ds: { info: { time_groups: { columns: string[]; labels: string[] }[] } }; x: string; onPick: (v: string) => void }) {
+  const g = ds.info.time_groups.find((tg) => tg.columns.includes(x));
+  const i = g ? g.columns.indexOf(x) : -1;
+  if (!g || i <= 0) return null;
+  return (
+    <button className="link" onClick={() => onPick(g.columns[i - 1])}>
+      {t("앞 기간({label})을 기준으로", { label: g.labels[i - 1] })}
+    </button>
   );
 }
 

@@ -278,7 +278,11 @@ export function Toolbar({ chartsOpen, onToggleCharts }: ToolbarProps) {
           "-",
           {
             label: "시공간 분석 (Moran 추이·기간별 LISA·차분 LISA)…",
-            onClick: () => activeId && showDialog({ kind: "timeseries", datasetId: activeId }),
+            onClick: () => {
+              if (!activeId) return;
+              onToggleCharts(true); // 기간별 LISA 결과(전이표)가 결과 패널에 나옴
+              showDialog({ kind: "timeseries", datasetId: activeId });
+            },
             disabled: !activeId || !!busy,
           },
         ]}

@@ -124,7 +124,7 @@ export function AggregateDialog({ datasetId }: { datasetId: string }) {
         </label>
         <label className="check">
           <input type="checkbox" checked={density} onChange={(e) => setDensity(e.target.checked)} />
-          {t("밀도: ㎢당 개수 (_DENS)")}
+          {t("밀도: km²당 개수 (_DENS)")}
         </label>
         <div className="field-label">{t("원본 속성 통계")}</div>
         {stats.map((s, i) => (
@@ -707,6 +707,17 @@ export function TrendLine({ rows }: { rows: { label: string; value: number; p?: 
 
 // ---- 기간별 자료 만들기 (긴 형태 → 넓은 형태, 기간별 파일 잇기) ----------------------------
 
+/** ID로 쓸 만한 열: 이름에 ID·코드·번호·name이 든 열, 없으면 첫 문자열 열, 없으면 첫 열 */
+function guessIdColumn(ds: LoadedDataset | undefined): string {
+  const cols = ds?.info.columns ?? [];
+  return (
+    cols.find((c) => /(^|_)(id|fid|code)$|id$|코드|번호|정점|이름|name/i.test(c.name))?.name ??
+    cols.find((c) => c.kind === "string")?.name ??
+    cols[0]?.name ??
+    ""
+  );
+}
+
 export function ReshapeDialog({ datasetId }: { datasetId: string }) {
   const datasets = useApp((s) => s.datasets);
   const order = useApp((s) => s.order);
@@ -716,17 +727,17 @@ export function ReshapeDialog({ datasetId }: { datasetId: string }) {
   const ds = datasets[datasetId];
   const [mode, setMode] = useState<"pivot" | "merge">("pivot");
   const allCols = ds?.info.columns.map((c) => c.name) ?? [];
-  const [idCol, setIdCol] = useState(allCols[0] ?? "");
+  const [idCol, setIdCol] = useState(guessIdColumn(ds));
   const [timeCol, setTimeCol] = useState(
     allCols.find((c) => /연도|년도|year|date|기간|시기/i.test(c)) ?? allCols[1] ?? "",
   );
   const [values, setValues] = useState<string[]>([]);
-  // 기간별 파일: 첫 행이 기준(지오메트리) 자료
+  // 기간별 파일: 첫 행이 기준(지오메트리) 자료. 활성 레이어를 맨 앞에 두고, ID 열은 이름으로 짐작함
   const [parts, setParts] = useState(() =>
-    order
+    [datasetId, ...order.filter((id) => id !== datasetId)]
       .filter((id) => datasets[id])
       .slice(0, 6)
-      .map((id) => ({ dataset_id: id, id_column: datasets[id].info.columns[0]?.name ?? "", label: guessLabel(datasets[id].info.name) })),
+      .map((id) => ({ dataset_id: id, id_column: guessIdColumn(datasets[id]), label: guessLabel(datasets[id].info.name) })),
   );
   if (!ds) return null;
 
@@ -845,7 +856,7 @@ export function ReshapeDialog({ datasetId }: { datasetId: string }) {
                                       dataset_id: e.target.value,
                                       id_column: datasets[e.target.value]?.info.columns.some((c) => c.name === x.id_column)
                                         ? x.id_column
-                                        : (datasets[e.target.value]?.info.columns[0]?.name ?? ""),
+                                        : guessIdColumn(datasets[e.target.value]),
                                       label: guessLabel(datasets[e.target.value]?.info.name ?? ""),
                                     }
                                   : x,
