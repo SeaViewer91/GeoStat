@@ -1,0 +1,4 @@
+tools/node_modules/
+__pycache__/
+# 저장소 전체 설정은 *.tif를 무시하지만, 책 예제 래스터는 올림
+!data/*.tif

@@ -1,0 +1,341 @@
+{
+ "title": "처음 만나는 공간통계학",
+ "subtitle": "GeoStat으로 따라 하는",
+ "status": "집필 중",
+ "parts": [
+  {
+   "part": 0,
+   "title": "들어가며",
+   "lessons": [
+    {
+     "id": "00",
+     "title": "공간통계학이란 무엇인가",
+     "app": "none"
+    }
+   ]
+  },
+  {
+   "part": 1,
+   "title": "공간 자료",
+   "lessons": [
+    {
+     "id": "01",
+     "title": "공간 자료의 세 얼굴",
+     "app": "full"
+    },
+    {
+     "id": "02",
+     "title": "좌표계와 거리",
+     "app": "full"
+    },
+    {
+     "id": "03",
+     "title": "척도와 단위의 문제",
+     "app": "partial"
+    },
+    {
+     "id": "04",
+     "title": "공간 자료 준비",
+     "app": "full"
+    },
+    {
+     "id": "05",
+     "title": "지도로 탐색하기",
+     "app": "full"
+    }
+   ]
+  },
+  {
+   "part": 2,
+   "title": "통계 다시 보기",
+   "lessons": [
+    {
+     "id": "06",
+     "title": "요약·분포·추정",
+     "app": "partial"
+    },
+    {
+     "id": "07",
+     "title": "검정의 논리와 순열 검정",
+     "app": "partial"
+    },
+    {
+     "id": "08",
+     "title": "회귀분석과 진단",
+     "app": "full"
+    },
+    {
+     "id": "09",
+     "title": "독립 가정이 깨질 때",
+     "app": "code"
+    }
+   ]
+  },
+  {
+   "part": 3,
+   "title": "공간 자기상관",
+   "lessons": [
+    {
+     "id": "10",
+     "title": "이웃 정하기: 공간가중치",
+     "app": "full"
+    },
+    {
+     "id": "11",
+     "title": "전역 공간 자기상관",
+     "app": "partial"
+    },
+    {
+     "id": "12",
+     "title": "국지 공간 자기상관 I: LISA",
+     "app": "full"
+    },
+    {
+     "id": "13",
+     "title": "국지 공간 자기상관 II",
+     "app": "partial"
+    },
+    {
+     "id": "14",
+     "title": "비율 자료와 작은 수 문제",
+     "app": "full"
+    },
+    {
+     "id": "15",
+     "title": "공간 군집 탐지",
+     "app": "code"
+    }
+   ]
+  },
+  {
+   "part": 4,
+   "title": "점 패턴",
+   "lessons": [
+    {
+     "id": "16",
+     "title": "점 패턴의 기초",
+     "app": "code"
+    },
+    {
+     "id": "17",
+     "title": "강도 추정",
+     "app": "partial"
+    },
+    {
+     "id": "18",
+     "title": "점 사이의 상호작용",
+     "app": "code"
+    },
+    {
+     "id": "19",
+     "title": "점 과정 모형",
+     "app": "code"
+    }
+   ]
+  },
+  {
+   "part": 5,
+   "title": "지구통계",
+   "lessons": [
+    {
+     "id": "20",
+     "title": "연속 표면과 확률장",
+     "app": "code"
+    },
+    {
+     "id": "21",
+     "title": "베리오그램",
+     "app": "code"
+    },
+    {
+     "id": "22",
+     "title": "크리깅",
+     "app": "code"
+    },
+    {
+     "id": "23",
+     "title": "불확실성과 시뮬레이션",
+     "app": "code"
+    }
+   ]
+  },
+  {
+   "part": 6,
+   "title": "공간 회귀",
+   "lessons": [
+    {
+     "id": "24",
+     "title": "왜 공간 회귀인가",
+     "app": "full"
+    },
+    {
+     "id": "25",
+     "title": "공간시차 모형",
+     "app": "full"
+    },
+    {
+     "id": "26",
+     "title": "공간오차 모형과 모형 계보",
+     "app": "partial"
+    },
+    {
+     "id": "27",
+     "title": "공간 회귀의 확장",
+     "app": "code"
+    }
+   ]
+  },
+  {
+   "part": 7,
+   "title": "공간 이질성",
+   "lessons": [
+    {
+     "id": "28",
+     "title": "공간 비정상성",
+     "app": "partial"
+    },
+    {
+     "id": "29",
+     "title": "지리가중회귀(GWR)",
+     "app": "full"
+    },
+    {
+     "id": "30",
+     "title": "MGWR과 해석",
+     "app": "full"
+    }
+   ]
+  },
+  {
+   "part": 8,
+   "title": "영역화",
+   "lessons": [
+    {
+     "id": "31",
+     "title": "군집 분석 기초",
+     "app": "full"
+    },
+    {
+     "id": "32",
+     "title": "공간 제약 군집화",
+     "app": "partial"
+    }
+   ]
+  },
+  {
+   "part": 9,
+   "title": "시공간",
+   "lessons": [
+    {
+     "id": "33",
+     "title": "시공간 자료의 구조",
+     "app": "full"
+    },
+    {
+     "id": "34",
+     "title": "시공간 탐색",
+     "app": "partial"
+    },
+    {
+     "id": "35",
+     "title": "시공간 모형 개요",
+     "app": "code"
+    }
+   ]
+  },
+  {
+   "part": 10,
+   "title": "베이지안 공간 모형",
+   "lessons": [
+    {
+     "id": "36",
+     "title": "베이지안 사고와 계층 모형",
+     "app": "partial"
+    },
+    {
+     "id": "37",
+     "title": "질병 지도와 CAR 모형",
+     "app": "code"
+    }
+   ]
+  },
+  {
+   "part": 11,
+   "title": "공간 데이터 과학",
+   "lessons": [
+    {
+     "id": "38",
+     "title": "공간 표본 설계",
+     "app": "code"
+    },
+    {
+     "id": "39",
+     "title": "공간 교차검증과 머신러닝",
+     "app": "code"
+    },
+    {
+     "id": "40",
+     "title": "격자·래스터 자료와 공간통계",
+     "app": "partial"
+    }
+   ]
+  },
+  {
+   "part": 12,
+   "title": "연구와 보고",
+   "lessons": [
+    {
+     "id": "41",
+     "title": "공간 분석 연구 설계",
+     "app": "full"
+    },
+    {
+     "id": "42",
+     "title": "쓰고 읽기",
+     "app": "full"
+    }
+   ]
+  },
+  {
+   "part": "appendix",
+   "title": "부록",
+   "lessons": [
+    {
+     "id": "A",
+     "title": "방법 선택 지도",
+     "app": null
+    },
+    {
+     "id": "B",
+     "title": "수학 준비",
+     "app": null
+    },
+    {
+     "id": "C",
+     "title": "기호·수식표",
+     "app": null
+    },
+    {
+     "id": "D",
+     "title": "용어 대역표",
+     "app": null
+    },
+    {
+     "id": "E",
+     "title": "도구별 차이와 결과 재현",
+     "app": null
+    },
+    {
+     "id": "F",
+     "title": "더 읽을거리",
+     "app": null
+    },
+    {
+     "id": "G",
+     "title": "예제 자료",
+     "app": null
+    }
+   ]
+  }
+ ]
+}

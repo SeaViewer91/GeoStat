@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 330" role="img" aria-label="같은 값 36개를 세 가지로 배치한 지도. 평균·표준편차·히스토그램은 같지만 모란 지수는 0.8대에서 −0.9대까지 다름">
+<style>
+.gsfig{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
+.gsfig .s-fg{stroke:#1c2330}.gsfig .s-mu{stroke:#8a93a3}.gsfig .s-ac{stroke:#2563eb}.gsfig .s-bd{stroke:#c2410c}.gsfig .s-ok{stroke:#15803d}.gsfig .s-bg{stroke:#ffffff}
+.gsfig .f-fg{fill:#1c2330}.gsfig .f-mu{fill:#5a6475}.gsfig .f-ac{fill:#2563eb}.gsfig .f-acs{fill:#e6eefe}.gsfig .f-bd{fill:#c2410c}
+.gsfig .f-bds{fill:#fdeee6}.gsfig .f-ok{fill:#15803d}.gsfig .f-sf{fill:#f0f2f5}.gsfig .f-bg{fill:#ffffff}
+.gsfig .q0{fill:#fff1e0}.gsfig .q1{fill:#fdc98f}.gsfig .q2{fill:#f98f45}.gsfig .q3{fill:#d9530f}.gsfig .q4{fill:#8c2d04}
+@media (prefers-color-scheme:dark){
+.gsfig .s-fg{stroke:#e6e9ef}.gsfig .s-mu{stroke:#737c8c}.gsfig .s-ac{stroke:#6d9bff}.gsfig .s-bd{stroke:#fb8b5b}.gsfig .s-ok{stroke:#4ade80}.gsfig .s-bg{stroke:#1a1e26}
+.gsfig .f-fg{fill:#e6e9ef}.gsfig .f-mu{fill:#a7afbd}.gsfig .f-ac{fill:#6d9bff}.gsfig .f-acs{fill:#1f2b45}.gsfig .f-bd{fill:#fb8b5b}
+.gsfig .f-bds{fill:#3a2218}.gsfig .f-ok{fill:#4ade80}.gsfig .f-sf{fill:#222733}.gsfig .f-bg{fill:#1a1e26}}
+</style>
+<rect x="0" y="0" width="720" height="330" class="f-bg"/>
+<text x="108.0" y="26.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">(가) 모여 있음</text>
+<rect x="30.0" y="40.0" width="26.0" height="26.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<rect x="56.0" y="40.0" width="26.0" height="26.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<rect x="82.0" y="40.0" width="26.0" height="26.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<rect x="108.0" y="40.0" width="26.0" height="26.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<rect x="134.0" y="40.0" width="26.0" height="26.0" rx="0" class="s-bg q3" stroke-width="1"/>
+<rect x="160.0" y="40.0" width="26.0" height="26.0" rx="0" class="s-bg q2" stroke-width="1"/>
+<rect x="30.0" y="66.0" width="26.0" height="26.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<rect x="56.0" y="66.0" width="26.0" height="26.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<rect x="82.0" y="66.0" width="26.0" height="26.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<rect x="108.0" y="66.0" width="26.0" height="26.0" rx="0" class="s-bg q3" stroke-width="1"/>
+<rect x="134.0" y="66.0" width="26.0" height="26.0" rx="0" class="s-bg q2" stroke-width="1"/>
+<rect x="160.0" y="66.0" width="26.0" height="26.0" rx="0" class="s-bg q2" stroke-width="1"/>
+<rect x="30.0" y="92.0" width="26.0" height="26.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<rect x="56.0" y="92.0" width="26.0" height="26.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<rect x="82.0" y="92.0" width="26.0" height="26.0" rx="0" class="s-bg q3" stroke-width="1"/>
+<rect x="108.0" y="92.0" width="26.0" height="26.0" rx="0" class="s-bg q2" stroke-width="1"/>
+<rect x="134.0" y="92.0" width="26.0" height="26.0" rx="0" class="s-bg q2" stroke-width="1"/>
+<rect x="160.0" y="92.0" width="26.0" height="26.0" rx="0" class="s-bg q1" stroke-width="1"/>
+<rect x="30.0" y="118.0" width="26.0" height="26.0" rx="0" class="s-bg q3" stroke-width="1"/>
+<rect x="56.0" y="118.0" width="26.0" height="26.0" rx="0" class="s-bg q3" stroke-width="1"/>
+<rect x="82.0" y="118.0" width="26.0" height="26.0" rx="0" class="s-bg q2" stroke-width="1"/>
+<rect x="108.0" y="118.0" width="26.0" height="26.0" rx="0" class="s-bg q1" stroke-width="1"/>
+<rect x="134.0" y="118.0" width="26.0" height="26.0" rx="0" class="s-bg q1" stroke-width="1"/>
+<rect x="160.0" y="118.0" width="26.0" height="26.0" rx="0" class="s-bg q0" stroke-width="1"/>
+<rect x="30.0" y="144.0" width="26.0" height="26.0" rx="0" class="s-bg q3" stroke-width="1"/>
+<rect x="56.0" y="144.0" width="26.0" height="26.0" rx="0" class="s-bg q2" stroke-width="1"/>
+<rect x="82.0" y="144.0" width="26.0" height="26.0" rx="0" class="s-bg q1" stroke-width="1"/>
+<rect x="108.0" y="144.0" width="26.0" height="26.0" rx="0" class="s-bg q1" stroke-width="1"/>
+<rect x="134.0" y="144.0" width="26.0" height="26.0" rx="0" class="s-bg q0" stroke-width="1"/>
+<rect x="160.0" y="144.0" width="26.0" height="26.0" rx="0" class="s-bg q0" stroke-width="1"/>
+<rect x="30.0" y="170.0" width="26.0" height="26.0" rx="0" class="s-bg q2" stroke-width="1"/>
+<rect x="56.0" y="170.0" width="26.0" height="26.0" rx="0" class="s-bg q1" stroke-width="1"/>
+<rect x="82.0" y="170.0" width="26.0" height="26.0" rx="0" class="s-bg q1" stroke-width="1"/>
+<rect x="108.0" y="170.0" width="26.0" height="26.0" rx="0" class="s-bg q0" stroke-width="1"/>
+<rect x="134.0" y="170.0" width="26.0" height="26.0" rx="0" class="s-bg q0" stroke-width="1"/>
+<rect x="160.0" y="170.0" width="26.0" height="26.0" rx="0" class="s-bg q0" stroke-width="1"/>
+<rect x="160.0" y="170.0" width="26.0" height="26.0" rx="0" class="s-bg q0" stroke-width="1" fill="none"/>
+<text x="108.0" y="218.0" class="f-fg" font-size="12" text-anchor="middle">모란 지수 I = 0.81</text>
+<text x="308.0" y="26.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">(나) 무작위</text>
+<rect x="230.0" y="40.0" width="26.0" height="26.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<rect x="256.0" y="40.0" width="26.0" height="26.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<rect x="282.0" y="40.0" width="26.0" height="26.0" rx="0" class="s-bg q2" stroke-width="1"/>
+<rect x="308.0" y="40.0" width="26.0" height="26.0" rx="0" class="s-bg q1" stroke-width="1"/>
+<rect x="334.0" y="40.0" width="26.0" height="26.0" rx="0" class="s-bg q0" stroke-width="1"/>
+<rect x="360.0" y="40.0" width="26.0" height="26.0" rx="0" class="s-bg q2" stroke-width="1"/>
+<rect x="230.0" y="66.0" width="26.0" height="26.0" rx="0" class="s-bg q1" stroke-width="1"/>
+<rect x="256.0" y="66.0" width="26.0" height="26.0" rx="0" class="s-bg q3" stroke-width="1"/>
+<rect x="282.0" y="66.0" width="26.0" height="26.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<rect x="308.0" y="66.0" width="26.0" height="26.0" rx="0" class="s-bg q1" stroke-width="1"/>
+<rect x="334.0" y="66.0" width="26.0" height="26.0" rx="0" class="s-bg q3" stroke-width="1"/>
+<rect x="360.0" y="66.0" width="26.0" height="26.0" rx="0" class="s-bg q1" stroke-width="1"/>
+<rect x="230.0" y="92.0" width="26.0" height="26.0" rx="0" class="s-bg q2" stroke-width="1"/>
+<rect x="256.0" y="92.0" width="26.0" height="26.0" rx="0" class="s-bg q3" stroke-width="1"/>
+<rect x="282.0" y="92.0" width="26.0" height="26.0" rx="0" class="s-bg q2" stroke-width="1"/>
+<rect x="308.0" y="92.0" width="26.0" height="26.0" rx="0" class="s-bg q3" stroke-width="1"/>
+<rect x="334.0" y="92.0" width="26.0" height="26.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<rect x="360.0" y="92.0" width="26.0" height="26.0" rx="0" class="s-bg q3" stroke-width="1"/>
+<rect x="230.0" y="118.0" width="26.0" height="26.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<rect x="256.0" y="118.0" width="26.0" height="26.0" rx="0" class="s-bg q0" stroke-width="1"/>
+<rect x="282.0" y="118.0" width="26.0" height="26.0" rx="0" class="s-bg q2" stroke-width="1"/>
+<rect x="308.0" y="118.0" width="26.0" height="26.0" rx="0" class="s-bg q1" stroke-width="1"/>
+<rect x="334.0" y="118.0" width="26.0" height="26.0" rx="0" class="s-bg q2" stroke-width="1"/>
+<rect x="360.0" y="118.0" width="26.0" height="26.0" rx="0" class="s-bg q0" stroke-width="1"/>
+<rect x="230.0" y="144.0" width="26.0" height="26.0" rx="0" class="s-bg q0" stroke-width="1"/>
+<rect x="256.0" y="144.0" width="26.0" height="26.0" rx="0" class="s-bg q2" stroke-width="1"/>
+<rect x="282.0" y="144.0" width="26.0" height="26.0" rx="0" class="s-bg q2" stroke-width="1"/>
+<rect x="308.0" y="144.0" width="26.0" height="26.0" rx="0" class="s-bg q1" stroke-width="1"/>
+<rect x="334.0" y="144.0" width="26.0" height="26.0" rx="0" class="s-bg q0" stroke-width="1"/>
+<rect x="360.0" y="144.0" width="26.0" height="26.0" rx="0" class="s-bg q3" stroke-width="1"/>
+<rect x="230.0" y="170.0" width="26.0" height="26.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<rect x="256.0" y="170.0" width="26.0" height="26.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<rect x="282.0" y="170.0" width="26.0" height="26.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<rect x="308.0" y="170.0" width="26.0" height="26.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<rect x="334.0" y="170.0" width="26.0" height="26.0" rx="0" class="s-bg q1" stroke-width="1"/>
+<rect x="360.0" y="170.0" width="26.0" height="26.0" rx="0" class="s-bg q0" stroke-width="1"/>
+<rect x="360.0" y="170.0" width="26.0" height="26.0" rx="0" class="s-bg q0" stroke-width="1" fill="none"/>
+<text x="308.0" y="218.0" class="f-fg" font-size="12" text-anchor="middle">모란 지수 I = -0.02</text>
+<text x="508.0" y="26.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">(다) 엇갈림</text>
+<rect x="430.0" y="40.0" width="26.0" height="26.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<rect x="456.0" y="40.0" width="26.0" height="26.0" rx="0" class="s-bg q0" stroke-width="1"/>
+<rect x="482.0" y="40.0" width="26.0" height="26.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<rect x="508.0" y="40.0" width="26.0" height="26.0" rx="0" class="s-bg q0" stroke-width="1"/>
+<rect x="534.0" y="40.0" width="26.0" height="26.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<rect x="560.0" y="40.0" width="26.0" height="26.0" rx="0" class="s-bg q0" stroke-width="1"/>
+<rect x="430.0" y="66.0" width="26.0" height="26.0" rx="0" class="s-bg q0" stroke-width="1"/>
+<rect x="456.0" y="66.0" width="26.0" height="26.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<rect x="482.0" y="66.0" width="26.0" height="26.0" rx="0" class="s-bg q0" stroke-width="1"/>
+<rect x="508.0" y="66.0" width="26.0" height="26.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<rect x="534.0" y="66.0" width="26.0" height="26.0" rx="0" class="s-bg q0" stroke-width="1"/>
+<rect x="560.0" y="66.0" width="26.0" height="26.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<rect x="430.0" y="92.0" width="26.0" height="26.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<rect x="456.0" y="92.0" width="26.0" height="26.0" rx="0" class="s-bg q1" stroke-width="1"/>
+<rect x="482.0" y="92.0" width="26.0" height="26.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<rect x="508.0" y="92.0" width="26.0" height="26.0" rx="0" class="s-bg q1" stroke-width="1"/>
+<rect x="534.0" y="92.0" width="26.0" height="26.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<rect x="560.0" y="92.0" width="26.0" height="26.0" rx="0" class="s-bg q1" stroke-width="1"/>
+<rect x="430.0" y="118.0" width="26.0" height="26.0" rx="0" class="s-bg q1" stroke-width="1"/>
+<rect x="456.0" y="118.0" width="26.0" height="26.0" rx="0" class="s-bg q3" stroke-width="1"/>
+<rect x="482.0" y="118.0" width="26.0" height="26.0" rx="0" class="s-bg q1" stroke-width="1"/>
+<rect x="508.0" y="118.0" width="26.0" height="26.0" rx="0" class="s-bg q3" stroke-width="1"/>
+<rect x="534.0" y="118.0" width="26.0" height="26.0" rx="0" class="s-bg q1" stroke-width="1"/>
+<rect x="560.0" y="118.0" width="26.0" height="26.0" rx="0" class="s-bg q3" stroke-width="1"/>
+<rect x="430.0" y="144.0" width="26.0" height="26.0" rx="0" class="s-bg q3" stroke-width="1"/>
+<rect x="456.0" y="144.0" width="26.0" height="26.0" rx="0" class="s-bg q1" stroke-width="1"/>
+<rect x="482.0" y="144.0" width="26.0" height="26.0" rx="0" class="s-bg q3" stroke-width="1"/>
+<rect x="508.0" y="144.0" width="26.0" height="26.0" rx="0" class="s-bg q2" stroke-width="1"/>
+<rect x="534.0" y="144.0" width="26.0" height="26.0" rx="0" class="s-bg q3" stroke-width="1"/>
+<rect x="560.0" y="144.0" width="26.0" height="26.0" rx="0" class="s-bg q2" stroke-width="1"/>
+<rect x="430.0" y="170.0" width="26.0" height="26.0" rx="0" class="s-bg q2" stroke-width="1"/>
+<rect x="456.0" y="170.0" width="26.0" height="26.0" rx="0" class="s-bg q2" stroke-width="1"/>
+<rect x="482.0" y="170.0" width="26.0" height="26.0" rx="0" class="s-bg q2" stroke-width="1"/>
+<rect x="508.0" y="170.0" width="26.0" height="26.0" rx="0" class="s-bg q2" stroke-width="1"/>
+<rect x="534.0" y="170.0" width="26.0" height="26.0" rx="0" class="s-bg q2" stroke-width="1"/>
+<rect x="560.0" y="170.0" width="26.0" height="26.0" rx="0" class="s-bg q2" stroke-width="1"/>
+<rect x="560.0" y="170.0" width="26.0" height="26.0" rx="0" class="s-bg q2" stroke-width="1" fill="none"/>
+<text x="508.0" y="218.0" class="f-fg" font-size="12" text-anchor="middle">모란 지수 I = -0.91</text>
+<text x="330.0" y="256.0" class="f-mu" font-size="12" text-anchor="middle">세 지도 모두 평균 51.6, 표준편차 8.5</text>
+<text x="673.5" y="26.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">값의 분포</text>
+<rect x="650.0" y="158.0" width="9.7" height="37.0" rx="0" class="f-mu" stroke-width="0"/>
+<text x="646.0" y="180.5" class="f-mu" font-size="10" text-anchor="end">30–39</text>
+<rect x="650.0" y="119.0" width="32.4" height="37.0" rx="0" class="f-mu" stroke-width="0"/>
+<text x="646.0" y="141.5" class="f-mu" font-size="10" text-anchor="end">40–49</text>
+<rect x="650.0" y="80.0" width="55.0" height="37.0" rx="0" class="f-mu" stroke-width="0"/>
+<text x="646.0" y="102.5" class="f-mu" font-size="10" text-anchor="end">50–59</text>
+<rect x="650.0" y="41.0" width="19.4" height="37.0" rx="0" class="f-mu" stroke-width="0"/>
+<text x="646.0" y="63.5" class="f-mu" font-size="10" text-anchor="end">60–69</text>
+<text x="673.5" y="218.0" class="f-mu" font-size="11" text-anchor="middle">(세 지도 공통)</text>
+<rect x="200.0" y="285.0" width="56.0" height="14.0" rx="0" class="s-bg q0" stroke-width="1"/>
+<rect x="256.0" y="285.0" width="56.0" height="14.0" rx="0" class="s-bg q1" stroke-width="1"/>
+<rect x="312.0" y="285.0" width="56.0" height="14.0" rx="0" class="s-bg q2" stroke-width="1"/>
+<rect x="368.0" y="285.0" width="56.0" height="14.0" rx="0" class="s-bg q3" stroke-width="1"/>
+<rect x="424.0" y="285.0" width="56.0" height="14.0" rx="0" class="s-bg q4" stroke-width="1"/>
+<text x="200.0" y="316.0" class="f-mu" font-size="11" text-anchor="start">낮음</text>
+<text x="480.0" y="316.0" class="f-mu" font-size="11" text-anchor="end">높음</text>
+<text x="340.0" y="316.0" class="f-mu" font-size="11" text-anchor="middle">5분위</text>
+</svg>
