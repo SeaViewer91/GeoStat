@@ -25,10 +25,10 @@ GeoStat으로 따라 하는 공간통계학 입문서임. 공간정보·지리�
 | 4 | [공간 자료 준비](lessons/04-preparing-spatial-data.md) | ● | 초안 |
 | 5 | [지도로 탐색하기](lessons/05-mapping-and-exploration.md) | ● | 초안 |
 | **2부** | **통계 다시 보기** | | |
-| 6 | 요약·분포·추정 | ◐ | |
-| 7 | 검정의 논리와 순열 검정 | ◐ | |
-| 8 | 회귀분석과 진단 | ● | |
-| 9 | 독립 가정이 깨질 때 | ○ | |
+| 6 | [요약·분포·추정](lessons/06-summary-distribution-estimation.md) | ◐ | 초안 |
+| 7 | [검정의 논리와 순열 검정](lessons/07-testing-and-permutation.md) | ◐ | 초안 |
+| 8 | [회귀분석과 진단](lessons/08-regression-and-diagnostics.md) | ● | 초안 |
+| 9 | [독립 가정이 깨질 때](lessons/09-when-independence-fails.md) | ○ | 초안 |
 | **3부** | **공간 자기상관** | | |
 | 10 | 이웃 정하기: 공간가중치 | ● | |
 | 11 | 전역 공간 자기상관 | ◐ | |

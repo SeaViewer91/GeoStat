@@ -8,7 +8,7 @@ updated: 2026-09-30
 status: draft
 ---
 
-[목차](../README.md) · 이전: [4강 공간 자료 준비](04-preparing-spatial-data.md) · 다음: 6강 요약·분포·추정 (집필 예정)
+[목차](../README.md) · 이전: [4강 공간 자료 준비](04-preparing-spatial-data.md) · 다음: [6강 요약·분포·추정](06-summary-distribution-estimation.md)
 
 # 5강 지도로 탐색하기
 
@@ -310,4 +310,4 @@ ESDA의 핵심 도구는 **연동 시각화**(linked views)임. 지도, 히스�
 
 ---
 
-[목차](../README.md) · 이전: [4강 공간 자료 준비](04-preparing-spatial-data.md) · 다음: 6강 요약·분포·추정 (집필 예정)
+[목차](../README.md) · 이전: [4강 공간 자료 준비](04-preparing-spatial-data.md) · 다음: [6강 요약·분포·추정](06-summary-distribution-estimation.md)

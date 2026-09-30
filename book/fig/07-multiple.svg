@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 300" role="img" aria-label="왼쪽: 모든 동의 참 출동률이 같을 때 동 150개를 하나씩 검정하면 우연만으로 &#x27;유의한 동&#x27;이 평균 4.5개 나옴(2,000번 모의실험). 실제 자료에서는 12개였음. 오른쪽: 실제 p값을 작은 것부터 늘어놓고 0.05, BH, 본페로니 기준과 비교한 것. 속이 찬 주황 점은 본페로니 기준을, 테두리가 진한 점은 0.05를 통과한 p값">
+<style>
+.gsfig{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
+.gsfig .s-fg{stroke:#1c2330}.gsfig .s-mu{stroke:#8a93a3}.gsfig .s-ac{stroke:#2563eb}.gsfig .s-bd{stroke:#c2410c}.gsfig .s-ok{stroke:#15803d}.gsfig .s-bg{stroke:#ffffff}
+.gsfig .f-fg{fill:#1c2330}.gsfig .f-mu{fill:#5a6475}.gsfig .f-ac{fill:#2563eb}.gsfig .f-acs{fill:#e6eefe}.gsfig .f-bd{fill:#c2410c}
+.gsfig .f-bds{fill:#fdeee6}.gsfig .f-ok{fill:#15803d}.gsfig .f-sf{fill:#f0f2f5}.gsfig .f-bg{fill:#ffffff}
+.gsfig .d0{fill:#2166ac}.gsfig .d1{fill:#67a9cf}.gsfig .d2{fill:#d1e5f0}.gsfig .d3{fill:#fddbc7}.gsfig .d4{fill:#ef8a62}.gsfig .d5{fill:#b2182b}
+.gsfig .q0{fill:#fff1e0}.gsfig .q1{fill:#fdc98f}.gsfig .q2{fill:#f98f45}.gsfig .q3{fill:#d9530f}.gsfig .q4{fill:#8c2d04}
+@media (prefers-color-scheme:dark){
+.gsfig .s-fg{stroke:#e6e9ef}.gsfig .s-mu{stroke:#737c8c}.gsfig .s-ac{stroke:#6d9bff}.gsfig .s-bd{stroke:#fb8b5b}.gsfig .s-ok{stroke:#4ade80}.gsfig .s-bg{stroke:#1a1e26}
+.gsfig .f-fg{fill:#e6e9ef}.gsfig .f-mu{fill:#a7afbd}.gsfig .f-ac{fill:#6d9bff}.gsfig .f-acs{fill:#1f2b45}.gsfig .f-bd{fill:#fb8b5b}
+.gsfig .f-bds{fill:#3a2218}.gsfig .f-ok{fill:#4ade80}.gsfig .f-sf{fill:#222733}.gsfig .f-bg{fill:#1a1e26}}
+</style>
+<rect x="0" y="0" width="720" height="300" class="f-bg"/>
+<text x="185.0" y="22.0" class="f-fg" font-size="12" text-anchor="middle" font-weight="600">귀무가설에서 &#x27;유의한 동&#x27;의 수</text>
+<rect x="50.0" y="207.7" width="16.9" height="12.3" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<rect x="66.9" y="182.3" width="16.9" height="37.7" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<rect x="83.8" y="132.2" width="16.9" height="87.8" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<rect x="100.6" y="65.6" width="16.9" height="154.4" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<rect x="117.5" y="59.3" width="16.9" height="160.7" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<rect x="134.4" y="71.6" width="16.9" height="148.4" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<rect x="151.2" y="112.7" width="16.9" height="107.3" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<rect x="168.1" y="155.1" width="16.9" height="64.9" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<rect x="185.0" y="178.9" width="16.9" height="41.1" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<rect x="201.9" y="201.3" width="16.9" height="18.7" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<rect x="218.8" y="209.4" width="16.9" height="10.6" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<rect x="235.6" y="215.8" width="16.9" height="4.2" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<line x1="260.9" y1="40.0" x2="260.9" y2="220.0" class="s-bd" stroke-width="2"/>
+<text x="256.9" y="56.0" class="f-bd" font-size="11" text-anchor="end">실제 12개</text>
+<line x1="50.0" y1="220.0" x2="320.0" y2="220.0" class="s-mu" stroke-width="1"/>
+<line x1="58.4" y1="220.0" x2="58.4" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="58.4" y="235.0" class="f-mu" font-size="10" text-anchor="middle">0</text>
+<line x1="142.8" y1="220.0" x2="142.8" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="142.8" y="235.0" class="f-mu" font-size="10" text-anchor="middle">5</text>
+<line x1="227.2" y1="220.0" x2="227.2" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="227.2" y="235.0" class="f-mu" font-size="10" text-anchor="middle">10</text>
+<line x1="311.6" y1="220.0" x2="311.6" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="311.6" y="235.0" class="f-mu" font-size="10" text-anchor="middle">15</text>
+<text x="185.0" y="252.0" class="f-mu" font-size="11" text-anchor="middle">p &lt; 0.05인 동의 수</text>
+<text x="560.0" y="22.0" class="f-fg" font-size="12" text-anchor="middle" font-weight="600">작은 p값 30개 (로그 눈금)</text>
+<line x1="420.0" y1="40.0" x2="420.0" y2="220.0" class="s-mu" stroke-width="1"/>
+<line x1="416.0" y1="213.1" x2="420.0" y2="213.1" class="s-mu" stroke-width="1"/>
+<text x="413.0" y="217.1" class="f-mu" font-size="10" text-anchor="end">0.00001</text>
+<line x1="416.0" y1="178.5" x2="420.0" y2="178.5" class="s-mu" stroke-width="1"/>
+<text x="413.0" y="182.5" class="f-mu" font-size="10" text-anchor="end">0.0001</text>
+<line x1="416.0" y1="143.8" x2="420.0" y2="143.8" class="s-mu" stroke-width="1"/>
+<text x="413.0" y="147.8" class="f-mu" font-size="10" text-anchor="end">0.001</text>
+<line x1="416.0" y1="109.2" x2="420.0" y2="109.2" class="s-mu" stroke-width="1"/>
+<text x="413.0" y="113.2" class="f-mu" font-size="10" text-anchor="end">0.01</text>
+<line x1="416.0" y1="74.6" x2="420.0" y2="74.6" class="s-mu" stroke-width="1"/>
+<text x="413.0" y="78.6" class="f-mu" font-size="10" text-anchor="end">0.1</text>
+<line x1="416.0" y1="40.0" x2="420.0" y2="40.0" class="s-mu" stroke-width="1"/>
+<text x="413.0" y="44.0" class="f-mu" font-size="10" text-anchor="end">1</text>
+<line x1="420.0" y1="220.0" x2="690.0" y2="220.0" class="s-mu" stroke-width="1"/>
+<line x1="424.5" y1="220.0" x2="424.5" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="424.5" y="235.0" class="f-mu" font-size="10" text-anchor="middle">1</text>
+<line x1="505.5" y1="220.0" x2="505.5" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="505.5" y="235.0" class="f-mu" font-size="10" text-anchor="middle">10</text>
+<line x1="595.5" y1="220.0" x2="595.5" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="595.5" y="235.0" class="f-mu" font-size="10" text-anchor="middle">20</text>
+<line x1="685.5" y1="220.0" x2="685.5" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="685.5" y="235.0" class="f-mu" font-size="10" text-anchor="middle">30</text>
+<text x="555.0" y="252.0" class="f-mu" font-size="11" text-anchor="middle">p값의 순위 k</text>
+<path d="M420.0,85.0 L690.0,85.0" class="s-mu" stroke-width="1.2" fill="none"/>
+<path d="M424.5,160.4 L433.5,149.9 L442.5,143.8 L451.5,139.5 L460.5,136.2 L469.5,133.4 L478.5,131.1 L487.5,129.1 L496.5,127.3 L505.5,125.7 L514.5,124.3 L523.5,123.0 L532.5,121.8 L541.5,120.7 L550.5,119.7 L559.5,118.7 L568.5,117.8 L577.5,116.9 L586.5,116.1 L595.5,115.3 L604.5,114.6 L613.5,113.9 L622.5,113.2 L631.5,112.6 L640.5,112.0 L649.5,111.4 L658.5,110.8 L667.5,110.3 L676.5,109.7 L685.5,109.2" class="s-ok" stroke-width="1.4" fill="none"/>
+<path d="M420.0,160.4 L690.0,160.4" class="s-ac" stroke-width="1.4" fill="none"/>
+<circle cx="424.5" cy="211.2" r="3.00" class="s-fg f-bd" stroke-width="0.7"/>
+<circle cx="433.5" cy="172.4" r="3.00" class="s-fg f-bd" stroke-width="0.7"/>
+<circle cx="442.5" cy="141.4" r="3.00" class="s-fg f-sf" stroke-width="0.7"/>
+<circle cx="451.5" cy="127.8" r="3.00" class="s-fg f-sf" stroke-width="0.7"/>
+<circle cx="460.5" cy="126.9" r="3.00" class="s-fg f-sf" stroke-width="0.7"/>
+<circle cx="469.5" cy="117.3" r="3.00" class="s-fg f-sf" stroke-width="0.7"/>
+<circle cx="478.5" cy="103.2" r="3.00" class="s-fg f-sf" stroke-width="0.7"/>
+<circle cx="487.5" cy="99.4" r="3.00" class="s-fg f-sf" stroke-width="0.7"/>
+<circle cx="496.5" cy="96.7" r="3.00" class="s-fg f-sf" stroke-width="0.7"/>
+<circle cx="505.5" cy="96.5" r="3.00" class="s-fg f-sf" stroke-width="0.7"/>
+<circle cx="514.5" cy="94.9" r="3.00" class="s-fg f-sf" stroke-width="0.7"/>
+<circle cx="523.5" cy="85.5" r="3.00" class="s-fg f-sf" stroke-width="0.7"/>
+<circle cx="532.5" cy="84.8" r="3.00" class="s-mu f-sf" stroke-width="0.7"/>
+<circle cx="541.5" cy="84.3" r="3.00" class="s-mu f-sf" stroke-width="0.7"/>
+<circle cx="550.5" cy="80.4" r="3.00" class="s-mu f-sf" stroke-width="0.7"/>
+<circle cx="559.5" cy="78.7" r="3.00" class="s-mu f-sf" stroke-width="0.7"/>
+<circle cx="568.5" cy="75.3" r="3.00" class="s-mu f-sf" stroke-width="0.7"/>
+<circle cx="577.5" cy="75.0" r="3.00" class="s-mu f-sf" stroke-width="0.7"/>
+<circle cx="586.5" cy="73.4" r="3.00" class="s-mu f-sf" stroke-width="0.7"/>
+<circle cx="595.5" cy="69.7" r="3.00" class="s-mu f-sf" stroke-width="0.7"/>
+<circle cx="604.5" cy="69.5" r="3.00" class="s-mu f-sf" stroke-width="0.7"/>
+<circle cx="613.5" cy="68.8" r="3.00" class="s-mu f-sf" stroke-width="0.7"/>
+<circle cx="622.5" cy="68.6" r="3.00" class="s-mu f-sf" stroke-width="0.7"/>
+<circle cx="631.5" cy="68.1" r="3.00" class="s-mu f-sf" stroke-width="0.7"/>
+<circle cx="640.5" cy="67.5" r="3.00" class="s-mu f-sf" stroke-width="0.7"/>
+<circle cx="649.5" cy="67.1" r="3.00" class="s-mu f-sf" stroke-width="0.7"/>
+<circle cx="658.5" cy="65.2" r="3.00" class="s-mu f-sf" stroke-width="0.7"/>
+<circle cx="667.5" cy="63.9" r="3.00" class="s-mu f-sf" stroke-width="0.7"/>
+<circle cx="676.5" cy="63.3" r="3.00" class="s-mu f-sf" stroke-width="0.7"/>
+<circle cx="685.5" cy="63.2" r="3.00" class="s-mu f-sf" stroke-width="0.7"/>
+<text x="688.0" y="80.0" class="f-mu" font-size="10" text-anchor="end">0.05</text>
+<text x="688.0" y="123.2" class="f-ok" font-size="10" text-anchor="end">BH: k × 0.05/150</text>
+<text x="688.0" y="174.4" class="f-ac" font-size="10" text-anchor="end">본페로니: 0.05/150</text>
+</svg>
