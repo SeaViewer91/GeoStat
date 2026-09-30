@@ -1,0 +1,208 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 360" role="img" aria-label="한빛시 행정동 중심점과 가운데 동에서 반경 3 km 원(실선), 경위도 숫자로 반경 0.03도를 잰 범위(점선). 경위도 그대로 재면 남북으로 늘어난 타원이 되어 이웃이 달라짐">
+<style>
+.gsfig{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
+.gsfig .s-fg{stroke:#1c2330}.gsfig .s-mu{stroke:#8a93a3}.gsfig .s-ac{stroke:#2563eb}.gsfig .s-bd{stroke:#c2410c}.gsfig .s-ok{stroke:#15803d}.gsfig .s-bg{stroke:#ffffff}
+.gsfig .f-fg{fill:#1c2330}.gsfig .f-mu{fill:#5a6475}.gsfig .f-ac{fill:#2563eb}.gsfig .f-acs{fill:#e6eefe}.gsfig .f-bd{fill:#c2410c}
+.gsfig .f-bds{fill:#fdeee6}.gsfig .f-ok{fill:#15803d}.gsfig .f-sf{fill:#f0f2f5}.gsfig .f-bg{fill:#ffffff}
+.gsfig .q0{fill:#fff1e0}.gsfig .q1{fill:#fdc98f}.gsfig .q2{fill:#f98f45}.gsfig .q3{fill:#d9530f}.gsfig .q4{fill:#8c2d04}
+@media (prefers-color-scheme:dark){
+.gsfig .s-fg{stroke:#e6e9ef}.gsfig .s-mu{stroke:#737c8c}.gsfig .s-ac{stroke:#6d9bff}.gsfig .s-bd{stroke:#fb8b5b}.gsfig .s-ok{stroke:#4ade80}.gsfig .s-bg{stroke:#1a1e26}
+.gsfig .f-fg{fill:#e6e9ef}.gsfig .f-mu{fill:#a7afbd}.gsfig .f-ac{fill:#6d9bff}.gsfig .f-acs{fill:#1f2b45}.gsfig .f-bd{fill:#fb8b5b}
+.gsfig .f-bds{fill:#3a2218}.gsfig .f-ok{fill:#4ade80}.gsfig .f-sf{fill:#222733}.gsfig .f-bg{fill:#1a1e26}}
+</style>
+<rect x="0" y="0" width="720" height="360" class="f-bg"/>
+<clipPath><rect x="20" y="20" width="440" height="330"/></clipPath>
+<rect x="20.0" y="20.0" width="440.0" height="330.0" rx="0" class="s-mu f-sf" stroke-width="1"/>
+<polygon points="39.7,20.3 25.5,20.0 30.2,20.0 43.4,20.0 66.6,20.0 67.9,20.0 59.3,20.0 39.7,20.3" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="39.7,20.3 35.9,32.3 20.0,44.4 20.0,27.7 20.0,20.0 25.5,20.0 39.7,20.3" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="45.3,72.5 20.4,77.0 20.0,73.1 20.0,44.4 35.9,32.3 55.1,55.8 45.3,72.5" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="75.7,38.6 61.8,54.5 55.1,55.8 35.9,32.3 39.7,20.3 59.3,20.0 75.7,35.2 75.7,38.6" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="76.8,89.0 60.5,91.8 45.3,72.5 55.1,55.8 61.8,54.5 82.4,71.9 76.8,89.0" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="75.7,35.2 59.3,20.0 67.9,20.0 96.4,20.0 95.3,20.0 75.7,35.2" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="94.7,65.8 82.4,71.9 61.8,54.5 75.7,38.6 93.8,49.7 94.7,65.8" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="93.8,49.7 75.7,38.6 75.7,35.2 95.3,20.0 109.1,38.1 93.8,49.7" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="106.2,70.7 94.7,65.8 93.8,49.7 109.1,38.1 115.2,39.0 121.5,58.0 106.2,70.7" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="95.3,20.0 96.4,20.0 98.8,20.0 123.9,20.0 126.1,30.2 115.2,39.0 109.1,38.1 95.3,20.0" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="135.3,62.1 137.5,82.6 129.0,88.8 110.7,83.5 106.2,70.7 121.5,58.0 135.3,62.1" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="115.2,39.0 126.1,30.2 143.0,35.1 144.5,54.8 135.3,62.1 121.5,58.0 115.2,39.0" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="153.6,27.4 143.0,35.1 126.1,30.2 123.9,20.0 129.1,20.0 149.9,20.0 152.8,20.0 153.6,27.4" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="23.4,110.9 20.0,123.9 20.0,113.9 20.0,79.0 20.0,73.1 20.4,77.0 23.4,110.9" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="48.2,117.9 40.2,120.1 23.4,110.9 20.4,77.0 45.3,72.5 60.5,91.8 48.2,117.9" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="91.4,102.6 75.3,130.7 48.2,117.9 60.5,91.8 76.8,89.0 91.4,102.6" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="110.7,83.5 96.2,102.3 91.4,102.6 76.8,89.0 82.4,71.9 94.7,65.8 106.2,70.7 110.7,83.5" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="128.5,114.1 115.5,117.6 96.2,102.3 110.7,83.5 129.0,88.8 128.5,114.1" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="210.2,20.0 226.6,20.0 202.7,34.4 185.0,21.9 183.4,20.0 183.8,20.0 210.2,20.0" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="215.5,20.0 251.9,20.0 261.2,20.0 238.5,20.7 226.6,20.0 210.2,20.0 215.5,20.0" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="363.9,20.0 417.8,20.0 433.1,20.0 411.5,20.7 369.3,23.1 334.1,20.0 336.0,20.0 363.9,20.0" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="154.5,87.0 137.5,82.6 135.3,62.1 144.5,54.8 165.7,60.5 167.7,72.7 154.5,87.0" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="144.5,54.8 143.0,35.1 153.6,27.4 168.8,33.9 172.1,51.8 165.7,60.5 144.5,54.8" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="183.4,20.0 185.0,21.9 168.8,33.9 153.6,27.4 152.8,20.0 183.4,20.0" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="165.7,60.5 172.1,51.8 200.9,52.0 205.6,59.9 191.3,83.6 167.7,72.7 165.7,60.5" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="172.1,51.8 168.8,33.9 185.0,21.9 202.7,34.4 200.9,52.0 172.1,51.8" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="205.6,59.9 236.5,66.6 239.3,73.3 229.6,99.2 197.0,100.6 194.7,98.8 191.3,83.6 205.6,59.9" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="205.6,59.9 200.9,52.0 202.7,34.4 226.6,20.0 238.5,20.7 247.6,37.4 236.5,66.6 205.6,59.9" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="247.6,37.4 291.5,40.2 303.9,74.4 286.2,85.4 239.3,73.3 236.5,66.6 247.6,37.4" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="261.2,20.0 303.9,20.0 291.5,40.2 247.6,37.4 238.5,20.7 261.2,20.0" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="334.1,20.0 369.3,23.1 342.4,84.5 339.1,85.7 303.9,74.4 291.5,40.2 303.9,20.0 334.1,20.0" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="431.6,46.6 412.8,110.2 405.6,114.5 342.4,84.5 369.3,23.1 411.5,20.7 431.6,46.6" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="161.8,110.3 161.8,110.4 140.0,119.9 128.5,114.1 129.0,88.8 137.5,82.6 154.5,87.0 161.8,110.3" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="161.8,110.4 178.7,145.5 169.0,156.3 141.5,148.2 140.0,119.9 161.8,110.4" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="191.3,83.6 194.7,98.8 161.8,110.3 154.5,87.0 167.7,72.7 191.3,83.6" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="194.7,98.8 197.0,100.6 198.6,140.2 178.7,145.5 161.8,110.4 161.8,110.3 194.7,98.8" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="239.3,118.2 215.2,146.9 198.6,140.2 197.0,100.6 229.6,99.2 239.3,118.2" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="279.8,146.7 269.6,164.7 222.7,163.2 215.2,146.9 239.3,118.2 269.4,125.4 279.8,146.7" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="286.2,85.4 269.4,125.4 239.3,118.2 229.6,99.2 239.3,73.3 286.2,85.4" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="303.9,74.4 339.1,85.7 322.4,145.8 279.8,146.7 269.4,125.4 286.2,85.4 303.9,74.4" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="178.7,145.5 198.6,140.2 215.2,146.9 222.7,163.2 209.5,199.0 201.9,201.1 171.0,184.8 169.0,156.3 178.7,145.5" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="460.0,20.0 460.0,20.0 460.0,48.8 431.6,46.6 411.5,20.7 433.1,20.0 460.0,20.0" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="412.8,110.2 460.0,124.1 460.0,180.3 432.8,189.9 399.1,141.4 405.6,114.5 412.8,110.2" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="460.0,124.1 412.8,110.2 431.6,46.6 460.0,48.8 460.0,91.9 460.0,124.1" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="20.0,170.8 20.0,123.9 23.4,110.9 40.2,120.1 31.7,164.2 20.0,170.8" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="75.3,130.7 78.8,137.6 58.9,177.0 31.7,164.2 40.2,120.1 48.2,117.9 75.3,130.7" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="104.2,143.4 78.8,137.6 75.3,130.7 91.4,102.6 96.2,102.3 115.5,117.6 104.2,143.4" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="140.0,119.9 141.5,148.2 117.4,161.8 104.2,143.4 115.5,117.6 128.5,114.1 140.0,119.9" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="24.2,243.9 20.0,233.5 20.0,179.6 20.0,170.8 31.7,164.2 58.9,177.0 70.0,195.0 69.5,202.6 24.2,243.9" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="58.9,177.0 78.8,137.6 104.2,143.4 117.4,161.8 115.7,171.8 70.0,195.0 58.9,177.0" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="70.0,195.0 115.7,171.8 140.6,200.8 133.2,232.9 114.1,241.8 69.5,202.6 70.0,195.0" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="117.4,161.8 141.5,148.2 169.0,156.3 171.0,184.8 140.6,200.8 115.7,171.8 117.4,161.8" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="140.6,200.8 171.0,184.8 201.9,201.1 178.0,253.5 133.2,232.9 140.6,200.8" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="20.0,233.5 24.2,243.9 34.1,269.3 20.0,311.4 20.0,320.5 20.0,297.9 20.0,293.0 20.0,282.4 20.0,271.7 20.0,261.0 20.0,255.9 20.0,233.5" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="114.1,241.8 100.0,275.0 34.1,269.3 24.2,243.9 69.5,202.6 114.1,241.8" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="133.2,232.9 178.0,253.5 178.8,255.1 165.2,303.1 113.5,307.8 100.0,275.0 114.1,241.8 133.2,232.9" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="100.0,275.0 113.5,307.8 107.7,321.1 49.8,339.9 20.0,311.4 34.1,269.3 100.0,275.0" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="165.2,303.1 176.9,315.5 174.0,350.0 171.7,350.0 166.0,350.0 160.4,350.0 154.7,350.0 149.1,350.0 143.5,350.0 137.8,350.0 132.2,350.0 126.7,350.0 107.7,321.1 113.5,307.8 165.2,303.1" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="20.0,320.5 20.0,311.4 49.8,339.9 49.9,350.0 47.6,350.0 42.0,350.0 36.3,350.0 30.7,350.0 25.1,350.0 20.0,350.0 20.0,350.0 20.0,350.0 20.0,350.0 20.0,350.0 20.0,350.0 20.0,350.0 20.0,350.0 20.0,350.0 20.0,320.5" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="126.7,350.0 126.6,350.0 120.9,350.0 115.3,350.0 109.6,350.0 104.0,350.0 98.4,350.0 92.7,350.0 87.1,350.0 81.4,350.0 75.8,350.0 70.2,350.0 64.5,350.0 58.9,350.0 53.3,350.0 49.9,350.0 49.8,339.9 107.7,321.1 126.7,350.0" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="342.4,84.5 405.6,114.5 399.1,141.4 365.6,165.6 332.7,159.0 322.4,145.8 339.1,85.7 342.4,84.5" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="237.0,214.6 209.5,199.0 222.7,163.2 269.6,164.7 271.8,181.5 237.0,214.6" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="238.9,218.9 237.0,214.6 271.8,181.5 295.4,204.2 274.6,230.6 238.9,218.9" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="332.7,159.0 318.3,196.6 298.2,204.5 295.4,204.2 271.8,181.5 269.6,164.7 279.8,146.7 322.4,145.8 332.7,159.0" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="312.4,240.7 298.2,204.5 318.3,196.6 338.5,213.8 326.1,241.6 312.4,240.7" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="358.4,213.9 338.5,213.8 318.3,196.6 332.7,159.0 365.6,165.6 371.6,198.8 358.4,213.9" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="371.6,198.8 365.6,165.6 399.1,141.4 432.8,189.9 417.2,214.5 371.6,198.8" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="417.2,214.5 432.8,189.9 460.0,180.3 460.0,184.5 460.0,248.6 460.0,259.5 429.4,243.7 417.5,222.8 417.2,214.5" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="226.4,294.5 217.7,314.0 176.9,315.5 165.2,303.1 178.8,255.1 217.3,264.0 226.4,294.5" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="217.3,264.0 178.8,255.1 178.0,253.5 201.9,201.1 209.5,199.0 237.0,214.6 238.9,218.9 233.1,252.0 217.3,264.0" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="257.0,291.2 226.4,294.5 217.3,264.0 233.1,252.0 257.9,261.8 263.4,276.9 257.0,291.2" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="233.1,252.0 238.9,218.9 274.6,230.6 277.9,243.2 257.9,261.8 233.1,252.0" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="263.4,276.9 257.9,261.8 277.9,243.2 287.7,248.9 287.2,276.8 263.4,276.9" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="277.9,243.2 274.6,230.6 295.4,204.2 298.2,204.5 312.4,240.7 303.9,247.7 287.7,248.9 277.9,243.2" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="288.8,278.1 287.2,276.8 287.7,248.9 303.9,247.7 309.6,269.7 288.8,278.1" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="291.9,288.9 288.8,278.1 309.6,269.7 322.6,276.5 325.9,281.5 323.9,279.9 318.3,279.1 312.6,283.1 307.0,291.2 304.0,296.7 291.9,288.9" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="309.6,269.7 303.9,247.7 312.4,240.7 326.1,241.6 329.3,245.1 322.6,276.5 309.6,269.7" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="326.5,282.0 325.9,281.5 322.6,276.5 329.3,245.1 346.5,250.9 349.6,264.3 326.5,282.0" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="329.3,245.1 326.1,241.6 338.5,213.8 358.4,213.9 364.4,236.4 346.5,250.9 329.3,245.1" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="349.6,264.3 366.6,275.5 365.5,281.8 338.9,295.1 335.2,290.7 329.5,284.4 326.5,282.0 349.6,264.3" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="346.5,250.9 364.4,236.4 379.6,245.2 380.9,264.9 366.6,275.5 349.6,264.3 346.5,250.9" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="364.4,236.4 358.4,213.9 371.6,198.8 417.2,214.5 417.5,222.8 379.6,245.2 364.4,236.4" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="380.9,264.9 409.8,278.4 411.7,289.3 374.8,301.1 365.5,281.8 366.6,275.5 380.9,264.9" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="417.5,222.8 429.4,243.7 409.8,278.4 380.9,264.9 379.6,245.2 417.5,222.8" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="429.4,243.7 460.0,259.5 460.0,284.3 431.3,305.8 420.7,301.5 411.7,289.3 409.8,278.4 429.4,243.7" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="176.9,315.5 217.7,314.0 224.4,323.5 226.4,350.0 222.4,350.0 216.8,350.0 211.1,350.0 205.5,350.0 199.9,350.0 194.2,350.0 188.6,350.0 182.9,350.0 177.3,350.0 174.0,350.0 176.9,315.5" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="267.2,306.7 258.1,323.5 224.4,323.5 217.7,314.0 226.4,294.5 257.0,291.2 267.2,306.7" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="224.4,323.5 258.1,323.5 269.7,347.3 267.5,348.8 261.9,350.0 256.2,350.0 250.6,350.0 245.0,349.9 239.3,350.0 233.7,350.0 228.0,350.0 226.4,350.0 224.4,323.5" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="258.1,323.5 267.2,306.7 273.9,307.0 291.4,320.0 290.1,322.4 284.4,331.5 278.8,339.1 273.2,344.9 269.7,347.3 258.1,323.5" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="291.9,288.9 273.9,307.0 267.2,306.7 257.0,291.2 263.4,276.9 287.2,276.8 288.8,278.1 291.9,288.9" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="273.9,307.0 291.9,288.9 304.0,296.7 301.3,301.5 295.7,312.3 291.4,320.0 273.9,307.0" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="365.5,281.8 374.8,301.1 370.7,314.0 369.0,313.0 363.4,311.9 357.7,310.9 352.1,308.3 346.5,303.5 340.8,297.4 338.9,295.1 365.5,281.8" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="374.8,301.1 411.7,289.3 420.7,301.5 388.3,335.2 385.9,331.8 380.3,323.1 374.6,316.4 370.7,314.0 374.8,301.1" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="420.7,301.5 431.3,305.8 442.2,345.6 436.7,350.0 431.0,350.0 425.4,350.0 419.8,350.0 414.1,350.0 408.5,348.7 402.8,347.7 397.2,345.3 391.6,339.9 388.3,335.2 420.7,301.5" class="s-mu f-sf" stroke-width="0.5"/>
+<polygon points="431.3,305.8 460.0,284.3 460.0,333.0 460.0,334.4 460.0,337.7 460.0,339.7 460.0,340.6 460.0,340.8 460.0,340.7 460.0,340.5 459.2,340.3 453.6,340.4 447.9,341.9 442.3,345.5 442.2,345.6 431.3,305.8" class="s-mu f-sf" stroke-width="0.5"/>
+<circle cx="240.0" cy="185.0" r="82.5" class="s-ac" stroke-width="2" fill="none"/>
+<ellipse cx="240.0" cy="185.0" rx="73.8" ry="91.6" class="s-bd" stroke-width="2" stroke-dasharray="6 4" fill="none"/>
+<circle cx="32.2" cy="56.4" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="55.8" cy="34.6" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="64.0" cy="73.9" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="80.3" cy="55.5" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="92.5" cy="35.5" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="107.0" cy="54.5" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="111.6" cy="22.0" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="123.2" cy="73.7" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="130.9" cy="45.9" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="38.9" cy="95.3" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="70.1" cy="108.7" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="93.7" cy="83.5" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="115.5" cy="100.6" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="150.6" cy="70.5" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="157.3" cy="44.3" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="185.1" cy="64.9" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="185.9" cy="39.3" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="214.8" cy="81.5" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="224.4" cy="42.8" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="270.3" cy="60.6" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="328.6" cy="37.5" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="390.2" cy="64.5" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="143.2" cy="101.3" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="157.6" cy="134.8" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="173.5" cy="91.6" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="183.6" cy="121.7" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="215.2" cy="120.0" r="4" class="f-fg" stroke-width="1"/>
+<circle cx="248.3" cy="144.1" r="4" class="f-fg" stroke-width="1"/>
+<circle cx="256.3" cy="98.8" r="4.5" class="f-bd" stroke-width="1"/>
+<circle cx="304.1" cy="112.6" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="195.3" cy="169.0" r="4" class="f-fg" stroke-width="1"/>
+<circle cx="440.9" cy="149.9" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="455.5" cy="85.0" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="53.6" cy="146.3" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="95.6" cy="124.1" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="124.3" cy="137.0" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="28.6" cy="199.8" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="87.3" cy="165.3" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="108.9" cy="206.1" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="145.1" cy="172.6" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="166.8" cy="217.5" r="4.5" class="f-ac" stroke-width="1"/>
+<circle cx="69.7" cy="244.7" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="138.3" cy="272.2" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="65.7" cy="302.3" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="145.0" cy="336.7" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="361.1" cy="127.9" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="240.0" cy="185.0" r="5" class="f-fg" stroke-width="1"/>
+<circle cx="267.7" cy="208.2" r="4" class="f-fg" stroke-width="1"/>
+<circle cx="300.5" cy="171.6" r="4" class="f-fg" stroke-width="1"/>
+<circle cx="318.5" cy="218.5" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="346.2" cy="187.7" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="397.8" cy="180.6" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="459.0" cy="218.8" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="195.8" cy="288.1" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="211.0" cy="233.8" r="4" class="f-fg" stroke-width="1"/>
+<circle cx="240.1" cy="274.3" r="4.5" class="f-bd" stroke-width="1"/>
+<circle cx="253.9" cy="240.6" r="4" class="f-fg" stroke-width="1"/>
+<circle cx="275.0" cy="262.5" r="4.5" class="f-bd" stroke-width="1"/>
+<circle cx="293.4" cy="230.6" r="4" class="f-fg" stroke-width="1"/>
+<circle cx="296.8" cy="262.1" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="304.2" cy="281.5" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="317.0" cy="256.1" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="335.1" cy="262.5" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="345.9" cy="231.7" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="347.2" cy="279.8" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="364.9" cy="255.9" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="384.7" cy="221.3" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="386.7" cy="283.1" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="404.4" cy="251.0" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="442.0" cy="274.7" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="198.9" cy="342.8" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="242.5" cy="308.4" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="244.8" cy="337.7" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="273.5" cy="324.9" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="274.0" cy="289.8" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="289.8" cy="303.9" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="359.5" cy="298.5" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="394.6" cy="309.3" r="2.2" class="f-mu" stroke-width="1"/>
+<circle cx="418.4" cy="331.3" r="2.2" class="f-mu" stroke-width="1"/>
+<line x1="32.0" y1="336.0" x2="87.0" y2="336.0" class="s-fg" stroke-width="2"/>
+<text x="59.5" y="330.0" class="f-fg" font-size="11" text-anchor="middle">2 km</text>
+<text x="490.0" y="50.0" class="f-fg" font-size="13" text-anchor="start" font-weight="600">가운데 동에서 이웃 찾기</text>
+<circle cx="498" cy="80" r="10" class="s-ac" stroke-width="2" fill="none"/>
+<text x="516.0" y="84.0" class="f-fg" font-size="12" text-anchor="start">평면 좌표(m)로 3 km</text>
+<ellipse cx="498" cy="110" rx="8" ry="10" class="s-bd" stroke-width="2" stroke-dasharray="4 3" fill="none"/>
+<text x="516.0" y="114.0" class="f-fg" font-size="12" text-anchor="start">경위도 숫자로 0.03도</text>
+<text x="516.0" y="131.0" class="f-mu" font-size="11" text-anchor="start">(동서 2.68 km, 남북 3.33 km)</text>
+<circle cx="498.0" cy="160.0" r="4" class="f-fg" stroke-width="1"/>
+<text x="516.0" y="164.0" class="f-fg" font-size="12" text-anchor="start">둘 다 이웃: 8개</text>
+<circle cx="498.0" cy="184.0" r="4.5" class="f-ac" stroke-width="1"/>
+<text x="516.0" y="188.0" class="f-fg" font-size="12" text-anchor="start">3 km 원에만 듦: 1개</text>
+<circle cx="498.0" cy="208.0" r="4.5" class="f-bd" stroke-width="1"/>
+<text x="516.0" y="212.0" class="f-fg" font-size="12" text-anchor="start">0.03도 범위에만 듦: 3개</text>
+<circle cx="498.0" cy="232.0" r="2.2" class="f-mu" stroke-width="1"/>
+<text x="516.0" y="236.0" class="f-mu" font-size="12" text-anchor="start">행정동 중심점</text>
+</svg>

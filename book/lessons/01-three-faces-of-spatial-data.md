@@ -8,7 +8,7 @@ updated: 2026-09-30
 status: draft
 ---
 
-[목차](../README.md) · 이전: [0강 공간통계학이란 무엇인가](00-what-is-spatial-statistics.md) · 다음: 2강 좌표계와 거리 (집필 예정)
+[목차](../README.md) · 이전: [0강 공간통계학이란 무엇인가](00-what-is-spatial-statistics.md) · 다음: [2강 좌표계와 거리](02-coordinates-and-distance.md)
 
 # 1강 공간 자료의 세 얼굴
 
@@ -307,4 +307,4 @@ status: draft
 
 ---
 
-[목차](../README.md) · 이전: [0강 공간통계학이란 무엇인가](00-what-is-spatial-statistics.md) · 다음: 2강 좌표계와 거리 (집필 예정)
+[목차](../README.md) · 이전: [0강 공간통계학이란 무엇인가](00-what-is-spatial-statistics.md) · 다음: [2강 좌표계와 거리](02-coordinates-and-distance.md)
