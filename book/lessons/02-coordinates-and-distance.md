@@ -8,7 +8,7 @@ updated: 2026-09-30
 status: draft
 ---
 
-[목차](../README.md) · 이전: [1강 공간 자료의 세 얼굴](01-three-faces-of-spatial-data.md) · 다음: 3강 척도와 단위의 문제 (집필 예정)
+[목차](../README.md) · 이전: [1강 공간 자료의 세 얼굴](01-three-faces-of-spatial-data.md) · 다음: [3강 척도와 단위의 문제](03-scale-and-units.md)
 
 # 2강 좌표계와 거리
 
@@ -294,4 +294,4 @@ GeoStat은 거리 기반 가중치를 만들 때 경위도 자료를 알아서 U
 
 ---
 
-[목차](../README.md) · 이전: [1강 공간 자료의 세 얼굴](01-three-faces-of-spatial-data.md) · 다음: 3강 척도와 단위의 문제 (집필 예정)
+[목차](../README.md) · 이전: [1강 공간 자료의 세 얼굴](01-three-faces-of-spatial-data.md) · 다음: [3강 척도와 단위의 문제](03-scale-and-units.md)

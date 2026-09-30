@@ -19,6 +19,7 @@
     hanbit_stations.gpkg  기상 관측소 (연속 표면의 표본)
     hanbit_roads.gpkg     주요 도로 (선)
     hanbit_lst.tif        여름 한낮 지표온도 50 m 래스터
+    hanbit_pop100.tif     100 m 격자 인구 (1밴드 인구, 2밴드 고령인구). 3강에서 추가
 """
 from __future__ import annotations
 
@@ -236,6 +237,8 @@ def make_events(dens, lst, inland, eld, area_union):
 
     r = rng("events")
     # 위험 = 인구 × 고령 비율 효과 × 더위 효과
+    # 고령 비율 효과 (0.3 + 6e)는 개인 효과와 맥락 효과를 합친 것임: 65세 이상 개인 위험은 65세 미만의 3배이므로
+    # 개인 효과는 (1 + 2e)이고, 나머지 (0.3 + 6e) / (1 + 2e)는 고령 동네의 맥락 효과(주거·냉방 여건 등)임 (부록 G)
     lam = dens * (0.3 + 6.0 * eld) * np.exp(0.15 * (np.nan_to_num(lst, nan=30.0) - 32.0))
     # 국지 군집 두 곳 (야외 작업이 많은 산업단지 주변, 전통시장 주변)
     XX, YY = cell_centers()
@@ -258,7 +261,17 @@ def make_events(dens, lst, inland, eld, area_union):
     month = r.choice([6, 7, 8], size=n, p=[0.2, 0.45, 0.35])
     day = np.array([r.integers(1, 31 if m == 6 else 32) for m in month])
     date = pd.to_datetime([f"2025-{m:02d}-{d:02d}" for m, d in zip(month, day)])
-    age = r.choice(["0-19", "20-39", "40-64", "65+"], size=n, p=[0.08, 0.22, 0.38, 0.32])
+    # 연령대: 출동 지점의 고령 비율 e에서 65세 이상일 확률 = 3e / (1 + 2e)
+    # (65세 이상 한 사람의 위험이 65세 미만의 3배라는 개인 수준의 참값). 65세 미만은 고정 비율로 나눔.
+    # 위치·날짜를 바꾸지 않도록 연령대는 따로 된 난수 흐름으로 뽑음
+    iy_e = np.clip(((Y1 - y) / CELL).astype(int), 0, NY - 1)
+    ix_e = np.clip(((x - X0) / CELL).astype(int), 0, NX - 1)
+    e_at = eld[iy_e, ix_e]
+    p_old = 3 * e_at / (1 + 2 * e_at)
+    ra = rng("events_age")
+    u = ra.random(n)
+    young = ra.choice(["0-19", "20-39", "40-64"], size=n, p=[0.12, 0.32, 0.56])
+    age = np.where(u < p_old, "65+", young)
     order = np.argsort(date.values, kind="stable")
     gdf = gpd.GeoDataFrame(
         {"출동ID": [f"E{k + 1:04d}" for k in range(n)], "출동일": date[order].strftime("%Y-%m-%d"),
@@ -314,6 +327,38 @@ def make_roads(land):
     return gpd.GeoDataFrame(rows, crs=CRS)
 
 
+# ---------------------------------------------------------------- 8. 100 m 격자 인구 (3강에서 추가)
+def make_pop_grid(dong, ids, dens, eld, inland):
+    """행정동 인구·고령인구를 50 m 셀에 나눠 담고 100 m 격자로 합침.
+    동 안에서는 인구 밀도 표면(고령인구는 밀도 × 고령 비율)에 비례해 정수로 나눔(큰 나머지 방식).
+    그래서 행정동 경계 안의 셀을 모두 더하면 동 인구와 정확히 같음. 난수는 쓰지 않음"""
+    pop50 = np.zeros(ids.shape, dtype=np.int64)
+    old50 = np.zeros(ids.shape, dtype=np.int64)
+
+    def allocate(total, w):
+        if w.sum() <= 0:
+            w = np.ones_like(w)
+        q = total * w / w.sum()
+        base = np.floor(q).astype(np.int64)
+        base[np.argsort(-(q - base))[: int(total - base.sum())]] += 1
+        return base
+
+    for k, row in dong.reset_index(drop=True).iterrows():
+        m = ids == k + 1
+        w = dens[m]
+        pop50[m] = allocate(int(row["인구"]), w)
+        old50[m] = allocate(int(row["고령인구"]), w * eld[m])
+    ny, nx = ids.shape[0] // 2, ids.shape[1] // 2
+
+    def to100(a):
+        return a.reshape(ny, 2, nx, 2).sum(axis=(1, 3))
+
+    land100 = to100(inland.astype(int)) > 0
+    pop = np.where(land100, to100(pop50), -1).astype("int32")
+    old = np.where(land100, to100(old50), -1).astype("int32")
+    return pop, old
+
+
 # ---------------------------------------------------------------- 실행
 def main():
     land, coast = land_polygon()
@@ -325,7 +370,7 @@ def main():
     dens = np.where(inland, density(XX, YY), 0.0)
 
     eld = elderly_share(dens, XX, YY)
-    dong, _ = make_dong(land, dens, XX, YY, inland, eld)
+    dong, ids = make_dong(land, dens, XX, YY, inland, eld)
     lst = make_lst(dens, dist_coast, inland, XX, YY)
     events = make_events(dens, lst, inland, eld, dong.union_all())
     stations = make_stations(land, lst, inland)
@@ -336,6 +381,14 @@ def main():
         if os.path.exists(path):
             os.remove(path)
         gdf.to_file(path, layer=f"hanbit_{name}", driver="GPKG")
+    pop, old = make_pop_grid(dong, ids, dens, eld, inland)
+    t100 = from_origin(X0, Y1, 2 * CELL, 2 * CELL)
+    with rasterio.open(os.path.join(OUT, "hanbit_pop100.tif"), "w", driver="GTiff", width=NX // 2, height=NY // 2,
+                       count=2, dtype="int32", crs=CRS, transform=t100, nodata=-1, compress="deflate", tiled=True) as dst:
+        dst.write(pop, 1)
+        dst.write(old, 2)
+        dst.set_band_description(1, "인구")
+        dst.set_band_description(2, "고령인구(65세 이상)")
     with rasterio.open(os.path.join(OUT, "hanbit_lst.tif"), "w", driver="GTiff", width=NX, height=NY, count=1,
                        dtype="float32", crs=CRS, transform=transform, nodata=-9999.0,
                        compress="deflate", predictor=3, tiled=True) as dst:

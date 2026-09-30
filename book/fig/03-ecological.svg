@@ -1,0 +1,188 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 300" role="img" aria-label="왼쪽은 행정동 150개의 고령비율과 출동률 산점도로, 고령비율이 높은 동일수록 출동률이 오히려 조금 낮음. 오른쪽은 같은 자료를 개인 수준으로 본 연령별 출동률로, 65세 이상이 65세 미만의 약 3배임">
+<style>
+.gsfig{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
+.gsfig .s-fg{stroke:#1c2330}.gsfig .s-mu{stroke:#8a93a3}.gsfig .s-ac{stroke:#2563eb}.gsfig .s-bd{stroke:#c2410c}.gsfig .s-ok{stroke:#15803d}.gsfig .s-bg{stroke:#ffffff}
+.gsfig .f-fg{fill:#1c2330}.gsfig .f-mu{fill:#5a6475}.gsfig .f-ac{fill:#2563eb}.gsfig .f-acs{fill:#e6eefe}.gsfig .f-bd{fill:#c2410c}
+.gsfig .f-bds{fill:#fdeee6}.gsfig .f-ok{fill:#15803d}.gsfig .f-sf{fill:#f0f2f5}.gsfig .f-bg{fill:#ffffff}
+.gsfig .q0{fill:#fff1e0}.gsfig .q1{fill:#fdc98f}.gsfig .q2{fill:#f98f45}.gsfig .q3{fill:#d9530f}.gsfig .q4{fill:#8c2d04}
+@media (prefers-color-scheme:dark){
+.gsfig .s-fg{stroke:#e6e9ef}.gsfig .s-mu{stroke:#737c8c}.gsfig .s-ac{stroke:#6d9bff}.gsfig .s-bd{stroke:#fb8b5b}.gsfig .s-ok{stroke:#4ade80}.gsfig .s-bg{stroke:#1a1e26}
+.gsfig .f-fg{fill:#e6e9ef}.gsfig .f-mu{fill:#a7afbd}.gsfig .f-ac{fill:#6d9bff}.gsfig .f-acs{fill:#1f2b45}.gsfig .f-bd{fill:#fb8b5b}
+.gsfig .f-bds{fill:#3a2218}.gsfig .f-ok{fill:#4ade80}.gsfig .f-sf{fill:#222733}.gsfig .f-bg{fill:#1a1e26}}
+</style>
+<rect x="0" y="0" width="720" height="300" class="f-bg"/>
+<rect x="60" y="40" width="330" height="200" class="s-mu" stroke-width="1" fill="none"/>
+<text x="60.0" y="256.0" class="f-mu" font-size="11" text-anchor="middle">10%</text>
+<text x="170.0" y="256.0" class="f-mu" font-size="11" text-anchor="middle">20%</text>
+<text x="280.0" y="256.0" class="f-mu" font-size="11" text-anchor="middle">30%</text>
+<text x="390.0" y="256.0" class="f-mu" font-size="11" text-anchor="middle">40%</text>
+<text x="54.0" y="244.0" class="f-mu" font-size="11" text-anchor="end">0</text>
+<text x="54.0" y="204.0" class="f-mu" font-size="11" text-anchor="end">10</text>
+<text x="54.0" y="164.0" class="f-mu" font-size="11" text-anchor="end">20</text>
+<text x="54.0" y="124.0" class="f-mu" font-size="11" text-anchor="end">30</text>
+<text x="54.0" y="84.0" class="f-mu" font-size="11" text-anchor="end">40</text>
+<text x="54.0" y="44.0" class="f-mu" font-size="11" text-anchor="end">50</text>
+<circle cx="258.0" cy="219.0" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="228.3" cy="217.9" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="299.0" cy="214.3" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="274.9" cy="213.3" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="250.3" cy="211.6" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="191.3" cy="180.7" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="236.8" cy="209.9" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="169.6" cy="214.7" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="217.8" cy="221.0" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="221.5" cy="221.0" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="193.3" cy="203.3" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="233.9" cy="187.5" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="141.1" cy="191.8" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="159.2" cy="190.9" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="132.3" cy="185.6" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="137.6" cy="204.1" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="91.1" cy="204.8" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="136.0" cy="193.7" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="101.0" cy="160.9" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="237.5" cy="208.5" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="195.0" cy="216.3" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="168.1" cy="218.3" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="117.4" cy="164.8" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="95.5" cy="178.4" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="106.1" cy="199.7" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="102.7" cy="201.0" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="107.8" cy="216.4" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="86.8" cy="200.9" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="105.8" cy="183.8" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="95.5" cy="200.0" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="119.5" cy="182.0" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="112.1" cy="187.1" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="82.7" cy="168.9" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="205.0" cy="159.7" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="201.5" cy="200.8" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="126.5" cy="210.0" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="123.1" cy="191.1" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="114.4" cy="191.3" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="129.3" cy="192.7" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="176.5" cy="209.5" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="219.1" cy="240.0" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="344.6" cy="216.4" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="318.4" cy="201.7" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="81.9" cy="194.8" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="140.2" cy="210.4" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="102.2" cy="202.6" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="103.3" cy="188.3" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="163.9" cy="182.0" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="153.0" cy="204.3" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="260.4" cy="212.9" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="318.1" cy="240.0" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="114.0" cy="177.2" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="95.1" cy="184.9" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="96.8" cy="201.3" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="112.5" cy="186.9" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="118.0" cy="183.9" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="165.7" cy="188.4" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="156.5" cy="215.4" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="270.4" cy="173.3" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="251.3" cy="188.6" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="326.7" cy="219.8" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="328.2" cy="240.0" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="127.4" cy="183.2" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="137.5" cy="188.2" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="119.1" cy="157.6" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="151.3" cy="211.3" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="169.2" cy="204.5" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="227.0" cy="175.8" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="248.1" cy="191.2" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="288.9" cy="186.5" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="218.8" cy="196.6" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="279.1" cy="89.5" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="281.2" cy="190.0" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="274.0" cy="218.9" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="305.1" cy="240.0" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="277.7" cy="199.9" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="223.2" cy="204.4" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="334.4" cy="218.2" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="296.1" cy="174.0" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="233.9" cy="199.2" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="218.4" cy="197.8" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="254.3" cy="201.2" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="316.3" cy="225.3" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="275.9" cy="175.5" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="252.3" cy="173.6" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="271.9" cy="204.8" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="188.8" cy="198.5" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="201.4" cy="214.5" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="231.0" cy="211.9" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="220.1" cy="135.9" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="227.2" cy="194.7" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="265.3" cy="225.2" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="239.0" cy="240.0" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="273.6" cy="42.6" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="255.8" cy="240.0" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="236.6" cy="225.6" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="248.4" cy="205.9" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="206.1" cy="194.8" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="140.4" cy="199.4" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="140.1" cy="196.8" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="121.9" cy="212.2" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="243.8" cy="156.7" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="279.3" cy="210.5" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="163.4" cy="204.6" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="214.3" cy="183.9" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="175.7" cy="201.4" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="212.8" cy="208.9" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="278.2" cy="209.0" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="213.2" cy="226.5" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="175.7" cy="217.9" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="259.6" cy="222.5" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="207.2" cy="240.0" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="237.4" cy="194.2" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="230.5" cy="192.0" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="242.0" cy="210.2" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="253.6" cy="193.3" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="246.6" cy="178.3" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="171.9" cy="226.9" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="231.8" cy="183.3" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="221.0" cy="207.2" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="233.6" cy="181.2" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="242.0" cy="200.9" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="236.6" cy="199.0" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="166.8" cy="213.3" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="177.1" cy="183.8" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="143.4" cy="204.7" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="159.3" cy="185.9" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="163.3" cy="170.7" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="230.4" cy="189.6" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="193.0" cy="141.1" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="201.3" cy="122.0" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="222.2" cy="160.7" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="191.2" cy="178.9" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="217.8" cy="146.5" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="204.5" cy="179.0" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="232.9" cy="183.5" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="251.7" cy="205.1" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="167.4" cy="196.9" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="209.7" cy="200.6" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="225.6" cy="190.7" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="203.8" cy="190.9" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="117.0" cy="202.2" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="159.8" cy="209.6" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="143.1" cy="189.6" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="187.1" cy="132.4" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="183.7" cy="192.3" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="176.6" cy="210.6" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="160.4" cy="194.2" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="219.0" cy="188.7" r="2.6" class="f-ac" stroke-width="1"/>
+<circle cx="269.4" cy="190.7" r="2.6" class="f-ac" stroke-width="1"/>
+<line x1="60.0" y1="188.4" x2="390.0" y2="205.3" class="s-bd" stroke-width="2"/>
+<text x="225.0" y="18.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">행정동 수준 (r = -0.13)</text>
+<text x="225.0" y="274.0" class="f-mu" font-size="11" text-anchor="middle">고령비율</text>
+<text x="54.0" y="32.0" class="f-mu" font-size="11" text-anchor="start">출동률 (1만 명당)</text>
+<text x="570.0" y="24.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">개인 수준 (연령별 출동률)</text>
+<rect x="500.0" y="185.9" width="60.0" height="54.1" rx="0" class="f-mu" stroke-width="0"/>
+<text x="530.0" y="179.9" class="f-fg" font-size="12" text-anchor="middle" font-weight="600">8.1</text>
+<text x="530.0" y="256.0" class="f-mu" font-size="11" text-anchor="middle">65세 미만</text>
+<rect x="590.0" y="68.6" width="60.0" height="171.4" rx="0" class="f-bd" stroke-width="0"/>
+<text x="620.0" y="62.6" class="f-fg" font-size="12" text-anchor="middle" font-weight="600">25.7</text>
+<text x="620.0" y="256.0" class="f-mu" font-size="11" text-anchor="middle">65세 이상</text>
+<line x1="480.0" y1="240.0" x2="680.0" y2="240.0" class="s-mu" stroke-width="1"/>
+<text x="570.0" y="274.0" class="f-mu" font-size="11" text-anchor="middle">인구 1만 명당 출동</text>
+</svg>

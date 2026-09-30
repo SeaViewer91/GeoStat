@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 250" role="img" aria-label="인구 1,000명씩인 네 블록(출동 2·8·4·6건)을 가로로 묶으면 두 구역의 출동률이 같고, 세로로 묶으면 3건과 7건으로 두 배 넘게 차이 남">
+<style>
+.gsfig{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
+.gsfig .s-fg{stroke:#1c2330}.gsfig .s-mu{stroke:#8a93a3}.gsfig .s-ac{stroke:#2563eb}.gsfig .s-bd{stroke:#c2410c}.gsfig .s-ok{stroke:#15803d}.gsfig .s-bg{stroke:#ffffff}
+.gsfig .f-fg{fill:#1c2330}.gsfig .f-mu{fill:#5a6475}.gsfig .f-ac{fill:#2563eb}.gsfig .f-acs{fill:#e6eefe}.gsfig .f-bd{fill:#c2410c}
+.gsfig .f-bds{fill:#fdeee6}.gsfig .f-ok{fill:#15803d}.gsfig .f-sf{fill:#f0f2f5}.gsfig .f-bg{fill:#ffffff}
+.gsfig .q0{fill:#fff1e0}.gsfig .q1{fill:#fdc98f}.gsfig .q2{fill:#f98f45}.gsfig .q3{fill:#d9530f}.gsfig .q4{fill:#8c2d04}
+@media (prefers-color-scheme:dark){
+.gsfig .s-fg{stroke:#e6e9ef}.gsfig .s-mu{stroke:#737c8c}.gsfig .s-ac{stroke:#6d9bff}.gsfig .s-bd{stroke:#fb8b5b}.gsfig .s-ok{stroke:#4ade80}.gsfig .s-bg{stroke:#1a1e26}
+.gsfig .f-fg{fill:#e6e9ef}.gsfig .f-mu{fill:#a7afbd}.gsfig .f-ac{fill:#6d9bff}.gsfig .f-acs{fill:#1f2b45}.gsfig .f-bd{fill:#fb8b5b}
+.gsfig .f-bds{fill:#3a2218}.gsfig .f-ok{fill:#4ade80}.gsfig .f-sf{fill:#222733}.gsfig .f-bg{fill:#1a1e26}}
+</style>
+<rect x="0" y="0" width="720" height="250" class="f-bg"/>
+<rect x="30.0" y="45.0" width="140.0" height="140.0" rx="0" class="s-bg f-sf" stroke-width="2"/>
+<rect x="30.0" y="45.0" width="70.0" height="70.0" rx="0" class="s-mu f-sf" stroke-width="1"/>
+<text x="65.0" y="75.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">A</text>
+<text x="65.0" y="95.0" class="f-fg" font-size="12" text-anchor="middle">2건</text>
+<rect x="100.0" y="45.0" width="70.0" height="70.0" rx="0" class="s-mu f-sf" stroke-width="1"/>
+<text x="135.0" y="75.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">B</text>
+<text x="135.0" y="95.0" class="f-fg" font-size="12" text-anchor="middle">8건</text>
+<rect x="30.0" y="115.0" width="70.0" height="70.0" rx="0" class="s-mu f-sf" stroke-width="1"/>
+<text x="65.0" y="145.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">C</text>
+<text x="65.0" y="165.0" class="f-fg" font-size="12" text-anchor="middle">4건</text>
+<rect x="100.0" y="115.0" width="70.0" height="70.0" rx="0" class="s-mu f-sf" stroke-width="1"/>
+<text x="135.0" y="145.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">D</text>
+<text x="135.0" y="165.0" class="f-fg" font-size="12" text-anchor="middle">6건</text>
+<text x="100.0" y="30.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">블록 (각 인구 1,000명)</text>
+<text x="340.0" y="30.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">가로로 묶음</text>
+<rect x="270.0" y="45.0" width="70.0" height="70.0" rx="0" class="s-bg f-acs" stroke-width="2"/>
+<rect x="340.0" y="45.0" width="70.0" height="70.0" rx="0" class="s-bg f-acs" stroke-width="2"/>
+<rect x="270.0" y="115.0" width="70.0" height="70.0" rx="0" class="s-bg f-bds" stroke-width="2"/>
+<rect x="340.0" y="115.0" width="70.0" height="70.0" rx="0" class="s-bg f-bds" stroke-width="2"/>
+<text x="305.0" y="75.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">A</text>
+<text x="305.0" y="95.0" class="f-fg" font-size="12" text-anchor="middle">2건</text>
+<text x="375.0" y="75.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">B</text>
+<text x="375.0" y="95.0" class="f-fg" font-size="12" text-anchor="middle">8건</text>
+<text x="305.0" y="145.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">C</text>
+<text x="305.0" y="165.0" class="f-fg" font-size="12" text-anchor="middle">4건</text>
+<text x="375.0" y="145.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">D</text>
+<text x="375.0" y="165.0" class="f-fg" font-size="12" text-anchor="middle">6건</text>
+<text x="340.0" y="209.0" class="f-ac" font-size="12" text-anchor="middle">위: 10건 ÷ 2,000명 = 5건/1천 명</text>
+<text x="340.0" y="227.0" class="f-bd" font-size="12" text-anchor="middle">아래: 10건 ÷ 2,000명 = 5건/1천 명</text>
+<text x="580.0" y="30.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">세로로 묶음</text>
+<rect x="510.0" y="45.0" width="70.0" height="70.0" rx="0" class="s-bg f-acs" stroke-width="2"/>
+<rect x="510.0" y="115.0" width="70.0" height="70.0" rx="0" class="s-bg f-acs" stroke-width="2"/>
+<rect x="580.0" y="45.0" width="70.0" height="70.0" rx="0" class="s-bg f-bds" stroke-width="2"/>
+<rect x="580.0" y="115.0" width="70.0" height="70.0" rx="0" class="s-bg f-bds" stroke-width="2"/>
+<text x="545.0" y="75.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">A</text>
+<text x="545.0" y="95.0" class="f-fg" font-size="12" text-anchor="middle">2건</text>
+<text x="615.0" y="75.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">B</text>
+<text x="615.0" y="95.0" class="f-fg" font-size="12" text-anchor="middle">8건</text>
+<text x="545.0" y="145.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">C</text>
+<text x="545.0" y="165.0" class="f-fg" font-size="12" text-anchor="middle">4건</text>
+<text x="615.0" y="145.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">D</text>
+<text x="615.0" y="165.0" class="f-fg" font-size="12" text-anchor="middle">6건</text>
+<text x="580.0" y="209.0" class="f-ac" font-size="12" text-anchor="middle">왼쪽: 6건 ÷ 2,000명 = 3건/1천 명</text>
+<text x="580.0" y="227.0" class="f-bd" font-size="12" text-anchor="middle">오른쪽: 14건 ÷ 2,000명 = 7건/1천 명</text>
+</svg>
