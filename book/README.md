@@ -22,7 +22,7 @@ GeoStat으로 따라 하는 공간통계학 입문서임. 공간정보·지리�
 | 1 | [공간 자료의 세 얼굴](lessons/01-three-faces-of-spatial-data.md) | ● | 초안 |
 | 2 | [좌표계와 거리](lessons/02-coordinates-and-distance.md) | ● | 초안 |
 | 3 | [척도와 단위의 문제](lessons/03-scale-and-units.md) | ◐ | 초안 |
-| 4 | 공간 자료 준비 | ● | |
+| 4 | [공간 자료 준비](lessons/04-preparing-spatial-data.md) | ● | 초안 |
 | 5 | 지도로 탐색하기 | ● | |
 | **2부** | **통계 다시 보기** | | |
 | 6 | 요약·분포·추정 | ◐ | |

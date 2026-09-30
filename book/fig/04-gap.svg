@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 250" role="img" aria-label="두 행정동이 경계를 공유하는 경우(왼쪽)와 각자 따로 그려 경계가 0.5 m 어긋난 경우(오른쪽). 눈으로는 같아 보여도, 꼭짓점이 정확히 같아야 이웃으로 인정하는 인접 가중치에서는 오른쪽 두 동이 이웃이 아님">
+<style>
+.gsfig{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
+.gsfig .s-fg{stroke:#1c2330}.gsfig .s-mu{stroke:#8a93a3}.gsfig .s-ac{stroke:#2563eb}.gsfig .s-bd{stroke:#c2410c}.gsfig .s-ok{stroke:#15803d}.gsfig .s-bg{stroke:#ffffff}
+.gsfig .f-fg{fill:#1c2330}.gsfig .f-mu{fill:#5a6475}.gsfig .f-ac{fill:#2563eb}.gsfig .f-acs{fill:#e6eefe}.gsfig .f-bd{fill:#c2410c}
+.gsfig .f-bds{fill:#fdeee6}.gsfig .f-ok{fill:#15803d}.gsfig .f-sf{fill:#f0f2f5}.gsfig .f-bg{fill:#ffffff}
+.gsfig .q0{fill:#fff1e0}.gsfig .q1{fill:#fdc98f}.gsfig .q2{fill:#f98f45}.gsfig .q3{fill:#d9530f}.gsfig .q4{fill:#8c2d04}
+@media (prefers-color-scheme:dark){
+.gsfig .s-fg{stroke:#e6e9ef}.gsfig .s-mu{stroke:#737c8c}.gsfig .s-ac{stroke:#6d9bff}.gsfig .s-bd{stroke:#fb8b5b}.gsfig .s-ok{stroke:#4ade80}.gsfig .s-bg{stroke:#1a1e26}
+.gsfig .f-fg{fill:#e6e9ef}.gsfig .f-mu{fill:#a7afbd}.gsfig .f-ac{fill:#6d9bff}.gsfig .f-acs{fill:#1f2b45}.gsfig .f-bd{fill:#fb8b5b}
+.gsfig .f-bds{fill:#3a2218}.gsfig .f-ok{fill:#4ade80}.gsfig .f-sf{fill:#222733}.gsfig .f-bg{fill:#1a1e26}}
+</style>
+<rect x="0" y="0" width="720" height="250" class="f-bg"/>
+<text x="180.0" y="26.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">경계를 공유함</text>
+<polygon points="40.0,50.0 180.0,40.0 190.0,120.0 175.0,200.0 40.0,210.0" class="s-fg f-acs" stroke-width="1.5"/>
+<polygon points="180.0,40.0 320.0,45.0 325.0,205.0 175.0,200.0 190.0,120.0" class="s-fg f-bds" stroke-width="1.5"/>
+<text x="100.0" y="130.0" class="f-fg" font-size="12" text-anchor="middle">가 동</text>
+<text x="260.0" y="130.0" class="f-fg" font-size="12" text-anchor="middle">나 동</text>
+<circle cx="180.0" cy="40.0" r="4" class="f-fg" stroke-width="1"/>
+<circle cx="190.0" cy="120.0" r="4" class="f-fg" stroke-width="1"/>
+<circle cx="175.0" cy="200.0" r="4" class="f-fg" stroke-width="1"/>
+<text x="180.0" y="232.0" class="f-ok" font-size="12" text-anchor="middle" font-weight="600">퀸 인접: 이웃</text>
+<text x="530.0" y="26.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">따로 그려 어긋남 (크게 확대)</text>
+<polygon points="390.0,50.0 530.0,40.0 540.0,120.0 525.0,200.0 390.0,210.0" class="s-fg f-acs" stroke-width="1.5"/>
+<polygon points="542.0,37.0 670.0,45.0 675.0,205.0 537.0,204.0 550.0,114.0" class="s-fg f-bds" stroke-width="1.5"/>
+<text x="450.0" y="130.0" class="f-fg" font-size="12" text-anchor="middle">가 동</text>
+<text x="610.0" y="130.0" class="f-fg" font-size="12" text-anchor="middle">나 동</text>
+<circle cx="530.0" cy="40.0" r="4" class="f-fg" stroke-width="1"/>
+<circle cx="540.0" cy="120.0" r="4" class="f-fg" stroke-width="1"/>
+<circle cx="525.0" cy="200.0" r="4" class="f-fg" stroke-width="1"/>
+<circle cx="542.0" cy="37.0" r="4" class="f-bd" stroke-width="1"/>
+<circle cx="537.0" cy="204.0" r="4" class="f-bd" stroke-width="1"/>
+<circle cx="550.0" cy="114.0" r="4" class="f-bd" stroke-width="1"/>
+<text x="530.0" y="232.0" class="f-bd" font-size="12" text-anchor="middle" font-weight="600">퀸 인접: 이웃 아님 (섬이 됨)</text>
+</svg>

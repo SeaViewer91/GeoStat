@@ -20,6 +20,7 @@
     hanbit_roads.gpkg     주요 도로 (선)
     hanbit_lst.tif        여름 한낮 지표온도 50 m 래스터
     hanbit_pop100.tif     100 m 격자 인구 (1밴드 인구, 2밴드 고령인구). 3강에서 추가
+    hanbit_boundary.gpkg  시 경계선 (해안선 / 이웃 시와 맞닿은 행정 경계). 4강에서 추가
 """
 from __future__ import annotations
 
@@ -359,6 +360,16 @@ def make_pop_grid(dong, ids, dens, eld, inland):
     return pop, old
 
 
+# ---------------------------------------------------------------- 9. 시 경계선 (4강에서 추가)
+def make_boundary(land, coast):
+    """시 경계를 해안선과 이웃 시와 맞닿은 행정 경계로 나눈 선. 난수는 쓰지 않음"""
+    ring = land.exterior
+    coast_zone = coast.buffer(1.0)
+    admin = ring.difference(coast_zone)
+    sea = ring.intersection(coast_zone)
+    return gpd.GeoDataFrame({"구분": ["해안선", "행정 경계"]}, geometry=[sea, admin], crs=CRS)
+
+
 # ---------------------------------------------------------------- 실행
 def main():
     land, coast = land_polygon()
@@ -382,6 +393,11 @@ def main():
             os.remove(path)
         gdf.to_file(path, layer=f"hanbit_{name}", driver="GPKG")
     pop, old = make_pop_grid(dong, ids, dens, eld, inland)
+    boundary = make_boundary(land, coast)
+    bpath = os.path.join(OUT, "hanbit_boundary.gpkg")
+    if os.path.exists(bpath):
+        os.remove(bpath)
+    boundary.to_file(bpath, layer="hanbit_boundary", driver="GPKG")
     t100 = from_origin(X0, Y1, 2 * CELL, 2 * CELL)
     with rasterio.open(os.path.join(OUT, "hanbit_pop100.tif"), "w", driver="GTiff", width=NX // 2, height=NY // 2,
                        count=2, dtype="int32", crs=CRS, transform=t100, nodata=-1, compress="deflate", tiled=True) as dst:

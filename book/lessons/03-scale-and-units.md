@@ -8,7 +8,7 @@ updated: 2026-09-30
 status: draft
 ---
 
-[목차](../README.md) · 이전: [2강 좌표계와 거리](02-coordinates-and-distance.md) · 다음: 4강 공간 자료 준비 (집필 예정)
+[목차](../README.md) · 이전: [2강 좌표계와 거리](02-coordinates-and-distance.md) · 다음: [4강 공간 자료 준비](04-preparing-spatial-data.md)
 
 # 3강 척도와 단위의 문제
 
@@ -255,4 +255,4 @@ MAUP는 해결되는 문제가 아니라 **관리하는 문제**임. 다음을 �
 
 ---
 
-[목차](../README.md) · 이전: [2강 좌표계와 거리](02-coordinates-and-distance.md) · 다음: 4강 공간 자료 준비 (집필 예정)
+[목차](../README.md) · 이전: [2강 좌표계와 거리](02-coordinates-and-distance.md) · 다음: [4강 공간 자료 준비](04-preparing-spatial-data.md)
