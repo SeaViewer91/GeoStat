@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 330" role="img" aria-label="색 체계 세 가지와 무지개 색. 오른쪽 선은 각 색의 밝기(L*). 순차 색은 밝기가 한 방향으로, 발산 색은 가운데에서 양쪽으로 어두워지며, 질적 색은 밝기가 비슷함. 무지개 색은 밝기가 오르내려 순서를 읽을 수 없음">
+<style>
+.gsfig{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
+.gsfig .s-fg{stroke:#1c2330}.gsfig .s-mu{stroke:#8a93a3}.gsfig .s-ac{stroke:#2563eb}.gsfig .s-bd{stroke:#c2410c}.gsfig .s-ok{stroke:#15803d}.gsfig .s-bg{stroke:#ffffff}
+.gsfig .f-fg{fill:#1c2330}.gsfig .f-mu{fill:#5a6475}.gsfig .f-ac{fill:#2563eb}.gsfig .f-acs{fill:#e6eefe}.gsfig .f-bd{fill:#c2410c}
+.gsfig .f-bds{fill:#fdeee6}.gsfig .f-ok{fill:#15803d}.gsfig .f-sf{fill:#f0f2f5}.gsfig .f-bg{fill:#ffffff}
+.gsfig .d0{fill:#2166ac}.gsfig .d1{fill:#67a9cf}.gsfig .d2{fill:#d1e5f0}.gsfig .d3{fill:#fddbc7}.gsfig .d4{fill:#ef8a62}.gsfig .d5{fill:#b2182b}
+.gsfig .q0{fill:#fff1e0}.gsfig .q1{fill:#fdc98f}.gsfig .q2{fill:#f98f45}.gsfig .q3{fill:#d9530f}.gsfig .q4{fill:#8c2d04}
+@media (prefers-color-scheme:dark){
+.gsfig .s-fg{stroke:#e6e9ef}.gsfig .s-mu{stroke:#737c8c}.gsfig .s-ac{stroke:#6d9bff}.gsfig .s-bd{stroke:#fb8b5b}.gsfig .s-ok{stroke:#4ade80}.gsfig .s-bg{stroke:#1a1e26}
+.gsfig .f-fg{fill:#e6e9ef}.gsfig .f-mu{fill:#a7afbd}.gsfig .f-ac{fill:#6d9bff}.gsfig .f-acs{fill:#1f2b45}.gsfig .f-bd{fill:#fb8b5b}
+.gsfig .f-bds{fill:#3a2218}.gsfig .f-ok{fill:#4ade80}.gsfig .f-sf{fill:#222733}.gsfig .f-bg{fill:#1a1e26}}
+</style>
+<rect x="0" y="0" width="720" height="330" class="f-bg"/>
+<text x="280.0" y="22.0" class="f-mu" font-size="12" text-anchor="middle">색 견본</text>
+<text x="590.0" y="22.0" class="f-mu" font-size="12" text-anchor="middle">밝기 L* (0~100)</text>
+<text x="116.0" y="58.0" class="f-fg" font-size="13" text-anchor="end" font-weight="600">순차</text>
+<rect x="130.0" y="40.0" width="60.0" height="28.0" rx="0" class="s-bg" stroke-width="1" fill="#ffffcc"/>
+<rect x="190.0" y="40.0" width="60.0" height="28.0" rx="0" class="s-bg" stroke-width="1" fill="#fed976"/>
+<rect x="250.0" y="40.0" width="60.0" height="28.0" rx="0" class="s-bg" stroke-width="1" fill="#fd8d3c"/>
+<rect x="310.0" y="40.0" width="60.0" height="28.0" rx="0" class="s-bg" stroke-width="1" fill="#e31a1c"/>
+<rect x="370.0" y="40.0" width="60.0" height="28.0" rx="0" class="s-bg" stroke-width="1" fill="#800026"/>
+<text x="130.0" y="86.0" class="f-mu" font-size="11" text-anchor="start">적음 → 많음 (출동률, 고령비율)</text>
+<rect x="500.0" y="36.0" width="180.0" height="36.0" rx="0" class="s-mu f-sf" stroke-width="0.5"/>
+<path d="M510.0,38.4 L550.0,41.8 L590.0,47.7 L630.0,54.5 L670.0,61.7" class="s-fg" stroke-width="1.6" fill="none"/>
+<circle cx="510.0" cy="38.4" r="3.20" class="s-fg" stroke-width="0.6" fill="#ffffcc"/>
+<circle cx="550.0" cy="41.8" r="3.20" class="s-fg" stroke-width="0.6" fill="#fed976"/>
+<circle cx="590.0" cy="47.7" r="3.20" class="s-fg" stroke-width="0.6" fill="#fd8d3c"/>
+<circle cx="630.0" cy="54.5" r="3.20" class="s-fg" stroke-width="0.6" fill="#e31a1c"/>
+<circle cx="670.0" cy="61.7" r="3.20" class="s-fg" stroke-width="0.6" fill="#800026"/>
+<text x="116.0" y="128.0" class="f-fg" font-size="13" text-anchor="end" font-weight="600">발산</text>
+<rect x="130.0" y="110.0" width="50.0" height="28.0" rx="0" class="s-bg" stroke-width="1" fill="#2166ac"/>
+<rect x="180.0" y="110.0" width="50.0" height="28.0" rx="0" class="s-bg" stroke-width="1" fill="#67a9cf"/>
+<rect x="230.0" y="110.0" width="50.0" height="28.0" rx="0" class="s-bg" stroke-width="1" fill="#d1e5f0"/>
+<rect x="280.0" y="110.0" width="50.0" height="28.0" rx="0" class="s-bg" stroke-width="1" fill="#fddbc7"/>
+<rect x="330.0" y="110.0" width="50.0" height="28.0" rx="0" class="s-bg" stroke-width="1" fill="#ef8a62"/>
+<rect x="380.0" y="110.0" width="50.0" height="28.0" rx="0" class="s-bg" stroke-width="1" fill="#b2182b"/>
+<text x="130.0" y="156.0" class="f-mu" font-size="11" text-anchor="start">기준값의 양쪽 (평균과의 차, 잔차)</text>
+<rect x="500.0" y="106.0" width="180.0" height="36.0" rx="0" class="s-mu f-sf" stroke-width="0.5"/>
+<path d="M510.0,126.4 L542.0,118.8 L574.0,111.3 L606.0,111.3 L638.0,118.4 L670.0,127.7" class="s-fg" stroke-width="1.6" fill="none"/>
+<circle cx="510.0" cy="126.4" r="3.20" class="s-fg" stroke-width="0.6" fill="#2166ac"/>
+<circle cx="542.0" cy="118.8" r="3.20" class="s-fg" stroke-width="0.6" fill="#67a9cf"/>
+<circle cx="574.0" cy="111.3" r="3.20" class="s-fg" stroke-width="0.6" fill="#d1e5f0"/>
+<circle cx="606.0" cy="111.3" r="3.20" class="s-fg" stroke-width="0.6" fill="#fddbc7"/>
+<circle cx="638.0" cy="118.4" r="3.20" class="s-fg" stroke-width="0.6" fill="#ef8a62"/>
+<circle cx="670.0" cy="127.7" r="3.20" class="s-fg" stroke-width="0.6" fill="#b2182b"/>
+<text x="116.0" y="198.0" class="f-fg" font-size="13" text-anchor="end" font-weight="600">질적</text>
+<rect x="130.0" y="180.0" width="50.0" height="28.0" rx="0" class="s-bg" stroke-width="1" fill="#4e79a7"/>
+<rect x="180.0" y="180.0" width="50.0" height="28.0" rx="0" class="s-bg" stroke-width="1" fill="#f28e2b"/>
+<rect x="230.0" y="180.0" width="50.0" height="28.0" rx="0" class="s-bg" stroke-width="1" fill="#e15759"/>
+<rect x="280.0" y="180.0" width="50.0" height="28.0" rx="0" class="s-bg" stroke-width="1" fill="#76b7b2"/>
+<rect x="330.0" y="180.0" width="50.0" height="28.0" rx="0" class="s-bg" stroke-width="1" fill="#59a14f"/>
+<rect x="380.0" y="180.0" width="50.0" height="28.0" rx="0" class="s-bg" stroke-width="1" fill="#edc948"/>
+<text x="130.0" y="226.0" class="f-mu" font-size="11" text-anchor="start">순서 없는 종류 (구, 토지 이용)</text>
+<rect x="500.0" y="176.0" width="180.0" height="36.0" rx="0" class="s-mu f-sf" stroke-width="0.5"/>
+<path d="M510.0,194.1 L542.0,188.1 L574.0,192.2 L606.0,187.6 L638.0,190.8 L670.0,183.8" class="s-fg" stroke-width="1.6" fill="none"/>
+<circle cx="510.0" cy="194.1" r="3.20" class="s-fg" stroke-width="0.6" fill="#4e79a7"/>
+<circle cx="542.0" cy="188.1" r="3.20" class="s-fg" stroke-width="0.6" fill="#f28e2b"/>
+<circle cx="574.0" cy="192.2" r="3.20" class="s-fg" stroke-width="0.6" fill="#e15759"/>
+<circle cx="606.0" cy="187.6" r="3.20" class="s-fg" stroke-width="0.6" fill="#76b7b2"/>
+<circle cx="638.0" cy="190.8" r="3.20" class="s-fg" stroke-width="0.6" fill="#59a14f"/>
+<circle cx="670.0" cy="183.8" r="3.20" class="s-fg" stroke-width="0.6" fill="#edc948"/>
+<text x="116.0" y="268.0" class="f-fg" font-size="13" text-anchor="end" font-weight="600">무지개</text>
+<rect x="130.0" y="250.0" width="42.9" height="28.0" rx="0" class="s-bg" stroke-width="1" fill="#8000ff"/>
+<rect x="172.9" y="250.0" width="42.9" height="28.0" rx="0" class="s-bg" stroke-width="1" fill="#0000ff"/>
+<rect x="215.7" y="250.0" width="42.9" height="28.0" rx="0" class="s-bg" stroke-width="1" fill="#00ffff"/>
+<rect x="258.6" y="250.0" width="42.9" height="28.0" rx="0" class="s-bg" stroke-width="1" fill="#00ff00"/>
+<rect x="301.4" y="250.0" width="42.9" height="28.0" rx="0" class="s-bg" stroke-width="1" fill="#ffff00"/>
+<rect x="344.3" y="250.0" width="42.9" height="28.0" rx="0" class="s-bg" stroke-width="1" fill="#ff8000"/>
+<rect x="387.1" y="250.0" width="42.9" height="28.0" rx="0" class="s-bg" stroke-width="1" fill="#ff0000"/>
+<text x="130.0" y="296.0" class="f-mu" font-size="11" text-anchor="start">순서가 있는 값에는 피함</text>
+<rect x="500.0" y="246.0" width="180.0" height="36.0" rx="0" class="s-mu f-sf" stroke-width="0.5"/>
+<path d="M510.0,266.9 L536.7,269.7 L563.3,250.8 L590.0,251.9 L616.7,248.9 L643.3,258.5 L670.0,263.0" class="s-bd" stroke-width="1.6" fill="none"/>
+<circle cx="510.0" cy="266.9" r="3.20" class="s-fg" stroke-width="0.6" fill="#8000ff"/>
+<circle cx="536.7" cy="269.7" r="3.20" class="s-fg" stroke-width="0.6" fill="#0000ff"/>
+<circle cx="563.3" cy="250.8" r="3.20" class="s-fg" stroke-width="0.6" fill="#00ffff"/>
+<circle cx="590.0" cy="251.9" r="3.20" class="s-fg" stroke-width="0.6" fill="#00ff00"/>
+<circle cx="616.7" cy="248.9" r="3.20" class="s-fg" stroke-width="0.6" fill="#ffff00"/>
+<circle cx="643.3" cy="258.5" r="3.20" class="s-fg" stroke-width="0.6" fill="#ff8000"/>
+<circle cx="670.0" cy="263.0" r="3.20" class="s-fg" stroke-width="0.6" fill="#ff0000"/>
+<text x="360.0" y="318.0" class="f-mu" font-size="11" text-anchor="middle">순차·발산 색은 GeoStat 주제도의 색(노랑–빨강, 파랑–빨강), 질적 색은 고유값 지도의 색</text>
+</svg>
