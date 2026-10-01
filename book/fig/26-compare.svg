@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 300" role="img" aria-label="연습용 모의 자료의 세 변수에 여섯 모형을 적합한 AICc(각 변수에서 가장 작은 값과의 차이, 작을수록 좋음). Y_독립은 OLS, Y_시차는 공간시차(SAR), Y_오차는 공간오차(SEM)가 가장 작음. 참 모형을 포함하는 더 큰 모형(예: Y_오차의 SDM·SDEM, Y_시차의 SDM)은 모수가 많아 AICc가 4~6 정도 뒤짐. 차이가 2보다 작은 모형들은 자료로 잘 구별되지 않음">
+<style>
+.gsfig{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
+.gsfig .s-fg{stroke:#1c2330}.gsfig .s-mu{stroke:#8a93a3}.gsfig .s-ac{stroke:#2563eb}.gsfig .s-bd{stroke:#c2410c}.gsfig .s-ok{stroke:#15803d}.gsfig .s-bg{stroke:#ffffff}
+.gsfig .f-fg{fill:#1c2330}.gsfig .f-mu{fill:#5a6475}.gsfig .f-ac{fill:#2563eb}.gsfig .f-acs{fill:#e6eefe}.gsfig .f-bd{fill:#c2410c}
+.gsfig .f-bds{fill:#fdeee6}.gsfig .f-ok{fill:#15803d}.gsfig .f-sf{fill:#f0f2f5}.gsfig .f-bg{fill:#ffffff}
+.gsfig .d0{fill:#2166ac}.gsfig .d1{fill:#67a9cf}.gsfig .d2{fill:#d1e5f0}.gsfig .d3{fill:#fddbc7}.gsfig .d4{fill:#ef8a62}.gsfig .d5{fill:#b2182b}
+.gsfig .q0{fill:#fff1e0}.gsfig .q1{fill:#fdc98f}.gsfig .q2{fill:#f98f45}.gsfig .q3{fill:#d9530f}.gsfig .q4{fill:#8c2d04}
+@media (prefers-color-scheme:dark){
+.gsfig .s-fg{stroke:#e6e9ef}.gsfig .s-mu{stroke:#737c8c}.gsfig .s-ac{stroke:#6d9bff}.gsfig .s-bd{stroke:#fb8b5b}.gsfig .s-ok{stroke:#4ade80}.gsfig .s-bg{stroke:#1a1e26}
+.gsfig .f-fg{fill:#e6e9ef}.gsfig .f-mu{fill:#a7afbd}.gsfig .f-ac{fill:#6d9bff}.gsfig .f-acs{fill:#1f2b45}.gsfig .f-bd{fill:#fb8b5b}
+.gsfig .f-bds{fill:#3a2218}.gsfig .f-ok{fill:#4ade80}.gsfig .f-sf{fill:#222733}.gsfig .f-bg{fill:#1a1e26}}
+</style>
+<rect x="0" y="0" width="720" height="300" class="f-bg"/>
+<circle cx="138.0" cy="234.1" r="5.00" class="s-bg f-mu" stroke-width="1"/>
+<text x="146.0" y="238.1" class="f-mu" font-size="9" text-anchor="start">최소</text>
+<circle cx="231.3" cy="209.1" r="5.00" class="s-bg f-mu" stroke-width="1"/>
+<circle cx="324.7" cy="221.6" r="5.00" class="s-bg f-mu" stroke-width="1"/>
+<circle cx="418.0" cy="221.6" r="5.00" class="s-bg f-mu" stroke-width="1"/>
+<circle cx="511.3" cy="196.3" r="5.00" class="s-bg f-mu" stroke-width="1"/>
+<circle cx="604.7" cy="196.3" r="5.00" class="s-bg f-mu" stroke-width="1"/>
+<circle cx="156.7" cy="45.9" r="5.00" class="s-bg f-bd" stroke-width="1"/>
+<circle cx="250.0" cy="92.6" r="5.00" class="s-bg f-bd" stroke-width="1"/>
+<circle cx="343.3" cy="234.1" r="5.00" class="s-bg f-bd" stroke-width="1"/>
+<text x="351.3" y="238.1" class="f-bd" font-size="9" text-anchor="start">최소</text>
+<circle cx="436.7" cy="111.7" r="5.00" class="s-bg f-bd" stroke-width="1"/>
+<circle cx="530.0" cy="208.9" r="5.00" class="s-bg f-bd" stroke-width="1"/>
+<circle cx="623.3" cy="202.5" r="5.00" class="s-bg f-bd" stroke-width="1"/>
+<circle cx="175.3" cy="128.5" r="5.00" class="s-bg f-ac" stroke-width="1"/>
+<circle cx="268.7" cy="110.9" r="5.00" class="s-bg f-ac" stroke-width="1"/>
+<circle cx="362.0" cy="191.1" r="5.00" class="s-bg f-ac" stroke-width="1"/>
+<circle cx="455.3" cy="234.1" r="5.00" class="s-bg f-ac" stroke-width="1"/>
+<text x="463.3" y="238.1" class="f-ac" font-size="9" text-anchor="start">최소</text>
+<circle cx="548.7" cy="211.9" r="5.00" class="s-bg f-ac" stroke-width="1"/>
+<circle cx="642.0" cy="210.8" r="5.00" class="s-bg f-ac" stroke-width="1"/>
+<text x="156.7" y="258.0" class="f-fg" font-size="11" text-anchor="middle">OLS</text>
+<text x="250.0" y="258.0" class="f-fg" font-size="11" text-anchor="middle">SLX</text>
+<text x="343.3" y="258.0" class="f-fg" font-size="11" text-anchor="middle">SAR</text>
+<text x="436.7" y="258.0" class="f-fg" font-size="11" text-anchor="middle">SEM</text>
+<text x="530.0" y="258.0" class="f-fg" font-size="11" text-anchor="middle">SDM</text>
+<text x="623.3" y="258.0" class="f-fg" font-size="11" text-anchor="middle">SDEM</text>
+<path d="M110.0,222.4 L670.0,222.4" class="s-mu" stroke-width="1" fill="none" stroke-dasharray="3 3"/>
+<line x1="110.0" y1="40.0" x2="110.0" y2="240.0" class="s-mu" stroke-width="1"/>
+<line x1="106.0" y1="234.1" x2="110.0" y2="234.1" class="s-mu" stroke-width="1"/>
+<text x="103.0" y="238.1" class="f-mu" font-size="10" text-anchor="end">0</text>
+<line x1="106.0" y1="222.4" x2="110.0" y2="222.4" class="s-mu" stroke-width="1"/>
+<text x="103.0" y="226.4" class="f-mu" font-size="10" text-anchor="end">2</text>
+<line x1="106.0" y1="175.3" x2="110.0" y2="175.3" class="s-mu" stroke-width="1"/>
+<text x="103.0" y="179.3" class="f-mu" font-size="10" text-anchor="end">10</text>
+<line x1="106.0" y1="116.5" x2="110.0" y2="116.5" class="s-mu" stroke-width="1"/>
+<text x="103.0" y="120.5" class="f-mu" font-size="10" text-anchor="end">20</text>
+<line x1="106.0" y1="57.6" x2="110.0" y2="57.6" class="s-mu" stroke-width="1"/>
+<text x="103.0" y="61.6" class="f-mu" font-size="10" text-anchor="end">30</text>
+<text x="102.0" y="30.0" class="f-mu" font-size="11" text-anchor="start">AICc − 최솟값</text>
+<circle cx="200.0" cy="282.0" r="5.00" class="s-bg f-mu" stroke-width="1"/>
+<text x="210.0" y="286.0" class="f-fg" font-size="10" text-anchor="start">Y_독립</text>
+<circle cx="320.0" cy="282.0" r="5.00" class="s-bg f-bd" stroke-width="1"/>
+<text x="330.0" y="286.0" class="f-fg" font-size="10" text-anchor="start">Y_시차</text>
+<circle cx="440.0" cy="282.0" r="5.00" class="s-bg f-ac" stroke-width="1"/>
+<text x="450.0" y="286.0" class="f-fg" font-size="10" text-anchor="start">Y_오차</text>
+</svg>
