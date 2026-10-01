@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 220" role="img" aria-label="3×3 격자에 1(주황)과 0(흰색)을 세 가지로 배치하고 룩 인접 이진 가중치로 구한 Moran&#x27;s I. 같은 값끼리 붙으면 양수, 바둑판처럼 번갈아 놓이면 음수, 섞여 있으면 무작위일 때의 기댓값 −0.125 근처임">
+<style>
+.gsfig{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
+.gsfig .s-fg{stroke:#1c2330}.gsfig .s-mu{stroke:#8a93a3}.gsfig .s-ac{stroke:#2563eb}.gsfig .s-bd{stroke:#c2410c}.gsfig .s-ok{stroke:#15803d}.gsfig .s-bg{stroke:#ffffff}
+.gsfig .f-fg{fill:#1c2330}.gsfig .f-mu{fill:#5a6475}.gsfig .f-ac{fill:#2563eb}.gsfig .f-acs{fill:#e6eefe}.gsfig .f-bd{fill:#c2410c}
+.gsfig .f-bds{fill:#fdeee6}.gsfig .f-ok{fill:#15803d}.gsfig .f-sf{fill:#f0f2f5}.gsfig .f-bg{fill:#ffffff}
+.gsfig .d0{fill:#2166ac}.gsfig .d1{fill:#67a9cf}.gsfig .d2{fill:#d1e5f0}.gsfig .d3{fill:#fddbc7}.gsfig .d4{fill:#ef8a62}.gsfig .d5{fill:#b2182b}
+.gsfig .q0{fill:#fff1e0}.gsfig .q1{fill:#fdc98f}.gsfig .q2{fill:#f98f45}.gsfig .q3{fill:#d9530f}.gsfig .q4{fill:#8c2d04}
+@media (prefers-color-scheme:dark){
+.gsfig .s-fg{stroke:#e6e9ef}.gsfig .s-mu{stroke:#737c8c}.gsfig .s-ac{stroke:#6d9bff}.gsfig .s-bd{stroke:#fb8b5b}.gsfig .s-ok{stroke:#4ade80}.gsfig .s-bg{stroke:#1a1e26}
+.gsfig .f-fg{fill:#e6e9ef}.gsfig .f-mu{fill:#a7afbd}.gsfig .f-ac{fill:#6d9bff}.gsfig .f-acs{fill:#1f2b45}.gsfig .f-bd{fill:#fb8b5b}
+.gsfig .f-bds{fill:#3a2218}.gsfig .f-ok{fill:#4ade80}.gsfig .f-sf{fill:#222733}.gsfig .f-bg{fill:#1a1e26}}
+</style>
+<rect x="0" y="0" width="720" height="220" class="f-bg"/>
+<text x="140.0" y="26.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">뭉침</text>
+<rect x="80.0" y="38.0" width="40.0" height="40.0" rx="0" class="s-fg f-bd" stroke-width="1"/>
+<text x="100.0" y="63.0" class="f-bg" font-size="13" text-anchor="middle" font-weight="600">1</text>
+<rect x="120.0" y="38.0" width="40.0" height="40.0" rx="0" class="s-fg f-bd" stroke-width="1"/>
+<text x="140.0" y="63.0" class="f-bg" font-size="13" text-anchor="middle" font-weight="600">1</text>
+<rect x="160.0" y="38.0" width="40.0" height="40.0" rx="0" class="s-fg f-bg" stroke-width="1"/>
+<text x="180.0" y="63.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">0</text>
+<rect x="80.0" y="78.0" width="40.0" height="40.0" rx="0" class="s-fg f-bd" stroke-width="1"/>
+<text x="100.0" y="103.0" class="f-bg" font-size="13" text-anchor="middle" font-weight="600">1</text>
+<rect x="120.0" y="78.0" width="40.0" height="40.0" rx="0" class="s-fg f-bd" stroke-width="1"/>
+<text x="140.0" y="103.0" class="f-bg" font-size="13" text-anchor="middle" font-weight="600">1</text>
+<rect x="160.0" y="78.0" width="40.0" height="40.0" rx="0" class="s-fg f-bg" stroke-width="1"/>
+<text x="180.0" y="103.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">0</text>
+<rect x="80.0" y="118.0" width="40.0" height="40.0" rx="0" class="s-fg f-bg" stroke-width="1"/>
+<text x="100.0" y="143.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">0</text>
+<rect x="120.0" y="118.0" width="40.0" height="40.0" rx="0" class="s-fg f-bg" stroke-width="1"/>
+<text x="140.0" y="143.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">0</text>
+<rect x="160.0" y="118.0" width="40.0" height="40.0" rx="0" class="s-fg f-bg" stroke-width="1"/>
+<text x="180.0" y="143.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">0</text>
+<text x="140.0" y="184.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">I = 0.350</text>
+<text x="350.0" y="26.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">바둑판</text>
+<rect x="290.0" y="38.0" width="40.0" height="40.0" rx="0" class="s-fg f-bd" stroke-width="1"/>
+<text x="310.0" y="63.0" class="f-bg" font-size="13" text-anchor="middle" font-weight="600">1</text>
+<rect x="330.0" y="38.0" width="40.0" height="40.0" rx="0" class="s-fg f-bg" stroke-width="1"/>
+<text x="350.0" y="63.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">0</text>
+<rect x="370.0" y="38.0" width="40.0" height="40.0" rx="0" class="s-fg f-bd" stroke-width="1"/>
+<text x="390.0" y="63.0" class="f-bg" font-size="13" text-anchor="middle" font-weight="600">1</text>
+<rect x="290.0" y="78.0" width="40.0" height="40.0" rx="0" class="s-fg f-bg" stroke-width="1"/>
+<text x="310.0" y="103.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">0</text>
+<rect x="330.0" y="78.0" width="40.0" height="40.0" rx="0" class="s-fg f-bd" stroke-width="1"/>
+<text x="350.0" y="103.0" class="f-bg" font-size="13" text-anchor="middle" font-weight="600">1</text>
+<rect x="370.0" y="78.0" width="40.0" height="40.0" rx="0" class="s-fg f-bg" stroke-width="1"/>
+<text x="390.0" y="103.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">0</text>
+<rect x="290.0" y="118.0" width="40.0" height="40.0" rx="0" class="s-fg f-bd" stroke-width="1"/>
+<text x="310.0" y="143.0" class="f-bg" font-size="13" text-anchor="middle" font-weight="600">1</text>
+<rect x="330.0" y="118.0" width="40.0" height="40.0" rx="0" class="s-fg f-bg" stroke-width="1"/>
+<text x="350.0" y="143.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">0</text>
+<rect x="370.0" y="118.0" width="40.0" height="40.0" rx="0" class="s-fg f-bd" stroke-width="1"/>
+<text x="390.0" y="143.0" class="f-bg" font-size="13" text-anchor="middle" font-weight="600">1</text>
+<text x="350.0" y="184.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">I = −1.000</text>
+<text x="560.0" y="26.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">섞임</text>
+<rect x="500.0" y="38.0" width="40.0" height="40.0" rx="0" class="s-fg f-bd" stroke-width="1"/>
+<text x="520.0" y="63.0" class="f-bg" font-size="13" text-anchor="middle" font-weight="600">1</text>
+<rect x="540.0" y="38.0" width="40.0" height="40.0" rx="0" class="s-fg f-bg" stroke-width="1"/>
+<text x="560.0" y="63.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">0</text>
+<rect x="580.0" y="38.0" width="40.0" height="40.0" rx="0" class="s-fg f-bg" stroke-width="1"/>
+<text x="600.0" y="63.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">0</text>
+<rect x="500.0" y="78.0" width="40.0" height="40.0" rx="0" class="s-fg f-bg" stroke-width="1"/>
+<text x="520.0" y="103.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">0</text>
+<rect x="540.0" y="78.0" width="40.0" height="40.0" rx="0" class="s-fg f-bg" stroke-width="1"/>
+<text x="560.0" y="103.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">0</text>
+<rect x="580.0" y="78.0" width="40.0" height="40.0" rx="0" class="s-fg f-bd" stroke-width="1"/>
+<text x="600.0" y="103.0" class="f-bg" font-size="13" text-anchor="middle" font-weight="600">1</text>
+<rect x="500.0" y="118.0" width="40.0" height="40.0" rx="0" class="s-fg f-bg" stroke-width="1"/>
+<text x="520.0" y="143.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">0</text>
+<rect x="540.0" y="118.0" width="40.0" height="40.0" rx="0" class="s-fg f-bd" stroke-width="1"/>
+<text x="560.0" y="143.0" class="f-bg" font-size="13" text-anchor="middle" font-weight="600">1</text>
+<rect x="580.0" y="118.0" width="40.0" height="40.0" rx="0" class="s-fg f-bd" stroke-width="1"/>
+<text x="600.0" y="143.0" class="f-bg" font-size="13" text-anchor="middle" font-weight="600">1</text>
+<text x="560.0" y="184.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">I = −0.025</text>
+</svg>

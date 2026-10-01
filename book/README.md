@@ -30,12 +30,12 @@ GeoStat으로 따라 하는 공간통계학 입문서임. 공간정보·지리�
 | 8 | [회귀분석과 진단](lessons/08-regression-and-diagnostics.md) | ● | 초안 |
 | 9 | [독립 가정이 깨질 때](lessons/09-when-independence-fails.md) | ○ | 초안 |
 | **3부** | **공간 자기상관** | | |
-| 10 | 이웃 정하기: 공간가중치 | ● | |
-| 11 | 전역 공간 자기상관 | ◐ | |
-| 12 | 국지 공간 자기상관 I: LISA | ● | |
-| 13 | 국지 공간 자기상관 II | ◐ | |
-| 14 | 비율 자료와 작은 수 문제 | ● | |
-| 15 | 공간 군집 탐지 | ○ | |
+| 10 | [이웃 정하기: 공간가중치](lessons/10-spatial-weights.md) | ● | 초안 |
+| 11 | [전역 공간 자기상관](lessons/11-global-autocorrelation.md) | ◐ | 초안 |
+| 12 | [국지 공간 자기상관 I: LISA](lessons/12-lisa.md) | ● | 초안 |
+| 13 | [국지 공간 자기상관 II](lessons/13-local-statistics.md) | ◐ | 초안 |
+| 14 | [비율 자료와 작은 수 문제](lessons/14-rates-small-numbers.md) | ● | 초안 |
+| 15 | [공간 군집 탐지](lessons/15-cluster-detection.md) | ○ | 초안 |
 | **4부** | **점 패턴** | | |
 | 16 | 점 패턴의 기초 | ○ | |
 | 17 | 강도 추정 | ◐ | |

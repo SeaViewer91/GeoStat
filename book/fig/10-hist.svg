@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 230" role="img" aria-label="가중치 종류별 행정동의 이웃 수 분포. 퀸은 2~8개, KNN은 모두 6개, 거리 임계값은 1개에서 22개까지 크게 퍼짐">
+<style>
+.gsfig{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
+.gsfig .s-fg{stroke:#1c2330}.gsfig .s-mu{stroke:#8a93a3}.gsfig .s-ac{stroke:#2563eb}.gsfig .s-bd{stroke:#c2410c}.gsfig .s-ok{stroke:#15803d}.gsfig .s-bg{stroke:#ffffff}
+.gsfig .f-fg{fill:#1c2330}.gsfig .f-mu{fill:#5a6475}.gsfig .f-ac{fill:#2563eb}.gsfig .f-acs{fill:#e6eefe}.gsfig .f-bd{fill:#c2410c}
+.gsfig .f-bds{fill:#fdeee6}.gsfig .f-ok{fill:#15803d}.gsfig .f-sf{fill:#f0f2f5}.gsfig .f-bg{fill:#ffffff}
+.gsfig .d0{fill:#2166ac}.gsfig .d1{fill:#67a9cf}.gsfig .d2{fill:#d1e5f0}.gsfig .d3{fill:#fddbc7}.gsfig .d4{fill:#ef8a62}.gsfig .d5{fill:#b2182b}
+.gsfig .q0{fill:#fff1e0}.gsfig .q1{fill:#fdc98f}.gsfig .q2{fill:#f98f45}.gsfig .q3{fill:#d9530f}.gsfig .q4{fill:#8c2d04}
+@media (prefers-color-scheme:dark){
+.gsfig .s-fg{stroke:#e6e9ef}.gsfig .s-mu{stroke:#737c8c}.gsfig .s-ac{stroke:#6d9bff}.gsfig .s-bd{stroke:#fb8b5b}.gsfig .s-ok{stroke:#4ade80}.gsfig .s-bg{stroke:#1a1e26}
+.gsfig .f-fg{fill:#e6e9ef}.gsfig .f-mu{fill:#a7afbd}.gsfig .f-ac{fill:#6d9bff}.gsfig .f-acs{fill:#1f2b45}.gsfig .f-bd{fill:#fb8b5b}
+.gsfig .f-bds{fill:#3a2218}.gsfig .f-ok{fill:#4ade80}.gsfig .f-sf{fill:#222733}.gsfig .f-bg{fill:#1a1e26}}
+</style>
+<rect x="0" y="0" width="720" height="230" class="f-bg"/>
+<text x="135.0" y="24.0" class="f-fg" font-size="12" text-anchor="middle" font-weight="600">퀸 1차</text>
+<rect x="56.5" y="169.2" width="8.3" height="0.8" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<rect x="64.8" y="157.8" width="8.3" height="12.2" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<rect x="73.0" y="159.4" width="8.3" height="10.6" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<rect x="81.3" y="135.1" width="8.3" height="34.9" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<rect x="89.6" y="126.1" width="8.3" height="43.9" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<rect x="97.8" y="155.4" width="8.3" height="14.6" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<rect x="106.1" y="165.1" width="8.3" height="4.9" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<line x1="40.0" y1="170.0" x2="230.0" y2="170.0" class="s-mu" stroke-width="1"/>
+<line x1="44.1" y1="170.0" x2="44.1" y2="174.0" class="s-mu" stroke-width="1"/>
+<text x="44.1" y="185.0" class="f-mu" font-size="10" text-anchor="middle">0</text>
+<line x1="85.4" y1="170.0" x2="85.4" y2="174.0" class="s-mu" stroke-width="1"/>
+<text x="85.4" y="185.0" class="f-mu" font-size="10" text-anchor="middle">5</text>
+<line x1="126.7" y1="170.0" x2="126.7" y2="174.0" class="s-mu" stroke-width="1"/>
+<text x="126.7" y="185.0" class="f-mu" font-size="10" text-anchor="middle">10</text>
+<line x1="168.0" y1="170.0" x2="168.0" y2="174.0" class="s-mu" stroke-width="1"/>
+<text x="168.0" y="185.0" class="f-mu" font-size="10" text-anchor="middle">15</text>
+<line x1="209.3" y1="170.0" x2="209.3" y2="174.0" class="s-mu" stroke-width="1"/>
+<text x="209.3" y="185.0" class="f-mu" font-size="10" text-anchor="middle">20</text>
+<text x="135.0" y="202.0" class="f-mu" font-size="11" text-anchor="middle">이웃 수</text>
+<line x1="40.0" y1="40.0" x2="40.0" y2="170.0" class="s-mu" stroke-width="1"/>
+<line x1="36.0" y1="170.0" x2="40.0" y2="170.0" class="s-mu" stroke-width="1"/>
+<text x="33.0" y="174.0" class="f-mu" font-size="10" text-anchor="end">0</text>
+<line x1="36.0" y1="129.4" x2="40.0" y2="129.4" class="s-mu" stroke-width="1"/>
+<text x="33.0" y="133.4" class="f-mu" font-size="10" text-anchor="end">50</text>
+<line x1="36.0" y1="88.8" x2="40.0" y2="88.8" class="s-mu" stroke-width="1"/>
+<text x="33.0" y="92.8" class="f-mu" font-size="10" text-anchor="end">100</text>
+<line x1="36.0" y1="48.1" x2="40.0" y2="48.1" class="s-mu" stroke-width="1"/>
+<text x="33.0" y="52.1" class="f-mu" font-size="10" text-anchor="end">150</text>
+<text x="365.0" y="24.0" class="f-fg" font-size="12" text-anchor="middle" font-weight="600">KNN 6</text>
+<rect x="319.6" y="48.1" width="8.3" height="121.9" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<line x1="270.0" y1="170.0" x2="460.0" y2="170.0" class="s-mu" stroke-width="1"/>
+<line x1="274.1" y1="170.0" x2="274.1" y2="174.0" class="s-mu" stroke-width="1"/>
+<text x="274.1" y="185.0" class="f-mu" font-size="10" text-anchor="middle">0</text>
+<line x1="315.4" y1="170.0" x2="315.4" y2="174.0" class="s-mu" stroke-width="1"/>
+<text x="315.4" y="185.0" class="f-mu" font-size="10" text-anchor="middle">5</text>
+<line x1="356.7" y1="170.0" x2="356.7" y2="174.0" class="s-mu" stroke-width="1"/>
+<text x="356.7" y="185.0" class="f-mu" font-size="10" text-anchor="middle">10</text>
+<line x1="398.0" y1="170.0" x2="398.0" y2="174.0" class="s-mu" stroke-width="1"/>
+<text x="398.0" y="185.0" class="f-mu" font-size="10" text-anchor="middle">15</text>
+<line x1="439.3" y1="170.0" x2="439.3" y2="174.0" class="s-mu" stroke-width="1"/>
+<text x="439.3" y="185.0" class="f-mu" font-size="10" text-anchor="middle">20</text>
+<text x="365.0" y="202.0" class="f-mu" font-size="11" text-anchor="middle">이웃 수</text>
+<line x1="270.0" y1="40.0" x2="270.0" y2="170.0" class="s-mu" stroke-width="1"/>
+<line x1="266.0" y1="170.0" x2="270.0" y2="170.0" class="s-mu" stroke-width="1"/>
+<text x="263.0" y="174.0" class="f-mu" font-size="10" text-anchor="end">0</text>
+<line x1="266.0" y1="129.4" x2="270.0" y2="129.4" class="s-mu" stroke-width="1"/>
+<text x="263.0" y="133.4" class="f-mu" font-size="10" text-anchor="end">50</text>
+<line x1="266.0" y1="88.8" x2="270.0" y2="88.8" class="s-mu" stroke-width="1"/>
+<text x="263.0" y="92.8" class="f-mu" font-size="10" text-anchor="end">100</text>
+<line x1="266.0" y1="48.1" x2="270.0" y2="48.1" class="s-mu" stroke-width="1"/>
+<text x="263.0" y="52.1" class="f-mu" font-size="10" text-anchor="end">150</text>
+<text x="595.0" y="24.0" class="f-fg" font-size="12" text-anchor="middle" font-weight="600">거리 2,784 m</text>
+<rect x="508.3" y="165.9" width="8.3" height="4.1" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<rect x="516.5" y="166.8" width="8.3" height="3.2" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<rect x="524.8" y="160.2" width="8.3" height="9.8" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<rect x="533.0" y="157.8" width="8.3" height="12.2" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<rect x="541.3" y="160.2" width="8.3" height="9.8" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<rect x="549.6" y="158.6" width="8.3" height="11.4" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<rect x="557.8" y="165.1" width="8.3" height="4.9" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<rect x="566.1" y="165.9" width="8.3" height="4.1" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<rect x="574.3" y="162.7" width="8.3" height="7.3" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<rect x="582.6" y="165.1" width="8.3" height="4.9" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<rect x="590.9" y="163.5" width="8.3" height="6.5" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<rect x="599.1" y="167.6" width="8.3" height="2.4" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<rect x="607.4" y="165.1" width="8.3" height="4.9" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<rect x="615.7" y="161.9" width="8.3" height="8.1" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<rect x="623.9" y="166.8" width="8.3" height="3.2" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<rect x="632.2" y="165.9" width="8.3" height="4.1" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<rect x="640.4" y="163.5" width="8.3" height="6.5" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<rect x="648.7" y="165.9" width="8.3" height="4.1" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<rect x="657.0" y="166.8" width="8.3" height="3.2" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<rect x="665.2" y="168.4" width="8.3" height="1.6" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<rect x="673.5" y="166.8" width="8.3" height="3.2" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<rect x="681.7" y="167.6" width="8.3" height="2.4" rx="0" class="s-bg f-mu" stroke-width="0.4"/>
+<line x1="500.0" y1="170.0" x2="690.0" y2="170.0" class="s-mu" stroke-width="1"/>
+<line x1="504.1" y1="170.0" x2="504.1" y2="174.0" class="s-mu" stroke-width="1"/>
+<text x="504.1" y="185.0" class="f-mu" font-size="10" text-anchor="middle">0</text>
+<line x1="545.4" y1="170.0" x2="545.4" y2="174.0" class="s-mu" stroke-width="1"/>
+<text x="545.4" y="185.0" class="f-mu" font-size="10" text-anchor="middle">5</text>
+<line x1="586.7" y1="170.0" x2="586.7" y2="174.0" class="s-mu" stroke-width="1"/>
+<text x="586.7" y="185.0" class="f-mu" font-size="10" text-anchor="middle">10</text>
+<line x1="628.0" y1="170.0" x2="628.0" y2="174.0" class="s-mu" stroke-width="1"/>
+<text x="628.0" y="185.0" class="f-mu" font-size="10" text-anchor="middle">15</text>
+<line x1="669.3" y1="170.0" x2="669.3" y2="174.0" class="s-mu" stroke-width="1"/>
+<text x="669.3" y="185.0" class="f-mu" font-size="10" text-anchor="middle">20</text>
+<text x="595.0" y="202.0" class="f-mu" font-size="11" text-anchor="middle">이웃 수</text>
+<line x1="500.0" y1="40.0" x2="500.0" y2="170.0" class="s-mu" stroke-width="1"/>
+<line x1="496.0" y1="170.0" x2="500.0" y2="170.0" class="s-mu" stroke-width="1"/>
+<text x="493.0" y="174.0" class="f-mu" font-size="10" text-anchor="end">0</text>
+<line x1="496.0" y1="129.4" x2="500.0" y2="129.4" class="s-mu" stroke-width="1"/>
+<text x="493.0" y="133.4" class="f-mu" font-size="10" text-anchor="end">50</text>
+<line x1="496.0" y1="88.8" x2="500.0" y2="88.8" class="s-mu" stroke-width="1"/>
+<text x="493.0" y="92.8" class="f-mu" font-size="10" text-anchor="end">100</text>
+<line x1="496.0" y1="48.1" x2="500.0" y2="48.1" class="s-mu" stroke-width="1"/>
+<text x="493.0" y="52.1" class="f-mu" font-size="10" text-anchor="end">150</text>
+</svg>
