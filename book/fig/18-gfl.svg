@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 282" role="img" aria-label="출동의 거리 함수(빨간 선)와 CSR 모의 99번의 범위(회색 띠), 점선은 CSR의 이론값. 왼쪽: G 함수(최근린 거리가 r 이하인 점의 비율)는 CSR보다 빨리 올라감. 가운데: F 함수(임의의 위치에서 가장 가까운 출동까지 거리가 r 이하인 비율)는 CSR보다 느리게 올라감. 오른쪽: L(r) − r은 모든 거리에서 0보다 훨씬 위에 있음. 세 함수 모두 군집을 가리킴">
+<style>
+.gsfig{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
+.gsfig .s-fg{stroke:#1c2330}.gsfig .s-mu{stroke:#8a93a3}.gsfig .s-ac{stroke:#2563eb}.gsfig .s-bd{stroke:#c2410c}.gsfig .s-ok{stroke:#15803d}.gsfig .s-bg{stroke:#ffffff}
+.gsfig .f-fg{fill:#1c2330}.gsfig .f-mu{fill:#5a6475}.gsfig .f-ac{fill:#2563eb}.gsfig .f-acs{fill:#e6eefe}.gsfig .f-bd{fill:#c2410c}
+.gsfig .f-bds{fill:#fdeee6}.gsfig .f-ok{fill:#15803d}.gsfig .f-sf{fill:#f0f2f5}.gsfig .f-bg{fill:#ffffff}
+.gsfig .d0{fill:#2166ac}.gsfig .d1{fill:#67a9cf}.gsfig .d2{fill:#d1e5f0}.gsfig .d3{fill:#fddbc7}.gsfig .d4{fill:#ef8a62}.gsfig .d5{fill:#b2182b}
+.gsfig .q0{fill:#fff1e0}.gsfig .q1{fill:#fdc98f}.gsfig .q2{fill:#f98f45}.gsfig .q3{fill:#d9530f}.gsfig .q4{fill:#8c2d04}
+@media (prefers-color-scheme:dark){
+.gsfig .s-fg{stroke:#e6e9ef}.gsfig .s-mu{stroke:#737c8c}.gsfig .s-ac{stroke:#6d9bff}.gsfig .s-bd{stroke:#fb8b5b}.gsfig .s-ok{stroke:#4ade80}.gsfig .s-bg{stroke:#1a1e26}
+.gsfig .f-fg{fill:#e6e9ef}.gsfig .f-mu{fill:#a7afbd}.gsfig .f-ac{fill:#6d9bff}.gsfig .f-acs{fill:#1f2b45}.gsfig .f-bd{fill:#fb8b5b}
+.gsfig .f-bds{fill:#3a2218}.gsfig .f-ok{fill:#4ade80}.gsfig .f-sf{fill:#222733}.gsfig .f-bg{fill:#1a1e26}}
+</style>
+<rect x="0" y="0" width="720" height="282" class="f-bg"/>
+<text x="145.0" y="26.0" class="f-fg" font-size="12" text-anchor="middle" font-weight="600">G 함수</text>
+<polygon points="50.0,222.0 59.5,214.2 69.0,199.8 78.5,180.5 88.0,158.4 97.5,134.0 107.0,113.3 116.5,94.7 126.0,79.6 135.5,68.9 145.0,62.7 154.5,58.1 164.0,55.3 173.5,53.3 183.0,52.5 192.5,52.1 202.0,52.0 211.5,52.0 221.0,52.0 230.5,52.0 240.0,52.0 240.0,52.3 230.5,52.3 221.0,52.4 211.5,52.5 202.0,53.2 192.5,53.5 183.0,54.6 173.5,56.0 164.0,58.3 154.5,62.6 145.0,68.8 135.5,77.9 126.0,90.0 116.5,107.9 107.0,126.7 97.5,149.5 88.0,173.6 78.5,193.4 69.0,209.2 59.5,221.0 50.0,222.0" class="s-bg f-sf" stroke-width="0"/>
+<path d="M50.0,222.0 L59.5,217.9 L69.0,206.2 L78.5,188.5 L88.0,167.1 L97.5,144.5 L107.0,122.7 L116.5,103.5 L126.0,87.8 L135.5,75.6 L145.0,66.9 L154.5,60.9 L164.0,57.1 L173.5,54.8 L183.0,53.4 L192.5,52.7 L202.0,52.3 L211.5,52.1 L221.0,52.1 L230.5,52.0 L240.0,52.0" class="s-mu" stroke-width="1.2" fill="none" stroke-dasharray="4 3"/>
+<path d="M50.0,222.0 L59.5,204.9 L69.0,168.5 L78.5,134.2 L88.0,108.3 L97.5,94.3 L107.0,84.1 L116.5,75.4 L126.0,67.0 L135.5,63.3 L145.0,60.0 L154.5,58.2 L164.0,57.2 L173.5,55.7 L183.0,55.0 L192.5,54.7 L202.0,54.5 L211.5,54.0 L221.0,53.7 L230.5,53.2 L240.0,53.2" class="s-bd" stroke-width="2" fill="none"/>
+<line x1="50.0" y1="222.0" x2="240.0" y2="222.0" class="s-mu" stroke-width="1"/>
+<line x1="50.0" y1="222.0" x2="50.0" y2="226.0" class="s-mu" stroke-width="1"/>
+<text x="50.0" y="237.0" class="f-mu" font-size="10" text-anchor="middle">0</text>
+<line x1="145.0" y1="222.0" x2="145.0" y2="226.0" class="s-mu" stroke-width="1"/>
+<text x="145.0" y="237.0" class="f-mu" font-size="10" text-anchor="middle">500</text>
+<line x1="240.0" y1="222.0" x2="240.0" y2="226.0" class="s-mu" stroke-width="1"/>
+<text x="240.0" y="237.0" class="f-mu" font-size="10" text-anchor="middle">1,000</text>
+<text x="145.0" y="254.0" class="f-mu" font-size="11" text-anchor="middle">r (m)</text>
+<line x1="50.0" y1="52.0" x2="50.0" y2="222.0" class="s-mu" stroke-width="1"/>
+<line x1="46.0" y1="222.0" x2="50.0" y2="222.0" class="s-mu" stroke-width="1"/>
+<text x="43.0" y="226.0" class="f-mu" font-size="10" text-anchor="end">0</text>
+<line x1="46.0" y1="137.0" x2="50.0" y2="137.0" class="s-mu" stroke-width="1"/>
+<text x="43.0" y="141.0" class="f-mu" font-size="10" text-anchor="end">0.5</text>
+<line x1="46.0" y1="52.0" x2="50.0" y2="52.0" class="s-mu" stroke-width="1"/>
+<text x="43.0" y="56.0" class="f-mu" font-size="10" text-anchor="end">1</text>
+<text x="42.0" y="42.0" class="f-mu" font-size="11" text-anchor="start">G(r)</text>
+<text x="385.0" y="26.0" class="f-fg" font-size="12" text-anchor="middle" font-weight="600">F 함수</text>
+<polygon points="290.0,222.0 299.5,217.1 309.0,204.5 318.5,186.0 328.0,164.0 337.5,140.6 347.0,118.9 356.5,98.9 366.0,83.2 375.5,70.7 385.0,62.8 394.5,58.0 404.0,55.1 413.5,53.5 423.0,52.5 432.5,52.2 442.0,52.0 451.5,52.0 461.0,52.0 470.5,52.0 480.0,52.0 480.0,52.1 470.5,52.2 461.0,52.3 451.5,52.5 442.0,52.9 432.5,53.3 423.0,54.4 413.5,56.0 404.0,58.4 394.5,62.4 385.0,68.4 375.5,76.8 366.0,88.2 356.5,104.6 347.0,123.3 337.5,144.5 328.0,166.9 318.5,188.4 309.0,206.4 299.5,218.4 290.0,222.0" class="s-bg f-sf" stroke-width="0"/>
+<path d="M290.0,222.0 L299.5,217.9 L309.0,206.2 L318.5,188.5 L328.0,167.1 L337.5,144.5 L347.0,122.7 L356.5,103.5 L366.0,87.8 L375.5,75.6 L385.0,66.9 L394.5,60.9 L404.0,57.1 L413.5,54.8 L423.0,53.4 L432.5,52.7 L442.0,52.3 L451.5,52.1 L461.0,52.1 L470.5,52.0 L480.0,52.0" class="s-mu" stroke-width="1.2" fill="none" stroke-dasharray="4 3"/>
+<path d="M290.0,222.0 L299.5,217.7 L309.0,205.9 L318.5,191.9 L328.0,177.7 L337.5,164.3 L347.0,153.1 L356.5,143.3 L366.0,134.7 L375.5,126.6 L385.0,120.5 L394.5,115.3 L404.0,110.1 L413.5,104.9 L423.0,100.2 L432.5,96.7 L442.0,93.0 L451.5,89.7 L461.0,86.2 L470.5,83.1 L480.0,80.6" class="s-bd" stroke-width="2" fill="none"/>
+<line x1="290.0" y1="222.0" x2="480.0" y2="222.0" class="s-mu" stroke-width="1"/>
+<line x1="290.0" y1="222.0" x2="290.0" y2="226.0" class="s-mu" stroke-width="1"/>
+<text x="290.0" y="237.0" class="f-mu" font-size="10" text-anchor="middle">0</text>
+<line x1="385.0" y1="222.0" x2="385.0" y2="226.0" class="s-mu" stroke-width="1"/>
+<text x="385.0" y="237.0" class="f-mu" font-size="10" text-anchor="middle">500</text>
+<line x1="480.0" y1="222.0" x2="480.0" y2="226.0" class="s-mu" stroke-width="1"/>
+<text x="480.0" y="237.0" class="f-mu" font-size="10" text-anchor="middle">1,000</text>
+<text x="385.0" y="254.0" class="f-mu" font-size="11" text-anchor="middle">r (m)</text>
+<line x1="290.0" y1="52.0" x2="290.0" y2="222.0" class="s-mu" stroke-width="1"/>
+<line x1="286.0" y1="222.0" x2="290.0" y2="222.0" class="s-mu" stroke-width="1"/>
+<text x="283.0" y="226.0" class="f-mu" font-size="10" text-anchor="end">0</text>
+<line x1="286.0" y1="137.0" x2="290.0" y2="137.0" class="s-mu" stroke-width="1"/>
+<text x="283.0" y="141.0" class="f-mu" font-size="10" text-anchor="end">0.5</text>
+<line x1="286.0" y1="52.0" x2="290.0" y2="52.0" class="s-mu" stroke-width="1"/>
+<text x="283.0" y="56.0" class="f-mu" font-size="10" text-anchor="end">1</text>
+<text x="282.0" y="42.0" class="f-mu" font-size="11" text-anchor="start">F(r)</text>
+<text x="615.0" y="26.0" class="f-fg" font-size="12" text-anchor="middle" font-weight="600">L(r) − r</text>
+<polygon points="530.0,214.3 532.8,213.0 535.7,213.1 538.5,213.0 541.3,213.2 544.2,213.1 547.0,213.3 549.8,213.1 552.7,213.2 555.5,213.0 558.3,213.2 561.2,213.2 564.0,212.9 566.8,213.1 569.7,213.0 572.5,213.0 575.3,213.0 578.2,212.8 581.0,213.1 583.8,212.9 586.7,212.9 589.5,213.0 592.3,213.0 595.2,212.9 598.0,212.8 600.8,212.8 603.7,212.6 606.5,212.3 609.3,212.1 612.2,212.1 615.0,212.0 617.8,211.9 620.7,212.0 623.5,211.6 626.3,211.5 629.2,211.3 632.0,211.6 634.8,211.6 637.7,211.6 640.5,211.7 643.3,211.8 646.2,211.7 649.0,211.7 651.8,211.6 654.7,211.7 657.5,211.7 660.3,211.3 663.2,211.2 666.0,210.9 668.8,210.8 671.7,210.7 674.5,210.6 677.3,210.6 680.2,210.4 683.0,210.1 685.8,209.9 688.7,209.8 691.5,209.9 694.3,209.8 697.2,209.9 700.0,209.9 700.0,221.0 697.2,220.9 694.3,220.7 691.5,220.6 688.7,220.4 685.8,220.3 683.0,220.2 680.2,220.3 677.3,220.2 674.5,219.9 671.7,219.9 668.8,219.8 666.0,219.3 663.2,219.3 660.3,219.2 657.5,219.0 654.7,218.7 651.8,218.4 649.0,218.2 646.2,218.1 643.3,217.8 640.5,217.6 637.7,217.7 634.8,217.5 632.0,217.4 629.2,217.6 626.3,217.6 623.5,217.6 620.7,217.6 617.8,217.4 615.0,217.4 612.2,217.1 609.3,216.9 606.5,217.0 603.7,216.9 600.8,217.0 598.0,217.0 595.2,216.8 592.3,216.4 589.5,216.5 586.7,216.2 583.8,216.0 581.0,215.7 578.2,215.9 575.3,215.8 572.5,215.8 569.7,215.9 566.8,215.8 564.0,215.7 561.2,215.5 558.3,215.6 555.5,215.3 552.7,215.4 549.8,215.6 547.0,215.5 544.2,215.7 541.3,215.7 538.5,215.4 535.7,215.3 532.8,216.3 530.0,214.3" class="s-bg f-sf" stroke-width="0"/>
+<path d="M530.0,214.3 L532.8,214.3 L535.7,214.3 L538.5,214.3 L541.3,214.3 L544.2,214.3 L547.0,214.3 L549.8,214.3 L552.7,214.3 L555.5,214.3 L558.3,214.3 L561.2,214.3 L564.0,214.3 L566.8,214.3 L569.7,214.3 L572.5,214.3 L575.3,214.3 L578.2,214.3 L581.0,214.3 L583.8,214.3 L586.7,214.3 L589.5,214.3 L592.3,214.3 L595.2,214.3 L598.0,214.3 L600.8,214.3 L603.7,214.3 L606.5,214.3 L609.3,214.3 L612.2,214.3 L615.0,214.3 L617.8,214.3 L620.7,214.3 L623.5,214.3 L626.3,214.3 L629.2,214.3 L632.0,214.3 L634.8,214.3 L637.7,214.3 L640.5,214.3 L643.3,214.3 L646.2,214.3 L649.0,214.3 L651.8,214.3 L654.7,214.3 L657.5,214.3 L660.3,214.3 L663.2,214.3 L666.0,214.3 L668.8,214.3 L671.7,214.3 L674.5,214.3 L677.3,214.3 L680.2,214.3 L683.0,214.3 L685.8,214.3 L688.7,214.3 L691.5,214.3 L694.3,214.3 L697.2,214.3 L700.0,214.3" class="s-mu" stroke-width="1.2" fill="none" stroke-dasharray="4 3"/>
+<path d="M530.0,214.3 L532.8,209.8 L535.7,205.9 L538.5,202.1 L541.3,198.5 L544.2,195.0 L547.0,191.5 L549.8,188.5 L552.7,185.6 L555.5,182.5 L558.3,179.2 L561.2,176.2 L564.0,173.3 L566.8,170.8 L569.7,167.9 L572.5,165.3 L575.3,163.2 L578.2,161.4 L581.0,158.6 L583.8,156.1 L586.7,153.8 L589.5,151.9 L592.3,149.5 L595.2,146.8 L598.0,144.7 L600.8,142.3 L603.7,140.3 L606.5,137.6 L609.3,135.5 L612.2,133.5 L615.0,131.7 L617.8,129.9 L620.7,128.1 L623.5,125.4 L626.3,123.1 L629.2,120.1 L632.0,118.0 L634.8,115.7 L637.7,114.2 L640.5,111.5 L643.3,109.6 L646.2,107.8 L649.0,105.4 L651.8,103.3 L654.7,101.4 L657.5,99.0 L660.3,96.1 L663.2,94.2 L666.0,91.7 L668.8,89.7 L671.7,87.3 L674.5,85.6 L677.3,83.6 L680.2,81.2 L683.0,78.9 L685.8,76.2 L688.7,73.6 L691.5,71.3 L694.3,69.5 L697.2,67.3 L700.0,64.7" class="s-bd" stroke-width="2" fill="none"/>
+<line x1="530.0" y1="222.0" x2="700.0" y2="222.0" class="s-mu" stroke-width="1"/>
+<line x1="530.0" y1="222.0" x2="530.0" y2="226.0" class="s-mu" stroke-width="1"/>
+<text x="530.0" y="237.0" class="f-mu" font-size="10" text-anchor="middle">0</text>
+<line x1="586.7" y1="222.0" x2="586.7" y2="226.0" class="s-mu" stroke-width="1"/>
+<text x="586.7" y="237.0" class="f-mu" font-size="10" text-anchor="middle">1,000</text>
+<line x1="643.3" y1="222.0" x2="643.3" y2="226.0" class="s-mu" stroke-width="1"/>
+<text x="643.3" y="237.0" class="f-mu" font-size="10" text-anchor="middle">2,000</text>
+<line x1="700.0" y1="222.0" x2="700.0" y2="226.0" class="s-mu" stroke-width="1"/>
+<text x="700.0" y="237.0" class="f-mu" font-size="10" text-anchor="middle">3,000</text>
+<text x="615.0" y="254.0" class="f-mu" font-size="11" text-anchor="middle">거리 r (m)</text>
+<line x1="530.0" y1="52.0" x2="530.0" y2="222.0" class="s-mu" stroke-width="1"/>
+<line x1="526.0" y1="214.3" x2="530.0" y2="214.3" class="s-mu" stroke-width="1"/>
+<text x="523.0" y="218.3" class="f-mu" font-size="10" text-anchor="end">0</text>
+<line x1="526.0" y1="137.0" x2="530.0" y2="137.0" class="s-mu" stroke-width="1"/>
+<text x="523.0" y="141.0" class="f-mu" font-size="10" text-anchor="end">1,000</text>
+<line x1="526.0" y1="59.7" x2="530.0" y2="59.7" class="s-mu" stroke-width="1"/>
+<text x="523.0" y="63.7" class="f-mu" font-size="10" text-anchor="end">2,000</text>
+<text x="522.0" y="42.0" class="f-mu" font-size="11" text-anchor="start">m</text>
+</svg>
