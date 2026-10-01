@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 300" role="img" aria-label="모의 실험(실현값 1,000개씩)에서 세 검정이 5% 수준에서 유의하게 나온 비율. 앞의 둘은 계수가 지역마다 다른지(이질성)를, LM-error는 오차가 닮았는지(의존성)를 묻는 검정임. 공간오차·공간시차 과정에서는 이질성이 없는데도 체제 Chow가 자주 유의하고, 매끈한 변이 과정에서는 오차가 독립인데도 LM-error가 자주 유의함">
+<style>
+.gsfig{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
+.gsfig .s-fg{stroke:#1c2330}.gsfig .s-mu{stroke:#8a93a3}.gsfig .s-ac{stroke:#2563eb}.gsfig .s-bd{stroke:#c2410c}.gsfig .s-ok{stroke:#15803d}.gsfig .s-bg{stroke:#ffffff}
+.gsfig .f-fg{fill:#1c2330}.gsfig .f-mu{fill:#5a6475}.gsfig .f-ac{fill:#2563eb}.gsfig .f-acs{fill:#e6eefe}.gsfig .f-bd{fill:#c2410c}
+.gsfig .f-bds{fill:#fdeee6}.gsfig .f-ok{fill:#15803d}.gsfig .f-sf{fill:#f0f2f5}.gsfig .f-bg{fill:#ffffff}
+.gsfig .d0{fill:#2166ac}.gsfig .d1{fill:#67a9cf}.gsfig .d2{fill:#d1e5f0}.gsfig .d3{fill:#fddbc7}.gsfig .d4{fill:#ef8a62}.gsfig .d5{fill:#b2182b}
+.gsfig .q0{fill:#fff1e0}.gsfig .q1{fill:#fdc98f}.gsfig .q2{fill:#f98f45}.gsfig .q3{fill:#d9530f}.gsfig .q4{fill:#8c2d04}
+@media (prefers-color-scheme:dark){
+.gsfig .s-fg{stroke:#e6e9ef}.gsfig .s-mu{stroke:#737c8c}.gsfig .s-ac{stroke:#6d9bff}.gsfig .s-bd{stroke:#fb8b5b}.gsfig .s-ok{stroke:#4ade80}.gsfig .s-bg{stroke:#1a1e26}
+.gsfig .f-fg{fill:#e6e9ef}.gsfig .f-mu{fill:#a7afbd}.gsfig .f-ac{fill:#6d9bff}.gsfig .f-acs{fill:#1f2b45}.gsfig .f-bd{fill:#fb8b5b}
+.gsfig .f-bds{fill:#3a2218}.gsfig .f-ok{fill:#4ade80}.gsfig .f-sf{fill:#222733}.gsfig .f-bg{fill:#1a1e26}}
+</style>
+<rect x="0" y="0" width="720" height="300" class="f-bg"/>
+<rect x="153.0" y="219.0" width="23.8" height="11.0" rx="0" class="s-bg f-bd" stroke-width="0.5"/>
+<text x="164.8" y="215.0" class="f-fg" font-size="9" text-anchor="middle">5.8</text>
+<rect x="182.1" y="219.9" width="23.8" height="10.1" rx="0" class="s-bg f-ok" stroke-width="0.5"/>
+<text x="194.0" y="215.9" class="f-fg" font-size="9" text-anchor="middle">5.3</text>
+<rect x="211.3" y="221.0" width="23.8" height="9.0" rx="0" class="s-bg f-ac" stroke-width="0.5"/>
+<text x="223.2" y="217.0" class="f-fg" font-size="9" text-anchor="middle">4.7</text>
+<text x="194.0" y="246.0" class="f-fg" font-size="10" text-anchor="middle">독립</text>
+<rect x="261.0" y="71.9" width="23.8" height="158.1" rx="0" class="s-bg f-bd" stroke-width="0.5"/>
+<text x="272.8" y="67.9" class="f-fg" font-size="9" text-anchor="middle">83</text>
+<rect x="290.1" y="125.4" width="23.8" height="104.6" rx="0" class="s-bg f-ok" stroke-width="0.5"/>
+<text x="302.0" y="121.4" class="f-fg" font-size="9" text-anchor="middle">54.9</text>
+<rect x="319.3" y="43.1" width="23.8" height="186.9" rx="0" class="s-bg f-ac" stroke-width="0.5"/>
+<text x="331.2" y="39.1" class="f-fg" font-size="9" text-anchor="middle">98.1</text>
+<text x="302.0" y="246.0" class="f-fg" font-size="10" text-anchor="middle">공간시차 ρ 0.5</text>
+<rect x="369.0" y="122.2" width="23.8" height="107.8" rx="0" class="s-bg f-bd" stroke-width="0.5"/>
+<text x="380.8" y="118.2" class="f-fg" font-size="9" text-anchor="middle">56.6</text>
+<rect x="398.1" y="176.1" width="23.8" height="53.9" rx="0" class="s-bg f-ok" stroke-width="0.5"/>
+<text x="410.0" y="172.1" class="f-fg" font-size="9" text-anchor="middle">28.3</text>
+<rect x="427.3" y="47.5" width="23.8" height="182.5" rx="0" class="s-bg f-ac" stroke-width="0.5"/>
+<text x="439.2" y="43.5" class="f-fg" font-size="9" text-anchor="middle">95.8</text>
+<text x="410.0" y="246.0" class="f-fg" font-size="10" text-anchor="middle">공간오차 λ 0.5</text>
+<rect x="477.0" y="53.8" width="23.8" height="176.2" rx="0" class="s-bg f-bd" stroke-width="0.5"/>
+<text x="488.8" y="49.8" class="f-fg" font-size="9" text-anchor="middle">92.5</text>
+<rect x="506.1" y="62.4" width="23.8" height="167.6" rx="0" class="s-bg f-ok" stroke-width="0.5"/>
+<text x="518.0" y="58.4" class="f-fg" font-size="9" text-anchor="middle">88</text>
+<rect x="535.3" y="177.4" width="23.8" height="52.6" rx="0" class="s-bg f-ac" stroke-width="0.5"/>
+<text x="547.2" y="173.4" class="f-fg" font-size="9" text-anchor="middle">27.6</text>
+<text x="518.0" y="246.0" class="f-fg" font-size="10" text-anchor="middle">체제 (다솜구)</text>
+<rect x="585.0" y="39.5" width="23.8" height="190.5" rx="0" class="s-bg f-bd" stroke-width="0.5"/>
+<text x="596.8" y="35.5" class="f-fg" font-size="9" text-anchor="middle">100</text>
+<rect x="614.1" y="39.5" width="23.8" height="190.5" rx="0" class="s-bg f-ok" stroke-width="0.5"/>
+<text x="626.0" y="35.5" class="f-fg" font-size="9" text-anchor="middle">100</text>
+<rect x="643.3" y="41.0" width="23.8" height="189.0" rx="0" class="s-bg f-ac" stroke-width="0.5"/>
+<text x="655.2" y="37.0" class="f-fg" font-size="9" text-anchor="middle">99.2</text>
+<text x="626.0" y="246.0" class="f-fg" font-size="10" text-anchor="middle">매끈한 변이</text>
+<path d="M140.0,220.5 L680.0,220.5" class="s-mu" stroke-width="1" fill="none" stroke-dasharray="3 3"/>
+<line x1="140.0" y1="30.0" x2="140.0" y2="230.0" class="s-mu" stroke-width="1"/>
+<line x1="136.0" y1="230.0" x2="140.0" y2="230.0" class="s-mu" stroke-width="1"/>
+<text x="133.0" y="234.0" class="f-mu" font-size="10" text-anchor="end">0%</text>
+<line x1="136.0" y1="182.4" x2="140.0" y2="182.4" class="s-mu" stroke-width="1"/>
+<text x="133.0" y="186.4" class="f-mu" font-size="10" text-anchor="end">25%</text>
+<line x1="136.0" y1="134.8" x2="140.0" y2="134.8" class="s-mu" stroke-width="1"/>
+<text x="133.0" y="138.8" class="f-mu" font-size="10" text-anchor="end">50%</text>
+<line x1="136.0" y1="87.1" x2="140.0" y2="87.1" class="s-mu" stroke-width="1"/>
+<text x="133.0" y="91.1" class="f-mu" font-size="10" text-anchor="end">75%</text>
+<line x1="136.0" y1="39.5" x2="140.0" y2="39.5" class="s-mu" stroke-width="1"/>
+<text x="133.0" y="43.5" class="f-mu" font-size="10" text-anchor="end">100%</text>
+<text x="684.0" y="224.5" class="f-mu" font-size="9" text-anchor="start">5%</text>
+<text x="80.0" y="24.0" class="f-mu" font-size="10" text-anchor="start">유의하게 나온 비율</text>
+<rect x="200.0" y="278.0" width="12.0" height="12.0" rx="0" class="s-mu f-bd" stroke-width="0.5"/>
+<text x="216.0" y="288.0" class="f-fg" font-size="10" text-anchor="start">구 체제 Chow</text>
+<rect x="312.0" y="278.0" width="12.0" height="12.0" rx="0" class="s-mu f-ok" stroke-width="0.5"/>
+<text x="328.0" y="288.0" class="f-fg" font-size="10" text-anchor="start">확장법 1차 F</text>
+<rect x="416.0" y="278.0" width="12.0" height="12.0" rx="0" class="s-mu f-ac" stroke-width="0.5"/>
+<text x="432.0" y="288.0" class="f-fg" font-size="10" text-anchor="start">LM-error</text>
+</svg>

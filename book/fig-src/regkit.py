@@ -11,6 +11,12 @@
     Y_시차 = (I − 0.5W)⁻¹ (xb + ε)          공간시차 과정, ρ = 0.5
     Y_오차 = xb + (I − 0.5W)⁻¹ ε            공간오차 과정, λ = 0.5
     W는 퀸 인접을 행 표준화한 것. Y는 소수 셋째 자리로 반올림해 저장함
+
+28강에서 더한 변수 (공간 이질성, ε는 따로 뽑음)
+    X_km, Y_km = 행정동 중심점 좌표(km, EPSG:5186)
+    Y_체제 = 5 + 0.3 × 고령비율 + b2 × 온도편차 + ε,  b2 = 2.0 (다솜구), 1.0 (나머지 구)
+    Y_변이 = 5 + 0.3 × 고령비율 + b2(u, v) × 온도편차 + ε,
+             b2(u, v) = 0.8 + 1.4 × exp(−d² / (2 × 6²)),  d = 중심점과 (34, 455) km 사이 거리(km)
 """
 import os
 import warnings
@@ -75,11 +81,28 @@ def make_sim(dong, W):
     sim["Y_독립"] = np.round(xb + e, 3)
     sim["Y_시차"] = np.round(np.linalg.solve(I - TRUE["rho"] * Wd, xb + e), 3)
     sim["Y_오차"] = np.round(xb + np.linalg.solve(I - TRUE["lam"] * Wd, e), 3)
+    cent = dong.geometry.centroid
+    sim["X_km"] = np.round(cent.x.to_numpy() / 1000, 3)
+    sim["Y_km"] = np.round(cent.y.to_numpy() / 1000, 3)
+    sim["Y_체제"] = np.round(TRUE["b0"] + TRUE["b1"] * x1 + regime_b2(dong) * x2 + TRUE["sigma"] * rng("sim_regime").standard_normal(n), 3)
+    sim["Y_변이"] = np.round(TRUE["b0"] + TRUE["b1"] * x1 + vary_b2(sim["X_km"].to_numpy(), sim["Y_km"].to_numpy()) * x2
+                           + TRUE["sigma"] * rng("sim_vary").standard_normal(n), 3)
     os.makedirs(PRACTICE, exist_ok=True)
     if os.path.exists(SIM_PATH):
         os.remove(SIM_PATH)
     sim.to_file(SIM_PATH, layer="hanbit_dong_sim", driver="GPKG")
     return sim
+
+
+def regime_b2(gdf):
+    """Y_체제의 참 온도편차 계수: 다솜구 2.0, 나머지 1.0"""
+    return np.where(gdf["구"].to_numpy() == "다솜구", 2.0, 1.0)
+
+
+def vary_b2(xk, yk):
+    """Y_변이의 참 온도편차 계수: (34, 455) km 둘레에서 2.2까지 커지는 매끈한 언덕"""
+    d2 = (np.asarray(xk) - 34.0) ** 2 + (np.asarray(yk) - 455.0) ** 2
+    return 0.8 + 1.4 * np.exp(-d2 / (2 * 6.0 ** 2))
 
 
 def load_sim():
