@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 292" role="img" aria-label="왼쪽: 보통의 L(r) − r(빨간 선)과, 출동을 100 m 격자 인구에 비례해 뿌린 불균질 포아송 모의 99번의 범위(회색 띠). 관측이 1.5 km까지 띠보다 위에 있어 인구 분포만으로 설명되지 않는 몰림이 남음. 오른쪽: 강도를 출동 자체의 커널 밀도(865 m)로 추정해 1/λ로 가중한 불균질 L 함수와, 그 강도의 불균질 포아송 모의(모의마다 강도를 다시 추정) 99번의 범위. 0~2 km의 모든 거리에서 띠 안에 듦">
+<style>
+.gsfig{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
+.gsfig .s-fg{stroke:#1c2330}.gsfig .s-mu{stroke:#8a93a3}.gsfig .s-ac{stroke:#2563eb}.gsfig .s-bd{stroke:#c2410c}.gsfig .s-ok{stroke:#15803d}.gsfig .s-bg{stroke:#ffffff}
+.gsfig .f-fg{fill:#1c2330}.gsfig .f-mu{fill:#5a6475}.gsfig .f-ac{fill:#2563eb}.gsfig .f-acs{fill:#e6eefe}.gsfig .f-bd{fill:#c2410c}
+.gsfig .f-bds{fill:#fdeee6}.gsfig .f-ok{fill:#15803d}.gsfig .f-sf{fill:#f0f2f5}.gsfig .f-bg{fill:#ffffff}
+.gsfig .d0{fill:#2166ac}.gsfig .d1{fill:#67a9cf}.gsfig .d2{fill:#d1e5f0}.gsfig .d3{fill:#fddbc7}.gsfig .d4{fill:#ef8a62}.gsfig .d5{fill:#b2182b}
+.gsfig .q0{fill:#fff1e0}.gsfig .q1{fill:#fdc98f}.gsfig .q2{fill:#f98f45}.gsfig .q3{fill:#d9530f}.gsfig .q4{fill:#8c2d04}
+@media (prefers-color-scheme:dark){
+.gsfig .s-fg{stroke:#e6e9ef}.gsfig .s-mu{stroke:#737c8c}.gsfig .s-ac{stroke:#6d9bff}.gsfig .s-bd{stroke:#fb8b5b}.gsfig .s-ok{stroke:#4ade80}.gsfig .s-bg{stroke:#1a1e26}
+.gsfig .f-fg{fill:#e6e9ef}.gsfig .f-mu{fill:#a7afbd}.gsfig .f-ac{fill:#6d9bff}.gsfig .f-acs{fill:#1f2b45}.gsfig .f-bd{fill:#fb8b5b}
+.gsfig .f-bds{fill:#3a2218}.gsfig .f-ok{fill:#4ade80}.gsfig .f-sf{fill:#222733}.gsfig .f-bg{fill:#1a1e26}}
+</style>
+<rect x="0" y="0" width="720" height="292" class="f-bg"/>
+<text x="210.0" y="26.0" class="f-fg" font-size="12" text-anchor="middle" font-weight="600">(가) 보통 L, 인구 비례 모의</text>
+<polygon points="70.0,221.4 77.0,215.7 84.0,210.9 91.0,206.9 98.0,202.5 105.0,198.8 112.0,194.4 119.0,190.4 126.0,186.4 133.0,182.6 140.0,178.4 147.0,174.9 154.0,171.1 161.0,168.4 168.0,164.8 175.0,160.9 182.0,157.4 189.0,154.0 196.0,150.7 203.0,147.2 210.0,143.6 217.0,140.0 224.0,136.5 231.0,133.3 238.0,130.0 245.0,126.4 252.0,123.3 259.0,119.5 266.0,116.0 273.0,112.9 280.0,109.1 287.0,106.2 294.0,102.6 301.0,99.3 308.0,95.9 315.0,92.0 322.0,88.4 329.0,85.4 336.0,81.8 343.0,78.5 350.0,75.0 350.0,107.8 343.0,110.2 336.0,112.6 329.0,115.7 322.0,118.6 315.0,120.6 308.0,123.1 301.0,125.7 294.0,128.5 287.0,130.8 280.0,133.3 273.0,136.1 266.0,138.6 259.0,141.4 252.0,144.3 245.0,146.7 238.0,149.1 231.0,152.3 224.0,154.9 217.0,158.0 210.0,160.8 203.0,163.6 196.0,166.1 189.0,168.5 182.0,171.1 175.0,174.1 168.0,177.2 161.0,180.2 154.0,183.4 147.0,186.6 140.0,189.5 133.0,192.0 126.0,195.2 119.0,198.5 112.0,201.1 105.0,204.1 98.0,207.2 91.0,211.3 84.0,214.9 77.0,218.9 70.0,221.4" class="s-bg f-sf" stroke-width="0"/>
+<path d="M70.0,221.4 L77.0,221.4 L84.0,221.4 L91.0,221.4 L98.0,221.4 L105.0,221.4 L112.0,221.4 L119.0,221.4 L126.0,221.4 L133.0,221.4 L140.0,221.4 L147.0,221.4 L154.0,221.4 L161.0,221.4 L168.0,221.4 L175.0,221.4 L182.0,221.4 L189.0,221.4 L196.0,221.4 L203.0,221.4 L210.0,221.4 L217.0,221.4 L224.0,221.4 L231.0,221.4 L238.0,221.4 L245.0,221.4 L252.0,221.4 L259.0,221.4 L266.0,221.4 L273.0,221.4 L280.0,221.4 L287.0,221.4 L294.0,221.4 L301.0,221.4 L308.0,221.4 L315.0,221.4 L322.0,221.4 L329.0,221.4 L336.0,221.4 L343.0,221.4 L350.0,221.4" class="s-mu" stroke-width="1.2" fill="none" stroke-dasharray="4 3"/>
+<path d="M70.0,221.4 L77.0,215.3 L84.0,209.9 L91.0,204.7 L98.0,199.8 L105.0,195.0 L112.0,190.2 L119.0,186.1 L126.0,182.1 L133.0,177.9 L140.0,173.4 L147.0,169.2 L154.0,165.3 L161.0,161.9 L168.0,157.9 L175.0,154.2 L182.0,151.5 L189.0,149.0 L196.0,145.2 L203.0,141.6 L210.0,138.5 L217.0,135.9 L224.0,132.7 L231.0,128.9 L238.0,126.1 L245.0,122.8 L252.0,120.0 L259.0,116.3 L266.0,113.4 L273.0,110.8 L280.0,108.2 L287.0,105.8 L294.0,103.3 L301.0,99.6 L308.0,96.5 L315.0,92.4 L322.0,89.5 L329.0,86.3 L336.0,84.3 L343.0,80.6 L350.0,78.0" class="s-bd" stroke-width="2" fill="none"/>
+<line x1="70.0" y1="232.0" x2="350.0" y2="232.0" class="s-mu" stroke-width="1"/>
+<line x1="70.0" y1="232.0" x2="70.0" y2="236.0" class="s-mu" stroke-width="1"/>
+<text x="70.0" y="247.0" class="f-mu" font-size="10" text-anchor="middle">0</text>
+<line x1="140.0" y1="232.0" x2="140.0" y2="236.0" class="s-mu" stroke-width="1"/>
+<text x="140.0" y="247.0" class="f-mu" font-size="10" text-anchor="middle">500</text>
+<line x1="210.0" y1="232.0" x2="210.0" y2="236.0" class="s-mu" stroke-width="1"/>
+<text x="210.0" y="247.0" class="f-mu" font-size="10" text-anchor="middle">1,000</text>
+<line x1="280.0" y1="232.0" x2="280.0" y2="236.0" class="s-mu" stroke-width="1"/>
+<text x="280.0" y="247.0" class="f-mu" font-size="10" text-anchor="middle">1,500</text>
+<line x1="350.0" y1="232.0" x2="350.0" y2="236.0" class="s-mu" stroke-width="1"/>
+<text x="350.0" y="247.0" class="f-mu" font-size="10" text-anchor="middle">2,000</text>
+<text x="210.0" y="264.0" class="f-mu" font-size="11" text-anchor="middle">거리 r (m)</text>
+<line x1="70.0" y1="52.0" x2="70.0" y2="232.0" class="s-mu" stroke-width="1"/>
+<line x1="66.0" y1="221.4" x2="70.0" y2="221.4" class="s-mu" stroke-width="1"/>
+<text x="63.0" y="225.4" class="f-mu" font-size="10" text-anchor="end">0</text>
+<line x1="66.0" y1="168.5" x2="70.0" y2="168.5" class="s-mu" stroke-width="1"/>
+<text x="63.0" y="172.5" class="f-mu" font-size="10" text-anchor="end">500</text>
+<line x1="66.0" y1="115.5" x2="70.0" y2="115.5" class="s-mu" stroke-width="1"/>
+<text x="63.0" y="119.5" class="f-mu" font-size="10" text-anchor="end">1,000</text>
+<line x1="66.0" y1="62.6" x2="70.0" y2="62.6" class="s-mu" stroke-width="1"/>
+<text x="63.0" y="66.6" class="f-mu" font-size="10" text-anchor="end">1,500</text>
+<text x="62.0" y="42.0" class="f-mu" font-size="11" text-anchor="start">L(r) − r (m)</text>
+<text x="550.0" y="26.0" class="f-fg" font-size="12" text-anchor="middle" font-weight="600">(나) 불균질 L, 커널 밀도 865 m</text>
+<polygon points="410.0,90.6 417.0,84.8 424.0,88.2 431.0,88.4 438.0,89.4 445.0,91.6 452.0,93.4 459.0,91.9 466.0,93.5 473.0,93.9 480.0,93.2 487.0,91.9 494.0,93.0 501.0,93.0 508.0,93.4 515.0,95.0 522.0,94.3 529.0,95.2 536.0,96.0 543.0,97.7 550.0,99.3 557.0,99.3 564.0,97.1 571.0,97.3 578.0,95.6 585.0,92.4 592.0,93.9 599.0,95.3 606.0,96.9 613.0,97.5 620.0,97.3 627.0,97.9 634.0,87.4 641.0,88.2 648.0,59.4 655.0,61.9 662.0,65.1 669.0,67.6 676.0,70.5 683.0,68.8 690.0,71.3 690.0,232.0 683.0,232.0 676.0,232.0 669.0,232.0 662.0,232.0 655.0,232.0 648.0,231.3 641.0,226.3 634.0,222.2 627.0,217.3 620.0,212.6 613.0,208.6 606.0,205.0 599.0,200.8 592.0,196.5 585.0,192.1 578.0,187.4 571.0,201.2 564.0,196.4 557.0,191.2 550.0,217.2 543.0,210.9 536.0,204.5 529.0,198.2 522.0,191.9 515.0,185.5 508.0,179.2 501.0,172.9 494.0,166.5 487.0,160.2 480.0,153.9 473.0,147.5 466.0,141.2 459.0,134.9 452.0,128.6 445.0,122.2 438.0,115.9 431.0,109.6 424.0,103.3 417.0,96.9 410.0,90.6" class="s-bg f-sf" stroke-width="0"/>
+<path d="M410.0,90.6 L417.0,90.6 L424.0,90.6 L431.0,90.6 L438.0,90.6 L445.0,90.6 L452.0,90.6 L459.0,90.6 L466.0,90.6 L473.0,90.6 L480.0,90.6 L487.0,90.6 L494.0,90.6 L501.0,90.6 L508.0,90.6 L515.0,90.6 L522.0,90.6 L529.0,90.6 L536.0,90.6 L543.0,90.6 L550.0,90.6 L557.0,90.6 L564.0,90.6 L571.0,90.6 L578.0,90.6 L585.0,90.6 L592.0,90.6 L599.0,90.6 L606.0,90.6 L613.0,90.6 L620.0,90.6 L627.0,90.6 L634.0,90.6 L641.0,90.6 L648.0,90.6 L655.0,90.6 L662.0,90.6 L669.0,90.6 L676.0,90.6 L683.0,90.6 L690.0,90.6" class="s-mu" stroke-width="1.2" fill="none" stroke-dasharray="4 3"/>
+<path d="M410.0,90.6 L417.0,95.2 L424.0,99.5 L431.0,103.6 L438.0,107.5 L445.0,111.9 L452.0,116.0 L459.0,120.1 L466.0,107.7 L473.0,110.5 L480.0,113.2 L487.0,114.8 L494.0,117.5 L501.0,114.1 L508.0,116.6 L515.0,118.8 L522.0,121.9 L529.0,122.6 L536.0,124.6 L543.0,127.7 L550.0,131.0 L557.0,125.0 L564.0,127.9 L571.0,130.7 L578.0,132.5 L585.0,134.2 L592.0,136.1 L599.0,127.4 L606.0,130.9 L613.0,134.3 L620.0,137.0 L627.0,139.3 L634.0,141.9 L641.0,142.4 L648.0,145.3 L655.0,139.8 L662.0,137.9 L669.0,139.8 L676.0,141.9 L683.0,143.3 L690.0,147.5" class="s-bd" stroke-width="2" fill="none"/>
+<line x1="410.0" y1="232.0" x2="690.0" y2="232.0" class="s-mu" stroke-width="1"/>
+<line x1="410.0" y1="232.0" x2="410.0" y2="236.0" class="s-mu" stroke-width="1"/>
+<text x="410.0" y="247.0" class="f-mu" font-size="10" text-anchor="middle">0</text>
+<line x1="480.0" y1="232.0" x2="480.0" y2="236.0" class="s-mu" stroke-width="1"/>
+<text x="480.0" y="247.0" class="f-mu" font-size="10" text-anchor="middle">500</text>
+<line x1="550.0" y1="232.0" x2="550.0" y2="236.0" class="s-mu" stroke-width="1"/>
+<text x="550.0" y="247.0" class="f-mu" font-size="10" text-anchor="middle">1,000</text>
+<line x1="620.0" y1="232.0" x2="620.0" y2="236.0" class="s-mu" stroke-width="1"/>
+<text x="620.0" y="247.0" class="f-mu" font-size="10" text-anchor="middle">1,500</text>
+<line x1="690.0" y1="232.0" x2="690.0" y2="236.0" class="s-mu" stroke-width="1"/>
+<text x="690.0" y="247.0" class="f-mu" font-size="10" text-anchor="middle">2,000</text>
+<text x="550.0" y="264.0" class="f-mu" font-size="11" text-anchor="middle">거리 r (m)</text>
+<line x1="410.0" y1="52.0" x2="410.0" y2="232.0" class="s-mu" stroke-width="1"/>
+<line x1="406.0" y1="219.1" x2="410.0" y2="219.1" class="s-mu" stroke-width="1"/>
+<text x="403.0" y="223.1" class="f-mu" font-size="10" text-anchor="end">−1,000</text>
+<line x1="406.0" y1="154.9" x2="410.0" y2="154.9" class="s-mu" stroke-width="1"/>
+<text x="403.0" y="158.9" class="f-mu" font-size="10" text-anchor="end">−500</text>
+<line x1="406.0" y1="90.6" x2="410.0" y2="90.6" class="s-mu" stroke-width="1"/>
+<text x="403.0" y="94.6" class="f-mu" font-size="10" text-anchor="end">0</text>
+<text x="402.0" y="42.0" class="f-mu" font-size="11" text-anchor="start">L(r) − r (m)</text>
+</svg>

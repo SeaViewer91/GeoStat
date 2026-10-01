@@ -8,7 +8,7 @@ updated: 2026-10-01
 status: draft
 ---
 
-[목차](../README.md) · 이전: [14강 비율 자료와 작은 수 문제](14-rates-small-numbers.md) · 다음: 16강 점 패턴의 기초 (집필 예정)
+[목차](../README.md) · 이전: [14강 비율 자료와 작은 수 문제](14-rates-small-numbers.md) · 다음: [16강 점 패턴의 기초](16-point-pattern-basics.md)
 
 # 15강 공간 군집 탐지
 
@@ -314,4 +314,4 @@ print(f"LLR = {L[i, k]:.2f}, 몬테카를로 p = {p:.3f}")
 
 ---
 
-[목차](../README.md) · 이전: [14강 비율 자료와 작은 수 문제](14-rates-small-numbers.md) · 다음: 16강 점 패턴의 기초 (집필 예정)
+[목차](../README.md) · 이전: [14강 비율 자료와 작은 수 문제](14-rates-small-numbers.md) · 다음: [16강 점 패턴의 기초](16-point-pattern-basics.md)

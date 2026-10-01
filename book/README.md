@@ -37,15 +37,15 @@ GeoStat으로 따라 하는 공간통계학 입문서임. 공간정보·지리�
 | 14 | [비율 자료와 작은 수 문제](lessons/14-rates-small-numbers.md) | ● | 초안 |
 | 15 | [공간 군집 탐지](lessons/15-cluster-detection.md) | ○ | 초안 |
 | **4부** | **점 패턴** | | |
-| 16 | 점 패턴의 기초 | ○ | |
-| 17 | 강도 추정 | ◐ | |
-| 18 | 점 사이의 상호작용 | ○ | |
-| 19 | 점 과정 모형 | ○ | |
+| 16 | [점 패턴의 기초](lessons/16-point-pattern-basics.md) | ◐ | 초안 |
+| 17 | [강도 추정](lessons/17-intensity.md) | ◐ | 초안 |
+| 18 | [점 사이의 상호작용](lessons/18-interaction.md) | ○ | 초안 |
+| 19 | [점 과정 모형](lessons/19-point-process-models.md) | ○ | 초안 |
 | **5부** | **지구통계** | | |
-| 20 | 연속 표면과 확률장 | ○ | |
-| 21 | 베리오그램 | ○ | |
-| 22 | 크리깅 | ○ | |
-| 23 | 불확실성과 시뮬레이션 | ○ | |
+| 20 | [연속 표면과 확률장](lessons/20-continuous-surfaces.md) | ○ | 초안 |
+| 21 | [베리오그램](lessons/21-variogram.md) | ○ | 초안 |
+| 22 | [크리깅](lessons/22-kriging.md) | ○ | 초안 |
+| 23 | [불확실성과 시뮬레이션](lessons/23-uncertainty-simulation.md) | ○ | 초안 |
 | **6부** | **공간 회귀** | | |
 | 24 | 왜 공간 회귀인가 | ● | |
 | 25 | 공간시차 모형 | ● | |

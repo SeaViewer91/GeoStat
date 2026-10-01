@@ -86,3 +86,61 @@ def dong_vars():
     dong["출동률"] = dong["PT_CNT"] / dong["인구"] * 10000
     dong["고령비율"] = dong["고령인구"] / dong["인구"] * 100
     return dong
+
+
+# ---------------------------------------------------------------- 래스터 그림 (4·5부)
+RAMP = np.array([[255, 241, 224], [253, 201, 143], [249, 143, 69], [217, 83, 15], [140, 45, 4]], float)  # q0~q4
+DRAMP = np.array([[33, 102, 172], [103, 169, 207], [209, 229, 240], [247, 247, 247], [253, 219, 199], [239, 138, 98], [178, 24, 43]], float)
+
+
+def _ramp(v, lo, hi, ramp):
+    t = np.nan_to_num(np.clip((v - lo) / (hi - lo), 0, 1)) * (len(ramp) - 1)
+    i = np.clip(np.floor(t).astype(int), 0, len(ramp) - 2)
+    f = (t - i)[..., None]
+    rgb = ramp[i] * (1 - f) + ramp[i + 1] * f
+    a = np.where(np.isnan(v), 0, 255)[..., None]
+    return np.concatenate([np.nan_to_num(rgb), a], axis=-1).astype(np.uint8)
+
+
+def ramp_rgb(v, lo, hi):
+    """값 → 순차 색(q0~q4를 이은 연속 색). NaN은 투명"""
+    return _ramp(v, lo, hi, RAMP)
+
+
+def div_rgb(v, lo, hi):
+    """값 → 발산 색(파랑~흰색~빨강, 가운데가 (lo+hi)/2). NaN은 투명"""
+    return _ramp(v, lo, hi, DRAMP)
+
+
+def png(arr_rgba, width=None):
+    """RGBA 배열 → PNG. 표시 크기의 2배로 줄이고 색을 64개로 줄여 파일을 작게 함"""
+    import io
+
+    from PIL import Image
+
+    im = Image.fromarray(arr_rgba, "RGBA")
+    if width and im.width > width:
+        im = im.resize((width, round(im.height * width / im.width)), Image.Resampling.BOX)
+    im = im.quantize(64, method=Image.Quantize.FASTOCTREE)
+    buf = io.BytesIO()
+    im.save(buf, "PNG", optimize=True)
+    return buf.getvalue()
+
+
+def to_array(values, inside):
+    """창 안 격자점의 값(1차원) → 2차원 배열(위쪽 행이 북쪽). 창 밖은 NaN"""
+    a = np.full(inside.shape, np.nan)
+    a[inside] = values
+    return a[::-1]
+
+
+def colorbar(s, x, y, w, lo, hi, ticks, label, diverging=False, fmt=lambda t: f"{t:g}"):
+    """가로 색 막대"""
+    v = np.linspace(lo, hi, 200)[None, :].repeat(6, 0)
+    rgb = (div_rgb if diverging else ramp_rgb)(v, lo, hi)
+    s.image_png(x, y, w, 10, png(rgb))
+    for t in ticks:
+        X = x + (t - lo) / (hi - lo) * w
+        s.line(X, y + 10, X, y + 14, cls="s-mu", width=1)
+        s.text(X, y + 25, fmt(t).replace("-", "−"), size=10, cls="f-mu")
+    s.text(x + w / 2, y - 5, label, size=10, cls="f-mu")
