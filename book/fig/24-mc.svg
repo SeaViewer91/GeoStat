@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 320" role="img" aria-label="모의 실험(실현값 2,000개씩). 왼쪽: 공간 의존의 세기(ρ 또는 λ)에 따른 OLS 온도편차 계수의 평균과 95% 범위. 공간오차 과정(파랑)에서는 참값 1.5 둘레에 머물지만, 공간시차 과정(주황)에서는 참 직접 효과(점선)보다도 커지고 총 효과(쇄선)를 향해 끌려감. 오른쪽: OLS가 보고한 95% 신뢰구간이 참값 1.5를 포함한 비율. 공간오차 과정에서도 포함률이 95%보다 낮아짐(표준오차를 과소 추정)">
+<style>
+.gsfig{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
+.gsfig .s-fg{stroke:#1c2330}.gsfig .s-mu{stroke:#8a93a3}.gsfig .s-ac{stroke:#2563eb}.gsfig .s-bd{stroke:#c2410c}.gsfig .s-ok{stroke:#15803d}.gsfig .s-bg{stroke:#ffffff}
+.gsfig .f-fg{fill:#1c2330}.gsfig .f-mu{fill:#5a6475}.gsfig .f-ac{fill:#2563eb}.gsfig .f-acs{fill:#e6eefe}.gsfig .f-bd{fill:#c2410c}
+.gsfig .f-bds{fill:#fdeee6}.gsfig .f-ok{fill:#15803d}.gsfig .f-sf{fill:#f0f2f5}.gsfig .f-bg{fill:#ffffff}
+.gsfig .d0{fill:#2166ac}.gsfig .d1{fill:#67a9cf}.gsfig .d2{fill:#d1e5f0}.gsfig .d3{fill:#fddbc7}.gsfig .d4{fill:#ef8a62}.gsfig .d5{fill:#b2182b}
+.gsfig .q0{fill:#fff1e0}.gsfig .q1{fill:#fdc98f}.gsfig .q2{fill:#f98f45}.gsfig .q3{fill:#d9530f}.gsfig .q4{fill:#8c2d04}
+@media (prefers-color-scheme:dark){
+.gsfig .s-fg{stroke:#e6e9ef}.gsfig .s-mu{stroke:#737c8c}.gsfig .s-ac{stroke:#6d9bff}.gsfig .s-bd{stroke:#fb8b5b}.gsfig .s-ok{stroke:#4ade80}.gsfig .s-bg{stroke:#1a1e26}
+.gsfig .f-fg{fill:#e6e9ef}.gsfig .f-mu{fill:#a7afbd}.gsfig .f-ac{fill:#6d9bff}.gsfig .f-acs{fill:#1f2b45}.gsfig .f-bd{fill:#fb8b5b}
+.gsfig .f-bds{fill:#3a2218}.gsfig .f-ok{fill:#4ade80}.gsfig .f-sf{fill:#222733}.gsfig .f-bg{fill:#1a1e26}}
+</style>
+<rect x="0" y="0" width="720" height="320" class="f-bg"/>
+<text x="205.0" y="22.0" class="f-fg" font-size="12" text-anchor="middle" font-weight="600">OLS 온도편차 계수</text>
+<polygon points="70.0,203.1 103.8,195.5 137.5,187.1 171.2,174.7 205.0,160.4 238.8,142.0 272.5,115.5 306.2,79.4 340.0,20.9 340.0,82.8 306.2,128.0 272.5,157.2 238.8,176.7 205.0,191.3 171.2,204.7 137.5,211.7 103.8,220.3 70.0,226.7" class="s-bg f-bds" stroke-width="0"/>
+<path d="M70.0,214.9 L103.8,207.8 L137.5,199.5 L171.2,189.4 L205.0,176.2 L238.8,159.5 L272.5,136.4 L306.2,104.2 L340.0,51.8" class="s-bd" stroke-width="2" fill="none"/>
+<polygon points="70.0,203.4 103.8,203.0 137.5,202.4 171.2,200.6 205.0,199.0 238.8,198.1 272.5,194.4 306.2,190.5 340.0,181.6 340.0,244.8 306.2,239.3 272.5,234.9 238.8,232.2 205.0,230.4 171.2,229.7 137.5,228.0 103.8,227.0 70.0,225.8" class="s-bg f-acs" stroke-width="0"/>
+<path d="M70.0,215.0 L103.8,214.9 L137.5,215.0 L171.2,215.1 L205.0,215.0 L238.8,214.7 L272.5,214.8 L306.2,214.7 L340.0,214.5" class="s-ac" stroke-width="2" fill="none"/>
+<path d="M70.0,215.0 L76.8,215.0 L83.5,215.0 L90.2,214.9 L97.0,214.9 L103.8,214.8 L110.5,214.7 L117.2,214.6 L124.0,214.5 L130.8,214.3 L137.5,214.1 L144.2,214.0 L151.0,213.7 L157.8,213.5 L164.5,213.3 L171.2,213.0 L178.0,212.7 L184.8,212.3 L191.5,212.0 L198.2,211.6 L205.0,211.1 L211.7,210.7 L218.5,210.2 L225.2,209.6 L232.0,209.0 L238.8,208.4 L245.5,207.7 L252.2,207.0 L259.0,206.2 L265.8,205.3 L272.5,204.4 L279.2,203.4 L286.0,202.3 L292.8,201.1 L299.5,199.8 L306.2,198.3 L313.0,196.7 L319.8,195.0 L326.5,193.0 L333.2,190.8 L340.0,188.3" class="s-fg" stroke-width="1.2" fill="none" stroke-dasharray="3 3"/>
+<path d="M70.0,215.0 L76.8,212.9 L83.5,210.6 L90.2,208.3 L97.0,205.9 L103.8,203.3 L110.5,200.7 L117.2,197.9 L124.0,195.0 L130.8,192.0 L137.5,188.8 L144.2,185.4 L151.0,181.8 L157.8,178.1 L164.5,174.2 L171.2,170.0 L178.0,165.6 L184.8,160.9 L191.5,155.9 L198.2,150.6 L205.0,145.0 L211.7,139.0 L218.5,132.5 L225.2,125.6 L232.0,118.1 L238.8,110.0 L245.5,101.2 L252.2,91.7 L259.0,81.4 L265.8,70.0 L272.5,57.5 L279.2,43.7" class="s-fg" stroke-width="1.2" fill="none" stroke-dasharray="8 3 2 3"/>
+<path d="M70.0,215.0 L340.0,215.0" class="s-mu" stroke-width="1" fill="none"/>
+<line x1="70.0" y1="250.0" x2="340.0" y2="250.0" class="s-mu" stroke-width="1"/>
+<line x1="70.0" y1="250.0" x2="70.0" y2="254.0" class="s-mu" stroke-width="1"/>
+<text x="70.0" y="265.0" class="f-mu" font-size="10" text-anchor="middle">0</text>
+<line x1="137.5" y1="250.0" x2="137.5" y2="254.0" class="s-mu" stroke-width="1"/>
+<text x="137.5" y="265.0" class="f-mu" font-size="10" text-anchor="middle">0.2</text>
+<line x1="205.0" y1="250.0" x2="205.0" y2="254.0" class="s-mu" stroke-width="1"/>
+<text x="205.0" y="265.0" class="f-mu" font-size="10" text-anchor="middle">0.4</text>
+<line x1="272.5" y1="250.0" x2="272.5" y2="254.0" class="s-mu" stroke-width="1"/>
+<text x="272.5" y="265.0" class="f-mu" font-size="10" text-anchor="middle">0.6</text>
+<line x1="340.0" y1="250.0" x2="340.0" y2="254.0" class="s-mu" stroke-width="1"/>
+<text x="340.0" y="265.0" class="f-mu" font-size="10" text-anchor="middle">0.8</text>
+<text x="205.0" y="282.0" class="f-mu" font-size="11" text-anchor="middle">공간 의존의 세기 (ρ 또는 λ)</text>
+<line x1="70.0" y1="40.0" x2="70.0" y2="250.0" class="s-mu" stroke-width="1"/>
+<line x1="66.0" y1="250.0" x2="70.0" y2="250.0" class="s-mu" stroke-width="1"/>
+<text x="63.0" y="254.0" class="f-mu" font-size="10" text-anchor="end">1</text>
+<line x1="66.0" y1="180.0" x2="70.0" y2="180.0" class="s-mu" stroke-width="1"/>
+<text x="63.0" y="184.0" class="f-mu" font-size="10" text-anchor="end">2</text>
+<line x1="66.0" y1="110.0" x2="70.0" y2="110.0" class="s-mu" stroke-width="1"/>
+<text x="63.0" y="114.0" class="f-mu" font-size="10" text-anchor="end">3</text>
+<line x1="66.0" y1="40.0" x2="70.0" y2="40.0" class="s-mu" stroke-width="1"/>
+<text x="63.0" y="44.0" class="f-mu" font-size="10" text-anchor="end">4</text>
+<text x="283.2" y="55.5" class="f-mu" font-size="10" text-anchor="start">총 효과</text>
+<text x="329.9" y="182.1" class="f-mu" font-size="10" text-anchor="end">직접 효과</text>
+<text x="565.0" y="22.0" class="f-fg" font-size="12" text-anchor="middle" font-weight="600">95% 신뢰구간이 참값을 포함한 비율</text>
+<path d="M440.0,52.0 L471.2,94.8 L502.5,191.2 L533.8,241.7 L565.0,249.9 L596.2,250.0 L627.5,250.0 L658.8,250.0 L690.0,250.0" class="s-bd" stroke-width="2" fill="none"/>
+<path d="M440.0,50.3 L471.2,53.9 L502.5,56.8 L533.8,64.3 L565.0,71.0 L596.2,73.1 L627.5,84.0 L658.8,96.1 L690.0,106.6" class="s-ac" stroke-width="2" fill="none"/>
+<path d="M440.0,50.5 L690.0,50.5" class="s-mu" stroke-width="1" fill="none" stroke-dasharray="3 3"/>
+<line x1="440.0" y1="250.0" x2="690.0" y2="250.0" class="s-mu" stroke-width="1"/>
+<line x1="440.0" y1="250.0" x2="440.0" y2="254.0" class="s-mu" stroke-width="1"/>
+<text x="440.0" y="265.0" class="f-mu" font-size="10" text-anchor="middle">0</text>
+<line x1="502.5" y1="250.0" x2="502.5" y2="254.0" class="s-mu" stroke-width="1"/>
+<text x="502.5" y="265.0" class="f-mu" font-size="10" text-anchor="middle">0.2</text>
+<line x1="565.0" y1="250.0" x2="565.0" y2="254.0" class="s-mu" stroke-width="1"/>
+<text x="565.0" y="265.0" class="f-mu" font-size="10" text-anchor="middle">0.4</text>
+<line x1="627.5" y1="250.0" x2="627.5" y2="254.0" class="s-mu" stroke-width="1"/>
+<text x="627.5" y="265.0" class="f-mu" font-size="10" text-anchor="middle">0.6</text>
+<line x1="690.0" y1="250.0" x2="690.0" y2="254.0" class="s-mu" stroke-width="1"/>
+<text x="690.0" y="265.0" class="f-mu" font-size="10" text-anchor="middle">0.8</text>
+<text x="565.0" y="282.0" class="f-mu" font-size="11" text-anchor="middle">공간 의존의 세기 (ρ 또는 λ)</text>
+<line x1="440.0" y1="40.0" x2="440.0" y2="250.0" class="s-mu" stroke-width="1"/>
+<line x1="436.0" y1="250.0" x2="440.0" y2="250.0" class="s-mu" stroke-width="1"/>
+<text x="433.0" y="254.0" class="f-mu" font-size="10" text-anchor="end">0</text>
+<line x1="436.0" y1="197.5" x2="440.0" y2="197.5" class="s-mu" stroke-width="1"/>
+<text x="433.0" y="201.5" class="f-mu" font-size="10" text-anchor="end">0.25</text>
+<line x1="436.0" y1="145.0" x2="440.0" y2="145.0" class="s-mu" stroke-width="1"/>
+<text x="433.0" y="149.0" class="f-mu" font-size="10" text-anchor="end">0.5</text>
+<line x1="436.0" y1="92.5" x2="440.0" y2="92.5" class="s-mu" stroke-width="1"/>
+<text x="433.0" y="96.5" class="f-mu" font-size="10" text-anchor="end">0.75</text>
+<line x1="436.0" y1="50.5" x2="440.0" y2="50.5" class="s-mu" stroke-width="1"/>
+<text x="433.0" y="54.5" class="f-mu" font-size="10" text-anchor="end">0.95</text>
+<line x1="200.0" y1="298.0" x2="222.0" y2="298.0" class="s-bd" stroke-width="2"/>
+<text x="226.0" y="302.0" class="f-fg" font-size="10" text-anchor="start">공간시차 과정 (ρ)</text>
+<line x1="380.0" y1="298.0" x2="402.0" y2="298.0" class="s-ac" stroke-width="2"/>
+<text x="406.0" y="302.0" class="f-fg" font-size="10" text-anchor="start">공간오차 과정 (λ)</text>
+</svg>

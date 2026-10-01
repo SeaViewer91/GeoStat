@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 290" role="img" aria-label="온도편차의 직접·간접·총 효과. 짙은 회색 막대(다크 모드에서는 밝은 회색)는 참값, 파랑은 공간시차 모형(ML), 초록은 공간시차 모형(GM)의 추정값이고, 가는 선은 ML 추정의 95% 구간(모수 분포에서 2,000번 뽑아 계산). 점선은 OLS 계수(2.27)로, 어느 효과와도 맞지 않음. 공간시차 모형의 계수 β(1.48)도 직접 효과와 같지 않음">
+<style>
+.gsfig{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
+.gsfig .s-fg{stroke:#1c2330}.gsfig .s-mu{stroke:#8a93a3}.gsfig .s-ac{stroke:#2563eb}.gsfig .s-bd{stroke:#c2410c}.gsfig .s-ok{stroke:#15803d}.gsfig .s-bg{stroke:#ffffff}
+.gsfig .f-fg{fill:#1c2330}.gsfig .f-mu{fill:#5a6475}.gsfig .f-ac{fill:#2563eb}.gsfig .f-acs{fill:#e6eefe}.gsfig .f-bd{fill:#c2410c}
+.gsfig .f-bds{fill:#fdeee6}.gsfig .f-ok{fill:#15803d}.gsfig .f-sf{fill:#f0f2f5}.gsfig .f-bg{fill:#ffffff}
+.gsfig .d0{fill:#2166ac}.gsfig .d1{fill:#67a9cf}.gsfig .d2{fill:#d1e5f0}.gsfig .d3{fill:#fddbc7}.gsfig .d4{fill:#ef8a62}.gsfig .d5{fill:#b2182b}
+.gsfig .q0{fill:#fff1e0}.gsfig .q1{fill:#fdc98f}.gsfig .q2{fill:#f98f45}.gsfig .q3{fill:#d9530f}.gsfig .q4{fill:#8c2d04}
+@media (prefers-color-scheme:dark){
+.gsfig .s-fg{stroke:#e6e9ef}.gsfig .s-mu{stroke:#737c8c}.gsfig .s-ac{stroke:#6d9bff}.gsfig .s-bd{stroke:#fb8b5b}.gsfig .s-ok{stroke:#4ade80}.gsfig .s-bg{stroke:#1a1e26}
+.gsfig .f-fg{fill:#e6e9ef}.gsfig .f-mu{fill:#a7afbd}.gsfig .f-ac{fill:#6d9bff}.gsfig .f-acs{fill:#1f2b45}.gsfig .f-bd{fill:#fb8b5b}
+.gsfig .f-bds{fill:#3a2218}.gsfig .f-ok{fill:#4ade80}.gsfig .f-sf{fill:#222733}.gsfig .f-bg{fill:#1a1e26}}
+</style>
+<rect x="0" y="0" width="720" height="290" class="f-bg"/>
+<rect x="110.5" y="146.1" width="44.8" height="83.9" rx="0" class="s-bg f-fg" stroke-width="0.5"/>
+<text x="132.9" y="141.1" class="f-fg" font-size="10" text-anchor="middle">1.59</text>
+<rect x="160.9" y="147.3" width="44.8" height="82.7" rx="0" class="s-bg f-ac" stroke-width="0.5"/>
+<line x1="183.3" y1="158.8" x2="183.3" y2="136.0" class="s-mu" stroke-width="1.2"/>
+<text x="183.3" y="131.0" class="f-fg" font-size="10" text-anchor="middle">1.57</text>
+<rect x="211.3" y="148.0" width="44.8" height="82.0" rx="0" class="s-bg f-ok" stroke-width="0.5"/>
+<text x="233.7" y="143.0" class="f-fg" font-size="10" text-anchor="middle">1.56</text>
+<text x="183.3" y="248.0" class="f-fg" font-size="11" text-anchor="middle">직접 효과</text>
+<rect x="297.2" y="156.0" width="44.8" height="74.0" rx="0" class="s-bg f-fg" stroke-width="0.5"/>
+<text x="319.6" y="151.0" class="f-fg" font-size="10" text-anchor="middle">1.41</text>
+<rect x="347.6" y="158.1" width="44.8" height="71.9" rx="0" class="s-bg f-ac" stroke-width="0.5"/>
+<line x1="370.0" y1="180.0" x2="370.0" y2="126.6" class="s-mu" stroke-width="1.2"/>
+<text x="370.0" y="121.6" class="f-fg" font-size="10" text-anchor="middle">1.37</text>
+<rect x="398.0" y="155.7" width="44.8" height="74.3" rx="0" class="s-bg f-ok" stroke-width="0.5"/>
+<text x="420.4" y="150.7" class="f-fg" font-size="10" text-anchor="middle">1.41</text>
+<text x="370.0" y="248.0" class="f-fg" font-size="11" text-anchor="middle">간접 효과 (파급)</text>
+<rect x="483.9" y="72.1" width="44.8" height="157.9" rx="0" class="s-bg f-fg" stroke-width="0.5"/>
+<text x="506.3" y="67.1" class="f-fg" font-size="10" text-anchor="middle">3.00</text>
+<rect x="534.3" y="75.4" width="44.8" height="154.6" rx="0" class="s-bg f-ac" stroke-width="0.5"/>
+<line x1="556.7" y1="95.1" x2="556.7" y2="47.3" class="s-mu" stroke-width="1.2"/>
+<text x="556.7" y="42.3" class="f-fg" font-size="10" text-anchor="middle">2.94</text>
+<rect x="584.7" y="73.7" width="44.8" height="156.3" rx="0" class="s-bg f-ok" stroke-width="0.5"/>
+<text x="607.1" y="68.7" class="f-fg" font-size="10" text-anchor="middle">2.97</text>
+<text x="556.7" y="248.0" class="f-fg" font-size="11" text-anchor="middle">총 효과</text>
+<line x1="90.0" y1="110.5" x2="650.0" y2="110.5" class="s-bd" stroke-width="1.4" stroke-dasharray="5 3"/>
+<text x="99.3" y="105.5" class="f-bd" font-size="10" text-anchor="start">OLS 계수 2.27</text>
+<line x1="90.0" y1="30.0" x2="90.0" y2="230.0" class="s-mu" stroke-width="1"/>
+<line x1="86.0" y1="230.0" x2="90.0" y2="230.0" class="s-mu" stroke-width="1"/>
+<text x="83.0" y="234.0" class="f-mu" font-size="10" text-anchor="end">0</text>
+<line x1="86.0" y1="177.4" x2="90.0" y2="177.4" class="s-mu" stroke-width="1"/>
+<text x="83.0" y="181.4" class="f-mu" font-size="10" text-anchor="end">1</text>
+<line x1="86.0" y1="124.7" x2="90.0" y2="124.7" class="s-mu" stroke-width="1"/>
+<text x="83.0" y="128.7" class="f-mu" font-size="10" text-anchor="end">2</text>
+<line x1="86.0" y1="72.1" x2="90.0" y2="72.1" class="s-mu" stroke-width="1"/>
+<text x="83.0" y="76.1" class="f-mu" font-size="10" text-anchor="end">3</text>
+<rect x="200.0" y="266.0" width="12.0" height="12.0" rx="0" class="s-mu f-fg" stroke-width="0.5"/>
+<text x="216.0" y="276.0" class="f-fg" font-size="10" text-anchor="start">참값</text>
+<rect x="248.0" y="266.0" width="12.0" height="12.0" rx="0" class="s-mu f-ac" stroke-width="0.5"/>
+<text x="264.0" y="276.0" class="f-fg" font-size="10" text-anchor="start">공간시차 ML</text>
+<rect x="341.0" y="266.0" width="12.0" height="12.0" rx="0" class="s-mu f-ok" stroke-width="0.5"/>
+<text x="357.0" y="276.0" class="f-fg" font-size="10" text-anchor="start">공간시차 GM</text>
+</svg>

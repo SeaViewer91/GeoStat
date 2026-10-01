@@ -47,10 +47,10 @@ GeoStat으로 따라 하는 공간통계학 입문서임. 공간정보·지리�
 | 22 | [크리깅](lessons/22-kriging.md) | ○ | 초안 |
 | 23 | [불확실성과 시뮬레이션](lessons/23-uncertainty-simulation.md) | ○ | 초안 |
 | **6부** | **공간 회귀** | | |
-| 24 | 왜 공간 회귀인가 | ● | |
-| 25 | 공간시차 모형 | ● | |
-| 26 | 공간오차 모형과 모형 계보 | ◐ | |
-| 27 | 공간 회귀의 확장 | ○ | |
+| 24 | [왜 공간 회귀인가](lessons/24-why-spatial-regression.md) | ● | 초안 |
+| 25 | [공간시차 모형](lessons/25-spatial-lag.md) | ● | 초안 |
+| 26 | [공간오차 모형과 모형 계보](lessons/26-spatial-error-and-family.md) | ◐ | 초안 |
+| 27 | [공간 회귀의 확장](lessons/27-spatial-regression-extensions.md) | ◐ | 초안 |
 | **7부** | **공간 이질성** | | |
 | 28 | 공간 비정상성 | ◐ | |
 | 29 | 지리가중회귀(GWR) | ● | |

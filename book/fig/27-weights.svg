@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 300" role="img" aria-label="공간가중치 여섯 가지로 적합한 결과(연습용 모의 자료, 참 가중치는 퀸 인접). 왼쪽: Y_시차의 공간시차 모형과 Y_오차의 공간오차 모형의 로그우도(가장 큰 값과의 차이). 두 변수 모두 참 가중치에서 로그우도가 가장 큼. 오른쪽: 추정한 ρ(Y_시차)와 λ(Y_오차). 참값은 둘 다 0.5인데, 가중치에 따라 ρ는 0.43~0.50, λ는 0.44~0.57로 달라짐">
+<style>
+.gsfig{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
+.gsfig .s-fg{stroke:#1c2330}.gsfig .s-mu{stroke:#8a93a3}.gsfig .s-ac{stroke:#2563eb}.gsfig .s-bd{stroke:#c2410c}.gsfig .s-ok{stroke:#15803d}.gsfig .s-bg{stroke:#ffffff}
+.gsfig .f-fg{fill:#1c2330}.gsfig .f-mu{fill:#5a6475}.gsfig .f-ac{fill:#2563eb}.gsfig .f-acs{fill:#e6eefe}.gsfig .f-bd{fill:#c2410c}
+.gsfig .f-bds{fill:#fdeee6}.gsfig .f-ok{fill:#15803d}.gsfig .f-sf{fill:#f0f2f5}.gsfig .f-bg{fill:#ffffff}
+.gsfig .d0{fill:#2166ac}.gsfig .d1{fill:#67a9cf}.gsfig .d2{fill:#d1e5f0}.gsfig .d3{fill:#fddbc7}.gsfig .d4{fill:#ef8a62}.gsfig .d5{fill:#b2182b}
+.gsfig .q0{fill:#fff1e0}.gsfig .q1{fill:#fdc98f}.gsfig .q2{fill:#f98f45}.gsfig .q3{fill:#d9530f}.gsfig .q4{fill:#8c2d04}
+@media (prefers-color-scheme:dark){
+.gsfig .s-fg{stroke:#e6e9ef}.gsfig .s-mu{stroke:#737c8c}.gsfig .s-ac{stroke:#6d9bff}.gsfig .s-bd{stroke:#fb8b5b}.gsfig .s-ok{stroke:#4ade80}.gsfig .s-bg{stroke:#1a1e26}
+.gsfig .f-fg{fill:#e6e9ef}.gsfig .f-mu{fill:#a7afbd}.gsfig .f-ac{fill:#6d9bff}.gsfig .f-acs{fill:#1f2b45}.gsfig .f-bd{fill:#fb8b5b}
+.gsfig .f-bds{fill:#3a2218}.gsfig .f-ok{fill:#4ade80}.gsfig .f-sf{fill:#222733}.gsfig .f-bg{fill:#1a1e26}}
+</style>
+<rect x="0" y="0" width="720" height="300" class="f-bg"/>
+<text x="230.0" y="22.0" class="f-fg" font-size="12" text-anchor="middle" font-weight="600">로그우도 − 최댓값</text>
+<text x="112.0" y="60.7" class="f-fg" font-size="11" text-anchor="end">퀸 인접</text>
+<circle cx="326.2" cy="52.7" r="5.00" class="s-bg f-bd" stroke-width="1"/>
+<circle cx="326.2" cy="60.7" r="5.00" class="s-bg f-ac" stroke-width="1"/>
+<text x="112.0" y="94.0" class="f-fg" font-size="11" text-anchor="end">KNN 4</text>
+<circle cx="213.5" cy="86.0" r="5.00" class="s-bg f-bd" stroke-width="1"/>
+<circle cx="293.7" cy="94.0" r="5.00" class="s-bg f-ac" stroke-width="1"/>
+<text x="112.0" y="127.3" class="f-fg" font-size="11" text-anchor="end">KNN 6</text>
+<circle cx="277.4" cy="119.3" r="5.00" class="s-bg f-bd" stroke-width="1"/>
+<circle cx="297.6" cy="127.3" r="5.00" class="s-bg f-ac" stroke-width="1"/>
+<text x="112.0" y="160.7" class="f-fg" font-size="11" text-anchor="end">KNN 8</text>
+<circle cx="215.3" cy="152.7" r="5.00" class="s-bg f-bd" stroke-width="1"/>
+<circle cx="278.5" cy="160.7" r="5.00" class="s-bg f-ac" stroke-width="1"/>
+<text x="112.0" y="194.0" class="f-fg" font-size="11" text-anchor="end">거리 3 km</text>
+<circle cx="270.6" cy="186.0" r="5.00" class="s-bg f-bd" stroke-width="1"/>
+<circle cx="292.2" cy="194.0" r="5.00" class="s-bg f-ac" stroke-width="1"/>
+<text x="112.0" y="227.3" class="f-fg" font-size="11" text-anchor="end">역거리 5 km</text>
+<circle cx="160.7" cy="219.3" r="5.00" class="s-bg f-bd" stroke-width="1"/>
+<circle cx="206.8" cy="227.3" r="5.00" class="s-bg f-ac" stroke-width="1"/>
+<line x1="120.0" y1="240.0" x2="340.0" y2="240.0" class="s-mu" stroke-width="1"/>
+<line x1="142.9" y1="240.0" x2="142.9" y2="244.0" class="s-mu" stroke-width="1"/>
+<text x="142.9" y="255.0" class="f-mu" font-size="10" text-anchor="middle">−8</text>
+<line x1="188.8" y1="240.0" x2="188.8" y2="244.0" class="s-mu" stroke-width="1"/>
+<text x="188.8" y="255.0" class="f-mu" font-size="10" text-anchor="middle">−6</text>
+<line x1="234.6" y1="240.0" x2="234.6" y2="244.0" class="s-mu" stroke-width="1"/>
+<text x="234.6" y="255.0" class="f-mu" font-size="10" text-anchor="middle">−4</text>
+<line x1="280.4" y1="240.0" x2="280.4" y2="244.0" class="s-mu" stroke-width="1"/>
+<text x="280.4" y="255.0" class="f-mu" font-size="10" text-anchor="middle">−2</text>
+<line x1="326.2" y1="240.0" x2="326.2" y2="244.0" class="s-mu" stroke-width="1"/>
+<text x="326.2" y="255.0" class="f-mu" font-size="10" text-anchor="middle">0</text>
+<text x="570.0" y="22.0" class="f-fg" font-size="12" text-anchor="middle" font-weight="600">추정한 ρ와 λ</text>
+<circle cx="544.1" cy="52.7" r="5.00" class="s-bg f-bd" stroke-width="1"/>
+<circle cx="538.5" cy="60.7" r="5.00" class="s-bg f-ac" stroke-width="1"/>
+<circle cx="509.8" cy="86.0" r="5.00" class="s-bg f-bd" stroke-width="1"/>
+<circle cx="517.4" cy="94.0" r="5.00" class="s-bg f-ac" stroke-width="1"/>
+<circle cx="521.2" cy="119.3" r="5.00" class="s-bg f-bd" stroke-width="1"/>
+<circle cx="543.7" cy="127.3" r="5.00" class="s-bg f-ac" stroke-width="1"/>
+<circle cx="521.8" cy="152.7" r="5.00" class="s-bg f-bd" stroke-width="1"/>
+<circle cx="563.7" cy="160.7" r="5.00" class="s-bg f-ac" stroke-width="1"/>
+<circle cx="525.5" cy="186.0" r="5.00" class="s-bg f-bd" stroke-width="1"/>
+<circle cx="561.8" cy="194.0" r="5.00" class="s-bg f-ac" stroke-width="1"/>
+<circle cx="516.8" cy="219.3" r="5.00" class="s-bg f-bd" stroke-width="1"/>
+<circle cx="577.6" cy="227.3" r="5.00" class="s-bg f-ac" stroke-width="1"/>
+<line x1="546.0" y1="40.0" x2="546.0" y2="240.0" class="s-mu" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="450.0" y1="240.0" x2="690.0" y2="240.0" class="s-mu" stroke-width="1"/>
+<line x1="450.0" y1="240.0" x2="450.0" y2="244.0" class="s-mu" stroke-width="1"/>
+<text x="450.0" y="255.0" class="f-mu" font-size="10" text-anchor="middle">0.3</text>
+<line x1="498.0" y1="240.0" x2="498.0" y2="244.0" class="s-mu" stroke-width="1"/>
+<text x="498.0" y="255.0" class="f-mu" font-size="10" text-anchor="middle">0.4</text>
+<line x1="546.0" y1="240.0" x2="546.0" y2="244.0" class="s-mu" stroke-width="1"/>
+<text x="546.0" y="255.0" class="f-mu" font-size="10" text-anchor="middle">0.5</text>
+<line x1="594.0" y1="240.0" x2="594.0" y2="244.0" class="s-mu" stroke-width="1"/>
+<text x="594.0" y="255.0" class="f-mu" font-size="10" text-anchor="middle">0.6</text>
+<line x1="642.0" y1="240.0" x2="642.0" y2="244.0" class="s-mu" stroke-width="1"/>
+<text x="642.0" y="255.0" class="f-mu" font-size="10" text-anchor="middle">0.7</text>
+<line x1="690.0" y1="240.0" x2="690.0" y2="244.0" class="s-mu" stroke-width="1"/>
+<text x="690.0" y="255.0" class="f-mu" font-size="10" text-anchor="middle">0.8</text>
+<circle cx="200.0" cy="282.0" r="5.00" class="s-bg f-bd" stroke-width="1"/>
+<text x="210.0" y="286.0" class="f-fg" font-size="10" text-anchor="start">Y_시차 · 공간시차 모형 (ρ)</text>
+<circle cx="430.0" cy="282.0" r="5.00" class="s-bg f-ac" stroke-width="1"/>
+<text x="440.0" y="286.0" class="f-fg" font-size="10" text-anchor="start">Y_오차 · 공간오차 모형 (λ)</text>
+</svg>

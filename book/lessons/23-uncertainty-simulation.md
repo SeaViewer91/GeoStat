@@ -8,7 +8,7 @@ updated: 2026-10-01
 status: draft
 ---
 
-[목차](../README.md) · 이전: [22강 크리깅](22-kriging.md) · 다음: 24강 왜 공간 회귀인가 (집필 예정)
+[목차](../README.md) · 이전: [22강 크리깅](22-kriging.md) · 다음: [24강 왜 공간 회귀인가](24-why-spatial-regression.md)
 
 # 23강 불확실성과 시뮬레이션
 
@@ -332,4 +332,4 @@ print(f"격자 최고 기온: 크리깅 지도 {pred.max():.2f}℃, 시뮬레이
 
 ---
 
-[목차](../README.md) · 이전: [22강 크리깅](22-kriging.md) · 다음: 24강 왜 공간 회귀인가 (집필 예정)
+[목차](../README.md) · 이전: [22강 크리깅](22-kriging.md) · 다음: [24강 왜 공간 회귀인가](24-why-spatial-regression.md)
