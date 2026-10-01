@@ -8,7 +8,7 @@ updated: 2026-10-01
 status: draft
 ---
 
-[목차](../README.md) · 이전: [8강 회귀분석과 진단](08-regression-and-diagnostics.md) · 다음: 10강 이웃 정하기: 공간가중치 (집필 예정)
+[목차](../README.md) · 이전: [8강 회귀분석과 진단](08-regression-and-diagnostics.md) · 다음: [10강 이웃 정하기: 공간가중치](10-spatial-weights.md)
 
 # 9강 독립 가정이 깨질 때
 
@@ -270,4 +270,4 @@ for rho in (0.0, 0.6, 0.9):
 
 ---
 
-[목차](../README.md) · 이전: [8강 회귀분석과 진단](08-regression-and-diagnostics.md) · 다음: 10강 이웃 정하기: 공간가중치 (집필 예정)
+[목차](../README.md) · 이전: [8강 회귀분석과 진단](08-regression-and-diagnostics.md) · 다음: [10강 이웃 정하기: 공간가중치](10-spatial-weights.md)
