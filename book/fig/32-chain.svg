@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 200" role="img" aria-label="한 줄로 이어진 지역 여섯 개(값 1, 8, 2, 9, 2, 7)를 두 묶음으로 나눈 결과. 위: 값만 보는 비공간 군집은 낮은 값(1, 2, 2)과 높은 값(8, 9, 7)으로 나눠 군집 내 제곱합이 2.67이지만, 두 묶음이 서로 엇갈려 흩어짐. 아래: 이웃끼리만 묶는 연결 제약에서는 이어진 구간으로만 나눌 수 있어, 가장 좋은 자르기(지역 1과 2~6)도 군집 내 제곱합이 45.2로 커짐">
+<style>
+.gsfig{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
+.gsfig .s-fg{stroke:#1c2330}.gsfig .s-mu{stroke:#8a93a3}.gsfig .s-ac{stroke:#2563eb}.gsfig .s-bd{stroke:#c2410c}.gsfig .s-ok{stroke:#15803d}.gsfig .s-bg{stroke:#ffffff}
+.gsfig .f-fg{fill:#1c2330}.gsfig .f-mu{fill:#5a6475}.gsfig .f-ac{fill:#2563eb}.gsfig .f-acs{fill:#e6eefe}.gsfig .f-bd{fill:#c2410c}
+.gsfig .f-bds{fill:#fdeee6}.gsfig .f-ok{fill:#15803d}.gsfig .f-sf{fill:#f0f2f5}.gsfig .f-bg{fill:#ffffff}
+.gsfig .d0{fill:#2166ac}.gsfig .d1{fill:#67a9cf}.gsfig .d2{fill:#d1e5f0}.gsfig .d3{fill:#fddbc7}.gsfig .d4{fill:#ef8a62}.gsfig .d5{fill:#b2182b}
+.gsfig .q0{fill:#fff1e0}.gsfig .q1{fill:#fdc98f}.gsfig .q2{fill:#f98f45}.gsfig .q3{fill:#d9530f}.gsfig .q4{fill:#8c2d04}
+@media (prefers-color-scheme:dark){
+.gsfig .s-fg{stroke:#e6e9ef}.gsfig .s-mu{stroke:#737c8c}.gsfig .s-ac{stroke:#6d9bff}.gsfig .s-bd{stroke:#fb8b5b}.gsfig .s-ok{stroke:#4ade80}.gsfig .s-bg{stroke:#1a1e26}
+.gsfig .f-fg{fill:#e6e9ef}.gsfig .f-mu{fill:#a7afbd}.gsfig .f-ac{fill:#6d9bff}.gsfig .f-acs{fill:#1f2b45}.gsfig .f-bd{fill:#fb8b5b}
+.gsfig .f-bds{fill:#3a2218}.gsfig .f-ok{fill:#4ade80}.gsfig .f-sf{fill:#222733}.gsfig .f-bg{fill:#1a1e26}}
+</style>
+<rect x="0" y="0" width="720" height="200" class="f-bg"/>
+<text x="20.0" y="66.0" class="f-fg" font-size="12" text-anchor="start" font-weight="600">비공간: 값이 비슷한 것끼리</text>
+<rect x="250.0" y="44.0" width="68.0" height="36.0" rx="0" class="s-bg" stroke-width="1" fill="#0072B2"/>
+<text x="284" y="68" font-size="14" text-anchor="middle" fill="#ffffff" font-weight="600">1</text>
+<rect x="322.0" y="44.0" width="68.0" height="36.0" rx="0" class="s-bg" stroke-width="1" fill="#E69F00"/>
+<text x="356" y="68" font-size="14" text-anchor="middle" fill="#ffffff" font-weight="600">8</text>
+<rect x="394.0" y="44.0" width="68.0" height="36.0" rx="0" class="s-bg" stroke-width="1" fill="#0072B2"/>
+<text x="428" y="68" font-size="14" text-anchor="middle" fill="#ffffff" font-weight="600">2</text>
+<rect x="466.0" y="44.0" width="68.0" height="36.0" rx="0" class="s-bg" stroke-width="1" fill="#E69F00"/>
+<text x="500" y="68" font-size="14" text-anchor="middle" fill="#ffffff" font-weight="600">9</text>
+<rect x="538.0" y="44.0" width="68.0" height="36.0" rx="0" class="s-bg" stroke-width="1" fill="#0072B2"/>
+<text x="572" y="68" font-size="14" text-anchor="middle" fill="#ffffff" font-weight="600">2</text>
+<rect x="610.0" y="44.0" width="68.0" height="36.0" rx="0" class="s-bg" stroke-width="1" fill="#E69F00"/>
+<text x="644" y="68" font-size="14" text-anchor="middle" fill="#ffffff" font-weight="600">7</text>
+<text x="20.0" y="146.0" class="f-fg" font-size="12" text-anchor="start" font-weight="600">연결 제약: 이어진 구간끼리</text>
+<rect x="250.0" y="124.0" width="68.0" height="36.0" rx="0" class="s-bg" stroke-width="1" fill="#0072B2"/>
+<text x="284" y="148" font-size="14" text-anchor="middle" fill="#ffffff" font-weight="600">1</text>
+<rect x="322.0" y="124.0" width="68.0" height="36.0" rx="0" class="s-bg" stroke-width="1" fill="#E69F00"/>
+<text x="356" y="148" font-size="14" text-anchor="middle" fill="#ffffff" font-weight="600">8</text>
+<rect x="394.0" y="124.0" width="68.0" height="36.0" rx="0" class="s-bg" stroke-width="1" fill="#E69F00"/>
+<text x="428" y="148" font-size="14" text-anchor="middle" fill="#ffffff" font-weight="600">2</text>
+<rect x="466.0" y="124.0" width="68.0" height="36.0" rx="0" class="s-bg" stroke-width="1" fill="#E69F00"/>
+<text x="500" y="148" font-size="14" text-anchor="middle" fill="#ffffff" font-weight="600">9</text>
+<rect x="538.0" y="124.0" width="68.0" height="36.0" rx="0" class="s-bg" stroke-width="1" fill="#E69F00"/>
+<text x="572" y="148" font-size="14" text-anchor="middle" fill="#ffffff" font-weight="600">2</text>
+<rect x="610.0" y="124.0" width="68.0" height="36.0" rx="0" class="s-bg" stroke-width="1" fill="#E69F00"/>
+<text x="644" y="148" font-size="14" text-anchor="middle" fill="#ffffff" font-weight="600">7</text>
+<text x="466.0" y="190.0" class="f-mu" font-size="10" text-anchor="middle">지역 1 → 6 (옆 칸끼리만 이웃)</text>
+</svg>

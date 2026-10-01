@@ -116,6 +116,14 @@ def fit(gdf, model, y, xs, W=None):
     return out["report"], out["columns"]
 
 
+def fit_gwr(gdf, model, y, xs, W=None, **opts):
+    """GeoStat 엔진의 GWR·MGWR (앱과 같은 계산: 행정동 중심점 좌표(m), 기본 bisquare·적응·AICc)"""
+    coords, _ = gw._metric_points(gdf)
+    payload = rg.prepare(gdf, {"model": model, "y": y, "x": xs, **opts}, W, coords)
+    out = rg.run(payload, lambda *a: None)
+    return out["report"], out["columns"]
+
+
 def summ(rep):
     return dict(rep["summary"])
 

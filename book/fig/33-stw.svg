@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 250" role="img" aria-label="시공간 가중치의 구조. 동 3개(1–2–3이 한 줄로 이웃)를 연도 3개만큼 쌓은 것. 가로 선은 같은 연도의 이웃(공간), 세로 선은 같은 동의 앞 연도(시간), 비스듬한 점선은 앞 연도의 이웃(시공간 파급). 어떤 선을 이웃으로 셀지에 따라 시공간 분석과 모형이 달라짐">
+<style>
+.gsfig{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
+.gsfig .s-fg{stroke:#1c2330}.gsfig .s-mu{stroke:#8a93a3}.gsfig .s-ac{stroke:#2563eb}.gsfig .s-bd{stroke:#c2410c}.gsfig .s-ok{stroke:#15803d}.gsfig .s-bg{stroke:#ffffff}
+.gsfig .f-fg{fill:#1c2330}.gsfig .f-mu{fill:#5a6475}.gsfig .f-ac{fill:#2563eb}.gsfig .f-acs{fill:#e6eefe}.gsfig .f-bd{fill:#c2410c}
+.gsfig .f-bds{fill:#fdeee6}.gsfig .f-ok{fill:#15803d}.gsfig .f-sf{fill:#f0f2f5}.gsfig .f-bg{fill:#ffffff}
+.gsfig .d0{fill:#2166ac}.gsfig .d1{fill:#67a9cf}.gsfig .d2{fill:#d1e5f0}.gsfig .d3{fill:#fddbc7}.gsfig .d4{fill:#ef8a62}.gsfig .d5{fill:#b2182b}
+.gsfig .q0{fill:#fff1e0}.gsfig .q1{fill:#fdc98f}.gsfig .q2{fill:#f98f45}.gsfig .q3{fill:#d9530f}.gsfig .q4{fill:#8c2d04}
+@media (prefers-color-scheme:dark){
+.gsfig .s-fg{stroke:#e6e9ef}.gsfig .s-mu{stroke:#737c8c}.gsfig .s-ac{stroke:#6d9bff}.gsfig .s-bd{stroke:#fb8b5b}.gsfig .s-ok{stroke:#4ade80}.gsfig .s-bg{stroke:#1a1e26}
+.gsfig .f-fg{fill:#e6e9ef}.gsfig .f-mu{fill:#a7afbd}.gsfig .f-ac{fill:#6d9bff}.gsfig .f-acs{fill:#1f2b45}.gsfig .f-bd{fill:#fb8b5b}
+.gsfig .f-bds{fill:#3a2218}.gsfig .f-ok{fill:#4ade80}.gsfig .f-sf{fill:#222733}.gsfig .f-bg{fill:#1a1e26}}
+</style>
+<rect x="0" y="0" width="720" height="250" class="f-bg"/>
+<text x="150.0" y="195.0" class="f-fg" font-size="12" text-anchor="end" font-weight="600">2023년</text>
+<line x1="270.0" y1="190.0" x2="360.0" y2="190.0" class="s-ac" stroke-width="2.2"/>
+<line x1="400.0" y1="190.0" x2="490.0" y2="190.0" class="s-ac" stroke-width="2.2"/>
+<circle cx="250.0" cy="190.0" r="18.00" class="f-acs s-fg" stroke-width="1.2"/>
+<text x="250.0" y="195.0" class="f-fg" font-size="12" text-anchor="middle">동1</text>
+<circle cx="380.0" cy="190.0" r="18.00" class="f-acs s-fg" stroke-width="1.2"/>
+<text x="380.0" y="195.0" class="f-fg" font-size="12" text-anchor="middle">동2</text>
+<circle cx="510.0" cy="190.0" r="18.00" class="f-acs s-fg" stroke-width="1.2"/>
+<text x="510.0" y="195.0" class="f-fg" font-size="12" text-anchor="middle">동3</text>
+<text x="150.0" y="130.0" class="f-fg" font-size="12" text-anchor="end" font-weight="600">2024년</text>
+<line x1="270.0" y1="125.0" x2="360.0" y2="125.0" class="s-ac" stroke-width="2.2"/>
+<line x1="400.0" y1="125.0" x2="490.0" y2="125.0" class="s-ac" stroke-width="2.2"/>
+<circle cx="250.0" cy="125.0" r="18.00" class="f-acs s-fg" stroke-width="1.2"/>
+<text x="250.0" y="130.0" class="f-fg" font-size="12" text-anchor="middle">동1</text>
+<circle cx="380.0" cy="125.0" r="18.00" class="f-acs s-fg" stroke-width="1.2"/>
+<text x="380.0" y="130.0" class="f-fg" font-size="12" text-anchor="middle">동2</text>
+<circle cx="510.0" cy="125.0" r="18.00" class="f-acs s-fg" stroke-width="1.2"/>
+<text x="510.0" y="130.0" class="f-fg" font-size="12" text-anchor="middle">동3</text>
+<line x1="250.0" y1="172.0" x2="250.0" y2="143.0" class="s-bd" stroke-width="2"/>
+<line x1="380.0" y1="172.0" x2="380.0" y2="143.0" class="s-bd" stroke-width="2"/>
+<line x1="510.0" y1="172.0" x2="510.0" y2="143.0" class="s-bd" stroke-width="2"/>
+<line x1="262.0" y1="176.0" x2="366.0" y2="139.0" class="s-ok" stroke-width="1.2" stroke-dasharray="4 3"/>
+<line x1="368.0" y1="176.0" x2="264.0" y2="139.0" class="s-ok" stroke-width="1.2" stroke-dasharray="4 3"/>
+<line x1="392.0" y1="176.0" x2="496.0" y2="139.0" class="s-ok" stroke-width="1.2" stroke-dasharray="4 3"/>
+<line x1="498.0" y1="176.0" x2="394.0" y2="139.0" class="s-ok" stroke-width="1.2" stroke-dasharray="4 3"/>
+<text x="150.0" y="65.0" class="f-fg" font-size="12" text-anchor="end" font-weight="600">2025년</text>
+<line x1="270.0" y1="60.0" x2="360.0" y2="60.0" class="s-ac" stroke-width="2.2"/>
+<line x1="400.0" y1="60.0" x2="490.0" y2="60.0" class="s-ac" stroke-width="2.2"/>
+<circle cx="250.0" cy="60.0" r="18.00" class="f-acs s-fg" stroke-width="1.2"/>
+<text x="250.0" y="65.0" class="f-fg" font-size="12" text-anchor="middle">동1</text>
+<circle cx="380.0" cy="60.0" r="18.00" class="f-acs s-fg" stroke-width="1.2"/>
+<text x="380.0" y="65.0" class="f-fg" font-size="12" text-anchor="middle">동2</text>
+<circle cx="510.0" cy="60.0" r="18.00" class="f-acs s-fg" stroke-width="1.2"/>
+<text x="510.0" y="65.0" class="f-fg" font-size="12" text-anchor="middle">동3</text>
+<line x1="250.0" y1="107.0" x2="250.0" y2="78.0" class="s-bd" stroke-width="2"/>
+<line x1="380.0" y1="107.0" x2="380.0" y2="78.0" class="s-bd" stroke-width="2"/>
+<line x1="510.0" y1="107.0" x2="510.0" y2="78.0" class="s-bd" stroke-width="2"/>
+<line x1="262.0" y1="111.0" x2="366.0" y2="74.0" class="s-ok" stroke-width="1.2" stroke-dasharray="4 3"/>
+<line x1="368.0" y1="111.0" x2="264.0" y2="74.0" class="s-ok" stroke-width="1.2" stroke-dasharray="4 3"/>
+<line x1="392.0" y1="111.0" x2="496.0" y2="74.0" class="s-ok" stroke-width="1.2" stroke-dasharray="4 3"/>
+<line x1="498.0" y1="111.0" x2="394.0" y2="74.0" class="s-ok" stroke-width="1.2" stroke-dasharray="4 3"/>
+<line x1="575.0" y1="80.0" x2="601.0" y2="80.0" class="s-ac" stroke-width="2"/>
+<text x="607.0" y="84.0" class="f-fg" font-size="11" text-anchor="start">같은 연도 이웃</text>
+<line x1="575.0" y1="110.0" x2="601.0" y2="110.0" class="s-bd" stroke-width="2"/>
+<text x="607.0" y="114.0" class="f-fg" font-size="11" text-anchor="start">앞 연도 같은 동</text>
+<line x1="575.0" y1="140.0" x2="601.0" y2="140.0" class="s-ok" stroke-width="2" stroke-dasharray="4 3"/>
+<text x="607.0" y="144.0" class="f-fg" font-size="11" text-anchor="start">앞 연도 이웃</text>
+</svg>

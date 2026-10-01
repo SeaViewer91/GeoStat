@@ -53,15 +53,15 @@ GeoStat으로 따라 하는 공간통계학 입문서임. 공간정보·지리�
 | 27 | [공간 회귀의 확장](lessons/27-spatial-regression-extensions.md) | ◐ | 초안 |
 | **7부** | **공간 이질성** | | |
 | 28 | [공간 비정상성](lessons/28-spatial-nonstationarity.md) | ◐ | 초안 |
-| 29 | 지리가중회귀(GWR) | ● | |
-| 30 | MGWR과 해석 | ● | |
+| 29 | [지리가중회귀(GWR)](lessons/29-gwr.md) | ● | 초안 |
+| 30 | [MGWR과 해석](lessons/30-mgwr.md) | ● | 초안 |
 | **8부** | **영역화** | | |
-| 31 | 군집 분석 기초 | ● | |
-| 32 | 공간 제약 군집화 | ◐ | |
+| 31 | [군집 분석 기초](lessons/31-clustering-basics.md) | ● | 초안 |
+| 32 | [공간 제약 군집화](lessons/32-spatially-constrained-clustering.md) | ◐ | 초안 |
 | **9부** | **시공간** | | |
-| 33 | 시공간 자료의 구조 | ● | |
-| 34 | 시공간 탐색 | ◐ | |
-| 35 | 시공간 모형 개요 | ○ | |
+| 33 | [시공간 자료의 구조](lessons/33-spatiotemporal-data.md) | ● | 초안 |
+| 34 | [시공간 탐색](lessons/34-spatiotemporal-exploration.md) | ◐ | 초안 |
+| 35 | [시공간 모형 개요](lessons/35-spatiotemporal-models.md) | ○ | 초안 |
 | **10부** | **베이지안 공간 모형** | | |
 | 36 | 베이지안 사고와 계층 모형 | ◐ | |
 | 37 | 질병 지도와 CAR 모형 | ○ | |

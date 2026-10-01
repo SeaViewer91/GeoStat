@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 270" role="img" aria-label="군집 수 k에 따른 두 지표(표준화한 네 변수). 왼쪽: 군집 간 제곱합 / 전체 제곱합 비. k가 커질수록 계속 커지므로 꺾이는 곳(팔꿈치)을 찾지만 뚜렷하지 않음. 오른쪽: 평균 실루엣 계수. K-평균은 k = 2에서 가장 크고(0.419), Ward는 k = 2와 3이 거의 같음(0.4087, 0.4095). 파랑 실선은 K-평균, 주황 점선은 Ward 계층 군집">
+<style>
+.gsfig{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
+.gsfig .s-fg{stroke:#1c2330}.gsfig .s-mu{stroke:#8a93a3}.gsfig .s-ac{stroke:#2563eb}.gsfig .s-bd{stroke:#c2410c}.gsfig .s-ok{stroke:#15803d}.gsfig .s-bg{stroke:#ffffff}
+.gsfig .f-fg{fill:#1c2330}.gsfig .f-mu{fill:#5a6475}.gsfig .f-ac{fill:#2563eb}.gsfig .f-acs{fill:#e6eefe}.gsfig .f-bd{fill:#c2410c}
+.gsfig .f-bds{fill:#fdeee6}.gsfig .f-ok{fill:#15803d}.gsfig .f-sf{fill:#f0f2f5}.gsfig .f-bg{fill:#ffffff}
+.gsfig .d0{fill:#2166ac}.gsfig .d1{fill:#67a9cf}.gsfig .d2{fill:#d1e5f0}.gsfig .d3{fill:#fddbc7}.gsfig .d4{fill:#ef8a62}.gsfig .d5{fill:#b2182b}
+.gsfig .q0{fill:#fff1e0}.gsfig .q1{fill:#fdc98f}.gsfig .q2{fill:#f98f45}.gsfig .q3{fill:#d9530f}.gsfig .q4{fill:#8c2d04}
+@media (prefers-color-scheme:dark){
+.gsfig .s-fg{stroke:#e6e9ef}.gsfig .s-mu{stroke:#737c8c}.gsfig .s-ac{stroke:#6d9bff}.gsfig .s-bd{stroke:#fb8b5b}.gsfig .s-ok{stroke:#4ade80}.gsfig .s-bg{stroke:#1a1e26}
+.gsfig .f-fg{fill:#e6e9ef}.gsfig .f-mu{fill:#a7afbd}.gsfig .f-ac{fill:#6d9bff}.gsfig .f-acs{fill:#1f2b45}.gsfig .f-bd{fill:#fb8b5b}
+.gsfig .f-bds{fill:#3a2218}.gsfig .f-ok{fill:#4ade80}.gsfig .f-sf{fill:#222733}.gsfig .f-bg{fill:#1a1e26}}
+</style>
+<rect x="0" y="0" width="720" height="270" class="f-bg"/>
+<path d="M82.3,185.7 L123.2,141.5 L164.1,111.4 L205.0,94.2 L245.9,82.6 L286.8,72.9 L327.7,66.4" class="s-ac" stroke-width="2" fill="none"/>
+<circle cx="82.3" cy="185.7" r="3.00" class="f-ac s-bg" stroke-width="0.6"/>
+<circle cx="123.2" cy="141.5" r="3.00" class="f-ac s-bg" stroke-width="0.6"/>
+<circle cx="164.1" cy="111.4" r="3.00" class="f-ac s-bg" stroke-width="0.6"/>
+<circle cx="205.0" cy="94.2" r="3.00" class="f-ac s-bg" stroke-width="0.6"/>
+<circle cx="245.9" cy="82.6" r="3.00" class="f-ac s-bg" stroke-width="0.6"/>
+<circle cx="286.8" cy="72.9" r="3.00" class="f-ac s-bg" stroke-width="0.6"/>
+<circle cx="327.7" cy="66.4" r="3.00" class="f-ac s-bg" stroke-width="0.6"/>
+<path d="M82.3,190.3 L123.2,153.8 L164.1,126.3 L205.0,100.7 L245.9,87.2 L286.8,78.1 L327.7,71.4" class="s-bd" stroke-width="2" fill="none" stroke-dasharray="5 3"/>
+<circle cx="82.3" cy="190.3" r="3.00" class="f-bd s-bg" stroke-width="0.6"/>
+<circle cx="123.2" cy="153.8" r="3.00" class="f-bd s-bg" stroke-width="0.6"/>
+<circle cx="164.1" cy="126.3" r="3.00" class="f-bd s-bg" stroke-width="0.6"/>
+<circle cx="205.0" cy="100.7" r="3.00" class="f-bd s-bg" stroke-width="0.6"/>
+<circle cx="245.9" cy="87.2" r="3.00" class="f-bd s-bg" stroke-width="0.6"/>
+<circle cx="286.8" cy="78.1" r="3.00" class="f-bd s-bg" stroke-width="0.6"/>
+<circle cx="327.7" cy="71.4" r="3.00" class="f-bd s-bg" stroke-width="0.6"/>
+<line x1="70.0" y1="220.0" x2="340.0" y2="220.0" class="s-mu" stroke-width="1"/>
+<line x1="82.3" y1="220.0" x2="82.3" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="82.3" y="235.0" class="f-mu" font-size="10" text-anchor="middle">2</text>
+<line x1="123.2" y1="220.0" x2="123.2" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="123.2" y="235.0" class="f-mu" font-size="10" text-anchor="middle">3</text>
+<line x1="164.1" y1="220.0" x2="164.1" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="164.1" y="235.0" class="f-mu" font-size="10" text-anchor="middle">4</text>
+<line x1="205.0" y1="220.0" x2="205.0" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="205.0" y="235.0" class="f-mu" font-size="10" text-anchor="middle">5</text>
+<line x1="245.9" y1="220.0" x2="245.9" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="245.9" y="235.0" class="f-mu" font-size="10" text-anchor="middle">6</text>
+<line x1="286.8" y1="220.0" x2="286.8" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="286.8" y="235.0" class="f-mu" font-size="10" text-anchor="middle">7</text>
+<line x1="327.7" y1="220.0" x2="327.7" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="327.7" y="235.0" class="f-mu" font-size="10" text-anchor="middle">8</text>
+<text x="205.0" y="252.0" class="f-mu" font-size="11" text-anchor="middle">군집 수 k</text>
+<line x1="70.0" y1="40.0" x2="70.0" y2="220.0" class="s-mu" stroke-width="1"/>
+<line x1="66.0" y1="220.0" x2="70.0" y2="220.0" class="s-mu" stroke-width="1"/>
+<text x="63.0" y="224.0" class="f-mu" font-size="10" text-anchor="end">0.4</text>
+<line x1="66.0" y1="184.0" x2="70.0" y2="184.0" class="s-mu" stroke-width="1"/>
+<text x="63.0" y="188.0" class="f-mu" font-size="10" text-anchor="end">0.5</text>
+<line x1="66.0" y1="148.0" x2="70.0" y2="148.0" class="s-mu" stroke-width="1"/>
+<text x="63.0" y="152.0" class="f-mu" font-size="10" text-anchor="end">0.6</text>
+<line x1="66.0" y1="112.0" x2="70.0" y2="112.0" class="s-mu" stroke-width="1"/>
+<text x="63.0" y="116.0" class="f-mu" font-size="10" text-anchor="end">0.7</text>
+<line x1="66.0" y1="76.0" x2="70.0" y2="76.0" class="s-mu" stroke-width="1"/>
+<text x="63.0" y="80.0" class="f-mu" font-size="10" text-anchor="end">0.8</text>
+<line x1="66.0" y1="40.0" x2="70.0" y2="40.0" class="s-mu" stroke-width="1"/>
+<text x="63.0" y="44.0" class="f-mu" font-size="10" text-anchor="end">0.9</text>
+<text x="205.0" y="28.0" class="f-fg" font-size="12" text-anchor="middle" font-weight="600">군집 간 / 전체 비</text>
+<path d="M437.3,62.3 L478.2,81.6 L519.1,134.9 L560.0,124.5 L600.9,140.7 L641.8,155.7 L682.7,153.4" class="s-ac" stroke-width="2" fill="none"/>
+<circle cx="437.3" cy="62.3" r="3.00" class="f-ac s-bg" stroke-width="0.6"/>
+<circle cx="478.2" cy="81.6" r="3.00" class="f-ac s-bg" stroke-width="0.6"/>
+<circle cx="519.1" cy="134.9" r="3.00" class="f-ac s-bg" stroke-width="0.6"/>
+<circle cx="560.0" cy="124.5" r="3.00" class="f-ac s-bg" stroke-width="0.6"/>
+<circle cx="600.9" cy="140.7" r="3.00" class="f-ac s-bg" stroke-width="0.6"/>
+<circle cx="641.8" cy="155.7" r="3.00" class="f-ac s-bg" stroke-width="0.6"/>
+<circle cx="682.7" cy="153.4" r="3.00" class="f-ac s-bg" stroke-width="0.6"/>
+<path d="M437.3,69.8 L478.2,69.2 L519.1,147.5 L560.0,147.7 L600.9,171.4 L641.8,183.6 L682.7,182.4" class="s-bd" stroke-width="2" fill="none" stroke-dasharray="5 3"/>
+<circle cx="437.3" cy="69.8" r="3.00" class="f-bd s-bg" stroke-width="0.6"/>
+<circle cx="478.2" cy="69.2" r="3.00" class="f-bd s-bg" stroke-width="0.6"/>
+<circle cx="519.1" cy="147.5" r="3.00" class="f-bd s-bg" stroke-width="0.6"/>
+<circle cx="560.0" cy="147.7" r="3.00" class="f-bd s-bg" stroke-width="0.6"/>
+<circle cx="600.9" cy="171.4" r="3.00" class="f-bd s-bg" stroke-width="0.6"/>
+<circle cx="641.8" cy="183.6" r="3.00" class="f-bd s-bg" stroke-width="0.6"/>
+<circle cx="682.7" cy="182.4" r="3.00" class="f-bd s-bg" stroke-width="0.6"/>
+<line x1="425.0" y1="220.0" x2="695.0" y2="220.0" class="s-mu" stroke-width="1"/>
+<line x1="437.3" y1="220.0" x2="437.3" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="437.3" y="235.0" class="f-mu" font-size="10" text-anchor="middle">2</text>
+<line x1="478.2" y1="220.0" x2="478.2" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="478.2" y="235.0" class="f-mu" font-size="10" text-anchor="middle">3</text>
+<line x1="519.1" y1="220.0" x2="519.1" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="519.1" y="235.0" class="f-mu" font-size="10" text-anchor="middle">4</text>
+<line x1="560.0" y1="220.0" x2="560.0" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="560.0" y="235.0" class="f-mu" font-size="10" text-anchor="middle">5</text>
+<line x1="600.9" y1="220.0" x2="600.9" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="600.9" y="235.0" class="f-mu" font-size="10" text-anchor="middle">6</text>
+<line x1="641.8" y1="220.0" x2="641.8" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="641.8" y="235.0" class="f-mu" font-size="10" text-anchor="middle">7</text>
+<line x1="682.7" y1="220.0" x2="682.7" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="682.7" y="235.0" class="f-mu" font-size="10" text-anchor="middle">8</text>
+<text x="560.0" y="252.0" class="f-mu" font-size="11" text-anchor="middle">군집 수 k</text>
+<line x1="425.0" y1="40.0" x2="425.0" y2="220.0" class="s-mu" stroke-width="1"/>
+<line x1="421.0" y1="220.0" x2="425.0" y2="220.0" class="s-mu" stroke-width="1"/>
+<text x="418.0" y="224.0" class="f-mu" font-size="10" text-anchor="end">0.2</text>
+<line x1="421.0" y1="184.0" x2="425.0" y2="184.0" class="s-mu" stroke-width="1"/>
+<text x="418.0" y="188.0" class="f-mu" font-size="10" text-anchor="end">0.25</text>
+<line x1="421.0" y1="148.0" x2="425.0" y2="148.0" class="s-mu" stroke-width="1"/>
+<text x="418.0" y="152.0" class="f-mu" font-size="10" text-anchor="end">0.3</text>
+<line x1="421.0" y1="112.0" x2="425.0" y2="112.0" class="s-mu" stroke-width="1"/>
+<text x="418.0" y="116.0" class="f-mu" font-size="10" text-anchor="end">0.35</text>
+<line x1="421.0" y1="76.0" x2="425.0" y2="76.0" class="s-mu" stroke-width="1"/>
+<text x="418.0" y="80.0" class="f-mu" font-size="10" text-anchor="end">0.4</text>
+<line x1="421.0" y1="40.0" x2="425.0" y2="40.0" class="s-mu" stroke-width="1"/>
+<text x="418.0" y="44.0" class="f-mu" font-size="10" text-anchor="end">0.45</text>
+<text x="560.0" y="28.0" class="f-fg" font-size="12" text-anchor="middle" font-weight="600">평균 실루엣 계수</text>
+</svg>
