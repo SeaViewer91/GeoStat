@@ -52,7 +52,7 @@ GeoStat으로 따라 하는 공간통계학 입문서임. 공간정보·지리�
 | 26 | [공간오차 모형과 모형 계보](lessons/26-spatial-error-and-family.md) | ◐ | 초안 |
 | 27 | [공간 회귀의 확장](lessons/27-spatial-regression-extensions.md) | ◐ | 초안 |
 | **7부** | **공간 이질성** | | |
-| 28 | 공간 비정상성 | ◐ | |
+| 28 | [공간 비정상성](lessons/28-spatial-nonstationarity.md) | ◐ | 초안 |
 | 29 | 지리가중회귀(GWR) | ● | |
 | 30 | MGWR과 해석 | ● | |
 | **8부** | **영역화** | | |

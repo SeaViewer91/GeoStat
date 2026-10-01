@@ -8,7 +8,7 @@ updated: 2026-10-01
 status: draft
 ---
 
-[목차](../README.md) · 이전: [26강 공간오차 모형과 모형 계보](26-spatial-error-and-family.md) · 다음: 28강 공간 비정상성 (집필 예정)
+[목차](../README.md) · 이전: [26강 공간오차 모형과 모형 계보](26-spatial-error-and-family.md) · 다음: [28강 공간 비정상성](28-spatial-nonstationarity.md)
 
 # 27강 공간 회귀의 확장
 
@@ -293,4 +293,4 @@ print(f"음이항: 계수 {coef}, α {nb.params[-1]:.4f}")
 
 ---
 
-[목차](../README.md) · 이전: [26강 공간오차 모형과 모형 계보](26-spatial-error-and-family.md) · 다음: 28강 공간 비정상성 (집필 예정)
+[목차](../README.md) · 이전: [26강 공간오차 모형과 모형 계보](26-spatial-error-and-family.md) · 다음: [28강 공간 비정상성](28-spatial-nonstationarity.md)
