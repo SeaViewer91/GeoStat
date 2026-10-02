@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 300" role="img" aria-label="왼쪽: 400픽셀로 시 평균 지표온도를 추정할 때의 실제 RMSE(막대)와 순진한 표준오차 s/√400(점). 픽셀이 붙어 있을수록 실제 오차가 커지는데 순진한 표준오차는 작아짐. 20×20 한 덩어리의 400픽셀은 독립 픽셀 1.2개만큼의 정보임. 오른쪽: 고온 픽셀 분류의 정확도. 훈련 구역 안에서 픽셀을 무작위로 나눈 교차검증은 0.955로 실제 지도 정확도(0.887, 점선)를 크게 부풀림. 구역 단위로 나눈 교차검증도 0.937로 여전히 높음(훈련 구역이 시 전체를 대표하지 않음). 시 전체에서 무작위로 뽑은 독립 표본 1,000픽셀(0.888)만 실제와 맞음">
+<style>
+.gsfig{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
+.gsfig .s-fg{stroke:#1c2330}.gsfig .s-mu{stroke:#8a93a3}.gsfig .s-ac{stroke:#2563eb}.gsfig .s-bd{stroke:#c2410c}.gsfig .s-ok{stroke:#15803d}.gsfig .s-bg{stroke:#ffffff}
+.gsfig .f-fg{fill:#1c2330}.gsfig .f-mu{fill:#5a6475}.gsfig .f-ac{fill:#2563eb}.gsfig .f-acs{fill:#e6eefe}.gsfig .f-bd{fill:#c2410c}
+.gsfig .f-bds{fill:#fdeee6}.gsfig .f-ok{fill:#15803d}.gsfig .f-sf{fill:#f0f2f5}.gsfig .f-bg{fill:#ffffff}
+.gsfig .d0{fill:#2166ac}.gsfig .d1{fill:#67a9cf}.gsfig .d2{fill:#d1e5f0}.gsfig .d3{fill:#fddbc7}.gsfig .d4{fill:#ef8a62}.gsfig .d5{fill:#b2182b}
+.gsfig .q0{fill:#fff1e0}.gsfig .q1{fill:#fdc98f}.gsfig .q2{fill:#f98f45}.gsfig .q3{fill:#d9530f}.gsfig .q4{fill:#8c2d04}
+@media (prefers-color-scheme:dark){
+.gsfig .s-fg{stroke:#e6e9ef}.gsfig .s-mu{stroke:#737c8c}.gsfig .s-ac{stroke:#6d9bff}.gsfig .s-bd{stroke:#fb8b5b}.gsfig .s-ok{stroke:#4ade80}.gsfig .s-bg{stroke:#1a1e26}
+.gsfig .f-fg{fill:#e6e9ef}.gsfig .f-mu{fill:#a7afbd}.gsfig .f-ac{fill:#6d9bff}.gsfig .f-acs{fill:#1f2b45}.gsfig .f-bd{fill:#fb8b5b}
+.gsfig .f-bds{fill:#3a2218}.gsfig .f-ok{fill:#4ade80}.gsfig .f-sf{fill:#222733}.gsfig .f-bg{fill:#1a1e26}}
+</style>
+<rect x="0" y="0" width="720" height="300" class="f-bg"/>
+<rect x="87.3" y="211.7" width="52.0" height="8.3" rx="0" class="s-bg f-ac" stroke-width="0.5"/>
+<circle cx="113.3" cy="211.6" r="4.50" class="f-bd s-bg" stroke-width="1"/>
+<text x="113.3" y="236.0" class="f-mu" font-size="10" text-anchor="middle">무작위 400픽셀</text>
+<text x="113.3" y="205.7" class="f-fg" font-size="10" text-anchor="middle">n_eff 414</text>
+<rect x="174.0" y="180.0" width="52.0" height="40.0" rx="0" class="s-bg f-ac" stroke-width="0.5"/>
+<circle cx="200.0" cy="211.9" r="4.50" class="f-bd s-bg" stroke-width="1"/>
+<text x="200.0" y="236.0" class="f-mu" font-size="10" text-anchor="middle">5×5 묶음 16개</text>
+<text x="200.0" y="174.0" class="f-fg" font-size="10" text-anchor="middle">n_eff 18</text>
+<rect x="260.7" y="63.5" width="52.0" height="156.5" rx="0" class="s-bg f-ac" stroke-width="0.5"/>
+<circle cx="286.7" cy="217.1" r="4.50" class="f-bd s-bg" stroke-width="1"/>
+<text x="286.7" y="236.0" class="f-mu" font-size="10" text-anchor="middle">20×20 한 덩어리</text>
+<text x="286.7" y="57.5" class="f-fg" font-size="10" text-anchor="middle">n_eff 1.2</text>
+<line x1="70.0" y1="40.0" x2="70.0" y2="220.0" class="s-mu" stroke-width="1"/>
+<line x1="66.0" y1="220.0" x2="70.0" y2="220.0" class="s-mu" stroke-width="1"/>
+<text x="63.0" y="224.0" class="f-mu" font-size="10" text-anchor="end">0</text>
+<line x1="66.0" y1="183.4" x2="70.0" y2="183.4" class="s-mu" stroke-width="1"/>
+<text x="63.0" y="187.4" class="f-mu" font-size="10" text-anchor="end">0.5</text>
+<line x1="66.0" y1="146.7" x2="70.0" y2="146.7" class="s-mu" stroke-width="1"/>
+<text x="63.0" y="150.7" class="f-mu" font-size="10" text-anchor="end">1</text>
+<line x1="66.0" y1="110.1" x2="70.0" y2="110.1" class="s-mu" stroke-width="1"/>
+<text x="63.0" y="114.1" class="f-mu" font-size="10" text-anchor="end">1.5</text>
+<line x1="66.0" y1="73.4" x2="70.0" y2="73.4" class="s-mu" stroke-width="1"/>
+<text x="63.0" y="77.4" class="f-mu" font-size="10" text-anchor="end">2</text>
+<text x="62.0" y="30.0" class="f-mu" font-size="11" text-anchor="start">시 평균 추정 오차 (℃)</text>
+<rect x="80.0" y="270.0" width="12.0" height="12.0" rx="0" class="s-mu f-ac" stroke-width="0.5"/>
+<text x="98.0" y="280.0" class="f-fg" font-size="11" text-anchor="start">실제 RMSE</text>
+<circle cx="196.0" cy="276.0" r="4.50" class="f-bd s-bg" stroke-width="1"/>
+<text x="206.0" y="280.0" class="f-fg" font-size="11" text-anchor="start">순진한 표준오차</text>
+<rect x="456.7" y="56.1" width="50.0" height="163.9" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<text x="481.7" y="50.1" class="f-fg" font-size="10" text-anchor="middle">0.955</text>
+<text x="481.7" y="236.0" class="f-mu" font-size="10" text-anchor="middle">픽셀 무작위 5겹</text>
+<rect x="540.0" y="62.8" width="50.0" height="157.2" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<text x="565.0" y="56.8" class="f-fg" font-size="10" text-anchor="middle">0.937</text>
+<text x="565.0" y="236.0" class="f-mu" font-size="10" text-anchor="middle">구역 단위 5겹</text>
+<rect x="623.3" y="80.3" width="50.0" height="139.7" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<text x="648.3" y="74.3" class="f-fg" font-size="10" text-anchor="middle">0.888</text>
+<text x="648.3" y="236.0" class="f-mu" font-size="10" text-anchor="middle">독립 확률 표본</text>
+<line x1="440.0" y1="80.7" x2="690.0" y2="80.7" class="s-fg" stroke-width="1.6" stroke-dasharray="5 3"/>
+<line x1="460.0" y1="276.0" x2="486.0" y2="276.0" class="s-fg" stroke-width="1.6" stroke-dasharray="5 3"/>
+<text x="492.0" y="280.0" class="f-fg" font-size="11" text-anchor="start">실제 지도 정확도 0.887</text>
+<line x1="440.0" y1="40.0" x2="440.0" y2="220.0" class="s-mu" stroke-width="1"/>
+<line x1="436.0" y1="220.0" x2="440.0" y2="220.0" class="s-mu" stroke-width="1"/>
+<text x="433.0" y="224.0" class="f-mu" font-size="10" text-anchor="end">0.5</text>
+<line x1="436.0" y1="184.0" x2="440.0" y2="184.0" class="s-mu" stroke-width="1"/>
+<text x="433.0" y="188.0" class="f-mu" font-size="10" text-anchor="end">0.6</text>
+<line x1="436.0" y1="148.0" x2="440.0" y2="148.0" class="s-mu" stroke-width="1"/>
+<text x="433.0" y="152.0" class="f-mu" font-size="10" text-anchor="end">0.7</text>
+<line x1="436.0" y1="112.0" x2="440.0" y2="112.0" class="s-mu" stroke-width="1"/>
+<text x="433.0" y="116.0" class="f-mu" font-size="10" text-anchor="end">0.8</text>
+<line x1="436.0" y1="76.0" x2="440.0" y2="76.0" class="s-mu" stroke-width="1"/>
+<text x="433.0" y="80.0" class="f-mu" font-size="10" text-anchor="end">0.9</text>
+<line x1="436.0" y1="40.0" x2="440.0" y2="40.0" class="s-mu" stroke-width="1"/>
+<text x="433.0" y="44.0" class="f-mu" font-size="10" text-anchor="end">1</text>
+<text x="432.0" y="30.0" class="f-mu" font-size="11" text-anchor="start">전체 정확도</text>
+</svg>

@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 300" role="img" aria-label="참값을 아는 모의 400회(참 출동률을 감마분포에서 뽑고, 실제 동 인구로 건수를 만듦). 왼쪽: 인구 4분위별 평균제곱오차. 인구가 적을수록 원비율의 오차가 크고, EB와 완전 베이즈가 크게 줄임. 오른쪽: 95% 구간이 참값을 포함한 비율. 원비율(정확 포아송 구간)은 95%를 넘고, EB와 완전 베이즈는 평균으로 95% 가까이 맞음. 그러나 참 비율이 상위 10%인 동만 보면, 인구 1분위에서 EB 72%, 완전 베이즈 75%로 크게 모자람(평균 쪽으로 당겨서)">
+<style>
+.gsfig{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
+.gsfig .s-fg{stroke:#1c2330}.gsfig .s-mu{stroke:#8a93a3}.gsfig .s-ac{stroke:#2563eb}.gsfig .s-bd{stroke:#c2410c}.gsfig .s-ok{stroke:#15803d}.gsfig .s-bg{stroke:#ffffff}
+.gsfig .f-fg{fill:#1c2330}.gsfig .f-mu{fill:#5a6475}.gsfig .f-ac{fill:#2563eb}.gsfig .f-acs{fill:#e6eefe}.gsfig .f-bd{fill:#c2410c}
+.gsfig .f-bds{fill:#fdeee6}.gsfig .f-ok{fill:#15803d}.gsfig .f-sf{fill:#f0f2f5}.gsfig .f-bg{fill:#ffffff}
+.gsfig .d0{fill:#2166ac}.gsfig .d1{fill:#67a9cf}.gsfig .d2{fill:#d1e5f0}.gsfig .d3{fill:#fddbc7}.gsfig .d4{fill:#ef8a62}.gsfig .d5{fill:#b2182b}
+.gsfig .q0{fill:#fff1e0}.gsfig .q1{fill:#fdc98f}.gsfig .q2{fill:#f98f45}.gsfig .q3{fill:#d9530f}.gsfig .q4{fill:#8c2d04}
+@media (prefers-color-scheme:dark){
+.gsfig .s-fg{stroke:#e6e9ef}.gsfig .s-mu{stroke:#737c8c}.gsfig .s-ac{stroke:#6d9bff}.gsfig .s-bd{stroke:#fb8b5b}.gsfig .s-ok{stroke:#4ade80}.gsfig .s-bg{stroke:#1a1e26}
+.gsfig .f-fg{fill:#e6e9ef}.gsfig .f-mu{fill:#a7afbd}.gsfig .f-ac{fill:#6d9bff}.gsfig .f-acs{fill:#1f2b45}.gsfig .f-bd{fill:#fb8b5b}
+.gsfig .f-bds{fill:#3a2218}.gsfig .f-ok{fill:#4ade80}.gsfig .f-sf{fill:#222733}.gsfig .f-bg{fill:#1a1e26}}
+</style>
+<rect x="0" y="0" width="720" height="300" class="f-bg"/>
+<rect x="74.0" y="53.3" width="12.6" height="166.7" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<rect x="88.0" y="196.1" width="12.6" height="23.9" rx="0" class="s-bg f-bd" stroke-width="0.5"/>
+<rect x="102.0" y="196.1" width="12.6" height="23.9" rx="0" class="s-bg f-ac" stroke-width="0.5"/>
+<text x="95.0" y="236.0" class="f-mu" font-size="10" text-anchor="middle">1분위</text>
+<rect x="144.0" y="164.2" width="12.6" height="55.8" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<rect x="158.0" y="201.5" width="12.6" height="18.5" rx="0" class="s-bg f-bd" stroke-width="0.5"/>
+<rect x="172.0" y="201.5" width="12.6" height="18.5" rx="0" class="s-bg f-ac" stroke-width="0.5"/>
+<text x="165.0" y="236.0" class="f-mu" font-size="10" text-anchor="middle">2분위</text>
+<rect x="214.0" y="188.6" width="12.6" height="31.4" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<rect x="228.0" y="204.8" width="12.6" height="15.2" rx="0" class="s-bg f-bd" stroke-width="0.5"/>
+<rect x="242.0" y="204.8" width="12.6" height="15.2" rx="0" class="s-bg f-ac" stroke-width="0.5"/>
+<text x="235.0" y="236.0" class="f-mu" font-size="10" text-anchor="middle">3분위</text>
+<rect x="284.0" y="196.6" width="12.6" height="23.4" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<rect x="298.0" y="207.3" width="12.6" height="12.7" rx="0" class="s-bg f-bd" stroke-width="0.5"/>
+<rect x="312.0" y="207.3" width="12.6" height="12.7" rx="0" class="s-bg f-ac" stroke-width="0.5"/>
+<text x="305.0" y="236.0" class="f-mu" font-size="10" text-anchor="middle">4분위</text>
+<line x1="60.0" y1="40.0" x2="60.0" y2="220.0" class="s-mu" stroke-width="1"/>
+<line x1="56.0" y1="220.0" x2="60.0" y2="220.0" class="s-mu" stroke-width="1"/>
+<text x="53.0" y="224.0" class="f-mu" font-size="10" text-anchor="end">0</text>
+<line x1="56.0" y1="166.4" x2="60.0" y2="166.4" class="s-mu" stroke-width="1"/>
+<text x="53.0" y="170.4" class="f-mu" font-size="10" text-anchor="end">20</text>
+<line x1="56.0" y1="112.9" x2="60.0" y2="112.9" class="s-mu" stroke-width="1"/>
+<text x="53.0" y="116.9" class="f-mu" font-size="10" text-anchor="end">40</text>
+<line x1="56.0" y1="59.3" x2="60.0" y2="59.3" class="s-mu" stroke-width="1"/>
+<text x="53.0" y="63.3" class="f-mu" font-size="10" text-anchor="end">60</text>
+<text x="52.0" y="30.0" class="f-mu" font-size="11" text-anchor="start">평균제곱오차</text>
+<text x="200.0" y="254.0" class="f-mu" font-size="11" text-anchor="middle">인구 4분위 (1분위 = 가장 적음)</text>
+<rect x="431.2" y="51.6" width="10.1" height="168.4" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<rect x="442.4" y="59.3" width="10.1" height="160.7" rx="0" class="s-bg f-bd" stroke-width="0.5"/>
+<rect x="453.6" y="57.8" width="10.1" height="162.2" rx="0" class="s-bg f-ac" stroke-width="0.5"/>
+<text x="448.0" y="236.0" class="f-mu" font-size="10" text-anchor="middle">1분위</text>
+<rect x="487.2" y="53.7" width="10.1" height="166.3" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<rect x="498.4" y="58.9" width="10.1" height="161.1" rx="0" class="s-bg f-bd" stroke-width="0.5"/>
+<rect x="509.6" y="57.8" width="10.1" height="162.2" rx="0" class="s-bg f-ac" stroke-width="0.5"/>
+<text x="504.0" y="236.0" class="f-mu" font-size="10" text-anchor="middle">2분위</text>
+<rect x="543.2" y="54.6" width="10.1" height="165.4" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<rect x="554.4" y="59.1" width="10.1" height="160.9" rx="0" class="s-bg f-bd" stroke-width="0.5"/>
+<rect x="565.6" y="58.2" width="10.1" height="161.8" rx="0" class="s-bg f-ac" stroke-width="0.5"/>
+<text x="560.0" y="236.0" class="f-mu" font-size="10" text-anchor="middle">3분위</text>
+<rect x="599.2" y="55.2" width="10.1" height="164.8" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<rect x="610.4" y="58.3" width="10.1" height="161.7" rx="0" class="s-bg f-bd" stroke-width="0.5"/>
+<rect x="621.6" y="57.8" width="10.1" height="162.2" rx="0" class="s-bg f-ac" stroke-width="0.5"/>
+<text x="616.0" y="236.0" class="f-mu" font-size="10" text-anchor="middle">4분위</text>
+<rect x="655.2" y="52.2" width="10.1" height="167.8" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<rect x="666.4" y="96.1" width="10.1" height="123.9" rx="0" class="s-bg f-bd" stroke-width="0.5"/>
+<rect x="677.6" y="90.8" width="10.1" height="129.2" rx="0" class="s-bg f-ac" stroke-width="0.5"/>
+<text x="672.0" y="236.0" class="f-mu" font-size="10" text-anchor="middle">상위 10%</text>
+<text x="672.0" y="249.0" class="f-mu" font-size="10" text-anchor="middle">(1분위)</text>
+<line x1="420.0" y1="40.0" x2="420.0" y2="220.0" class="s-mu" stroke-width="0.5"/>
+<line x1="420.0" y1="57.1" x2="700.0" y2="57.1" class="s-fg" stroke-width="1" stroke-dasharray="4 3"/>
+<line x1="420.0" y1="40.0" x2="420.0" y2="220.0" class="s-mu" stroke-width="1"/>
+<line x1="416.0" y1="220.0" x2="420.0" y2="220.0" class="s-mu" stroke-width="1"/>
+<text x="413.0" y="224.0" class="f-mu" font-size="10" text-anchor="end">0</text>
+<line x1="416.0" y1="177.1" x2="420.0" y2="177.1" class="s-mu" stroke-width="1"/>
+<text x="413.0" y="181.1" class="f-mu" font-size="10" text-anchor="end">0.25</text>
+<line x1="416.0" y1="134.3" x2="420.0" y2="134.3" class="s-mu" stroke-width="1"/>
+<text x="413.0" y="138.3" class="f-mu" font-size="10" text-anchor="end">0.5</text>
+<line x1="416.0" y1="91.4" x2="420.0" y2="91.4" class="s-mu" stroke-width="1"/>
+<text x="413.0" y="95.4" class="f-mu" font-size="10" text-anchor="end">0.75</text>
+<line x1="416.0" y1="57.1" x2="420.0" y2="57.1" class="s-mu" stroke-width="1"/>
+<text x="413.0" y="61.1" class="f-mu" font-size="10" text-anchor="end">0.95</text>
+<text x="412.0" y="30.0" class="f-mu" font-size="11" text-anchor="start">95% 구간 포함률</text>
+<rect x="150.0" y="269.0" width="12.0" height="12.0" rx="0" class="s-mu f-mu" stroke-width="0.5"/>
+<text x="168.0" y="279.0" class="f-fg" font-size="11" text-anchor="start">원비율</text>
+<rect x="300.0" y="269.0" width="12.0" height="12.0" rx="0" class="s-mu f-bd" stroke-width="0.5"/>
+<text x="318.0" y="279.0" class="f-fg" font-size="11" text-anchor="start">EB</text>
+<rect x="450.0" y="269.0" width="12.0" height="12.0" rx="0" class="s-mu f-ac" stroke-width="0.5"/>
+<text x="468.0" y="279.0" class="f-fg" font-size="11" text-anchor="start">완전 베이즈</text>
+</svg>

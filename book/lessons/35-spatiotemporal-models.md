@@ -8,7 +8,7 @@ updated: 2026-10-02
 status: draft
 ---
 
-[목차](../README.md) · 이전: [34강 시공간 탐색](34-spatiotemporal-exploration.md) · 다음: 36강 베이지안 사고와 계층 모형 (집필 예정)
+[목차](../README.md) · 이전: [34강 시공간 탐색](34-spatiotemporal-exploration.md) · 다음: [36강 베이지안 사고와 계층 모형](36-bayesian-hierarchical.md)
 
 # 35강 시공간 모형 개요
 
@@ -327,4 +327,4 @@ for j, name in enumerate(["고령비율", "폭염일수"]):
 
 ---
 
-[목차](../README.md) · 이전: [34강 시공간 탐색](34-spatiotemporal-exploration.md) · 다음: 36강 베이지안 사고와 계층 모형 (집필 예정)
+[목차](../README.md) · 이전: [34강 시공간 탐색](34-spatiotemporal-exploration.md) · 다음: [36강 베이지안 사고와 계층 모형](36-bayesian-hierarchical.md)

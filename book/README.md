@@ -63,15 +63,15 @@ GeoStat으로 따라 하는 공간통계학 입문서임. 공간정보·지리�
 | 34 | [시공간 탐색](lessons/34-spatiotemporal-exploration.md) | ◐ | 초안 |
 | 35 | [시공간 모형 개요](lessons/35-spatiotemporal-models.md) | ○ | 초안 |
 | **10부** | **베이지안 공간 모형** | | |
-| 36 | 베이지안 사고와 계층 모형 | ◐ | |
-| 37 | 질병 지도와 CAR 모형 | ○ | |
+| 36 | [베이지안 사고와 계층 모형](lessons/36-bayesian-hierarchical.md) | ◐ | 초안 |
+| 37 | [질병 지도와 CAR 모형](lessons/37-disease-mapping-car.md) | ○ | 초안 |
 | **11부** | **공간 데이터 과학** | | |
-| 38 | 공간 표본 설계 | ○ | |
-| 39 | 공간 교차검증과 머신러닝 | ○ | |
-| 40 | 격자·래스터 자료와 공간통계 | ◐ | |
+| 38 | [공간 표본 설계](lessons/38-spatial-sampling.md) | ○ | 초안 |
+| 39 | [공간 교차검증과 머신러닝](lessons/39-spatial-cv-ml.md) | ○ | 초안 |
+| 40 | [격자·래스터 자료와 공간통계](lessons/40-raster-grid.md) | ◐ | 초안 |
 | **12부** | **연구와 보고** | | |
-| 41 | 공간 분석 연구 설계 | ● | |
-| 42 | 쓰고 읽기 | ● | |
+| 41 | [공간 분석 연구 설계](lessons/41-research-design.md) | ● | 초안 |
+| 42 | [쓰고 읽기](lessons/42-writing-reading.md) | ● | 초안 |
 | **부록** | | | |
 | A | 방법 선택 지도 | | |
 | B | 수학 준비 | | |

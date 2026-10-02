@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 320" role="img" aria-label="교차검증으로 추정한 RMSE(막대)와 시 전체 지도의 실제 RMSE(검은 가로선). 왼쪽: 40곳에 15점씩 모인 집중 표본. 무작위 10겹 교차검증은 실제 오차를 크게 과소평가함(RF 공변량+좌표: 추정 0.71, 실제 1.26). 공간 블록과 완충 LOO가 실제에 더 가까움. 오른쪽: 시 전체에서 단순 무작위로 뽑은 표본. 무작위 10겹이 실제와 비슷하고, 공간 블록·완충 LOO는 대체로 과대평가함">
+<style>
+.gsfig{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
+.gsfig .s-fg{stroke:#1c2330}.gsfig .s-mu{stroke:#8a93a3}.gsfig .s-ac{stroke:#2563eb}.gsfig .s-bd{stroke:#c2410c}.gsfig .s-ok{stroke:#15803d}.gsfig .s-bg{stroke:#ffffff}
+.gsfig .f-fg{fill:#1c2330}.gsfig .f-mu{fill:#5a6475}.gsfig .f-ac{fill:#2563eb}.gsfig .f-acs{fill:#e6eefe}.gsfig .f-bd{fill:#c2410c}
+.gsfig .f-bds{fill:#fdeee6}.gsfig .f-ok{fill:#15803d}.gsfig .f-sf{fill:#f0f2f5}.gsfig .f-bg{fill:#ffffff}
+.gsfig .d0{fill:#2166ac}.gsfig .d1{fill:#67a9cf}.gsfig .d2{fill:#d1e5f0}.gsfig .d3{fill:#fddbc7}.gsfig .d4{fill:#ef8a62}.gsfig .d5{fill:#b2182b}
+.gsfig .q0{fill:#fff1e0}.gsfig .q1{fill:#fdc98f}.gsfig .q2{fill:#f98f45}.gsfig .q3{fill:#d9530f}.gsfig .q4{fill:#8c2d04}
+@media (prefers-color-scheme:dark){
+.gsfig .s-fg{stroke:#e6e9ef}.gsfig .s-mu{stroke:#737c8c}.gsfig .s-ac{stroke:#6d9bff}.gsfig .s-bd{stroke:#fb8b5b}.gsfig .s-ok{stroke:#4ade80}.gsfig .s-bg{stroke:#1a1e26}
+.gsfig .f-fg{fill:#e6e9ef}.gsfig .f-mu{fill:#a7afbd}.gsfig .f-ac{fill:#6d9bff}.gsfig .f-acs{fill:#1f2b45}.gsfig .f-bd{fill:#fb8b5b}
+.gsfig .f-bds{fill:#3a2218}.gsfig .f-ok{fill:#4ade80}.gsfig .f-sf{fill:#222733}.gsfig .f-bg{fill:#1a1e26}}
+</style>
+<rect x="0" y="0" width="720" height="320" class="f-bg"/>
+<rect x="75.9" y="99.6" width="18.7" height="130.4" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<rect x="96.4" y="84.7" width="18.7" height="145.3" rx="0" class="s-bg f-ac" stroke-width="0.5"/>
+<rect x="116.9" y="64.7" width="18.7" height="165.3" rx="0" class="s-bg f-bd" stroke-width="0.5"/>
+<line x1="69.3" y1="73.0" x2="144.0" y2="73.0" class="s-fg" stroke-width="2.2"/>
+<text x="106.7" y="246.0" class="f-mu" font-size="10" text-anchor="middle">선형 회귀</text>
+<rect x="169.2" y="158.2" width="18.7" height="71.8" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<rect x="189.7" y="117.0" width="18.7" height="113.0" rx="0" class="s-bg f-ac" stroke-width="0.5"/>
+<rect x="210.3" y="78.3" width="18.7" height="151.7" rx="0" class="s-bg f-bd" stroke-width="0.5"/>
+<line x1="162.7" y1="109.1" x2="237.3" y2="109.1" class="s-fg" stroke-width="2.2"/>
+<text x="200.0" y="246.0" class="f-mu" font-size="10" text-anchor="middle">RF(공변량)</text>
+<rect x="262.5" y="165.3" width="18.7" height="64.7" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<rect x="283.1" y="114.6" width="18.7" height="115.4" rx="0" class="s-bg f-ac" stroke-width="0.5"/>
+<rect x="303.6" y="92.0" width="18.7" height="138.0" rx="0" class="s-bg f-bd" stroke-width="0.5"/>
+<line x1="256.0" y1="115.1" x2="330.7" y2="115.1" class="s-fg" stroke-width="2.2"/>
+<text x="293.3" y="246.0" class="f-mu" font-size="10" text-anchor="middle">RF(공변량+좌표)</text>
+<line x1="60.0" y1="40.0" x2="60.0" y2="230.0" class="s-mu" stroke-width="1"/>
+<line x1="56.0" y1="230.0" x2="60.0" y2="230.0" class="s-mu" stroke-width="1"/>
+<text x="53.0" y="234.0" class="f-mu" font-size="10" text-anchor="end">0</text>
+<line x1="56.0" y1="184.4" x2="60.0" y2="184.4" class="s-mu" stroke-width="1"/>
+<text x="53.0" y="188.4" class="f-mu" font-size="10" text-anchor="end">0.5</text>
+<line x1="56.0" y1="138.8" x2="60.0" y2="138.8" class="s-mu" stroke-width="1"/>
+<text x="53.0" y="142.8" class="f-mu" font-size="10" text-anchor="end">1</text>
+<line x1="56.0" y1="93.2" x2="60.0" y2="93.2" class="s-mu" stroke-width="1"/>
+<text x="53.0" y="97.2" class="f-mu" font-size="10" text-anchor="end">1.5</text>
+<line x1="56.0" y1="47.6" x2="60.0" y2="47.6" class="s-mu" stroke-width="1"/>
+<text x="53.0" y="51.6" class="f-mu" font-size="10" text-anchor="end">2</text>
+<text x="52.0" y="30.0" class="f-mu" font-size="11" text-anchor="start">RMSE (℃)</text>
+<text x="200.0" y="26.0" class="f-fg" font-size="12" text-anchor="middle" font-weight="600">집중 표본 (600점)</text>
+<rect x="415.9" y="78.0" width="18.7" height="152.0" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<rect x="436.4" y="74.4" width="18.7" height="155.6" rx="0" class="s-bg f-ac" stroke-width="0.5"/>
+<rect x="456.9" y="57.3" width="18.7" height="172.7" rx="0" class="s-bg f-bd" stroke-width="0.5"/>
+<line x1="409.3" y1="74.4" x2="484.0" y2="74.4" class="s-fg" stroke-width="2.2"/>
+<text x="446.7" y="246.0" class="f-mu" font-size="10" text-anchor="middle">선형 회귀</text>
+<rect x="509.2" y="122.0" width="18.7" height="108.0" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<rect x="529.7" y="103.8" width="18.7" height="126.2" rx="0" class="s-bg f-ac" stroke-width="0.5"/>
+<rect x="550.3" y="98.2" width="18.7" height="131.8" rx="0" class="s-bg f-bd" stroke-width="0.5"/>
+<line x1="502.7" y1="123.4" x2="577.3" y2="123.4" class="s-fg" stroke-width="2.2"/>
+<text x="540.0" y="246.0" class="f-mu" font-size="10" text-anchor="middle">RF(공변량)</text>
+<rect x="602.5" y="141.0" width="18.7" height="89.0" rx="0" class="s-bg f-mu" stroke-width="0.5"/>
+<rect x="623.1" y="119.1" width="18.7" height="110.9" rx="0" class="s-bg f-ac" stroke-width="0.5"/>
+<rect x="643.6" y="118.2" width="18.7" height="111.8" rx="0" class="s-bg f-bd" stroke-width="0.5"/>
+<line x1="596.0" y1="135.3" x2="670.7" y2="135.3" class="s-fg" stroke-width="2.2"/>
+<text x="633.3" y="246.0" class="f-mu" font-size="10" text-anchor="middle">RF(공변량+좌표)</text>
+<line x1="400.0" y1="40.0" x2="400.0" y2="230.0" class="s-mu" stroke-width="1"/>
+<line x1="396.0" y1="230.0" x2="400.0" y2="230.0" class="s-mu" stroke-width="1"/>
+<text x="393.0" y="234.0" class="f-mu" font-size="10" text-anchor="end">0</text>
+<line x1="396.0" y1="184.4" x2="400.0" y2="184.4" class="s-mu" stroke-width="1"/>
+<text x="393.0" y="188.4" class="f-mu" font-size="10" text-anchor="end">0.5</text>
+<line x1="396.0" y1="138.8" x2="400.0" y2="138.8" class="s-mu" stroke-width="1"/>
+<text x="393.0" y="142.8" class="f-mu" font-size="10" text-anchor="end">1</text>
+<line x1="396.0" y1="93.2" x2="400.0" y2="93.2" class="s-mu" stroke-width="1"/>
+<text x="393.0" y="97.2" class="f-mu" font-size="10" text-anchor="end">1.5</text>
+<line x1="396.0" y1="47.6" x2="400.0" y2="47.6" class="s-mu" stroke-width="1"/>
+<text x="393.0" y="51.6" class="f-mu" font-size="10" text-anchor="end">2</text>
+<text x="392.0" y="30.0" class="f-mu" font-size="11" text-anchor="start">RMSE (℃)</text>
+<text x="540.0" y="26.0" class="f-fg" font-size="12" text-anchor="middle" font-weight="600">무작위 표본 (600점)</text>
+<rect x="120.0" y="286.0" width="12.0" height="12.0" rx="0" class="s-mu f-mu" stroke-width="0.5"/>
+<text x="138.0" y="296.0" class="f-fg" font-size="11" text-anchor="start">무작위 10겹</text>
+<rect x="245.0" y="286.0" width="12.0" height="12.0" rx="0" class="s-mu f-ac" stroke-width="0.5"/>
+<text x="263.0" y="296.0" class="f-fg" font-size="11" text-anchor="start">공간 블록 10겹</text>
+<rect x="392.0" y="286.0" width="12.0" height="12.0" rx="0" class="s-mu f-bd" stroke-width="0.5"/>
+<text x="410.0" y="296.0" class="f-fg" font-size="11" text-anchor="start">완충 LOO</text>
+<line x1="506.0" y1="292.0" x2="530.0" y2="292.0" class="s-fg" stroke-width="2.2"/>
+<text x="536.0" y="296.0" class="f-fg" font-size="11" text-anchor="start">실제 지도 RMSE</text>
+</svg>

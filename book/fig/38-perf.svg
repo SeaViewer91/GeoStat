@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 300" role="img" aria-label="설계별 성능(모의, n = 25·50·100). 왼쪽: 시 평균 지표온도 추정의 RMSE. 공간적으로 고르게 퍼진 설계(계통, GRTS, 공간 피복)가 단순 무작위보다 작고, 층화(구)는 그 사이. 오른쪽: 표본점으로 정규 크리깅한 지도의 RMSE(검증 셀 3,000개). 고르게 퍼진 설계일수록 작고, 계통과 공간 피복이 가장 작음(거의 같음). 점선은 단순 무작위">
+<style>
+.gsfig{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
+.gsfig .s-fg{stroke:#1c2330}.gsfig .s-mu{stroke:#8a93a3}.gsfig .s-ac{stroke:#2563eb}.gsfig .s-bd{stroke:#c2410c}.gsfig .s-ok{stroke:#15803d}.gsfig .s-bg{stroke:#ffffff}
+.gsfig .f-fg{fill:#1c2330}.gsfig .f-mu{fill:#5a6475}.gsfig .f-ac{fill:#2563eb}.gsfig .f-acs{fill:#e6eefe}.gsfig .f-bd{fill:#c2410c}
+.gsfig .f-bds{fill:#fdeee6}.gsfig .f-ok{fill:#15803d}.gsfig .f-sf{fill:#f0f2f5}.gsfig .f-bg{fill:#ffffff}
+.gsfig .d0{fill:#2166ac}.gsfig .d1{fill:#67a9cf}.gsfig .d2{fill:#d1e5f0}.gsfig .d3{fill:#fddbc7}.gsfig .d4{fill:#ef8a62}.gsfig .d5{fill:#b2182b}
+.gsfig .q0{fill:#fff1e0}.gsfig .q1{fill:#fdc98f}.gsfig .q2{fill:#f98f45}.gsfig .q3{fill:#d9530f}.gsfig .q4{fill:#8c2d04}
+@media (prefers-color-scheme:dark){
+.gsfig .s-fg{stroke:#e6e9ef}.gsfig .s-mu{stroke:#737c8c}.gsfig .s-ac{stroke:#6d9bff}.gsfig .s-bd{stroke:#fb8b5b}.gsfig .s-ok{stroke:#4ade80}.gsfig .s-bg{stroke:#1a1e26}
+.gsfig .f-fg{fill:#e6e9ef}.gsfig .f-mu{fill:#a7afbd}.gsfig .f-ac{fill:#6d9bff}.gsfig .f-acs{fill:#1f2b45}.gsfig .f-bd{fill:#fb8b5b}
+.gsfig .f-bds{fill:#3a2218}.gsfig .f-ok{fill:#4ade80}.gsfig .f-sf{fill:#222733}.gsfig .f-bg{fill:#1a1e26}}
+</style>
+<rect x="0" y="0" width="720" height="300" class="f-bg"/>
+<path d="M98.0,56.4 L185.0,87.9 L272.0,127.4" class="s-mu" stroke-width="2" fill="none" stroke-dasharray="4 3"/>
+<circle cx="98.0" cy="56.4" r="3.00" class="f-mu s-bg" stroke-width="0.6"/>
+<circle cx="185.0" cy="87.9" r="3.00" class="f-mu s-bg" stroke-width="0.6"/>
+<circle cx="272.0" cy="127.4" r="3.00" class="f-mu s-bg" stroke-width="0.6"/>
+<path d="M98.0,58.4 L185.0,104.3 L272.0,138.9" class="s-ok" stroke-width="2" fill="none"/>
+<circle cx="98.0" cy="58.4" r="3.00" class="f-ok s-bg" stroke-width="0.6"/>
+<circle cx="185.0" cy="104.3" r="3.00" class="f-ok s-bg" stroke-width="0.6"/>
+<circle cx="272.0" cy="138.9" r="3.00" class="f-ok s-bg" stroke-width="0.6"/>
+<path d="M98.0,131.6 L185.0,177.2 L272.0,181.2" class="s-bd" stroke-width="2" fill="none"/>
+<circle cx="98.0" cy="131.6" r="3.00" class="f-bd s-bg" stroke-width="0.6"/>
+<circle cx="185.0" cy="177.2" r="3.00" class="f-bd s-bg" stroke-width="0.6"/>
+<circle cx="272.0" cy="181.2" r="3.00" class="f-bd s-bg" stroke-width="0.6"/>
+<path d="M98.0,99.2 L185.0,146.7 L272.0,175.3" class="s-ac" stroke-width="2" fill="none"/>
+<circle cx="98.0" cy="99.2" r="3.00" class="f-ac s-bg" stroke-width="0.6"/>
+<circle cx="185.0" cy="146.7" r="3.00" class="f-ac s-bg" stroke-width="0.6"/>
+<circle cx="272.0" cy="175.3" r="3.00" class="f-ac s-bg" stroke-width="0.6"/>
+<path d="M98.0,125.7 L185.0,147.8 L272.0,180.4" class="s-fg" stroke-width="2" fill="none"/>
+<circle cx="98.0" cy="125.7" r="3.00" class="f-fg s-bg" stroke-width="0.6"/>
+<circle cx="185.0" cy="147.8" r="3.00" class="f-fg s-bg" stroke-width="0.6"/>
+<circle cx="272.0" cy="180.4" r="3.00" class="f-fg s-bg" stroke-width="0.6"/>
+<line x1="70.0" y1="220.0" x2="300.0" y2="220.0" class="s-mu" stroke-width="1"/>
+<line x1="98.0" y1="220.0" x2="98.0" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="98.0" y="235.0" class="f-mu" font-size="10" text-anchor="middle">25</text>
+<line x1="185.0" y1="220.0" x2="185.0" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="185.0" y="235.0" class="f-mu" font-size="10" text-anchor="middle">50</text>
+<line x1="272.0" y1="220.0" x2="272.0" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="272.0" y="235.0" class="f-mu" font-size="10" text-anchor="middle">100</text>
+<text x="185.0" y="252.0" class="f-mu" font-size="11" text-anchor="middle">표본 수 n</text>
+<line x1="70.0" y1="40.0" x2="70.0" y2="220.0" class="s-mu" stroke-width="1"/>
+<line x1="66.0" y1="220.0" x2="70.0" y2="220.0" class="s-mu" stroke-width="1"/>
+<text x="63.0" y="224.0" class="f-mu" font-size="10" text-anchor="end">0</text>
+<line x1="66.0" y1="181.5" x2="70.0" y2="181.5" class="s-mu" stroke-width="1"/>
+<text x="63.0" y="185.5" class="f-mu" font-size="10" text-anchor="end">0.1</text>
+<line x1="66.0" y1="143.1" x2="70.0" y2="143.1" class="s-mu" stroke-width="1"/>
+<text x="63.0" y="147.1" class="f-mu" font-size="10" text-anchor="end">0.2</text>
+<line x1="66.0" y1="104.6" x2="70.0" y2="104.6" class="s-mu" stroke-width="1"/>
+<text x="63.0" y="108.6" class="f-mu" font-size="10" text-anchor="end">0.3</text>
+<line x1="66.0" y1="66.2" x2="70.0" y2="66.2" class="s-mu" stroke-width="1"/>
+<text x="63.0" y="70.2" class="f-mu" font-size="10" text-anchor="end">0.4</text>
+<text x="62.0" y="30.0" class="f-mu" font-size="11" text-anchor="start">시 평균 추정 RMSE (℃)</text>
+<path d="M428.0,59.7 L515.0,122.7 L602.0,170.5" class="s-mu" stroke-width="2" fill="none" stroke-dasharray="4 3"/>
+<circle cx="428.0" cy="59.7" r="3.00" class="f-mu s-bg" stroke-width="0.6"/>
+<circle cx="515.0" cy="122.7" r="3.00" class="f-mu s-bg" stroke-width="0.6"/>
+<circle cx="602.0" cy="170.5" r="3.00" class="f-mu s-bg" stroke-width="0.6"/>
+<path d="M428.0,64.6 L515.0,125.9 L602.0,171.5" class="s-ok" stroke-width="2" fill="none"/>
+<circle cx="428.0" cy="64.6" r="3.00" class="f-ok s-bg" stroke-width="0.6"/>
+<circle cx="515.0" cy="125.9" r="3.00" class="f-ok s-bg" stroke-width="0.6"/>
+<circle cx="602.0" cy="171.5" r="3.00" class="f-ok s-bg" stroke-width="0.6"/>
+<path d="M428.0,104.1 L515.0,156.3 L602.0,194.0" class="s-bd" stroke-width="2" fill="none"/>
+<circle cx="428.0" cy="104.1" r="3.00" class="f-bd s-bg" stroke-width="0.6"/>
+<circle cx="515.0" cy="156.3" r="3.00" class="f-bd s-bg" stroke-width="0.6"/>
+<circle cx="602.0" cy="194.0" r="3.00" class="f-bd s-bg" stroke-width="0.6"/>
+<path d="M428.0,87.3 L515.0,145.2 L602.0,184.3" class="s-ac" stroke-width="2" fill="none"/>
+<circle cx="428.0" cy="87.3" r="3.00" class="f-ac s-bg" stroke-width="0.6"/>
+<circle cx="515.0" cy="145.2" r="3.00" class="f-ac s-bg" stroke-width="0.6"/>
+<circle cx="602.0" cy="184.3" r="3.00" class="f-ac s-bg" stroke-width="0.6"/>
+<path d="M428.0,102.1 L515.0,154.3 L602.0,190.4" class="s-fg" stroke-width="2" fill="none"/>
+<circle cx="428.0" cy="102.1" r="3.00" class="f-fg s-bg" stroke-width="0.6"/>
+<circle cx="515.0" cy="154.3" r="3.00" class="f-fg s-bg" stroke-width="0.6"/>
+<circle cx="602.0" cy="190.4" r="3.00" class="f-fg s-bg" stroke-width="0.6"/>
+<line x1="400.0" y1="220.0" x2="630.0" y2="220.0" class="s-mu" stroke-width="1"/>
+<line x1="428.0" y1="220.0" x2="428.0" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="428.0" y="235.0" class="f-mu" font-size="10" text-anchor="middle">25</text>
+<line x1="515.0" y1="220.0" x2="515.0" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="515.0" y="235.0" class="f-mu" font-size="10" text-anchor="middle">50</text>
+<line x1="602.0" y1="220.0" x2="602.0" y2="224.0" class="s-mu" stroke-width="1"/>
+<text x="602.0" y="235.0" class="f-mu" font-size="10" text-anchor="middle">100</text>
+<text x="515.0" y="252.0" class="f-mu" font-size="11" text-anchor="middle">표본 수 n</text>
+<line x1="400.0" y1="40.0" x2="400.0" y2="220.0" class="s-mu" stroke-width="1"/>
+<line x1="396.0" y1="220.0" x2="400.0" y2="220.0" class="s-mu" stroke-width="1"/>
+<text x="393.0" y="224.0" class="f-mu" font-size="10" text-anchor="end">1</text>
+<line x1="396.0" y1="173.1" x2="400.0" y2="173.1" class="s-mu" stroke-width="1"/>
+<text x="393.0" y="177.1" class="f-mu" font-size="10" text-anchor="end">1.2</text>
+<line x1="396.0" y1="126.1" x2="400.0" y2="126.1" class="s-mu" stroke-width="1"/>
+<text x="393.0" y="130.1" class="f-mu" font-size="10" text-anchor="end">1.4</text>
+<line x1="396.0" y1="79.2" x2="400.0" y2="79.2" class="s-mu" stroke-width="1"/>
+<text x="393.0" y="83.2" class="f-mu" font-size="10" text-anchor="end">1.6</text>
+<text x="392.0" y="30.0" class="f-mu" font-size="11" text-anchor="start">크리깅 지도 RMSE (℃)</text>
+<line x1="40.0" y1="284.0" x2="64.0" y2="284.0" class="s-mu" stroke-width="2" stroke-dasharray="4 3"/>
+<text x="70.0" y="288.0" class="f-fg" font-size="11" text-anchor="start">단순 무작위</text>
+<line x1="172.0" y1="284.0" x2="196.0" y2="284.0" class="s-ok" stroke-width="2"/>
+<text x="202.0" y="288.0" class="f-fg" font-size="11" text-anchor="start">층화(구)</text>
+<line x1="292.0" y1="284.0" x2="316.0" y2="284.0" class="s-bd" stroke-width="2"/>
+<text x="322.0" y="288.0" class="f-fg" font-size="11" text-anchor="start">계통</text>
+<line x1="376.0" y1="284.0" x2="400.0" y2="284.0" class="s-ac" stroke-width="2"/>
+<text x="406.0" y="288.0" class="f-fg" font-size="11" text-anchor="start">GRTS</text>
+<line x1="484.0" y1="284.0" x2="508.0" y2="284.0" class="s-fg" stroke-width="2"/>
+<text x="514.0" y="288.0" class="f-fg" font-size="11" text-anchor="start">공간 피복</text>
+</svg>
