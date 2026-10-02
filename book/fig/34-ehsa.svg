@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 300" role="img" aria-label="떠오르는 핫스폿 분석. 해마다 Gi* 핫스폿 여부(α 0.05)와 Gi* z의 열 해 추세(맨-켄달 검정)로 동을 나눔. 다솜구 동쪽 해안에는 거의 모든 해에 핫스폿이던 지속 핫스폿(3개)과, 마지막 해에만 빠진 과거 핫스폿(3개)이 있음. 마루구 남쪽에는 몇 해만 나타난 산발 핫스폿과 마지막 해에 처음 나타난 새로운 핫스폿이 모임. 검은 점(Gi* z가 유의하게 커지는 동 10개)은 마루구 남쪽과 누리구에 몰려 있음">
+<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 300" role="img" aria-label="떠오르는 핫스팟 분석. 해마다 Gi* 핫스팟 여부(α 0.05)와 Gi* z의 열 해 추세(맨-켄달 검정)로 동을 나눔. 다솜구 동쪽 해안에는 거의 모든 해에 핫스팟이던 지속 핫스팟(3개)과, 마지막 해에만 빠진 과거 핫스팟(3개)이 있음. 마루구 남쪽에는 몇 해만 나타난 산발 핫스팟과 마지막 해에 처음 나타난 새로운 핫스팟이 모임. 검은 점(Gi* z가 유의하게 커지는 동 10개)은 마루구 남쪽과 누리구에 몰려 있음">
 <style>
 .gsfig{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
 .gsfig .s-fg{stroke:#1c2330}.gsfig .s-mu{stroke:#8a93a3}.gsfig .s-ac{stroke:#2563eb}.gsfig .s-bd{stroke:#c2410c}.gsfig .s-ok{stroke:#15803d}.gsfig .s-bg{stroke:#ffffff}
@@ -174,19 +174,19 @@
 <circle cx="229.6" cy="239.3" r="3.20" class="s-bg" stroke-width="1" fill="#1c2330"/>
 <circle cx="207.0" cy="257.1" r="3.20" class="s-bg" stroke-width="1" fill="#1c2330"/>
 <rect x="470.0" y="39.0" width="14.0" height="14.0" rx="0" class="s-mu" stroke-width="0.5" fill="#b2182b"/>
-<text x="492.0" y="50.0" class="f-fg" font-size="11" text-anchor="start">강해지는 핫스폿 (0개)</text>
+<text x="492.0" y="50.0" class="f-fg" font-size="11" text-anchor="start">강해지는 핫스팟 (0개)</text>
 <rect x="470.0" y="65.0" width="14.0" height="14.0" rx="0" class="s-mu" stroke-width="0.5" fill="#d6604d"/>
-<text x="492.0" y="76.0" class="f-fg" font-size="11" text-anchor="start">지속 핫스폿 (3개)</text>
+<text x="492.0" y="76.0" class="f-fg" font-size="11" text-anchor="start">지속 핫스팟 (3개)</text>
 <rect x="470.0" y="91.0" width="14.0" height="14.0" rx="0" class="s-mu" stroke-width="0.5" fill="#f4a582"/>
-<text x="492.0" y="102.0" class="f-fg" font-size="11" text-anchor="start">연속 핫스폿 (0개)</text>
+<text x="492.0" y="102.0" class="f-fg" font-size="11" text-anchor="start">연속 핫스팟 (0개)</text>
 <rect x="470.0" y="117.0" width="14.0" height="14.0" rx="0" class="s-mu" stroke-width="0.5" fill="#fddbc7"/>
-<text x="492.0" y="128.0" class="f-fg" font-size="11" text-anchor="start">새로운 핫스폿 (3개)</text>
+<text x="492.0" y="128.0" class="f-fg" font-size="11" text-anchor="start">새로운 핫스팟 (3개)</text>
 <rect x="470.0" y="143.0" width="14.0" height="14.0" rx="0" class="s-mu" stroke-width="0.5" fill="#e7a9c9"/>
-<text x="492.0" y="154.0" class="f-fg" font-size="11" text-anchor="start">산발 핫스폿 (4개)</text>
+<text x="492.0" y="154.0" class="f-fg" font-size="11" text-anchor="start">산발 핫스팟 (4개)</text>
 <rect x="470.0" y="169.0" width="14.0" height="14.0" rx="0" class="s-mu" stroke-width="0.5" fill="#8073ac"/>
-<text x="492.0" y="180.0" class="f-fg" font-size="11" text-anchor="start">과거 핫스폿 (3개)</text>
+<text x="492.0" y="180.0" class="f-fg" font-size="11" text-anchor="start">과거 핫스팟 (3개)</text>
 <rect x="470.0" y="195.0" width="14.0" height="14.0" rx="0" class="s-mu" stroke-width="0.5" fill="#eeeeee"/>
-<text x="492.0" y="206.0" class="f-fg" font-size="11" text-anchor="start">핫스폿 아님 (137개)</text>
+<text x="492.0" y="206.0" class="f-fg" font-size="11" text-anchor="start">핫스팟 아님 (137개)</text>
 <circle cx="477.0" cy="228.0" r="3.20" class="s-bg" stroke-width="1" fill="#1c2330"/>
 <text x="492.0" y="232.0" class="f-fg" font-size="11" text-anchor="start">Gi* z 증가 추세 (10개)</text>
 </svg>

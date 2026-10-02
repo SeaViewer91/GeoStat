@@ -194,7 +194,7 @@ MAUP는 해결되는 문제가 아니라 **관리하는 문제**임. 다음을 �
 
 | 한글 | 영문 | 비고 |
 |---|---|---|
-| 가변적 공간 단위 문제 | Modifiable Areal Unit Problem (MAUP) | 가변 면적 단위 문제라고도 함 |
+| 가변적 공간 단위 문제 | Modifiable Areal Unit Problem (MAUP) | 가변 면적 단위 문제라고도 함 <!-- 용어 허용 --> |
 | 척도 효과 | Scale Effect | 집계 효과(aggregation effect)라고도 함 |
 | 구획 효과 | Zoning Effect | |
 | 게리맨더링 | Gerrymandering | |

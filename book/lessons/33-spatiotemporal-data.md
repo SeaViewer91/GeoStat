@@ -310,7 +310,7 @@ print(f"시공간 가중치 {W_space.shape}: 같은 연도 이웃 {W_space.nnz:,
 | 가변적 시간 단위 문제 | Modifiable Temporal Unit Problem (MTUP) | Cheng & Adepeju 2014 |
 | 면적 내삽 | Areal Interpolation | Goodchild & Lam 1980 |
 | 보조 자료 비례 내삽 | Dasymetric Interpolation | Mennis 2003 |
-| 외연 / 내연 변수 | Extensive / Intensive Variable | |
+| 외연량 / 내포량 | Extensive / Intensive Variable | |
 | 분산 분해 | Variance Decomposition | |
 | 크로네커 곱 | Kronecker Product | |
 | 시공간 가중치 | Space-time Weights | |

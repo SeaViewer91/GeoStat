@@ -4,7 +4,7 @@
 - 34-lisa.svg : 기간별 LISA. High-High였던 해의 수와 Low-Low였던 해의 수 지도
 - 34-markov.svg : 공간 마르코프. 이웃(공간 시차)의 계급별로 나눈 출동률 계급 전이 확률
 - 34-diff.svg : 차분 LISA. 2016→2025 한 해끼리와, 2016~2018 평균→2023~2025 평균
-- 34-ehsa.svg : 떠오르는 핫스폿 분석(Gi* z의 추세)으로 나눈 동의 유형
+- 34-ehsa.svg : 떠오르는 핫스팟 분석(Gi* z의 추세)으로 나눈 동의 유형
 
 자료는 book/data/hanbit_dong_panel.gpkg. 앱 해 보기 수치는 GeoStat 엔진(timeseries.pivot_long, esda_ops.moran/local,
 timeseries.transitions)으로 계산함 (앱과 같은 계산, 순열 999회, 시드 123456789).
@@ -212,7 +212,7 @@ def diff_lisa(wide, W):
     return out, d1, d3
 
 
-# ---------------------------------------------------------------- 5. 떠오르는 핫스폿 분석
+# ---------------------------------------------------------------- 5. 떠오르는 핫스팟 분석
 def mann_kendall(x):
     n = len(x)
     s = sum(np.sign(x[j] - x[i]) for i in range(n) for j in range(i + 1, n))
@@ -222,7 +222,7 @@ def mann_kendall(x):
 
 
 def ehsa(wide, W, alpha=0.05):
-    """ESRI 떠오르는 핫스폿 분석의 핫스폿 쪽 규칙을 단순화해 구현 (Gi*: 자기 포함 이진 가중치, 정규 근사 z)"""
+    """ESRI 떠오르는 핫스팟 분석의 핫스팟 쪽 규칙을 단순화해 구현 (Gi*: 자기 포함 이진 가중치, 정규 근사 z)"""
     from esda.getisord import G_Local
     Rm = R(wide)
     Zg = np.column_stack([G_Local(Rm[:, k], W, star=True, transform="B", permutations=0).Zs for k in range(len(YEARS))])
@@ -235,7 +235,7 @@ def ehsa(wide, W, alpha=0.05):
         up, down = mkp <= alpha and mkz > 0, mkp <= alpha and mkz < 0
         frac = h.mean()
         if not h.any():
-            labels.append("핫스폿 아님")
+            labels.append("핫스팟 아님")
         elif h[-1] and h[:-1].sum() == 0:
             labels.append("새로운")
         elif h[-1] and frac >= 0.9 and up:
@@ -254,9 +254,9 @@ def ehsa(wide, W, alpha=0.05):
         elif frac >= 0.9:
             labels.append("과거")
         else:
-            labels.append("핫스폿 아님")  # 마지막 해가 핫스폿이 아니고 90% 미만: ESRI의 '패턴 없음'(산발은 마지막 해가 핫스폿이어야 함)
+            labels.append("핫스팟 아님")  # 마지막 해가 핫스팟이 아니고 90% 미만: ESRI의 '패턴 없음'(산발은 마지막 해가 핫스팟이어야 함)
     lab = pd.Series(labels)
-    print("[6] 떠오르는 핫스폿 분석 (Gi* z, 맨-켄달 추세, α 0.05)")
+    print("[6] 떠오르는 핫스팟 분석 (Gi* z, 맨-켄달 추세, α 0.05)")
     print("  " + ", ".join(f"{k} {v}" for k, v in lab.value_counts().items()))
     for k in ("강해지는", "지속", "새로운", "연속", "산발", "과거"):
         idx = np.where(lab == k)[0]
@@ -360,12 +360,12 @@ def fig_diff(wide, out):
 
 def fig_ehsa(wide, lab, up):
     W_, H = 720, 300
-    cats = ["강해지는", "지속", "연속", "새로운", "산발", "과거", "핫스폿 아님"]  # 차가운 곳(콜드스폿)은 따지지 않음
-    col = {"강해지는": "#b2182b", "지속": "#d6604d", "연속": "#f4a582", "새로운": "#fddbc7", "산발": "#e7a9c9", "과거": "#8073ac", "핫스폿 아님": "#eeeeee"}
+    cats = ["강해지는", "지속", "연속", "새로운", "산발", "과거", "핫스팟 아님"]  # 차가운 곳(콜드스폿)은 따지지 않음
+    col = {"강해지는": "#b2182b", "지속": "#d6604d", "연속": "#f4a582", "새로운": "#fddbc7", "산발": "#e7a9c9", "과거": "#8073ac", "핫스팟 아님": "#eeeeee"}
     cnt = lab.value_counts()
-    svg = Svg(W_, H, "떠오르는 핫스폿 분석. 해마다 Gi* 핫스폿 여부(α 0.05)와 Gi* z의 열 해 추세(맨-켄달 검정)로 동을 나눔. "
-                     f"다솜구 동쪽 해안에는 거의 모든 해에 핫스폿이던 지속 핫스폿({cnt.get('지속', 0)}개)과, 마지막 해에만 빠진 과거 핫스폿({cnt.get('과거', 0)}개)이 있음. "
-                     f"마루구 남쪽에는 몇 해만 나타난 산발 핫스폿과 마지막 해에 처음 나타난 새로운 핫스폿이 모임. 검은 점(Gi* z가 유의하게 커지는 동 {int(up.sum())}개)은 마루구 남쪽과 누리구에 몰려 있음")
+    svg = Svg(W_, H, "떠오르는 핫스팟 분석. 해마다 Gi* 핫스팟 여부(α 0.05)와 Gi* z의 열 해 추세(맨-켄달 검정)로 동을 나눔. "
+                     f"다솜구 동쪽 해안에는 거의 모든 해에 핫스팟이던 지속 핫스팟({cnt.get('지속', 0)}개)과, 마지막 해에만 빠진 과거 핫스팟({cnt.get('과거', 0)}개)이 있음. "
+                     f"마루구 남쪽에는 몇 해만 나타난 산발 핫스팟과 마지막 해에 처음 나타난 새로운 핫스팟이 모임. 검은 점(Gi* z가 유의하게 커지는 동 {int(up.sum())}개)은 마루구 남쪽과 누리구에 몰려 있음")
     fr = MapFrame(wide.total_bounds, 20, 30, 420)
     draw(svg, fr, wide.geometry, None, width=0.3, stroke="s-bg", fills=[col[v] for v in lab])
     outline(svg, fr, wide.union_all(), cls="s-fg", width=0.8)
@@ -377,7 +377,7 @@ def fig_ehsa(wide, lab, up):
     for c in cats:
         n = int(cnt.get(c, 0))
         svg.rect(470, y - 11, 14, 14, cls="s-mu", width=0.5, fill=col[c])
-        svg.text(492, y, f"{c} 핫스폿 ({n}개)" if c != "핫스폿 아님" else f"핫스폿 아님 ({n}개)", size=11, anchor="start")
+        svg.text(492, y, f"{c} 핫스팟 ({n}개)" if c != "핫스팟 아님" else f"핫스팟 아님 ({n}개)", size=11, anchor="start")
         y += 26
     svg.circle(477, y - 4, 3.2, cls="s-bg", width=1, fill="#1c2330")
     svg.text(492, y, f"Gi* z 증가 추세 ({int(up.sum())}개)", size=11, anchor="start")

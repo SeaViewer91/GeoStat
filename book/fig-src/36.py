@@ -141,7 +141,7 @@ def split_rhat(x):
 
 
 def ess(x):
-    """유효 표본 수 (Geyer의 초기 양수 수열, Stan과 같은 식)"""
+    """유효 표본 크기 (Geyer의 초기 양수 수열, Stan과 같은 식)"""
     m, n = x.shape
     xc = x - x.mean(1, keepdims=True)
     f = np.fft.rfft(xc, 2 * n, axis=1)

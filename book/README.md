@@ -2,7 +2,7 @@
 
 GeoStat으로 따라 하는 공간통계학 입문서임. 공간정보·지리학을 전공하지 않은 연구자와 실무자가 공간통계학 전반을 처음부터 이해하는 것을 목표로 함.
 
-> **집필 중**임. 아래 목차에서 링크가 있는 강만 공개되었고, 모든 강은 검수 전 초안(draft)임.
+> 0~42강과 부록 A~G의 **초안을 모두 썼음**. 모든 강과 부록은 검수 전 초안(draft)임.
 
 ## 읽는 방법
 
@@ -73,13 +73,13 @@ GeoStat으로 따라 하는 공간통계학 입문서임. 공간정보·지리�
 | 41 | [공간 분석 연구 설계](lessons/41-research-design.md) | ● | 초안 |
 | 42 | [쓰고 읽기](lessons/42-writing-reading.md) | ● | 초안 |
 | **부록** | | | |
-| A | 방법 선택 지도 | | |
-| B | 수학 준비 | | |
-| C | 기호·수식표 | | |
-| D | 용어 대역표 | | |
-| E | 도구별 차이와 결과 재현 | | |
-| F | 더 읽을거리 | | |
-| G | 예제 자료 | | |
+| A | [방법 선택 지도](lessons/A-method-map.md) | - | 초안 |
+| B | [수학 준비](lessons/B-math-primer.md) | - | 초안 |
+| C | [기호·수식표](lessons/C-symbols.md) | - | 초안 |
+| D | [용어 대역표](lessons/D-glossary.md) | - | 초안 |
+| E | [도구별 차이와 결과 재현](lessons/E-tools-reproducibility.md) | - | 초안 |
+| F | [더 읽을거리](lessons/F-further-reading.md) | - | 초안 |
+| G | [예제 자료](lessons/G-example-data.md) | - | 초안 |
 
 ## 폴더 구성
 

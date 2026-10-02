@@ -1,7 +1,7 @@
 """37강 그림과 본문 수치.
 
 - 37-maps.svg    : 연령 표준화 SMR, 포아송-감마 EB, BYM2 사후 상대위험, BYM2 초과 확률 P(RR > 1)
-- 37-confound.svg: 온도편차 계수(1℃당 상대위험)의 모형별 비교와 BYM2의 공간 비율 φ의 사후분포
+- 37-confound.svg: 온도편차 계수(1℃당 상대위험)의 모형별 비교와 BYM2의 공간 비중 φ의 사후분포
 
 자료는 2025년 행정동별 출동 건수와 연령 표준화 기대 건수(14강의 간접 표준화: 65세 이상과 미만의 도시 전체 비율).
 모형은 PyMC(NUTS)로 적합함. 결과 요약은 37-fit.npz에 저장해 두고 다시 쓰며, 지우면 새로 적합함.
@@ -263,7 +263,7 @@ def fig_confound(res):
     ph1, ph2 = res["BYM2"]["phi"], res["BYM2+온도"]["phi"]
     svg = Svg(W_, H, f"왼쪽: 온도편차 1℃당 상대위험과 95% 신용구간. 랜덤효과 없는 포아송 회귀 {e['포아송'].mean():.3f}, 독립 랜덤효과 {e['독립+온도'].mean():.3f}, "
                      f"BYM2 {e['BYM2+온도'].mean():.3f}로 점추정은 거의 같고, 랜덤효과를 넣을수록 구간이 넓어짐(β의 사후 표준편차 {sd['포아송']:.4f} → {sd['BYM2+온도']:.4f}). "
-                     f"오른쪽: BYM2의 공간 비율 φ의 사후분포. 온도편차를 넣기 전(실선, 평균 {ph1.mean():.2f})에는 랜덤효과의 대부분이 공간 구조였지만, "
+                     f"오른쪽: BYM2의 공간 비중 φ의 사후분포. 온도편차를 넣기 전(실선, 평균 {ph1.mean():.2f})에는 랜덤효과의 대부분이 공간 구조였지만, "
                      f"넣은 뒤(점선, 평균 {ph2.mean():.2f})에는 넓게 퍼짐. 온도가 공간 구조의 상당 부분을 설명함")
     ax = Axes(svg, 230, 40, 220, 150, (0.98, 1.2), (-0.6, 2.6))
     for i, (k, lab) in enumerate(zip(keys, labs)):
@@ -281,7 +281,7 @@ def fig_confound(res):
     mids = (edges[:-1] + edges[1:]) / 2
     ax2.curve(np.r_[0, mids, 1], np.r_[h1[0], h1, h1[-1]], cls="s-ac", width=2)
     ax2.curve(np.r_[0, mids, 1], np.r_[h2[0], h2, h2[-1]], cls="s-bd", width=2, dash="5 3")
-    ax2.xaxis(ticks=[0, 0.25, 0.5, 0.75, 1], label="공간 비율 φ")
+    ax2.xaxis(ticks=[0, 0.25, 0.5, 0.75, 1], label="공간 비중 φ")
     svg.line(520, H - 16, 546, H - 16, cls="s-ac", width=2)
     svg.text(552, H - 12, "BYM2", size=11, anchor="start")
     svg.line(600, H - 16, 626, H - 16, cls="s-bd", width=2, dash="5 3")

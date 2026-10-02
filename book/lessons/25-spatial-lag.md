@@ -76,19 +76,19 @@ $$
 \ln L(\rho, \beta, \sigma^2) = -\frac{n}{2}\ln(2\pi\sigma^2) + \ln\lvert I - \rho W\rvert - \frac{1}{2\sigma^2}(y - \rho W y - X\beta)^\top (y - \rho W y - X\beta)
 $$
 
-보통의 회귀 우도와 다른 것은 가운데의 **야코비 항** ln|I − ρW|임. y를 ε로 바꾸는 변환의 부피 변화를 반영하는 항으로, 이 항이 Wy를 넣은 OLS의 치우침을 바로잡음. W의 고윳값을 ω₁, …, ωₙ이라 하면 ln|I − ρW| = Σ ln(1 − ρωᵢ)이라 한 번 고윳값을 구해 두면 빨리 계산됨(Ord 1975). 실제로는 β와 σ²를 ρ의 함수로 풀어 넣은 **집중 로그우도**를 ρ 하나에 대해 최대화함.
+보통의 회귀 우도와 다른 것은 가운데의 **야코비 항** ln|I − ρW|임. y를 ε로 바꾸는 변환의 부피 변화를 반영하는 항으로, 이 항이 Wy를 넣은 OLS의 치우침을 바로잡음. W의 고유값을 ω₁, …, ωₙ이라 하면 ln|I − ρW| = Σ ln(1 − ρωᵢ)이라 한 번 고유값을 구해 두면 빨리 계산됨(Ord 1975). 실제로는 β와 σ²를 ρ의 함수로 풀어 넣은 **집중 로그우도**를 ρ 하나에 대해 최대화함.
 
 ![왼쪽: Y_시차의 집중 로그우도(최댓값을 0으로 맞춤). 실선은 야코비 항 ln|I − ρW|까지 넣은 ML의 우도로 ρ = 0.50에서 최대이고, 점선은 그 항을 빼고 잔차 제곱합만 본 것으로 ρ를 크게 잡음. 오른쪽: 모의 실험(실현값 500개, 참 ρ = 0.5)에서 세 방법으로 추정한 ρ의 분포. Wy를 설명변수로 넣은 OLS는 ρ를 크게 잡고, ML과 2SLS는 참값 둘레에 모임](../fig/25-est.svg)
 
 Y_시차의 집중 로그우도는 ρ = 0.4961에서 최대임. 야코비 항을 빼면 0.5872에서 최대가 되어 ρ를 크게 잡음.
 
-ρ가 가질 수 있는 범위도 고윳값이 정함. I − ρW가 역행렬을 가지려면 ρ가 1/ω_min과 1/ω_max 사이에 있어야 함. 행 표준화 W에서는 ω_max = 1임. 한빛시 퀸 인접의 가장 작은 고윳값은 −0.573이라 ρ의 범위는 (−1.746, 1)임. 대부분의 응용에서 ρ는 0과 1 사이에 놓임(음수는 이웃끼리 경쟁하는 경우임).
+ρ가 가질 수 있는 범위도 고유값이 정함. I − ρW가 역행렬을 가지려면 ρ가 1/ω_min과 1/ω_max 사이에 있어야 함. 행 표준화 W에서는 ω_max = 1임. 한빛시 퀸 인접의 가장 작은 고유값은 −0.573이라 ρ의 범위는 (−1.746, 1)임. 대부분의 응용에서 ρ는 0과 1 사이에 놓임(음수는 이웃끼리 경쟁하는 경우임).
 
 ### 2단계 최소제곱(2SLS)과 GM
 
 내생 변수 Wy를 오차와 상관없는 **도구변수**로 대신하는 방법도 있음(Anselin 1988; Kelejian & Prucha 1998). 축약형에서 E[Wy] = W(I − ρW)⁻¹Xβ = WXβ + ρW²Xβ + …이므로, WX와 W²X가 Wy를 잘 예측하면서 ε와는 상관이 없어 도구변수로 적합함. 1단계에서 Wy를 [X, WX]로 회귀해 예측값을 만들고, 2단계에서 그 예측값을 Wy 대신 넣어 OLS를 함. GeoStat의 공간시차 모형 GM 추정(**공간시차 모형 — GM (2SLS)** 모형)은 WX를 도구변수로 씀.
 
-- 정규분포 가정이 필요 없고, 큰 자료에서도 빠름. 고윳값이나 행렬식을 계산하지 않기 때문임
+- 정규분포 가정이 필요 없고, 큰 자료에서도 빠름. 고유값이나 행렬식을 계산하지 않기 때문임
 - 대신 ML보다 덜 정확함. 모의 실험에서 ρ̂의 표준편차는 ML 0.066, 2SLS 0.089였음
 - ML은 이 크기(n = 150)에서 평균 0.480으로 참값보다 조금 작게 나왔고, 2SLS는 평균 0.502였음. 표본이 커지면 둘 다 참값에 가까워짐
 - 우도가 없으므로 AIC로 다른 모형과 비교할 수 없음
@@ -249,7 +249,7 @@ for name, b in zip(names, beta):
 
 **원전**
 
-- Ord, K. (1975). Estimation methods for models of spatial interaction. *Journal of the American Statistical Association*, 70(349), 120–126. 최대우도와 고윳값을 이용한 계산
+- Ord, K. (1975). Estimation methods for models of spatial interaction. *Journal of the American Statistical Association*, 70(349), 120–126. 최대우도와 고유값을 이용한 계산
 - Kelejian, H. H., & Prucha, I. R. (1998). A generalized spatial two-stage least squares procedure for estimating a spatial autoregressive model with autoregressive disturbances. *Journal of Real Estate Finance and Economics*, 17(1), 99–121. 도구변수 추정
 - LeSage, J., & Pace, R. K. (2009). *Introduction to Spatial Econometrics*. CRC Press. 2장(효과 분해)
 

@@ -1,0 +1,5570 @@
+{
+ "generated_by": "book/fig-src/D.py",
+ "count": 485,
+ "terms": [
+  {
+   "ko": "(반)베리오그램",
+   "en": "(Semi)variogram",
+   "notes": [
+    "γ(h)"
+   ],
+   "lessons": [
+    "21"
+   ],
+   "first": "21",
+   "variants": [
+    "배리오그램",
+    "반변동도",
+    "변동도"
+   ]
+  },
+  {
+   "ko": "1종 오류 / 2종 오류",
+   "en": "Type I / Type II Error",
+   "notes": [
+    "거짓 양성 / 거짓 음성"
+   ],
+   "lessons": [
+    "07"
+   ],
+   "first": "07",
+   "variants": []
+  },
+  {
+   "ko": "2단계 최소제곱",
+   "en": "Two-stage Least Squares (2SLS)",
+   "notes": [
+    "GM 추정"
+   ],
+   "lessons": [
+    "25"
+   ],
+   "first": "25",
+   "variants": []
+  },
+  {
+   "ko": "2차 군집",
+   "en": "Secondary Cluster",
+   "notes": [],
+   "lessons": [
+    "15"
+   ],
+   "first": "15",
+   "variants": []
+  },
+  {
+   "ko": "2차 정상성",
+   "en": "Second-Order Stationarity",
+   "notes": [],
+   "lessons": [
+    "20"
+   ],
+   "first": "20",
+   "variants": []
+  },
+  {
+   "ko": "BYM 모형",
+   "en": "Besag–York–Mollié Model",
+   "notes": [
+    "1991"
+   ],
+   "lessons": [
+    "37"
+   ],
+   "first": "37",
+   "variants": []
+  },
+  {
+   "ko": "BYM2 모형",
+   "en": "BYM2",
+   "notes": [
+    "Riebler 외 2016"
+   ],
+   "lessons": [
+    "37"
+   ],
+   "first": "37",
+   "variants": []
+  },
+  {
+   "ko": "Chow 검정",
+   "en": "Chow Test",
+   "notes": [
+    "Chow 1960"
+   ],
+   "lessons": [
+    "28"
+   ],
+   "first": "28",
+   "variants": []
+  },
+  {
+   "ko": "EB Moran's I",
+   "en": "EB Moran's I",
+   "notes": [
+    "Assunção & Reis 1999"
+   ],
+   "lessons": [
+    "14"
+   ],
+   "first": "14",
+   "variants": []
+  },
+  {
+   "ko": "EPSG 코드",
+   "en": "EPSG Code",
+   "notes": [
+    "좌표계 번호"
+   ],
+   "lessons": [
+    "02"
+   ],
+   "first": "02",
+   "variants": []
+  },
+  {
+   "ko": "GRTS",
+   "en": "Generalized Random Tessellation Stratified",
+   "notes": [
+    "Stevens & Olsen 2004"
+   ],
+   "lessons": [
+    "38"
+   ],
+   "first": "38",
+   "variants": []
+  },
+  {
+   "ko": "INLA",
+   "en": "Integrated Nested Laplace Approximation",
+   "notes": [
+    "Rue 외 2009"
+   ],
+   "lessons": [
+    "36"
+   ],
+   "first": "36",
+   "variants": []
+  },
+  {
+   "ko": "J 함수",
+   "en": "J Function",
+   "notes": [
+    "van Lieshout & Baddeley 1996"
+   ],
+   "lessons": [
+    "18"
+   ],
+   "first": "18",
+   "variants": []
+  },
+  {
+   "ko": "K 함수",
+   "en": "Ripley's K Function",
+   "notes": [
+    "Ripley 1976"
+   ],
+   "lessons": [
+    "18"
+   ],
+   "first": "18",
+   "variants": []
+  },
+  {
+   "ko": "K-평균",
+   "en": "K-means",
+   "notes": [
+    "MacQueen 1967, Lloyd 1982"
+   ],
+   "lessons": [
+    "31"
+   ],
+   "first": "31",
+   "variants": []
+  },
+  {
+   "ko": "L 함수",
+   "en": "L Function",
+   "notes": [
+    "Besag 1977"
+   ],
+   "lessons": [
+    "18"
+   ],
+   "first": "18",
+   "variants": []
+  },
+  {
+   "ko": "LISA 마르코프",
+   "en": "LISA Markov",
+   "notes": [
+    "Rey 2001"
+   ],
+   "lessons": [
+    "34"
+   ],
+   "first": "34",
+   "variants": []
+  },
+  {
+   "ko": "LM-SARMA",
+   "en": "LM-SARMA",
+   "notes": [
+    "두 의존 동시 검정"
+   ],
+   "lessons": [
+    "24"
+   ],
+   "first": "24",
+   "variants": []
+  },
+  {
+   "ko": "Max-p 지역화",
+   "en": "Max-p Regionalization",
+   "notes": [
+    "Duque 외 2012"
+   ],
+   "lessons": [
+    "32"
+   ],
+   "first": "32",
+   "variants": []
+  },
+  {
+   "ko": "R-hat",
+   "en": "Potential Scale Reduction Factor",
+   "notes": [
+    "Gelman & Rubin 1992"
+   ],
+   "lessons": [
+    "36"
+   ],
+   "first": "36",
+   "variants": []
+  },
+  {
+   "ko": "REDCAP",
+   "en": "Regionalization with Dynamically Constrained Agglomerative Clustering and Partitioning",
+   "notes": [
+    "Guo 2008"
+   ],
+   "lessons": [
+    "32"
+   ],
+   "first": "32",
+   "variants": []
+  },
+  {
+   "ko": "SAC, SARAR",
+   "en": "Spatial Autoregressive Combined",
+   "notes": [
+    "시차 + 오차"
+   ],
+   "lessons": [
+    "26"
+   ],
+   "first": "26",
+   "variants": []
+  },
+  {
+   "ko": "SKATER",
+   "en": "Spatial 'K'luster Analysis by Tree Edge Removal",
+   "notes": [
+    "Assunção 외 2006"
+   ],
+   "lessons": [
+    "32"
+   ],
+   "first": "32",
+   "variants": []
+  },
+  {
+   "ko": "Strauss 과정",
+   "en": "Strauss Process",
+   "notes": [
+    "하드코어는 γ = 0"
+   ],
+   "lessons": [
+    "19"
+   ],
+   "first": "19",
+   "variants": []
+  },
+  {
+   "ko": "Thomas 과정",
+   "en": "Thomas Process",
+   "notes": [
+    "자식이 정규분포로 퍼짐"
+   ],
+   "lessons": [
+    "19"
+   ],
+   "first": "19",
+   "variants": []
+  },
+  {
+   "ko": "WAIC / LOO / DIC",
+   "en": "Widely Applicable IC / Leave-One-Out CV / Deviance IC",
+   "notes": [
+    "모형 비교 지표"
+   ],
+   "lessons": [
+    "37"
+   ],
+   "first": "37",
+   "variants": []
+  },
+  {
+   "ko": "Ward 방법",
+   "en": "Ward's Method",
+   "notes": [
+    "Ward 1963"
+   ],
+   "lessons": [
+    "31"
+   ],
+   "first": "31",
+   "variants": []
+  },
+  {
+   "ko": "k-최근접 이웃",
+   "en": "k-Nearest Neighbors (KNN)",
+   "notes": [
+    "비대칭"
+   ],
+   "lessons": [
+    "10"
+   ],
+   "first": "10",
+   "variants": []
+  },
+  {
+   "ko": "p값",
+   "en": "p-value",
+   "notes": [],
+   "lessons": [
+    "07"
+   ],
+   "first": "07",
+   "variants": []
+  },
+  {
+   "ko": "가능도",
+   "en": "Likelihood",
+   "notes": [],
+   "lessons": [
+    "36"
+   ],
+   "first": "36",
+   "variants": []
+  },
+  {
+   "ko": "가림 효과",
+   "en": "Screening Effect",
+   "notes": [],
+   "lessons": [
+    "22"
+   ],
+   "first": "22",
+   "variants": []
+  },
+  {
+   "ko": "가변적 공간 단위 문제",
+   "en": "Modifiable Areal Unit Problem (MAUP)",
+   "notes": [
+    "가변 면적 단위 문제라고도 함"
+   ],
+   "lessons": [
+    "00",
+    "03"
+   ],
+   "first": "00",
+   "variants": [
+    "가변 면적 단위 문제",
+    "임의적 공간 단위 문제"
+   ]
+  },
+  {
+   "ko": "가변적 시간 단위 문제",
+   "en": "Modifiable Temporal Unit Problem (MTUP)",
+   "notes": [
+    "Cheng & Adepeju 2014"
+   ],
+   "lessons": [
+    "33"
+   ],
+   "first": "33",
+   "variants": []
+  },
+  {
+   "ko": "가산값",
+   "en": "False Easting / False Northing",
+   "notes": [],
+   "lessons": [
+    "02"
+   ],
+   "first": "02",
+   "variants": []
+  },
+  {
+   "ko": "가우스 과정",
+   "en": "Gaussian Process",
+   "notes": [],
+   "lessons": [
+    "30"
+   ],
+   "first": "30",
+   "variants": []
+  },
+  {
+   "ko": "가장 가능성 높은 군집",
+   "en": "Most Likely Cluster",
+   "notes": [],
+   "lessons": [
+    "15"
+   ],
+   "first": "15",
+   "variants": []
+  },
+  {
+   "ko": "가족별 오류율",
+   "en": "Family-wise Error Rate (FWER)",
+   "notes": [],
+   "lessons": [
+    "07"
+   ],
+   "first": "07",
+   "variants": []
+  },
+  {
+   "ko": "가중 최소제곱",
+   "en": "Weighted Least Squares (WLS)",
+   "notes": [
+    "Cressie 1985"
+   ],
+   "lessons": [
+    "08",
+    "21"
+   ],
+   "first": "08",
+   "variants": [
+    "가중최소제곱"
+   ]
+  },
+  {
+   "ko": "가중 평균",
+   "en": "Weighted Mean",
+   "notes": [],
+   "lessons": [
+    "06"
+   ],
+   "first": "06",
+   "variants": []
+  },
+  {
+   "ko": "가짜 상관",
+   "en": "Spurious Correlation",
+   "notes": [],
+   "lessons": [
+    "09"
+   ],
+   "first": "09",
+   "variants": []
+  },
+  {
+   "ko": "간섭",
+   "en": "Interference (Spillover)",
+   "notes": [],
+   "lessons": [
+    "41"
+   ],
+   "first": "41",
+   "variants": []
+  },
+  {
+   "ko": "간접 표준화",
+   "en": "Indirect Standardization",
+   "notes": [
+    "기준 비율 × 구역 인구 구조"
+   ],
+   "lessons": [
+    "14"
+   ],
+   "first": "14",
+   "variants": []
+  },
+  {
+   "ko": "간접 효과",
+   "en": "Indirect Effect (Spillover)",
+   "notes": [],
+   "lessons": [
+    "25"
+   ],
+   "first": "25",
+   "variants": []
+  },
+  {
+   "ko": "강건 LM 검정",
+   "en": "Robust LM Test",
+   "notes": [
+    "Anselin 외 1996"
+   ],
+   "lessons": [
+    "24"
+   ],
+   "first": "24",
+   "variants": []
+  },
+  {
+   "ko": "강건 표준오차",
+   "en": "Robust (Heteroskedasticity-consistent) Standard Error",
+   "notes": [
+    "White 1980"
+   ],
+   "lessons": [
+    "08"
+   ],
+   "first": "08",
+   "variants": []
+  },
+  {
+   "ko": "강도",
+   "en": "Intensity",
+   "notes": [
+    "단위 면적당 기대 점 수"
+   ],
+   "lessons": [
+    "16"
+   ],
+   "first": "16",
+   "variants": []
+  },
+  {
+   "ko": "강도 함수",
+   "en": "Intensity Function λ(x)",
+   "notes": [],
+   "lessons": [
+    "17"
+   ],
+   "first": "17",
+   "variants": []
+  },
+  {
+   "ko": "개인주의적 오류",
+   "en": "Individualistic (Atomistic) Fallacy",
+   "notes": [],
+   "lessons": [
+    "03"
+   ],
+   "first": "03",
+   "variants": []
+  },
+  {
+   "ko": "객체 관점 / 장 관점",
+   "en": "Object View / Field View",
+   "notes": [],
+   "lessons": [
+    "01"
+   ],
+   "first": "01",
+   "variants": []
+  },
+  {
+   "ko": "거리 임계값",
+   "en": "Distance Band (Threshold)",
+   "notes": [],
+   "lessons": [
+    "10"
+   ],
+   "first": "10",
+   "variants": []
+  },
+  {
+   "ko": "거짓 발견율",
+   "en": "False Discovery Rate (FDR)",
+   "notes": [],
+   "lessons": [
+    "07"
+   ],
+   "first": "07",
+   "variants": []
+  },
+  {
+   "ko": "검정력",
+   "en": "Power",
+   "notes": [
+    "1 − β"
+   ],
+   "lessons": [
+    "07"
+   ],
+   "first": "07",
+   "variants": []
+  },
+  {
+   "ko": "검정통계량",
+   "en": "Test Statistic",
+   "notes": [],
+   "lessons": [
+    "07"
+   ],
+   "first": "07",
+   "variants": []
+  },
+  {
+   "ko": "게리맨더링",
+   "en": "Gerrymandering",
+   "notes": [],
+   "lessons": [
+    "03"
+   ],
+   "first": "03",
+   "variants": []
+  },
+  {
+   "ko": "결정계수",
+   "en": "Coefficient of Determination (R²)",
+   "notes": [],
+   "lessons": [
+    "08"
+   ],
+   "first": "08",
+   "variants": []
+  },
+  {
+   "ko": "결측값",
+   "en": "Missing Value",
+   "notes": [],
+   "lessons": [
+    "04"
+   ],
+   "first": "04",
+   "variants": []
+  },
+  {
+   "ko": "경계 보정",
+   "en": "Edge Correction",
+   "notes": [
+    "Diggle 1985 균일 보정"
+   ],
+   "lessons": [
+    "17"
+   ],
+   "first": "17",
+   "variants": []
+  },
+  {
+   "ko": "경계 효과",
+   "en": "Edge Effect",
+   "notes": [],
+   "lessons": [
+    "04",
+    "16"
+   ],
+   "first": "04",
+   "variants": [
+    "가장자리 효과"
+   ]
+  },
+  {
+   "ko": "경험적 베이즈 / 완전 베이즈",
+   "en": "Empirical / Full Bayes",
+   "notes": [],
+   "lessons": [
+    "36"
+   ],
+   "first": "36",
+   "variants": []
+  },
+  {
+   "ko": "경험적 베이즈 평활",
+   "en": "Empirical Bayes (EB) Smoothing",
+   "notes": [
+    "Clayton & Kaldor 1987"
+   ],
+   "lessons": [
+    "14"
+   ],
+   "first": "14",
+   "variants": []
+  },
+  {
+   "ko": "계급",
+   "en": "Class",
+   "notes": [
+    "같은 색으로 칠하는 값의 구간"
+   ],
+   "lessons": [
+    "05"
+   ],
+   "first": "05",
+   "variants": []
+  },
+  {
+   "ko": "계급 구분",
+   "en": "Classification",
+   "notes": [],
+   "lessons": [
+    "42"
+   ],
+   "first": "42",
+   "variants": []
+  },
+  {
+   "ko": "계수 / 절편",
+   "en": "Coefficient / Intercept",
+   "notes": [],
+   "lessons": [
+    "08"
+   ],
+   "first": "08",
+   "variants": []
+  },
+  {
+   "ko": "계수별 유효 모수 수",
+   "en": "Covariate-specific ENP (ENPⱼ)",
+   "notes": [
+    "Yu 외 2020"
+   ],
+   "lessons": [
+    "30"
+   ],
+   "first": "30",
+   "variants": []
+  },
+  {
+   "ko": "계층 군집",
+   "en": "Hierarchical Clustering",
+   "notes": [],
+   "lessons": [
+    "31"
+   ],
+   "first": "31",
+   "variants": []
+  },
+  {
+   "ko": "계층 모형",
+   "en": "Hierarchical Model",
+   "notes": [
+    "다층 모형"
+   ],
+   "lessons": [
+    "36"
+   ],
+   "first": "36",
+   "variants": []
+  },
+  {
+   "ko": "계통 추출",
+   "en": "Systematic Sampling",
+   "notes": [],
+   "lessons": [
+    "38"
+   ],
+   "first": "38",
+   "variants": []
+  },
+  {
+   "ko": "고유 CAR",
+   "en": "Proper CAR",
+   "notes": [],
+   "lessons": [
+    "37"
+   ],
+   "first": "37",
+   "variants": []
+  },
+  {
+   "ko": "고유벡터 공간 필터",
+   "en": "Eigenvector Spatial Filtering (ESF)",
+   "notes": [
+    "Griffith 2003"
+   ],
+   "lessons": [
+    "27"
+   ],
+   "first": "27",
+   "variants": []
+  },
+  {
+   "ko": "고정 대역폭",
+   "en": "Fixed Bandwidth",
+   "notes": [
+    "거리"
+   ],
+   "lessons": [
+    "29"
+   ],
+   "first": "29",
+   "variants": []
+  },
+  {
+   "ko": "고정 순위 크리깅",
+   "en": "Fixed Rank Kriging (FRK)",
+   "notes": [],
+   "lessons": [
+    "40"
+   ],
+   "first": "40",
+   "variants": []
+  },
+  {
+   "ko": "고정효과 / 확률효과",
+   "en": "Fixed / Random Effects",
+   "notes": [],
+   "lessons": [
+    "35"
+   ],
+   "first": "35",
+   "variants": []
+  },
+  {
+   "ko": "고차 인접",
+   "en": "Higher-order Contiguity",
+   "notes": [
+    "이웃의 이웃"
+   ],
+   "lessons": [
+    "10"
+   ],
+   "first": "10",
+   "variants": []
+  },
+  {
+   "ko": "공간 Chow 검정",
+   "en": "Spatial Chow Test",
+   "notes": [
+    "Anselin 1990"
+   ],
+   "lessons": [
+    "28"
+   ],
+   "first": "28",
+   "variants": []
+  },
+  {
+   "ko": "공간 EB 평활",
+   "en": "Spatial EB Smoothing",
+   "notes": [
+    "이웃 쪽으로"
+   ],
+   "lessons": [
+    "14"
+   ],
+   "first": "14",
+   "variants": []
+  },
+  {
+   "ko": "공간 결합",
+   "en": "Spatial Join",
+   "notes": [
+    "위치로 붙임"
+   ],
+   "lessons": [
+    "04"
+   ],
+   "first": "04",
+   "variants": []
+  },
+  {
+   "ko": "공간 고정효과",
+   "en": "Spatial Fixed Effects",
+   "notes": [],
+   "lessons": [
+    "27"
+   ],
+   "first": "27",
+   "variants": []
+  },
+  {
+   "ko": "공간 교락",
+   "en": "Spatial Confounding",
+   "notes": [
+    "Hodges & Reich 2010"
+   ],
+   "lessons": [
+    "37"
+   ],
+   "first": "37",
+   "variants": []
+  },
+  {
+   "ko": "공간 군집",
+   "en": "Spatial Cluster",
+   "notes": [
+    "HH, LL"
+   ],
+   "lessons": [
+    "12"
+   ],
+   "first": "12",
+   "variants": []
+  },
+  {
+   "ko": "공간 균형 추출",
+   "en": "Spatially Balanced Sampling",
+   "notes": [],
+   "lessons": [
+    "38"
+   ],
+   "first": "38",
+   "variants": []
+  },
+  {
+   "ko": "공간 누설",
+   "en": "Spatial Leakage",
+   "notes": [
+    "공간 과적합"
+   ],
+   "lessons": [
+    "39"
+   ],
+   "first": "39",
+   "variants": []
+  },
+  {
+   "ko": "공간 더빈 모형",
+   "en": "Spatial Durbin Model (SDM)",
+   "notes": [
+    "전역적 파급"
+   ],
+   "lessons": [
+    "26"
+   ],
+   "first": "26",
+   "variants": []
+  },
+  {
+   "ko": "공간 더빈 오차 모형",
+   "en": "Spatial Durbin Error Model (SDEM)",
+   "notes": [],
+   "lessons": [
+    "26"
+   ],
+   "first": "26",
+   "variants": []
+  },
+  {
+   "ko": "공간 마르코프",
+   "en": "Spatial Markov",
+   "notes": [
+    "Rey 2001"
+   ],
+   "lessons": [
+    "34"
+   ],
+   "first": "34",
+   "variants": []
+  },
+  {
+   "ko": "공간 변이 계수 모형",
+   "en": "Spatially Varying Coefficient Model (SVC)",
+   "notes": [
+    "Gelfand 외 2003"
+   ],
+   "lessons": [
+    "30"
+   ],
+   "first": "30",
+   "variants": []
+  },
+  {
+   "ko": "공간 블록 교차검증",
+   "en": "Spatial Block Cross-validation",
+   "notes": [
+    "Roberts 외 2017"
+   ],
+   "lessons": [
+    "39"
+   ],
+   "first": "39",
+   "variants": []
+  },
+  {
+   "ko": "공간 비율",
+   "en": "Spatial Rate",
+   "notes": [
+    "창 안의 합 ÷ 합"
+   ],
+   "lessons": [
+    "14"
+   ],
+   "first": "14",
+   "variants": []
+  },
+  {
+   "ko": "공간 비정상성",
+   "en": "Spatial Nonstationarity",
+   "notes": [
+    "관계(계수)가 장소마다 달라지는 것"
+   ],
+   "lessons": [
+    "00",
+    "28"
+   ],
+   "first": "00",
+   "variants": []
+  },
+  {
+   "ko": "공간 비중",
+   "en": "Mixing Parameter φ",
+   "notes": [],
+   "lessons": [
+    "37"
+   ],
+   "first": "37",
+   "variants": []
+  },
+  {
+   "ko": "공간 스캔 통계",
+   "en": "Spatial Scan Statistic",
+   "notes": [
+    "Kulldorff 1997"
+   ],
+   "lessons": [
+    "15"
+   ],
+   "first": "15",
+   "variants": []
+  },
+  {
+   "ko": "공간 승수",
+   "en": "Spatial Multiplier",
+   "notes": [
+    "(I − ρW)⁻¹"
+   ],
+   "lessons": [
+    "25"
+   ],
+   "first": "25",
+   "variants": []
+  },
+  {
+   "ko": "공간 시차",
+   "en": "Spatial Lag",
+   "notes": [
+    "Wy, 이웃 값의 가중합"
+   ],
+   "lessons": [
+    "10"
+   ],
+   "first": "10",
+   "variants": [
+    "공간지연",
+    "공간래그"
+   ]
+  },
+  {
+   "ko": "공간 의존성",
+   "en": "Spatial Dependence",
+   "notes": [],
+   "lessons": [
+    "00",
+    "09"
+   ],
+   "first": "00",
+   "variants": []
+  },
+  {
+   "ko": "공간 이분산",
+   "en": "Spatial Heteroskedasticity",
+   "notes": [],
+   "lessons": [
+    "28"
+   ],
+   "first": "28",
+   "variants": []
+  },
+  {
+   "ko": "공간 이상치",
+   "en": "Spatial Outlier",
+   "notes": [
+    "HL, LH"
+   ],
+   "lessons": [
+    "12"
+   ],
+   "first": "12",
+   "variants": []
+  },
+  {
+   "ko": "공간 이질성",
+   "en": "Spatial Heterogeneity",
+   "notes": [
+    "Anselin 1988"
+   ],
+   "lessons": [
+    "00",
+    "28"
+   ],
+   "first": "00",
+   "variants": []
+  },
+  {
+   "ko": "공간 자기상관",
+   "en": "Spatial Autocorrelation",
+   "notes": [],
+   "lessons": [
+    "00",
+    "09",
+    "11"
+   ],
+   "first": "00",
+   "variants": [
+    "공간자기상관",
+    "공간 자기 상관"
+   ]
+  },
+  {
+   "ko": "공간 자기회귀 과정",
+   "en": "Simultaneous Autoregressive (SAR) Process",
+   "notes": [
+    "x = (I − ρW)⁻¹ε, 25~26강"
+   ],
+   "lessons": [
+    "09"
+   ],
+   "first": "09",
+   "variants": []
+  },
+  {
+   "ko": "공간 자료",
+   "en": "Spatial Data",
+   "notes": [],
+   "lessons": [
+    "00"
+   ],
+   "first": "00",
+   "variants": []
+  },
+  {
+   "ko": "공간 제약 군집화",
+   "en": "Spatially Constrained Clustering",
+   "notes": [],
+   "lessons": [
+    "32"
+   ],
+   "first": "32",
+   "variants": []
+  },
+  {
+   "ko": "공간 척도",
+   "en": "Spatial Scale",
+   "notes": [],
+   "lessons": [
+    "30"
+   ],
+   "first": "30",
+   "variants": []
+  },
+  {
+   "ko": "공간 체제",
+   "en": "Spatial Regimes",
+   "notes": [
+    "PySAL: OLS_Regimes"
+   ],
+   "lessons": [
+    "28"
+   ],
+   "first": "28",
+   "variants": []
+  },
+  {
+   "ko": "공간 패널 모형",
+   "en": "Spatial Panel Model",
+   "notes": [
+    "Elhorst 2003",
+    "Elhorst 2014"
+   ],
+   "lessons": [
+    "27",
+    "35"
+   ],
+   "first": "27",
+   "variants": []
+  },
+  {
+   "ko": "공간 평활 계수",
+   "en": "Spatial Smoothing Scalar",
+   "notes": [
+    "L_XX"
+   ],
+   "lessons": [
+    "13"
+   ],
+   "first": "13",
+   "variants": []
+  },
+  {
+   "ko": "공간 피복 표본",
+   "en": "Spatial Coverage Sample",
+   "notes": [
+    "Walvoort 외 2010"
+   ],
+   "lessons": [
+    "38"
+   ],
+   "first": "38",
+   "variants": []
+  },
+  {
+   "ko": "공간 필터",
+   "en": "Spatial Filter",
+   "notes": [
+    "(I − λW)"
+   ],
+   "lessons": [
+    "26"
+   ],
+   "first": "26",
+   "variants": []
+  },
+  {
+   "ko": "공간 회귀 불연속",
+   "en": "Geographic Regression Discontinuity",
+   "notes": [
+    "Keele & Titiunik 2015"
+   ],
+   "lessons": [
+    "41"
+   ],
+   "first": "41",
+   "variants": []
+  },
+  {
+   "ko": "공간 효과",
+   "en": "Spatial Effects",
+   "notes": [
+    "의존성과 이질성을 함께 이르는 말 (Anselin 1988)"
+   ],
+   "lessons": [
+    "00"
+   ],
+   "first": "00",
+   "variants": []
+  },
+  {
+   "ko": "공간가중치 (행렬)",
+   "en": "Spatial Weights (Matrix)",
+   "notes": [
+    "W"
+   ],
+   "lessons": [
+    "10"
+   ],
+   "first": "10",
+   "variants": [
+    "공간가중행렬",
+    "공간 가중행렬"
+   ]
+  },
+  {
+   "ko": "공간계량경제학",
+   "en": "Spatial Econometrics",
+   "notes": [],
+   "lessons": [
+    "00"
+   ],
+   "first": "00",
+   "variants": []
+  },
+  {
+   "ko": "공간시차 X 모형",
+   "en": "Spatial Lag of X (SLX)",
+   "notes": [
+    "국지적 파급"
+   ],
+   "lessons": [
+    "26"
+   ],
+   "first": "26",
+   "variants": []
+  },
+  {
+   "ko": "공간시차 모형",
+   "en": "Spatial Lag Model (SAR)",
+   "notes": [
+    "GeoDa: Spatial Lag, PySAL: ML_Lag·GM_Lag"
+   ],
+   "lessons": [
+    "24",
+    "25"
+   ],
+   "first": "24",
+   "variants": []
+  },
+  {
+   "ko": "공간오차 모형",
+   "en": "Spatial Error Model (SEM)",
+   "notes": [
+    "GeoDa: Spatial Error, PySAL: ML_Error·GM_Error_Het"
+   ],
+   "lessons": [
+    "24",
+    "26"
+   ],
+   "first": "24",
+   "variants": []
+  },
+  {
+   "ko": "공간통계학",
+   "en": "Spatial Statistics",
+   "notes": [],
+   "lessons": [
+    "00"
+   ],
+   "first": "00",
+   "variants": []
+  },
+  {
+   "ko": "공통인수 제약",
+   "en": "Common Factor Restriction",
+   "notes": [
+    "θ = −ρβ"
+   ],
+   "lessons": [
+    "26"
+   ],
+   "first": "26",
+   "variants": []
+  },
+  {
+   "ko": "과대산포",
+   "en": "Overdispersion",
+   "notes": [
+    "분산 > 평균"
+   ],
+   "lessons": [
+    "27"
+   ],
+   "first": "27",
+   "variants": []
+  },
+  {
+   "ko": "관찰창",
+   "en": "Observation Window",
+   "notes": [],
+   "lessons": [
+    "16"
+   ],
+   "first": "16",
+   "variants": []
+  },
+  {
+   "ko": "교란 변수",
+   "en": "Confounder",
+   "notes": [],
+   "lessons": [
+    "08"
+   ],
+   "first": "08",
+   "variants": []
+  },
+  {
+   "ko": "교차 K 함수",
+   "en": "Cross-K Function",
+   "notes": [],
+   "lessons": [
+    "18"
+   ],
+   "first": "18",
+   "variants": []
+  },
+  {
+   "ko": "교차검증",
+   "en": "Cross-Validation",
+   "notes": [
+    "LOOCV",
+    "k겹, LOO"
+   ],
+   "lessons": [
+    "20",
+    "39"
+   ],
+   "first": "20",
+   "variants": []
+  },
+  {
+   "ko": "교환 가능성",
+   "en": "Exchangeability",
+   "notes": [
+    "순열 검정의 가정"
+   ],
+   "lessons": [
+    "07"
+   ],
+   "first": "07",
+   "variants": []
+  },
+  {
+   "ko": "구조의 불안정",
+   "en": "Structural Instability",
+   "notes": [
+    "계수의 지역 차이"
+   ],
+   "lessons": [
+    "28"
+   ],
+   "first": "28",
+   "variants": []
+  },
+  {
+   "ko": "구형·지수·가우시안 모형",
+   "en": "Spherical, Exponential, Gaussian Models",
+   "notes": [],
+   "lessons": [
+    "21"
+   ],
+   "first": "21",
+   "variants": []
+  },
+  {
+   "ko": "구획 효과",
+   "en": "Zoning Effect",
+   "notes": [],
+   "lessons": [
+    "03"
+   ],
+   "first": "03",
+   "variants": []
+  },
+  {
+   "ko": "국소 최적",
+   "en": "Local Optimum",
+   "notes": [],
+   "lessons": [
+    "31"
+   ],
+   "first": "31",
+   "variants": []
+  },
+  {
+   "ko": "국지 G 통계량",
+   "en": "Getis-Ord Gi, Gi\\*",
+   "notes": [
+    "Gi\\*는 자기 자신 포함"
+   ],
+   "lessons": [
+    "13"
+   ],
+   "first": "13",
+   "variants": []
+  },
+  {
+   "ko": "국지 기어리",
+   "en": "Local Geary's c",
+   "notes": [
+    "Anselin 1995, 2019"
+   ],
+   "lessons": [
+    "13"
+   ],
+   "first": "13",
+   "variants": []
+  },
+  {
+   "ko": "국지 모란의 I",
+   "en": "Local Moran's I",
+   "notes": [],
+   "lessons": [
+    "12"
+   ],
+   "first": "12",
+   "variants": []
+  },
+  {
+   "ko": "국지 조인 카운트",
+   "en": "Local Join Count",
+   "notes": [
+    "Anselin & Li 2019"
+   ],
+   "lessons": [
+    "13"
+   ],
+   "first": "13",
+   "variants": []
+  },
+  {
+   "ko": "국지 피벗 방법",
+   "en": "Local Pivotal Method",
+   "notes": [
+    "Grafström 외 2012"
+   ],
+   "lessons": [
+    "38"
+   ],
+   "first": "38",
+   "variants": []
+  },
+  {
+   "ko": "국지적 공간 연관 지표",
+   "en": "Local Indicators of Spatial Association (LISA)",
+   "notes": [
+    "Anselin 1995"
+   ],
+   "lessons": [
+    "12"
+   ],
+   "first": "12",
+   "variants": []
+  },
+  {
+   "ko": "군집 강건 표준오차",
+   "en": "Cluster-robust Standard Error",
+   "notes": [],
+   "lessons": [
+    "35"
+   ],
+   "first": "35",
+   "variants": []
+  },
+  {
+   "ko": "군집 과정",
+   "en": "Cluster Process",
+   "notes": [
+    "Neyman–Scott"
+   ],
+   "lessons": [
+    "19"
+   ],
+   "first": "19",
+   "variants": []
+  },
+  {
+   "ko": "군집 내 제곱합",
+   "en": "Within-cluster Sum of Squares (WSS)",
+   "notes": [],
+   "lessons": [
+    "31"
+   ],
+   "first": "31",
+   "variants": []
+  },
+  {
+   "ko": "군집 분석",
+   "en": "Cluster Analysis",
+   "notes": [
+    "비지도 학습"
+   ],
+   "lessons": [
+    "31"
+   ],
+   "first": "31",
+   "variants": []
+  },
+  {
+   "ko": "군집 전이표",
+   "en": "Cluster Transition Table",
+   "notes": [
+    "GeoStat 기간별 LISA"
+   ],
+   "lessons": [
+    "34"
+   ],
+   "first": "34",
+   "variants": []
+  },
+  {
+   "ko": "군집 지도",
+   "en": "Cluster Map",
+   "notes": [
+    "HH, LL, HL, LH"
+   ],
+   "lessons": [
+    "12"
+   ],
+   "first": "12",
+   "variants": []
+  },
+  {
+   "ko": "군집 탐지",
+   "en": "Cluster Detection",
+   "notes": [],
+   "lessons": [
+    "15"
+   ],
+   "first": "15",
+   "variants": []
+  },
+  {
+   "ko": "군집 프로필",
+   "en": "Cluster Profile",
+   "notes": [],
+   "lessons": [
+    "31"
+   ],
+   "first": "31",
+   "variants": []
+  },
+  {
+   "ko": "귀무가설",
+   "en": "Null Hypothesis (H₀)",
+   "notes": [],
+   "lessons": [
+    "07"
+   ],
+   "first": "07",
+   "variants": []
+  },
+  {
+   "ko": "귀무분포",
+   "en": "Null Distribution",
+   "notes": [],
+   "lessons": [
+    "07"
+   ],
+   "first": "07",
+   "variants": []
+  },
+  {
+   "ko": "근사해법",
+   "en": "Heuristic",
+   "notes": [],
+   "lessons": [
+    "32"
+   ],
+   "first": "32",
+   "variants": []
+  },
+  {
+   "ko": "기대 건수",
+   "en": "Expected Count",
+   "notes": [
+    "간접 표준화"
+   ],
+   "lessons": [
+    "37"
+   ],
+   "first": "37",
+   "variants": []
+  },
+  {
+   "ko": "기어리의 C",
+   "en": "Geary's C",
+   "notes": [
+    "Geary 1954, 기댓값 1"
+   ],
+   "lessons": [
+    "11"
+   ],
+   "first": "11",
+   "variants": []
+  },
+  {
+   "ko": "기하평균",
+   "en": "Geometric Mean",
+   "notes": [
+    "로그의 평균을 되돌린 값"
+   ],
+   "lessons": [
+    "06"
+   ],
+   "first": "06",
+   "variants": []
+  },
+  {
+   "ko": "긴 형태 / 넓은 형태",
+   "en": "Long / Wide Format",
+   "notes": [],
+   "lessons": [
+    "33"
+   ],
+   "first": "33",
+   "variants": []
+  },
+  {
+   "ko": "깔때기 그림",
+   "en": "Funnel Plot",
+   "notes": [],
+   "lessons": [
+    "06"
+   ],
+   "first": "06",
+   "variants": []
+  },
+  {
+   "ko": "내생성",
+   "en": "Endogeneity",
+   "notes": [],
+   "lessons": [
+    "25"
+   ],
+   "first": "25",
+   "variants": []
+  },
+  {
+   "ko": "내재 정상성",
+   "en": "Intrinsic Stationarity",
+   "notes": [],
+   "lessons": [
+    "20"
+   ],
+   "first": "20",
+   "variants": []
+  },
+  {
+   "ko": "내재적 CAR",
+   "en": "Intrinsic CAR (ICAR)",
+   "notes": [
+    "합 0 제약"
+   ],
+   "lessons": [
+    "37"
+   ],
+   "first": "37",
+   "variants": []
+  },
+  {
+   "ko": "내포량",
+   "en": "Intensive Variable",
+   "notes": [
+    "밀도, 비율, 평균"
+   ],
+   "lessons": [
+    "01"
+   ],
+   "first": "01",
+   "variants": []
+  },
+  {
+   "ko": "너깃",
+   "en": "Nugget",
+   "notes": [
+    "c₀"
+   ],
+   "lessons": [
+    "21"
+   ],
+   "first": "21",
+   "variants": []
+  },
+  {
+   "ko": "노출 인구",
+   "en": "Population at Risk",
+   "notes": [
+    "알맞은 분모"
+   ],
+   "lessons": [
+    "03"
+   ],
+   "first": "03",
+   "variants": []
+  },
+  {
+   "ko": "누락 변수 편향",
+   "en": "Omitted Variable Bias",
+   "notes": [],
+   "lessons": [
+    "08",
+    "41"
+   ],
+   "first": "08",
+   "variants": [
+    "빠진 변수 치우침",
+    "누락변수 편의",
+    "누락 변수 편의"
+   ]
+  },
+  {
+   "ko": "다변량 국지 기어리",
+   "en": "Multivariate Local Geary",
+   "notes": [],
+   "lessons": [
+    "13"
+   ],
+   "first": "13",
+   "variants": []
+  },
+  {
+   "ko": "다수준 모형",
+   "en": "Multilevel Model",
+   "notes": [
+    "개인과 지역 효과를 함께 추정"
+   ],
+   "lessons": [
+    "03"
+   ],
+   "first": "03",
+   "variants": []
+  },
+  {
+   "ko": "다중 우주 분석",
+   "en": "Multiverse Analysis",
+   "notes": [
+    "Steegen 외 2016"
+   ],
+   "lessons": [
+    "41"
+   ],
+   "first": "41",
+   "variants": []
+  },
+  {
+   "ko": "다중검정",
+   "en": "Multiple Testing",
+   "notes": [],
+   "lessons": [
+    "07"
+   ],
+   "first": "07",
+   "variants": [
+    "다중 검정"
+   ]
+  },
+  {
+   "ko": "다중검정 보정",
+   "en": "Multiple Testing Correction",
+   "notes": [
+    "FDR, Bonferroni"
+   ],
+   "lessons": [
+    "12"
+   ],
+   "first": "12",
+   "variants": []
+  },
+  {
+   "ko": "다중공선성",
+   "en": "Multicollinearity",
+   "notes": [],
+   "lessons": [
+    "08"
+   ],
+   "first": "08",
+   "variants": []
+  },
+  {
+   "ko": "다중척도 지리가중회귀",
+   "en": "Multiscale GWR (MGWR)",
+   "notes": [
+    "Fotheringham 외 2017"
+   ],
+   "lessons": [
+    "30"
+   ],
+   "first": "30",
+   "variants": []
+  },
+  {
+   "ko": "단계구분도",
+   "en": "Choropleth Map",
+   "notes": [
+    "구역을 값의 계급으로 칠한 지도"
+   ],
+   "lessons": [
+    "01",
+    "05"
+   ],
+   "first": "01",
+   "variants": [
+    "코로플레스 지도",
+    "코로플레스맵"
+   ]
+  },
+  {
+   "ko": "단순 무작위 추출",
+   "en": "Simple Random Sampling (SRS)",
+   "notes": [],
+   "lessons": [
+    "38"
+   ],
+   "first": "38",
+   "variants": []
+  },
+  {
+   "ko": "단순·정규·보편 크리깅",
+   "en": "Simple, Ordinary, Universal Kriging",
+   "notes": [],
+   "lessons": [
+    "22"
+   ],
+   "first": "22",
+   "variants": []
+  },
+  {
+   "ko": "단순화",
+   "en": "Simplification",
+   "notes": [
+    "꼭짓점 줄이기"
+   ],
+   "lessons": [
+    "04"
+   ],
+   "first": "04",
+   "variants": []
+  },
+  {
+   "ko": "대권거리 / 측지선 거리",
+   "en": "Great-circle Distance / Geodesic Distance",
+   "notes": [],
+   "lessons": [
+    "02"
+   ],
+   "first": "02",
+   "variants": []
+  },
+  {
+   "ko": "대역폭",
+   "en": "Bandwidth",
+   "notes": [],
+   "lessons": [
+    "17",
+    "29"
+   ],
+   "first": "17",
+   "variants": []
+  },
+  {
+   "ko": "대역폭 불확실성",
+   "en": "Bandwidth Uncertainty",
+   "notes": [
+    "Li 외 2020"
+   ],
+   "lessons": [
+    "30"
+   ],
+   "first": "30",
+   "variants": []
+  },
+  {
+   "ko": "대체",
+   "en": "Imputation",
+   "notes": [
+    "결측을 채우는 것"
+   ],
+   "lessons": [
+    "04"
+   ],
+   "first": "04",
+   "variants": []
+  },
+  {
+   "ko": "덴드로그램",
+   "en": "Dendrogram",
+   "notes": [],
+   "lessons": [
+    "31"
+   ],
+   "first": "31",
+   "variants": []
+  },
+  {
+   "ko": "도구변수",
+   "en": "Instrumental Variable",
+   "notes": [
+    "WX, W²X"
+   ],
+   "lessons": [
+    "25"
+   ],
+   "first": "25",
+   "variants": []
+  },
+  {
+   "ko": "독립",
+   "en": "Independence",
+   "notes": [],
+   "lessons": [
+    "09"
+   ],
+   "first": "09",
+   "variants": []
+  },
+  {
+   "ko": "동 안 편차",
+   "en": "Within Transformation",
+   "notes": [],
+   "lessons": [
+    "35"
+   ],
+   "first": "35",
+   "variants": []
+  },
+  {
+   "ko": "동적 공간 패널",
+   "en": "Dynamic Spatial Panel",
+   "notes": [],
+   "lessons": [
+    "35"
+   ],
+   "first": "35",
+   "variants": []
+  },
+  {
+   "ko": "등간격 분류",
+   "en": "Equal Interval Classification",
+   "notes": [
+    "값의 범위를 같은 폭으로"
+   ],
+   "lessons": [
+    "05"
+   ],
+   "first": "05",
+   "variants": []
+  },
+  {
+   "ko": "등방성 / 이방성",
+   "en": "Isotropy / Anisotropy",
+   "notes": [],
+   "lessons": [
+    "20"
+   ],
+   "first": "20",
+   "variants": []
+  },
+  {
+   "ko": "등분산성 / 이분산성",
+   "en": "Homoskedasticity / Heteroskedasticity",
+   "notes": [],
+   "lessons": [
+    "08"
+   ],
+   "first": "08",
+   "variants": []
+  },
+  {
+   "ko": "떠오르는 핫스팟 분석",
+   "en": "Emerging Hot Spot Analysis",
+   "notes": [
+    "ESRI"
+   ],
+   "lessons": [
+    "34"
+   ],
+   "first": "34",
+   "variants": []
+  },
+  {
+   "ko": "라그랑주 승수",
+   "en": "Lagrange Multiplier",
+   "notes": [
+    "가중치 합 조건"
+   ],
+   "lessons": [
+    "22"
+   ],
+   "first": "22",
+   "variants": []
+  },
+  {
+   "ko": "라그랑주 승수 검정",
+   "en": "Lagrange Multiplier (LM) Test",
+   "notes": [
+    "스코어 검정"
+   ],
+   "lessons": [
+    "24"
+   ],
+   "first": "24",
+   "variants": []
+  },
+  {
+   "ko": "랜덤 포레스트",
+   "en": "Random Forest",
+   "notes": [
+    "Breiman 2001"
+   ],
+   "lessons": [
+    "39"
+   ],
+   "first": "39",
+   "variants": []
+  },
+  {
+   "ko": "로그 가우시안 콕스 과정",
+   "en": "Log-Gaussian Cox Process (LGCP)",
+   "notes": [],
+   "lessons": [
+    "19"
+   ],
+   "first": "19",
+   "variants": []
+  },
+  {
+   "ko": "로그우도비",
+   "en": "Log-Likelihood Ratio (LLR)",
+   "notes": [],
+   "lessons": [
+    "15"
+   ],
+   "first": "15",
+   "variants": []
+  },
+  {
+   "ko": "로버스트",
+   "en": "Robust",
+   "notes": [
+    "극단값에 덜 흔들림"
+   ],
+   "lessons": [
+    "06"
+   ],
+   "first": "06",
+   "variants": []
+  },
+  {
+   "ko": "룩 / 퀸 인접",
+   "en": "Rook / Queen Contiguity",
+   "notes": [],
+   "lessons": [
+    "10"
+   ],
+   "first": "10",
+   "variants": []
+  },
+  {
+   "ko": "르루 모형",
+   "en": "Leroux Model",
+   "notes": [],
+   "lessons": [
+    "37"
+   ],
+   "first": "37",
+   "variants": []
+  },
+  {
+   "ko": "리의 L",
+   "en": "Lee's L",
+   "notes": [
+    "Lee 2001, 대칭"
+   ],
+   "lessons": [
+    "13"
+   ],
+   "first": "13",
+   "variants": []
+  },
+  {
+   "ko": "마르코프 연쇄",
+   "en": "Markov Chain",
+   "notes": [],
+   "lessons": [
+    "34"
+   ],
+   "first": "34",
+   "variants": []
+  },
+  {
+   "ko": "마르코프 연쇄 몬테카를로",
+   "en": "Markov Chain Monte Carlo (MCMC)",
+   "notes": [],
+   "lessons": [
+    "36"
+   ],
+   "first": "36",
+   "variants": []
+  },
+  {
+   "ko": "마테른 모형",
+   "en": "Matérn Model",
+   "notes": [
+    "매끄러움 ν"
+   ],
+   "lessons": [
+    "21"
+   ],
+   "first": "21",
+   "variants": []
+  },
+  {
+   "ko": "맥락 효과",
+   "en": "Contextual Effect",
+   "notes": [
+    "지역 자체의 조건이 개인의 결과에 주는 효과"
+   ],
+   "lessons": [
+    "03"
+   ],
+   "first": "03",
+   "variants": []
+  },
+  {
+   "ko": "맨-켄달 추세 검정",
+   "en": "Mann-Kendall Trend Test",
+   "notes": [
+    "Mann 1945, Kendall 1975"
+   ],
+   "lessons": [
+    "34"
+   ],
+   "first": "34",
+   "variants": []
+  },
+  {
+   "ko": "메트로폴리스 알고리즘",
+   "en": "Metropolis Algorithm",
+   "notes": [
+    "Metropolis 외 1953"
+   ],
+   "lessons": [
+    "36"
+   ],
+   "first": "36",
+   "variants": []
+  },
+  {
+   "ko": "면 자료",
+   "en": "Lattice Data, Areal Data",
+   "notes": [
+    "격자 자료, 구역 자료라고도 함"
+   ],
+   "lessons": [
+    "00"
+   ],
+   "first": "00",
+   "variants": []
+  },
+  {
+   "ko": "면적 가중 보간",
+   "en": "Areal Weighting Interpolation",
+   "notes": [],
+   "lessons": [
+    "01"
+   ],
+   "first": "01",
+   "variants": []
+  },
+  {
+   "ko": "면적 내삽",
+   "en": "Areal Interpolation",
+   "notes": [
+    "Goodchild & Lam 1980"
+   ],
+   "lessons": [
+    "33"
+   ],
+   "first": "33",
+   "variants": []
+  },
+  {
+   "ko": "명세 곡선",
+   "en": "Specification Curve",
+   "notes": [
+    "Simonsohn 외 2020"
+   ],
+   "lessons": [
+    "41"
+   ],
+   "first": "41",
+   "variants": []
+  },
+  {
+   "ko": "모란 고유벡터 지도",
+   "en": "Moran's Eigenvector Maps (MEM)",
+   "notes": [
+    "Dray 외 2006"
+   ],
+   "lessons": [
+    "27"
+   ],
+   "first": "27",
+   "variants": []
+  },
+  {
+   "ko": "모란 산점도",
+   "en": "Moran Scatterplot",
+   "notes": [
+    "기울기 = I"
+   ],
+   "lessons": [
+    "11"
+   ],
+   "first": "11",
+   "variants": []
+  },
+  {
+   "ko": "모란 지수",
+   "en": "Moran's I",
+   "notes": [],
+   "lessons": [
+    "00"
+   ],
+   "first": "00",
+   "variants": []
+  },
+  {
+   "ko": "모란의 I",
+   "en": "Moran's I",
+   "notes": [
+    "Moran 1950"
+   ],
+   "lessons": [
+    "11"
+   ],
+   "first": "11",
+   "variants": []
+  },
+  {
+   "ko": "모의 포락선",
+   "en": "Simulation Envelope",
+   "notes": [],
+   "lessons": [
+    "18"
+   ],
+   "first": "18",
+   "variants": []
+  },
+  {
+   "ko": "모자 행렬",
+   "en": "Hat Matrix",
+   "notes": [
+    "ŷ = Sy"
+   ],
+   "lessons": [
+    "29"
+   ],
+   "first": "29",
+   "variants": []
+  },
+  {
+   "ko": "모집단 / 표본",
+   "en": "Population / Sample",
+   "notes": [],
+   "lessons": [
+    "06"
+   ],
+   "first": "06",
+   "variants": []
+  },
+  {
+   "ko": "모집단 틀",
+   "en": "Sampling Frame",
+   "notes": [],
+   "lessons": [
+    "38"
+   ],
+   "first": "38",
+   "variants": []
+  },
+  {
+   "ko": "모형 기반 추론",
+   "en": "Model-based Inference",
+   "notes": [],
+   "lessons": [
+    "38"
+   ],
+   "first": "38",
+   "variants": []
+  },
+  {
+   "ko": "몬테카를로 검정",
+   "en": "Monte Carlo Test",
+   "notes": [],
+   "lessons": [
+    "15"
+   ],
+   "first": "15",
+   "variants": []
+  },
+  {
+   "ko": "무작위 결측",
+   "en": "MAR (Missing At Random)",
+   "notes": [
+    "관측된 다른 변수로 결측이 설명됨"
+   ],
+   "lessons": [
+    "04"
+   ],
+   "first": "04",
+   "variants": []
+  },
+  {
+   "ko": "무작위 표지",
+   "en": "Random Labelling",
+   "notes": [],
+   "lessons": [
+    "17"
+   ],
+   "first": "17",
+   "variants": []
+  },
+  {
+   "ko": "무조건부 시뮬레이션",
+   "en": "Unconditional Simulation",
+   "notes": [],
+   "lessons": [
+    "23"
+   ],
+   "first": "23",
+   "variants": []
+  },
+  {
+   "ko": "문턱값",
+   "en": "Sill",
+   "notes": [
+    "c₀ + c"
+   ],
+   "lessons": [
+    "21"
+   ],
+   "first": "21",
+   "variants": []
+  },
+  {
+   "ko": "민감도 분석",
+   "en": "Sensitivity Analysis",
+   "notes": [],
+   "lessons": [
+    "03",
+    "10",
+    "27",
+    "41"
+   ],
+   "first": "03",
+   "variants": []
+  },
+  {
+   "ko": "박스 지도",
+   "en": "Box Map",
+   "notes": [
+    "사분위수와 1.5 IQR 울타리"
+   ],
+   "lessons": [
+    "05"
+   ],
+   "first": "05",
+   "variants": []
+  },
+  {
+   "ko": "박판 스플라인",
+   "en": "Thin Plate Spline",
+   "notes": [],
+   "lessons": [
+    "20"
+   ],
+   "first": "20",
+   "variants": []
+  },
+  {
+   "ko": "반복 가능성",
+   "en": "Replicability",
+   "notes": [],
+   "lessons": [
+    "41"
+   ],
+   "first": "41",
+   "variants": []
+  },
+  {
+   "ko": "방격 밀도",
+   "en": "Quadrat Density",
+   "notes": [
+    "앱: 점 집계의 _DENS"
+   ],
+   "lessons": [
+    "17"
+   ],
+   "first": "17",
+   "variants": []
+  },
+  {
+   "ko": "방격법",
+   "en": "Quadrat Method",
+   "notes": [],
+   "lessons": [
+    "16"
+   ],
+   "first": "16",
+   "variants": []
+  },
+  {
+   "ko": "방법 절 / 결과 절",
+   "en": "Methods / Results Section",
+   "notes": [],
+   "lessons": [
+    "42"
+   ],
+   "first": "42",
+   "variants": []
+  },
+  {
+   "ko": "방위 표시",
+   "en": "North Arrow",
+   "notes": [],
+   "lessons": [
+    "42"
+   ],
+   "first": "42",
+   "variants": []
+  },
+  {
+   "ko": "버먼–터너 근사",
+   "en": "Berman–Turner Approximation",
+   "notes": [
+    "셀 포아송 회귀"
+   ],
+   "lessons": [
+    "19"
+   ],
+   "first": "19",
+   "variants": []
+  },
+  {
+   "ko": "베리오그램 구름",
+   "en": "Variogram Cloud",
+   "notes": [],
+   "lessons": [
+    "21"
+   ],
+   "first": "21",
+   "variants": []
+  },
+  {
+   "ko": "벡터 / 래스터",
+   "en": "Vector / Raster",
+   "notes": [],
+   "lessons": [
+    "01"
+   ],
+   "first": "01",
+   "variants": []
+  },
+  {
+   "ko": "벤야미니–호흐베르크",
+   "en": "Benjamini–Hochberg (BH)",
+   "notes": [
+    "FDR 통제"
+   ],
+   "lessons": [
+    "07"
+   ],
+   "first": "07",
+   "variants": []
+  },
+  {
+   "ko": "변동계수",
+   "en": "Coefficient of Variation (CV)",
+   "notes": [
+    "표준편차 ÷ 평균"
+   ],
+   "lessons": [
+    "06"
+   ],
+   "first": "06",
+   "variants": []
+  },
+  {
+   "ko": "보고 지침",
+   "en": "Reporting Guideline",
+   "notes": [
+    "STROBE 등"
+   ],
+   "lessons": [
+    "42"
+   ],
+   "first": "42",
+   "variants": []
+  },
+  {
+   "ko": "보로노이 분할",
+   "en": "Voronoi Tessellation",
+   "notes": [
+    "티센 다각형과 같음"
+   ],
+   "lessons": [
+    "03"
+   ],
+   "first": "03",
+   "variants": []
+  },
+  {
+   "ko": "보조 자료 비례 내삽",
+   "en": "Dasymetric Interpolation",
+   "notes": [
+    "Mennis 2003"
+   ],
+   "lessons": [
+    "33"
+   ],
+   "first": "33",
+   "variants": []
+  },
+  {
+   "ko": "보충 자료",
+   "en": "Supplementary Material",
+   "notes": [],
+   "lessons": [
+    "42"
+   ],
+   "first": "42",
+   "variants": []
+  },
+  {
+   "ko": "복잡도 벌점 사전분포",
+   "en": "Penalized Complexity (PC) Prior",
+   "notes": [
+    "Simpson 외 2017"
+   ],
+   "lessons": [
+    "37"
+   ],
+   "first": "37",
+   "variants": []
+  },
+  {
+   "ko": "본페로니 보정",
+   "en": "Bonferroni Correction",
+   "notes": [
+    "α / m"
+   ],
+   "lessons": [
+    "07"
+   ],
+   "first": "07",
+   "variants": []
+  },
+  {
+   "ko": "부분 잔차",
+   "en": "Partial Residual",
+   "notes": [],
+   "lessons": [
+    "30"
+   ],
+   "first": "30",
+   "variants": []
+  },
+  {
+   "ko": "부분 합동",
+   "en": "Partial Pooling",
+   "notes": [],
+   "lessons": [
+    "36"
+   ],
+   "first": "36",
+   "variants": []
+  },
+  {
+   "ko": "부트스트랩",
+   "en": "Bootstrap",
+   "notes": [
+    "복원 추출로 표본분포를 흉내 냄"
+   ],
+   "lessons": [
+    "06"
+   ],
+   "first": "06",
+   "variants": []
+  },
+  {
+   "ko": "분리형 공분산",
+   "en": "Separable Covariance",
+   "notes": [],
+   "lessons": [
+    "35"
+   ],
+   "first": "35",
+   "variants": []
+  },
+  {
+   "ko": "분산 대 평균 비",
+   "en": "Variance-to-Mean Ratio (VMR)",
+   "notes": [],
+   "lessons": [
+    "16"
+   ],
+   "first": "16",
+   "variants": []
+  },
+  {
+   "ko": "분산 분해",
+   "en": "Variance Decomposition",
+   "notes": [],
+   "lessons": [
+    "33"
+   ],
+   "first": "33",
+   "variants": []
+  },
+  {
+   "ko": "분산 적합도",
+   "en": "Goodness of Variance Fit (GVF)",
+   "notes": [
+    "1 − 계급 안 제곱합 ÷ 전체 제곱합"
+   ],
+   "lessons": [
+    "05"
+   ],
+   "first": "05",
+   "variants": []
+  },
+  {
+   "ko": "분산 팽창 계수",
+   "en": "Variance Inflation Factor (VIF)",
+   "notes": [],
+   "lessons": [
+    "08"
+   ],
+   "first": "08",
+   "variants": []
+  },
+  {
+   "ko": "분석 계획서",
+   "en": "Analysis Plan",
+   "notes": [
+    "사전 등록"
+   ],
+   "lessons": [
+    "41"
+   ],
+   "first": "41",
+   "variants": []
+  },
+  {
+   "ko": "분위수 분류",
+   "en": "Quantile Classification",
+   "notes": [
+    "계급마다 개수가 같게"
+   ],
+   "lessons": [
+    "05"
+   ],
+   "first": "05",
+   "variants": []
+  },
+  {
+   "ko": "불균질 K 함수",
+   "en": "Inhomogeneous K Function",
+   "notes": [
+    "Baddeley et al. 2000"
+   ],
+   "lessons": [
+    "18"
+   ],
+   "first": "18",
+   "variants": []
+  },
+  {
+   "ko": "불균질 포아송 과정",
+   "en": "Inhomogeneous Poisson Process",
+   "notes": [
+    "1차 성질"
+   ],
+   "lessons": [
+    "16"
+   ],
+   "first": "16",
+   "variants": []
+  },
+  {
+   "ko": "불균질 포아송 모형",
+   "en": "Inhomogeneous Poisson Model",
+   "notes": [
+    "로그선형 강도"
+   ],
+   "lessons": [
+    "19"
+   ],
+   "first": "19",
+   "variants": []
+  },
+  {
+   "ko": "브러싱",
+   "en": "Brushing",
+   "notes": [
+    "한 창에서 골라 모든 창에 표시"
+   ],
+   "lessons": [
+    "05"
+   ],
+   "first": "05",
+   "variants": []
+  },
+  {
+   "ko": "블록 부트스트랩",
+   "en": "Block Bootstrap",
+   "notes": [
+    "Lahiri 2003"
+   ],
+   "lessons": [
+    "39"
+   ],
+   "first": "39",
+   "variants": []
+  },
+  {
+   "ko": "블록 크리깅",
+   "en": "Block Kriging",
+   "notes": [
+    "지원 변경"
+   ],
+   "lessons": [
+    "22"
+   ],
+   "first": "22",
+   "variants": []
+  },
+  {
+   "ko": "블록 평균",
+   "en": "Block Average",
+   "notes": [
+    "집계"
+   ],
+   "lessons": [
+    "40"
+   ],
+   "first": "40",
+   "variants": []
+  },
+  {
+   "ko": "비무작위 결측",
+   "en": "MNAR (Missing Not At Random)",
+   "notes": [
+    "빠진 값 자체가 결측을 결정"
+   ],
+   "lessons": [
+    "04"
+   ],
+   "first": "04",
+   "variants": []
+  },
+  {
+   "ko": "빈 공간 함수",
+   "en": "Empty Space Function F",
+   "notes": [],
+   "lessons": [
+    "18"
+   ],
+   "first": "18",
+   "variants": []
+  },
+  {
+   "ko": "사례–대조",
+   "en": "Case–Control",
+   "notes": [],
+   "lessons": [
+    "17"
+   ],
+   "first": "17",
+   "variants": []
+  },
+  {
+   "ko": "사분면",
+   "en": "Quadrant (HH, LL, LH, HL)",
+   "notes": [],
+   "lessons": [
+    "11"
+   ],
+   "first": "11",
+   "variants": []
+  },
+  {
+   "ko": "사분위 범위",
+   "en": "Interquartile Range (IQR)",
+   "notes": [
+    "Q3 − Q1"
+   ],
+   "lessons": [
+    "05",
+    "06"
+   ],
+   "first": "05",
+   "variants": []
+  },
+  {
+   "ko": "사전 등록",
+   "en": "Preregistration",
+   "notes": [],
+   "lessons": [
+    "42"
+   ],
+   "first": "42",
+   "variants": []
+  },
+  {
+   "ko": "사전분포 / 사후분포",
+   "en": "Prior / Posterior Distribution",
+   "notes": [],
+   "lessons": [
+    "36"
+   ],
+   "first": "36",
+   "variants": []
+  },
+  {
+   "ko": "상관거리",
+   "en": "Range",
+   "notes": [
+    "실효 상관거리"
+   ],
+   "lessons": [
+    "21"
+   ],
+   "first": "21",
+   "variants": []
+  },
+  {
+   "ko": "상대 강도(상대 위험)",
+   "en": "Relative Intensity (Relative Risk)",
+   "notes": [
+    "Kelsall & Diggle 1995"
+   ],
+   "lessons": [
+    "17"
+   ],
+   "first": "17",
+   "variants": []
+  },
+  {
+   "ko": "상대위험",
+   "en": "Relative Risk (RR)",
+   "notes": [
+    "창 안 O/E ÷ 창 밖 O/E"
+   ],
+   "lessons": [
+    "15",
+    "37"
+   ],
+   "first": "15",
+   "variants": []
+  },
+  {
+   "ko": "상호작용 항",
+   "en": "Interaction Term",
+   "notes": [],
+   "lessons": [
+    "28"
+   ],
+   "first": "28",
+   "variants": []
+  },
+  {
+   "ko": "생산자 정확도 / 사용자 정확도",
+   "en": "Producer's / User's Accuracy",
+   "notes": [
+    "재현율 / 정밀도"
+   ],
+   "lessons": [
+    "40"
+   ],
+   "first": "40",
+   "variants": []
+  },
+  {
+   "ko": "생태 회귀",
+   "en": "Ecological Regression",
+   "notes": [],
+   "lessons": [
+    "37"
+   ],
+   "first": "37",
+   "variants": []
+  },
+  {
+   "ko": "생태학적 상관",
+   "en": "Ecological Correlation",
+   "notes": [
+    "집계 단위에서 구한 상관"
+   ],
+   "lessons": [
+    "03"
+   ],
+   "first": "03",
+   "variants": []
+  },
+  {
+   "ko": "생태학적 오류",
+   "en": "Ecological Fallacy",
+   "notes": [
+    "Robinson 1950"
+   ],
+   "lessons": [
+    "03"
+   ],
+   "first": "03",
+   "variants": []
+  },
+  {
+   "ko": "선거구 획정",
+   "en": "Redistricting",
+   "notes": [],
+   "lessons": [
+    "32"
+   ],
+   "first": "32",
+   "variants": []
+  },
+  {
+   "ko": "설계 기반 / 모형 기반 추론",
+   "en": "Design-based / Model-based Inference",
+   "notes": [],
+   "lessons": [
+    "06"
+   ],
+   "first": "06",
+   "variants": []
+  },
+  {
+   "ko": "설계 기반 추론",
+   "en": "Design-based Inference",
+   "notes": [],
+   "lessons": [
+    "38"
+   ],
+   "first": "38",
+   "variants": []
+  },
+  {
+   "ko": "설계 효과",
+   "en": "Design Effect",
+   "notes": [],
+   "lessons": [
+    "38"
+   ],
+   "first": "38",
+   "variants": []
+  },
+  {
+   "ko": "섬",
+   "en": "Island (Isolate)",
+   "notes": [
+    "이웃이 없는 구역"
+   ],
+   "lessons": [
+    "04",
+    "10"
+   ],
+   "first": "04",
+   "variants": []
+  },
+  {
+   "ko": "성가신 의존",
+   "en": "Nuisance Dependence",
+   "notes": [
+    "공간오차"
+   ],
+   "lessons": [
+    "24"
+   ],
+   "first": "24",
+   "variants": []
+  },
+  {
+   "ko": "속성",
+   "en": "Attribute",
+   "notes": [],
+   "lessons": [
+    "01"
+   ],
+   "first": "01",
+   "variants": []
+  },
+  {
+   "ko": "속성 결합",
+   "en": "Attribute Join",
+   "notes": [
+    "키로 붙임"
+   ],
+   "lessons": [
+    "04"
+   ],
+   "first": "04",
+   "variants": []
+  },
+  {
+   "ko": "수정 t검정",
+   "en": "Modified t-test",
+   "notes": [
+    "Clifford 외 1989, Dutilleul 1993"
+   ],
+   "lessons": [
+    "09"
+   ],
+   "first": "09",
+   "variants": []
+  },
+  {
+   "ko": "수정 랜드 지수",
+   "en": "Adjusted Rand Index (ARI)",
+   "notes": [
+    "Hubert & Arabie 1985"
+   ],
+   "lessons": [
+    "31"
+   ],
+   "first": "31",
+   "variants": []
+  },
+  {
+   "ko": "수정 아카이케 정보 기준",
+   "en": "Corrected AIC (AICc)",
+   "notes": [
+    "Hurvich 외 1998"
+   ],
+   "lessons": [
+    "29"
+   ],
+   "first": "29",
+   "variants": []
+  },
+  {
+   "ko": "수축",
+   "en": "Shrinkage",
+   "notes": [
+    "평균 쪽으로 당김"
+   ],
+   "lessons": [
+    "14"
+   ],
+   "first": "14",
+   "variants": []
+  },
+  {
+   "ko": "순서 관계 문제",
+   "en": "Order Relation Problem",
+   "notes": [
+    "확률이 0~1을 벗어남"
+   ],
+   "lessons": [
+    "23"
+   ],
+   "first": "23",
+   "variants": []
+  },
+  {
+   "ko": "순수 너깃",
+   "en": "Pure Nugget",
+   "notes": [
+    "공간 구조 없음"
+   ],
+   "lessons": [
+    "21"
+   ],
+   "first": "21",
+   "variants": []
+  },
+  {
+   "ko": "순열 검정",
+   "en": "Permutation Test",
+   "notes": [
+    "공간통계에서는 무작위화 가정을 흉내 내는 데 씀 (11강)"
+   ],
+   "lessons": [
+    "07"
+   ],
+   "first": "07",
+   "variants": []
+  },
+  {
+   "ko": "순차 / 발산 / 질적 색",
+   "en": "Sequential / Diverging / Qualitative",
+   "notes": [],
+   "lessons": [
+    "05"
+   ],
+   "first": "05",
+   "variants": []
+  },
+  {
+   "ko": "순차 가우시안 시뮬레이션",
+   "en": "Sequential Gaussian Simulation (SGS)",
+   "notes": [],
+   "lessons": [
+    "23"
+   ],
+   "first": "23",
+   "variants": []
+  },
+  {
+   "ko": "스타인의 역설",
+   "en": "Stein's Paradox",
+   "notes": [
+    "수축 추정"
+   ],
+   "lessons": [
+    "36"
+   ],
+   "first": "36",
+   "variants": []
+  },
+  {
+   "ko": "시간 변수 묶음",
+   "en": "Time Variable Group",
+   "notes": [
+    "GeoStat"
+   ],
+   "lessons": [
+    "33"
+   ],
+   "first": "33",
+   "variants": []
+  },
+  {
+   "ko": "시공간 가중치",
+   "en": "Space-time Weights",
+   "notes": [],
+   "lessons": [
+    "33"
+   ],
+   "first": "33",
+   "variants": []
+  },
+  {
+   "ko": "시공간 상호작용",
+   "en": "Space-time Interaction",
+   "notes": [
+    "Knorr-Held 2000"
+   ],
+   "lessons": [
+    "35"
+   ],
+   "first": "35",
+   "variants": []
+  },
+  {
+   "ko": "시공간 순열 모형",
+   "en": "Space-time Permutation Model",
+   "notes": [
+    "Kulldorff 외 2005"
+   ],
+   "lessons": [
+    "35"
+   ],
+   "first": "35",
+   "variants": []
+  },
+  {
+   "ko": "시공간 스캔 통계",
+   "en": "Space-time Scan Statistic",
+   "notes": [
+    "Kulldorff 2001"
+   ],
+   "lessons": [
+    "35"
+   ],
+   "first": "35",
+   "variants": []
+  },
+  {
+   "ko": "시공간 크리깅",
+   "en": "Space-time Kriging",
+   "notes": [],
+   "lessons": [
+    "35"
+   ],
+   "first": "35",
+   "variants": []
+  },
+  {
+   "ko": "신뢰구간",
+   "en": "Confidence Interval (CI)",
+   "notes": [],
+   "lessons": [
+    "06"
+   ],
+   "first": "06",
+   "variants": []
+  },
+  {
+   "ko": "신뢰구간 포함 확률",
+   "en": "Coverage Probability",
+   "notes": [
+    "신뢰구간이 참값을 포함하는 비율"
+   ],
+   "lessons": [
+    "09"
+   ],
+   "first": "09",
+   "variants": []
+  },
+  {
+   "ko": "신용구간",
+   "en": "Credible Interval",
+   "notes": [],
+   "lessons": [
+    "36"
+   ],
+   "first": "36",
+   "variants": [
+    "신뢰 구간(베이즈)"
+   ]
+  },
+  {
+   "ko": "실루엣 계수",
+   "en": "Silhouette Coefficient",
+   "notes": [
+    "Rousseeuw 1987"
+   ],
+   "lessons": [
+    "31"
+   ],
+   "first": "31",
+   "variants": []
+  },
+  {
+   "ko": "실질적 의존",
+   "en": "Substantive Dependence",
+   "notes": [
+    "파급, 공간시차"
+   ],
+   "lessons": [
+    "24"
+   ],
+   "first": "24",
+   "variants": []
+  },
+  {
+   "ko": "실질적 중요성",
+   "en": "Practical Significance",
+   "notes": [],
+   "lessons": [
+    "42"
+   ],
+   "first": "42",
+   "variants": []
+  },
+  {
+   "ko": "실험 베리오그램",
+   "en": "Empirical (Experimental) Variogram",
+   "notes": [],
+   "lessons": [
+    "21"
+   ],
+   "first": "21",
+   "variants": []
+  },
+  {
+   "ko": "실현값",
+   "en": "Realization",
+   "notes": [],
+   "lessons": [
+    "23"
+   ],
+   "first": "23",
+   "variants": []
+  },
+  {
+   "ko": "쌍상관함수",
+   "en": "Pair Correlation Function g(r)",
+   "notes": [
+    "K의 미분을 2πr로 나눈 것"
+   ],
+   "lessons": [
+    "18"
+   ],
+   "first": "18",
+   "variants": []
+  },
+  {
+   "ko": "아웃오브백 오차",
+   "en": "Out-of-bag (OOB) Error",
+   "notes": [
+    "랜덤 포레스트"
+   ],
+   "lessons": [
+    "39"
+   ],
+   "first": "39",
+   "variants": []
+  },
+  {
+   "ko": "아카이케 정보 기준",
+   "en": "Akaike Information Criterion (AIC) / corrected AIC (AICc)",
+   "notes": [
+    "작을수록 좋음"
+   ],
+   "lessons": [
+    "08"
+   ],
+   "first": "08",
+   "variants": []
+  },
+  {
+   "ko": "야코비 항",
+   "en": "Jacobian Term",
+   "notes": [
+    "ln\\|I − ρW\\|"
+   ],
+   "lessons": [
+    "25"
+   ],
+   "first": "25",
+   "variants": []
+  },
+  {
+   "ko": "억제 과정",
+   "en": "Inhibition Process",
+   "notes": [],
+   "lessons": [
+    "19"
+   ],
+   "first": "19",
+   "variants": []
+  },
+  {
+   "ko": "역거리 가중",
+   "en": "Inverse Distance Weighting (IDW)",
+   "notes": [
+    "1/d, 1/d²",
+    "Shepard 1968"
+   ],
+   "lessons": [
+    "10",
+    "20"
+   ],
+   "first": "10",
+   "variants": []
+  },
+  {
+   "ko": "역적합",
+   "en": "Backfitting",
+   "notes": [
+    "Buja 외 1989"
+   ],
+   "lessons": [
+    "30"
+   ],
+   "first": "30",
+   "variants": []
+  },
+  {
+   "ko": "연결 성분",
+   "en": "Connected Component",
+   "notes": [],
+   "lessons": [
+    "10"
+   ],
+   "first": "10",
+   "variants": []
+  },
+  {
+   "ko": "연동 시각화",
+   "en": "Linked Views",
+   "notes": [],
+   "lessons": [
+    "05"
+   ],
+   "first": "05",
+   "variants": []
+  },
+  {
+   "ko": "연령 표준화",
+   "en": "Age Standardization",
+   "notes": [],
+   "lessons": [
+    "03"
+   ],
+   "first": "03",
+   "variants": []
+  },
+  {
+   "ko": "연속 표면 자료",
+   "en": "Geostatistical Data",
+   "notes": [
+    "지구통계 자료라고도 함"
+   ],
+   "lessons": [
+    "00"
+   ],
+   "first": "00",
+   "variants": []
+  },
+  {
+   "ko": "영역화",
+   "en": "Regionalization",
+   "notes": [],
+   "lessons": [
+    "32"
+   ],
+   "first": "32",
+   "variants": []
+  },
+  {
+   "ko": "오차 행렬",
+   "en": "Error (Confusion) Matrix",
+   "notes": [],
+   "lessons": [
+    "40"
+   ],
+   "first": "40",
+   "variants": []
+  },
+  {
+   "ko": "오프셋",
+   "en": "Offset",
+   "notes": [
+    "ln(인구)"
+   ],
+   "lessons": [
+    "27"
+   ],
+   "first": "27",
+   "variants": []
+  },
+  {
+   "ko": "완전 공간 무작위",
+   "en": "Complete Spatial Randomness (CSR)",
+   "notes": [
+    "균질 포아송 과정"
+   ],
+   "lessons": [
+    "16"
+   ],
+   "first": "16",
+   "variants": []
+  },
+  {
+   "ko": "완전 무작위 결측",
+   "en": "MCAR (Missing Completely At Random)",
+   "notes": [
+    "결측이 어떤 값과도 무관"
+   ],
+   "lessons": [
+    "04"
+   ],
+   "first": "04",
+   "variants": []
+  },
+  {
+   "ko": "완충 LOO",
+   "en": "Buffered Leave-one-out",
+   "notes": [],
+   "lessons": [
+    "39"
+   ],
+   "first": "39",
+   "variants": []
+  },
+  {
+   "ko": "완충 구역",
+   "en": "Buffer Zone",
+   "notes": [
+    "이웃 계산에만 쓰는 바깥 구역"
+   ],
+   "lessons": [
+    "04"
+   ],
+   "first": "04",
+   "variants": []
+  },
+  {
+   "ko": "왜도",
+   "en": "Skewness",
+   "notes": [],
+   "lessons": [
+    "06"
+   ],
+   "first": "06",
+   "variants": []
+  },
+  {
+   "ko": "외부 표류 크리깅",
+   "en": "Kriging with External Drift",
+   "notes": [],
+   "lessons": [
+    "22"
+   ],
+   "first": "22",
+   "variants": []
+  },
+  {
+   "ko": "외삽",
+   "en": "Extrapolation",
+   "notes": [],
+   "lessons": [
+    "39"
+   ],
+   "first": "39",
+   "variants": []
+  },
+  {
+   "ko": "외연량",
+   "en": "Extensive Variable",
+   "notes": [
+    "합치면 더해지는 양"
+   ],
+   "lessons": [
+    "01"
+   ],
+   "first": "01",
+   "variants": []
+  },
+  {
+   "ko": "외연량 / 내포량",
+   "en": "Extensive / Intensive Variable",
+   "notes": [],
+   "lessons": [
+    "33"
+   ],
+   "first": "33",
+   "variants": []
+  },
+  {
+   "ko": "우도 교차검증",
+   "en": "Likelihood Cross-Validation",
+   "notes": [],
+   "lessons": [
+    "17"
+   ],
+   "first": "17",
+   "variants": []
+  },
+  {
+   "ko": "원 카토그램",
+   "en": "Dorling Cartogram",
+   "notes": [
+    "구역을 원으로"
+   ],
+   "lessons": [
+    "05"
+   ],
+   "first": "05",
+   "variants": []
+  },
+  {
+   "ko": "원비율",
+   "en": "Raw Rate",
+   "notes": [
+    "사건 수 ÷ 분모"
+   ],
+   "lessons": [
+    "14"
+   ],
+   "first": "14",
+   "variants": []
+  },
+  {
+   "ko": "웹 메르카토르",
+   "en": "Web Mercator (EPSG:3857)",
+   "notes": [],
+   "lessons": [
+    "02"
+   ],
+   "first": "02",
+   "variants": []
+  },
+  {
+   "ko": "위상",
+   "en": "Topology",
+   "notes": [
+    "경계를 공유하는 관계"
+   ],
+   "lessons": [
+    "04"
+   ],
+   "first": "04",
+   "variants": []
+  },
+  {
+   "ko": "유사 p값",
+   "en": "Pseudo p-value",
+   "notes": [
+    "(M + 1)/(R + 1)"
+   ],
+   "lessons": [
+    "07"
+   ],
+   "first": "07",
+   "variants": []
+  },
+  {
+   "ko": "유의성 지도",
+   "en": "Significance Map",
+   "notes": [
+    "유사 p값의 크기"
+   ],
+   "lessons": [
+    "12"
+   ],
+   "first": "12",
+   "variants": []
+  },
+  {
+   "ko": "유의수준",
+   "en": "Significance Level (α)",
+   "notes": [],
+   "lessons": [
+    "07"
+   ],
+   "first": "07",
+   "variants": []
+  },
+  {
+   "ko": "유클리드 거리",
+   "en": "Euclidean Distance",
+   "notes": [],
+   "lessons": [
+    "31"
+   ],
+   "first": "31",
+   "variants": []
+  },
+  {
+   "ko": "유한 모집단 수정",
+   "en": "Finite Population Correction",
+   "notes": [],
+   "lessons": [
+    "38"
+   ],
+   "first": "38",
+   "variants": []
+  },
+  {
+   "ko": "유효 모수 수",
+   "en": "Effective Number of Parameters (ENP)",
+   "notes": [
+    "tr(S)"
+   ],
+   "lessons": [
+    "29"
+   ],
+   "first": "29",
+   "variants": []
+  },
+  {
+   "ko": "유효 표본 크기",
+   "en": "Effective Sample Size (n_eff)",
+   "notes": [],
+   "lessons": [
+    "00",
+    "09",
+    "36",
+    "40"
+   ],
+   "first": "00",
+   "variants": [
+    "실효 표본 수",
+    "유효 표본 수",
+    "유효표본크기"
+   ]
+  },
+  {
+   "ko": "음이항 회귀",
+   "en": "Negative Binomial Regression (NB2)",
+   "notes": [
+    "분산 μ + αμ²"
+   ],
+   "lessons": [
+    "27"
+   ],
+   "first": "27",
+   "variants": []
+  },
+  {
+   "ko": "의사반복",
+   "en": "Pseudoreplication",
+   "notes": [
+    "Hurlbert 1984"
+   ],
+   "lessons": [
+    "09"
+   ],
+   "first": "09",
+   "variants": []
+  },
+  {
+   "ko": "이방성",
+   "en": "Anisotropy",
+   "notes": [
+    "기하 이방성"
+   ],
+   "lessons": [
+    "21"
+   ],
+   "first": "21",
+   "variants": []
+  },
+  {
+   "ko": "이변량 모란의 I",
+   "en": "Bivariate Moran's I",
+   "notes": [
+    "자기 x × 이웃 y"
+   ],
+   "lessons": [
+    "13"
+   ],
+   "first": "13",
+   "variants": []
+  },
+  {
+   "ko": "이분산 강건 GM",
+   "en": "Heteroskedasticity-robust GMM",
+   "notes": [
+    "Kelejian & Prucha 2010"
+   ],
+   "lessons": [
+    "26"
+   ],
+   "first": "26",
+   "variants": []
+  },
+  {
+   "ko": "이중차분",
+   "en": "Difference-in-Differences",
+   "notes": [],
+   "lessons": [
+    "41"
+   ],
+   "first": "41",
+   "variants": []
+  },
+  {
+   "ko": "이진 / 행 표준화",
+   "en": "Binary / Row-standardized",
+   "notes": [],
+   "lessons": [
+    "10"
+   ],
+   "first": "10",
+   "variants": []
+  },
+  {
+   "ko": "인과 도표",
+   "en": "Directed Acyclic Graph (DAG)",
+   "notes": [
+    "Pearl 2009"
+   ],
+   "lessons": [
+    "41"
+   ],
+   "first": "41",
+   "variants": []
+  },
+  {
+   "ko": "인접",
+   "en": "Contiguity",
+   "notes": [
+    "퀸·룩 인접, 10강"
+   ],
+   "lessons": [
+    "04",
+    "10"
+   ],
+   "first": "04",
+   "variants": []
+  },
+  {
+   "ko": "일반 G",
+   "en": "General G (Getis-Ord)",
+   "notes": [
+    "핫스팟·콜드스팟 구별"
+   ],
+   "lessons": [
+    "11"
+   ],
+   "first": "11",
+   "variants": []
+  },
+  {
+   "ko": "일반 둥지 모형",
+   "en": "General Nesting Spatial Model (GNS)",
+   "notes": [
+    "Elhorst 2010"
+   ],
+   "lessons": [
+    "26"
+   ],
+   "first": "26",
+   "variants": []
+  },
+  {
+   "ko": "자동 구역화 절차",
+   "en": "Automatic Zoning Procedure (AZP)",
+   "notes": [
+    "Openshaw 1977"
+   ],
+   "lessons": [
+    "32"
+   ],
+   "first": "32",
+   "variants": []
+  },
+  {
+   "ko": "자료 중복",
+   "en": "Data Redundancy (Declustering)",
+   "notes": [
+    "크리깅이 고려함"
+   ],
+   "lessons": [
+    "20"
+   ],
+   "first": "20",
+   "variants": []
+  },
+  {
+   "ko": "자연 분류",
+   "en": "Natural Breaks (Jenks, Fisher-Jenks)",
+   "notes": [
+    "계급 안 제곱합을 가장 작게"
+   ],
+   "lessons": [
+    "05"
+   ],
+   "first": "05",
+   "variants": []
+  },
+  {
+   "ko": "자연 실험",
+   "en": "Natural Experiment",
+   "notes": [],
+   "lessons": [
+    "41"
+   ],
+   "first": "41",
+   "variants": []
+  },
+  {
+   "ko": "작은 수 문제",
+   "en": "Small Number Problem",
+   "notes": [],
+   "lessons": [
+    "14"
+   ],
+   "first": "14",
+   "variants": []
+  },
+  {
+   "ko": "잔차 / 오차",
+   "en": "Residual / Error",
+   "notes": [],
+   "lessons": [
+    "08"
+   ],
+   "first": "08",
+   "variants": []
+  },
+  {
+   "ko": "잔차 Moran's I",
+   "en": "Moran's I for Residuals",
+   "notes": [
+    "Cliff & Ord 1981"
+   ],
+   "lessons": [
+    "24"
+   ],
+   "first": "24",
+   "variants": []
+  },
+  {
+   "ko": "재현 자료",
+   "en": "Replication Package",
+   "notes": [],
+   "lessons": [
+    "42"
+   ],
+   "first": "42",
+   "variants": []
+  },
+  {
+   "ko": "재현성",
+   "en": "Reproducibility",
+   "notes": [],
+   "lessons": [
+    "41"
+   ],
+   "first": "41",
+   "variants": []
+  },
+  {
+   "ko": "적용 가능 영역",
+   "en": "Area of Applicability (AOA)",
+   "notes": [
+    "Meyer & Pebesma 2021"
+   ],
+   "lessons": [
+    "39"
+   ],
+   "first": "39",
+   "variants": []
+  },
+  {
+   "ko": "적응 대역폭",
+   "en": "Adaptive Bandwidth",
+   "notes": [
+    "이웃 수"
+   ],
+   "lessons": [
+    "17",
+    "29"
+   ],
+   "first": "17",
+   "variants": []
+  },
+  {
+   "ko": "전역 / 국지",
+   "en": "Global / Local",
+   "notes": [],
+   "lessons": [
+    "11"
+   ],
+   "first": "11",
+   "variants": []
+  },
+  {
+   "ko": "전역 포락선 검정",
+   "en": "Global Envelope Test",
+   "notes": [],
+   "lessons": [
+    "18"
+   ],
+   "first": "18",
+   "variants": []
+  },
+  {
+   "ko": "전이 확률 행렬",
+   "en": "Transition Probability Matrix",
+   "notes": [],
+   "lessons": [
+    "34"
+   ],
+   "first": "34",
+   "variants": []
+  },
+  {
+   "ko": "점 과정",
+   "en": "Point Process",
+   "notes": [
+    "점 패턴을 만드는 확률 규칙"
+   ],
+   "lessons": [
+    "16"
+   ],
+   "first": "16",
+   "variants": []
+  },
+  {
+   "ko": "점 집계",
+   "en": "Point Aggregation, Spatial Join",
+   "notes": [
+    "GeoStat: 점 집계"
+   ],
+   "lessons": [
+    "01"
+   ],
+   "first": "01",
+   "variants": []
+  },
+  {
+   "ko": "점 패턴",
+   "en": "Spatial Point Pattern",
+   "notes": [
+    "사건 위치의 모음"
+   ],
+   "lessons": [
+    "00",
+    "16"
+   ],
+   "first": "00",
+   "variants": []
+  },
+  {
+   "ko": "정각 / 정적 / 정거 투영",
+   "en": "Conformal / Equal-area / Equidistant Projection",
+   "notes": [],
+   "lessons": [
+    "02"
+   ],
+   "first": "02",
+   "variants": []
+  },
+  {
+   "ko": "정규 Q-Q 그림",
+   "en": "Normal Q-Q Plot",
+   "notes": [],
+   "lessons": [
+    "08"
+   ],
+   "first": "08",
+   "variants": []
+  },
+  {
+   "ko": "정규 가정 / 무작위화 / 순열",
+   "en": "Normality / Randomization / Permutation",
+   "notes": [],
+   "lessons": [
+    "11"
+   ],
+   "first": "11",
+   "variants": []
+  },
+  {
+   "ko": "정규 근사",
+   "en": "Normal Approximation",
+   "notes": [
+    "순열과 대비"
+   ],
+   "lessons": [
+    "13"
+   ],
+   "first": "13",
+   "variants": []
+  },
+  {
+   "ko": "정규 점수 변환",
+   "en": "Normal Score Transform",
+   "notes": [],
+   "lessons": [
+    "23"
+   ],
+   "first": "23",
+   "variants": []
+  },
+  {
+   "ko": "정규분포 / 로그정규분포 / 포아송분포",
+   "en": "Normal / Log-normal / Poisson",
+   "notes": [],
+   "lessons": [
+    "06"
+   ],
+   "first": "06",
+   "variants": []
+  },
+  {
+   "ko": "정밀도 행렬",
+   "en": "Precision Matrix",
+   "notes": [
+    "공분산의 역행렬"
+   ],
+   "lessons": [
+    "37"
+   ],
+   "first": "37",
+   "variants": []
+  },
+  {
+   "ko": "정상 분포",
+   "en": "Stationary Distribution",
+   "notes": [],
+   "lessons": [
+    "34"
+   ],
+   "first": "34",
+   "variants": []
+  },
+  {
+   "ko": "정확도 평가",
+   "en": "Accuracy Assessment",
+   "notes": [],
+   "lessons": [
+    "40"
+   ],
+   "first": "40",
+   "variants": []
+  },
+  {
+   "ko": "조건부 순열",
+   "en": "Conditional Permutation",
+   "notes": [
+    "기준 구역의 값을 고정"
+   ],
+   "lessons": [
+    "12"
+   ],
+   "first": "12",
+   "variants": []
+  },
+  {
+   "ko": "조건부 시뮬레이션",
+   "en": "Conditional Simulation",
+   "notes": [
+    "Journel 1974"
+   ],
+   "lessons": [
+    "23"
+   ],
+   "first": "23",
+   "variants": []
+  },
+  {
+   "ko": "조건부 자기회귀",
+   "en": "Conditional Autoregressive (CAR)",
+   "notes": [
+    "Besag 1974"
+   ],
+   "lessons": [
+    "37"
+   ],
+   "first": "37",
+   "variants": []
+  },
+  {
+   "ko": "조건수",
+   "en": "Condition Number",
+   "notes": [
+    "30 넘으면 주의"
+   ],
+   "lessons": [
+    "08"
+   ],
+   "first": "08",
+   "variants": []
+  },
+  {
+   "ko": "조인 카운트",
+   "en": "Join Count (BB, BW, WW)",
+   "notes": [
+    "범주 자료"
+   ],
+   "lessons": [
+    "11"
+   ],
+   "first": "11",
+   "variants": []
+  },
+  {
+   "ko": "존 통계",
+   "en": "Zonal Statistics",
+   "notes": [
+    "GeoStat: 존 통계"
+   ],
+   "lessons": [
+    "01"
+   ],
+   "first": "01",
+   "variants": []
+  },
+  {
+   "ko": "좌표 특징",
+   "en": "Coordinates as Features",
+   "notes": [],
+   "lessons": [
+    "39"
+   ],
+   "first": "39",
+   "variants": []
+  },
+  {
+   "ko": "좌표계",
+   "en": "Coordinate Reference System (CRS)",
+   "notes": [],
+   "lessons": [
+    "02"
+   ],
+   "first": "02",
+   "variants": []
+  },
+  {
+   "ko": "좌표계 변환",
+   "en": "Reproject / Transform",
+   "notes": [
+    "GeoStat: 내보내기에서 변환"
+   ],
+   "lessons": [
+    "02"
+   ],
+   "first": "02",
+   "variants": []
+  },
+  {
+   "ko": "좌표계 지정",
+   "en": "Assign / Define Projection",
+   "notes": [
+    "GeoStat: 좌표계 지정"
+   ],
+   "lessons": [
+    "02"
+   ],
+   "first": "02",
+   "variants": []
+  },
+  {
+   "ko": "주변 가능도",
+   "en": "Marginal Likelihood",
+   "notes": [
+    "2형 최대우도"
+   ],
+   "lessons": [
+    "36"
+   ],
+   "first": "36",
+   "variants": []
+  },
+  {
+   "ko": "중심극한정리",
+   "en": "Central Limit Theorem",
+   "notes": [],
+   "lessons": [
+    "06"
+   ],
+   "first": "06",
+   "variants": []
+  },
+  {
+   "ko": "중심화",
+   "en": "Centering",
+   "notes": [
+    "기준값을 뺌"
+   ],
+   "lessons": [
+    "08"
+   ],
+   "first": "08",
+   "variants": []
+  },
+  {
+   "ko": "중첩 교차검증",
+   "en": "Nested Cross-validation",
+   "notes": [],
+   "lessons": [
+    "39"
+   ],
+   "first": "39",
+   "variants": []
+  },
+  {
+   "ko": "지구통계",
+   "en": "Geostatistics",
+   "notes": [
+    "Krige 1951, Matheron 1963"
+   ],
+   "lessons": [
+    "20"
+   ],
+   "first": "20",
+   "variants": []
+  },
+  {
+   "ko": "지리 좌표계",
+   "en": "Geographic Coordinate System",
+   "notes": [
+    "경위도"
+   ],
+   "lessons": [
+    "02"
+   ],
+   "first": "02",
+   "variants": []
+  },
+  {
+   "ko": "지리가중회귀",
+   "en": "Geographically Weighted Regression (GWR)",
+   "notes": [
+    "Brunsdon 외 1996"
+   ],
+   "lessons": [
+    "29"
+   ],
+   "first": "29",
+   "variants": [
+    "지리적 가중 회귀",
+    "지리가중 회귀",
+    "지리적 가중회귀"
+   ]
+  },
+  {
+   "ko": "지시자 크리깅",
+   "en": "Indicator Kriging",
+   "notes": [
+    "Journel 1983"
+   ],
+   "lessons": [
+    "23"
+   ],
+   "first": "23",
+   "variants": []
+  },
+  {
+   "ko": "지역 R²",
+   "en": "Local R²",
+   "notes": [],
+   "lessons": [
+    "29"
+   ],
+   "first": "29",
+   "variants": []
+  },
+  {
+   "ko": "지역 다중공선성",
+   "en": "Local Multicollinearity",
+   "notes": [
+    "Wheeler & Tiefelsdorf 2005"
+   ],
+   "lessons": [
+    "29"
+   ],
+   "first": "29",
+   "variants": []
+  },
+  {
+   "ko": "지역 조건수",
+   "en": "Local Condition Number",
+   "notes": [],
+   "lessons": [
+    "29"
+   ],
+   "first": "29",
+   "variants": []
+  },
+  {
+   "ko": "지오데모그래픽스",
+   "en": "Geodemographics",
+   "notes": [
+    "지역 유형 분류"
+   ],
+   "lessons": [
+    "31"
+   ],
+   "first": "31",
+   "variants": []
+  },
+  {
+   "ko": "지오메트리",
+   "en": "Geometry",
+   "notes": [],
+   "lessons": [
+    "01"
+   ],
+   "first": "01",
+   "variants": []
+  },
+  {
+   "ko": "지오코딩",
+   "en": "Geocoding",
+   "notes": [
+    "주소를 좌표로 바꿈"
+   ],
+   "lessons": [
+    "04"
+   ],
+   "first": "04",
+   "variants": []
+  },
+  {
+   "ko": "지원",
+   "en": "Support",
+   "notes": [
+    "값이 대표하는 공간 범위. 3강",
+    "점, 셀, 블록"
+   ],
+   "lessons": [
+    "01",
+    "20"
+   ],
+   "first": "01",
+   "variants": []
+  },
+  {
+   "ko": "지원 변경",
+   "en": "Change of Support",
+   "notes": [],
+   "lessons": [
+    "01",
+    "40"
+   ],
+   "first": "01",
+   "variants": []
+  },
+  {
+   "ko": "지원 효과",
+   "en": "Support Effect",
+   "notes": [
+    "1강의 지원"
+   ],
+   "lessons": [
+    "40"
+   ],
+   "first": "40",
+   "variants": []
+  },
+  {
+   "ko": "직접 효과",
+   "en": "Direct Effect",
+   "notes": [
+    "LeSage & Pace 2009"
+   ],
+   "lessons": [
+    "25"
+   ],
+   "first": "25",
+   "variants": []
+  },
+  {
+   "ko": "질병 지도",
+   "en": "Disease Mapping",
+   "notes": [],
+   "lessons": [
+    "37"
+   ],
+   "first": "37",
+   "variants": []
+  },
+  {
+   "ko": "집중 로그우도",
+   "en": "Concentrated Log-likelihood",
+   "notes": [],
+   "lessons": [
+    "25"
+   ],
+   "first": "25",
+   "variants": []
+  },
+  {
+   "ko": "차분 Moran's I / 차분 LISA",
+   "en": "Differential Moran's I / LISA",
+   "notes": [],
+   "lessons": [
+    "34"
+   ],
+   "first": "34",
+   "variants": []
+  },
+  {
+   "ko": "창",
+   "en": "Window",
+   "notes": [
+    "원형, 타원, 유연한 창"
+   ],
+   "lessons": [
+    "15"
+   ],
+   "first": "15",
+   "variants": []
+  },
+  {
+   "ko": "척도 인자",
+   "en": "Scaling Factor",
+   "notes": [
+    "ICAR 주변 분산의 기하 평균"
+   ],
+   "lessons": [
+    "37"
+   ],
+   "first": "37",
+   "variants": []
+  },
+  {
+   "ko": "척도 효과",
+   "en": "Scale Effect",
+   "notes": [
+    "집계 효과(aggregation effect)라고도 함"
+   ],
+   "lessons": [
+    "03"
+   ],
+   "first": "03",
+   "variants": []
+  },
+  {
+   "ko": "초과 확률",
+   "en": "Exceedance Probability",
+   "notes": [
+    "1 − Φ((T − Ẑ)/σ_K)",
+    "P(θ > 기준)"
+   ],
+   "lessons": [
+    "23",
+    "36"
+   ],
+   "first": "23",
+   "variants": []
+  },
+  {
+   "ko": "초과위험",
+   "en": "Excess Risk",
+   "notes": [
+    "관측 ÷ 기대"
+   ],
+   "lessons": [
+    "14"
+   ],
+   "first": "14",
+   "variants": []
+  },
+  {
+   "ko": "초사전분포",
+   "en": "Hyperprior",
+   "notes": [],
+   "lessons": [
+    "36"
+   ],
+   "first": "36",
+   "variants": []
+  },
+  {
+   "ko": "초점 검정",
+   "en": "Focused Test",
+   "notes": [
+    "미리 정한 지점 주변"
+   ],
+   "lessons": [
+    "15"
+   ],
+   "first": "15",
+   "variants": []
+  },
+  {
+   "ko": "촐레스키 분해",
+   "en": "Cholesky Decomposition",
+   "notes": [
+    "C = LLᵀ"
+   ],
+   "lessons": [
+    "23"
+   ],
+   "first": "23",
+   "variants": []
+  },
+  {
+   "ko": "총 효과",
+   "en": "Total Effect",
+   "notes": [],
+   "lessons": [
+    "25"
+   ],
+   "first": "25",
+   "variants": []
+  },
+  {
+   "ko": "최근린 거리",
+   "en": "Nearest Neighbour Distance",
+   "notes": [
+    "Clark–Evans R"
+   ],
+   "lessons": [
+    "16"
+   ],
+   "first": "16",
+   "variants": []
+  },
+  {
+   "ko": "최근린 거리 함수",
+   "en": "Nearest Neighbour Distance Function G",
+   "notes": [],
+   "lessons": [
+    "18"
+   ],
+   "first": "18",
+   "variants": []
+  },
+  {
+   "ko": "최근접 이웃 가우스 과정",
+   "en": "Nearest-Neighbor Gaussian Process (NNGP)",
+   "notes": [
+    "Datta 외 2016"
+   ],
+   "lessons": [
+    "40"
+   ],
+   "first": "40",
+   "variants": []
+  },
+  {
+   "ko": "최근접 이웃 거리 맞춤",
+   "en": "Nearest Neighbour Distance Matching (NNDM)",
+   "notes": [
+    "Milà 외 2022"
+   ],
+   "lessons": [
+    "39"
+   ],
+   "first": "39",
+   "variants": []
+  },
+  {
+   "ko": "최대우도 / 로그우도",
+   "en": "Maximum Likelihood / Log-likelihood",
+   "notes": [],
+   "lessons": [
+    "08"
+   ],
+   "first": "08",
+   "variants": [
+    "최우추정",
+    "최대 우도"
+   ]
+  },
+  {
+   "ko": "최량 선형 불편 예측",
+   "en": "Best Linear Unbiased Prediction (BLUP)",
+   "notes": [],
+   "lessons": [
+    "22"
+   ],
+   "first": "22",
+   "variants": []
+  },
+  {
+   "ko": "최소 대비",
+   "en": "Minimum Contrast",
+   "notes": [],
+   "lessons": [
+    "19"
+   ],
+   "first": "19",
+   "variants": []
+  },
+  {
+   "ko": "최소 신장 트리",
+   "en": "Minimum Spanning Tree",
+   "notes": [],
+   "lessons": [
+    "32"
+   ],
+   "first": "32",
+   "variants": []
+  },
+  {
+   "ko": "최소제곱법",
+   "en": "Ordinary Least Squares (OLS)",
+   "notes": [],
+   "lessons": [
+    "08"
+   ],
+   "first": "08",
+   "variants": []
+  },
+  {
+   "ko": "추세",
+   "en": "Trend (First-order Effect)",
+   "notes": [],
+   "lessons": [
+    "11"
+   ],
+   "first": "11",
+   "variants": []
+  },
+  {
+   "ko": "축약형",
+   "en": "Reduced Form",
+   "notes": [],
+   "lessons": [
+    "25"
+   ],
+   "first": "25",
+   "variants": []
+  },
+  {
+   "ko": "축척 계수",
+   "en": "Scale Factor",
+   "notes": [],
+   "lessons": [
+    "02"
+   ],
+   "first": "02",
+   "variants": []
+  },
+  {
+   "ko": "축척 막대",
+   "en": "Scale Bar",
+   "notes": [],
+   "lessons": [
+    "42"
+   ],
+   "first": "42",
+   "variants": []
+  },
+  {
+   "ko": "측정 척도 (명목·서열·등간·비율)",
+   "en": "Levels of Measurement (Nominal, Ordinal, Interval, Ratio)",
+   "notes": [
+    "Stevens 1946"
+   ],
+   "lessons": [
+    "01"
+   ],
+   "first": "01",
+   "variants": []
+  },
+  {
+   "ko": "측지 기준계",
+   "en": "Geodetic Datum",
+   "notes": [
+    "Korea 2000(KGD2002), 한국측지계 1985"
+   ],
+   "lessons": [
+    "02"
+   ],
+   "first": "02",
+   "variants": []
+  },
+  {
+   "ko": "층화 무작위 추출",
+   "en": "Stratified Random Sampling",
+   "notes": [],
+   "lessons": [
+    "38"
+   ],
+   "first": "38",
+   "variants": []
+  },
+  {
+   "ko": "카토그램",
+   "en": "Cartogram",
+   "notes": [
+    "크기를 다른 양에 비례하게"
+   ],
+   "lessons": [
+    "05"
+   ],
+   "first": "05",
+   "variants": []
+  },
+  {
+   "ko": "커널",
+   "en": "Kernel",
+   "notes": [
+    "고정·적응 대역폭",
+    "bisquare, gaussian, exponential"
+   ],
+   "lessons": [
+    "10",
+    "29"
+   ],
+   "first": "10",
+   "variants": []
+  },
+  {
+   "ko": "커널 밀도 추정",
+   "en": "Kernel Density Estimation (KDE)",
+   "notes": [],
+   "lessons": [
+    "17"
+   ],
+   "first": "17",
+   "variants": []
+  },
+  {
+   "ko": "켤레 사전분포",
+   "en": "Conjugate Prior",
+   "notes": [
+    "포아송-감마"
+   ],
+   "lessons": [
+    "36"
+   ],
+   "first": "36",
+   "variants": []
+  },
+  {
+   "ko": "코렐로그램",
+   "en": "Correlogram",
+   "notes": [
+    "거리·차수별 자기상관"
+   ],
+   "lessons": [
+    "11"
+   ],
+   "first": "11",
+   "variants": []
+  },
+  {
+   "ko": "코크리깅",
+   "en": "Cokriging",
+   "notes": [],
+   "lessons": [
+    "22"
+   ],
+   "first": "22",
+   "variants": []
+  },
+  {
+   "ko": "콕스 과정",
+   "en": "Cox Process",
+   "notes": [
+    "강도가 확률적"
+   ],
+   "lessons": [
+    "19"
+   ],
+   "first": "19",
+   "variants": []
+  },
+  {
+   "ko": "크로네커 곱",
+   "en": "Kronecker Product",
+   "notes": [],
+   "lessons": [
+    "33"
+   ],
+   "first": "33",
+   "variants": []
+  },
+  {
+   "ko": "크리게의 관계",
+   "en": "Krige's Relation",
+   "notes": [
+    "분산의 분해"
+   ],
+   "lessons": [
+    "40"
+   ],
+   "first": "40",
+   "variants": []
+  },
+  {
+   "ko": "크리깅",
+   "en": "Kriging",
+   "notes": [
+    "Krige 1951, Matheron 1963"
+   ],
+   "lessons": [
+    "22"
+   ],
+   "first": "22",
+   "variants": [
+    "크리징"
+   ]
+  },
+  {
+   "ko": "크리깅 분산",
+   "en": "Kriging Variance",
+   "notes": [],
+   "lessons": [
+    "22"
+   ],
+   "first": "22",
+   "variants": []
+  },
+  {
+   "ko": "키",
+   "en": "Key",
+   "notes": [
+    "두 표를 잇는 공통 열"
+   ],
+   "lessons": [
+    "04"
+   ],
+   "first": "04",
+   "variants": []
+  },
+  {
+   "ko": "타원체",
+   "en": "Ellipsoid",
+   "notes": [
+    "GRS80, WGS 84, Bessel 1841"
+   ],
+   "lessons": [
+    "02"
+   ],
+   "first": "02",
+   "variants": []
+  },
+  {
+   "ko": "탐색적 공간 자료 분석",
+   "en": "Exploratory Spatial Data Analysis (ESDA)",
+   "notes": [],
+   "lessons": [
+    "05"
+   ],
+   "first": "05",
+   "variants": []
+  },
+  {
+   "ko": "탐욕 알고리즘",
+   "en": "Greedy Algorithm",
+   "notes": [
+    "하나씩 최선을 고름"
+   ],
+   "lessons": [
+    "23"
+   ],
+   "first": "23",
+   "variants": []
+  },
+  {
+   "ko": "텍사스 명사수의 오류",
+   "en": "Texas Sharpshooter Fallacy",
+   "notes": [
+    "사후 가설"
+   ],
+   "lessons": [
+    "15"
+   ],
+   "first": "15",
+   "variants": []
+  },
+  {
+   "ko": "토블러의 지리학 제1법칙",
+   "en": "Tobler's First Law of Geography",
+   "notes": [],
+   "lessons": [
+    "00"
+   ],
+   "first": "00",
+   "variants": []
+  },
+  {
+   "ko": "투영 좌표계",
+   "en": "Projected Coordinate System",
+   "notes": [],
+   "lessons": [
+    "02"
+   ],
+   "first": "02",
+   "variants": []
+  },
+  {
+   "ko": "특수→일반 / 일반→특수",
+   "en": "Specific-to-general / General-to-specific",
+   "notes": [],
+   "lessons": [
+    "26"
+   ],
+   "first": "26",
+   "variants": []
+  },
+  {
+   "ko": "틈 / 겹침",
+   "en": "Gap / Overlap (Sliver)",
+   "notes": [
+    "경계가 어긋나 생긴 작은 조각"
+   ],
+   "lessons": [
+    "04"
+   ],
+   "first": "04",
+   "variants": []
+  },
+  {
+   "ko": "티센 다각형",
+   "en": "Thiessen (Voronoi) Polygon",
+   "notes": [],
+   "lessons": [
+    "20"
+   ],
+   "first": "20",
+   "variants": []
+  },
+  {
+   "ko": "파급",
+   "en": "Spillover",
+   "notes": [],
+   "lessons": [
+    "24"
+   ],
+   "first": "24",
+   "variants": []
+  },
+  {
+   "ko": "파레토 k",
+   "en": "Pareto k",
+   "notes": [
+    "PSIS-LOO의 진단값"
+   ],
+   "lessons": [
+    "37"
+   ],
+   "first": "37",
+   "variants": []
+  },
+  {
+   "ko": "팔꿈치 방법",
+   "en": "Elbow Method",
+   "notes": [],
+   "lessons": [
+    "31"
+   ],
+   "first": "31",
+   "variants": []
+  },
+  {
+   "ko": "패널 자료",
+   "en": "Panel Data",
+   "notes": [
+    "고정 단위의 시계열"
+   ],
+   "lessons": [
+    "33"
+   ],
+   "first": "33",
+   "variants": []
+  },
+  {
+   "ko": "편향",
+   "en": "Bias",
+   "notes": [],
+   "lessons": [
+    "24"
+   ],
+   "first": "24",
+   "variants": []
+  },
+  {
+   "ko": "평균 / 중앙값",
+   "en": "Mean / Median",
+   "notes": [],
+   "lessons": [
+    "06"
+   ],
+   "first": "06",
+   "variants": []
+  },
+  {
+   "ko": "평활 잔차",
+   "en": "Smoothed Residual",
+   "notes": [
+    "Baddeley et al. 2005"
+   ],
+   "lessons": [
+    "19"
+   ],
+   "first": "19",
+   "variants": []
+  },
+  {
+   "ko": "평활 편향",
+   "en": "Smoothing Bias",
+   "notes": [],
+   "lessons": [
+    "29"
+   ],
+   "first": "29",
+   "variants": []
+  },
+  {
+   "ko": "평활 효과",
+   "en": "Smoothing Effect",
+   "notes": [
+    "크리깅 지도의 변동이 실제보다 작음"
+   ],
+   "lessons": [
+    "23"
+   ],
+   "first": "23",
+   "variants": []
+  },
+  {
+   "ko": "포아송 회귀",
+   "en": "Poisson Regression",
+   "notes": [
+    "일반화 선형 모형"
+   ],
+   "lessons": [
+    "27"
+   ],
+   "first": "27",
+   "variants": []
+  },
+  {
+   "ko": "포함확률",
+   "en": "Inclusion Probability",
+   "notes": [],
+   "lessons": [
+    "38"
+   ],
+   "first": "38",
+   "variants": []
+  },
+  {
+   "ko": "폴스비-포퍼 지수",
+   "en": "Polsby-Popper Score",
+   "notes": [
+    "4πA/P²"
+   ],
+   "lessons": [
+    "32"
+   ],
+   "first": "32",
+   "variants": []
+  },
+  {
+   "ko": "표본분포",
+   "en": "Sampling Distribution",
+   "notes": [],
+   "lessons": [
+    "06"
+   ],
+   "first": "06",
+   "variants": []
+  },
+  {
+   "ko": "표시 상관 함수",
+   "en": "Mark Correlation Function",
+   "notes": [],
+   "lessons": [
+    "18"
+   ],
+   "first": "18",
+   "variants": []
+  },
+  {
+   "ko": "표시 점 패턴",
+   "en": "Marked Point Pattern",
+   "notes": [
+    "연령대 등"
+   ],
+   "lessons": [
+    "16"
+   ],
+   "first": "16",
+   "variants": []
+  },
+  {
+   "ko": "표준오차",
+   "en": "Standard Error (SE)",
+   "notes": [
+    "추정값의 흔들림"
+   ],
+   "lessons": [
+    "06"
+   ],
+   "first": "06",
+   "variants": []
+  },
+  {
+   "ko": "표준편차",
+   "en": "Standard Deviation (SD)",
+   "notes": [
+    "개별 값의 퍼짐"
+   ],
+   "lessons": [
+    "06"
+   ],
+   "first": "06",
+   "variants": []
+  },
+  {
+   "ko": "표준편차 지도",
+   "en": "Standard Deviation Map",
+   "notes": [
+    "평균 ± σ, 2σ로 끊음"
+   ],
+   "lessons": [
+    "05"
+   ],
+   "first": "05",
+   "variants": []
+  },
+  {
+   "ko": "표준화",
+   "en": "Standardization",
+   "notes": [
+    "z점수"
+   ],
+   "lessons": [
+    "31"
+   ],
+   "first": "31",
+   "variants": []
+  },
+  {
+   "ko": "표준화 계수",
+   "en": "Standardized Coefficient",
+   "notes": [],
+   "lessons": [
+    "30"
+   ],
+   "first": "30",
+   "variants": []
+  },
+  {
+   "ko": "표준화 사망비",
+   "en": "Standardized Mortality Ratio (SMR)",
+   "notes": [
+    "간접 표준화"
+   ],
+   "lessons": [
+    "14"
+   ],
+   "first": "14",
+   "variants": []
+  },
+  {
+   "ko": "표준화 오차",
+   "en": "Standardized Error",
+   "notes": [
+    "제곱 평균이 1이면 적절"
+   ],
+   "lessons": [
+    "22"
+   ],
+   "first": "22",
+   "variants": []
+  },
+  {
+   "ko": "피벗 / 언피벗",
+   "en": "Pivot / Melt",
+   "notes": [],
+   "lessons": [
+    "33"
+   ],
+   "first": "33",
+   "variants": []
+  },
+  {
+   "ko": "피처",
+   "en": "Feature",
+   "notes": [
+    "지오메트리 + 속성"
+   ],
+   "lessons": [
+    "01"
+   ],
+   "first": "01",
+   "variants": []
+  },
+  {
+   "ko": "하버사인 공식",
+   "en": "Haversine Formula",
+   "notes": [],
+   "lessons": [
+    "02"
+   ],
+   "first": "02",
+   "variants": []
+  },
+  {
+   "ko": "하우스만 검정",
+   "en": "Hausman Test",
+   "notes": [
+    "고정효과 대 확률효과"
+   ],
+   "lessons": [
+    "35"
+   ],
+   "first": "35",
+   "variants": []
+  },
+  {
+   "ko": "합동 OLS",
+   "en": "Pooled OLS",
+   "notes": [],
+   "lessons": [
+    "35"
+   ],
+   "first": "35",
+   "variants": []
+  },
+  {
+   "ko": "핫스팟 / 콜드스팟",
+   "en": "Hot Spot / Cold Spot",
+   "notes": [
+    "Gi\\* z의 부호"
+   ],
+   "lessons": [
+    "12",
+    "13"
+   ],
+   "first": "12",
+   "variants": [
+    "핫스폿",
+    "열점",
+    "콜드스폿",
+    "냉점"
+   ]
+  },
+  {
+   "ko": "해밀토니안 몬테카를로",
+   "en": "Hamiltonian Monte Carlo (HMC, NUTS)",
+   "notes": [
+    "Stan, PyMC"
+   ],
+   "lessons": [
+    "36"
+   ],
+   "first": "36",
+   "variants": []
+  },
+  {
+   "ko": "해상도",
+   "en": "Resolution",
+   "notes": [
+    "래스터 셀의 크기",
+    "셀 크기"
+   ],
+   "lessons": [
+    "01",
+    "40"
+   ],
+   "first": "01",
+   "variants": []
+  },
+  {
+   "ko": "행정동 / 법정동",
+   "en": "Administrative Dong / Legal Dong",
+   "notes": [],
+   "lessons": [
+    "04"
+   ],
+   "first": "04",
+   "variants": []
+  },
+  {
+   "ko": "허용 오차 인접",
+   "en": "Fuzzy Contiguity",
+   "notes": [
+    "구역을 조금 넓혀 겹치면 이웃. PySAL `fuzzy_contiguity`"
+   ],
+   "lessons": [
+    "04"
+   ],
+   "first": "04",
+   "variants": []
+  },
+  {
+   "ko": "호비츠-톰프슨 추정량",
+   "en": "Horvitz–Thompson Estimator",
+   "notes": [
+    "1952"
+   ],
+   "lessons": [
+    "38"
+   ],
+   "first": "38",
+   "variants": []
+  },
+  {
+   "ko": "혼란 변수 / 매개 변수 / 충돌 변수",
+   "en": "Confounder / Mediator / Collider",
+   "notes": [],
+   "lessons": [
+    "41"
+   ],
+   "first": "41",
+   "variants": []
+  },
+  {
+   "ko": "확률장",
+   "en": "Random Field",
+   "notes": [],
+   "lessons": [
+    "20"
+   ],
+   "first": "20",
+   "variants": []
+  },
+  {
+   "ko": "확장법",
+   "en": "Expansion Method",
+   "notes": [
+    "Casetti 1972"
+   ],
+   "lessons": [
+    "28"
+   ],
+   "first": "28",
+   "variants": []
+  },
+  {
+   "ko": "회귀 크리깅",
+   "en": "Regression Kriging",
+   "notes": [
+    "Hengl et al. 2007"
+   ],
+   "lessons": [
+    "22"
+   ],
+   "first": "22",
+   "variants": []
+  },
+  {
+   "ko": "횡메르카토르",
+   "en": "Transverse Mercator (TM)",
+   "notes": [
+    "한국 국가 좌표계의 투영법"
+   ],
+   "lessons": [
+    "02"
+   ],
+   "first": "02",
+   "variants": []
+  },
+  {
+   "ko": "효과 크기",
+   "en": "Effect Size",
+   "notes": [],
+   "lessons": [
+    "42"
+   ],
+   "first": "42",
+   "variants": []
+  },
+  {
+   "ko": "효율성",
+   "en": "Efficiency",
+   "notes": [],
+   "lessons": [
+    "24"
+   ],
+   "first": "24",
+   "variants": []
+  },
+  {
+   "ko": "흔적 그림",
+   "en": "Trace Plot",
+   "notes": [],
+   "lessons": [
+    "36"
+   ],
+   "first": "36",
+   "variants": []
+  },
+  {
+   "ko": "희소 행렬",
+   "en": "Sparse Matrix",
+   "notes": [
+    "비영 비율"
+   ],
+   "lessons": [
+    "10"
+   ],
+   "first": "10",
+   "variants": []
+  }
+ ],
+ "variants": {
+  "공간시차": [
+   "공간지연",
+   "공간래그"
+  ],
+  "공간가중치": [
+   "공간가중행렬",
+   "공간 가중행렬"
+  ],
+  "지리가중회귀": [
+   "지리적 가중 회귀",
+   "지리가중 회귀",
+   "지리적 가중회귀"
+  ],
+  "가변적 공간 단위 문제": [
+   "가변 면적 단위 문제",
+   "임의적 공간 단위 문제"
+  ],
+  "베리오그램": [
+   "배리오그램",
+   "반변동도",
+   "변동도"
+  ],
+  "크리깅": [
+   "크리징"
+  ],
+  "핫스팟": [
+   "핫스폿",
+   "열점"
+  ],
+  "콜드스팟": [
+   "콜드스폿",
+   "냉점"
+  ],
+  "유효 표본 크기": [
+   "실효 표본 수",
+   "유효 표본 수",
+   "유효표본크기"
+  ],
+  "누락 변수 편향": [
+   "빠진 변수 치우침",
+   "누락변수 편의",
+   "누락 변수 편의"
+  ],
+  "다중검정": [
+   "다중 검정"
+  ],
+  "룩 인접": [
+   "루크 인접",
+   "룩 인접성"
+  ],
+  "공간 자기상관": [
+   "공간자기상관",
+   "공간 자기 상관"
+  ],
+  "경계 효과": [
+   "가장자리 효과"
+  ],
+  "단계구분도": [
+   "코로플레스 지도",
+   "코로플레스맵"
+  ],
+  "최대우도": [
+   "최우추정",
+   "최대 우도"
+  ],
+  "가중 최소제곱": [
+   "가중최소제곱"
+  ],
+  "모의 실험": [
+   "모의실험"
+  ],
+  "신용구간": [
+   "신뢰 구간(베이즈)"
+  ]
+ }
+}

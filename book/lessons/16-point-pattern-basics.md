@@ -2,7 +2,7 @@
 id: 16
 part: 4
 title: 점 패턴의 기초
-app: code
+app: partial
 version: 1
 updated: 2026-10-01
 status: draft

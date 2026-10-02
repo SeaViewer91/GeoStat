@@ -42,7 +42,7 @@ def hand():
     print("[손계산] 4×4 픽셀을 2×2 블록 네 개로 묶기")
     print(f"  블록 평균 {bm.tolist()}, 전체 분산 {A.var():.4f} = 블록 사이 분산 {bm.var():.4f} + 블록 안 분산의 평균 {within:.4f}")
     for n, rho in ((100, 0.8), (100, 0.5), (400, 0.95)):
-        print(f"  AR(1) 실효 표본 수: n {n}, ρ {rho} → n(1 − ρ)/(1 + ρ) = {n * (1 - rho) / (1 + rho):.1f}")
+        print(f"  AR(1) 유효 표본 크기: n {n}, ρ {rho} → n(1 − ρ)/(1 + ρ) = {n * (1 - rho) / (1 + rho):.1f}")
 
 
 # ---------------------------------------------------------------- 1. 셀 크기
@@ -158,7 +158,7 @@ def neff(F, z, R=2000):
         mse = np.mean((est - mu) ** 2)
         cov = np.mean(np.abs(est - mu) <= 1.96 * se)
         out[nm] = dict(rmse=float(np.sqrt(mse)), se=float(se.mean()), neff=float(sig2 / mse), cover=float(cov))
-        print(f"  {nm}: 실제 RMSE {np.sqrt(mse):.4f}, 순진한 표준오차(s/√400) 평균 {se.mean():.4f}, 95% 구간 포함률 {cov:.3f}, 실효 표본 수 σ²/MSE {sig2 / mse:.1f}")
+        print(f"  {nm}: 실제 RMSE {np.sqrt(mse):.4f}, 순진한 표준오차(s/√400) 평균 {se.mean():.4f}, 95% 구간 포함률 {cov:.3f}, 유효 표본 크기 σ²/MSE {sig2 / mse:.1f}")
     return out
 
 

@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 300" role="img" aria-label="핫스폿의 강건성. 왼쪽: EB 비율 LISA의 High-High를 가중치 4가지(퀸, 퀸 2차, 6-최근접, 거리 3 km) × 보정 2가지(없음, FDR)로 구했을 때 HH로 나온 횟수(0~8). 마루구 원도심의 다섯 동은 8번 모두 HH이고, 명세에 따라 1~6번 나오는 동들이 둘레에 있음. 오른쪽: 순열의 난수 시드만 20가지로 바꿨을 때(퀸, 보정 없음) 유의하게 나온 횟수. 경계에 있는 9개 동은 시드에 따라 유의 여부가 바뀜">
+<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 300" role="img" aria-label="핫스팟의 강건성. 왼쪽: EB 비율 LISA의 High-High를 가중치 4가지(퀸, 퀸 2차, 6-최근접, 거리 3 km) × 보정 2가지(없음, FDR)로 구했을 때 HH로 나온 횟수(0~8). 마루구 원도심의 다섯 동은 8번 모두 HH이고, 명세에 따라 1~6번 나오는 동들이 둘레에 있음. 오른쪽: 순열의 난수 시드만 20가지로 바꿨을 때(퀸, 보정 없음) 유의하게 나온 횟수. 경계에 있는 9개 동은 시드에 따라 유의 여부가 바뀜">
 <style>
 .gsfig{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
 .gsfig .s-fg{stroke:#1c2330}.gsfig .s-mu{stroke:#8a93a3}.gsfig .s-ac{stroke:#2563eb}.gsfig .s-bd{stroke:#c2410c}.gsfig .s-ok{stroke:#15803d}.gsfig .s-bg{stroke:#ffffff}

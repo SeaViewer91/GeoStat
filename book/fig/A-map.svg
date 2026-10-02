@@ -1,0 +1,152 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="gsfig" viewBox="0 0 720 650" role="img" aria-label="방법 선택 지도. 왼쪽에서 자료의 꼴(면 자료, 점 패턴, 연속 표면, 시공간, 표본·래스터)을 고르고, 가운데에서 묻고 싶은 질문을 고르면, 오른쪽에 쓸 방법과 그 방법을 다룬 강 번호가 있음. 모든 갈래의 앞에는 1~10강의 공통 단계(좌표계, 단위, 분모, 지도, 검정)가 있고, 뒤에는 41~42강의 연구 설계와 보고가 있음">
+<style>
+.gsfig{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
+.gsfig .s-fg{stroke:#1c2330}.gsfig .s-mu{stroke:#8a93a3}.gsfig .s-ac{stroke:#2563eb}.gsfig .s-bd{stroke:#c2410c}.gsfig .s-ok{stroke:#15803d}.gsfig .s-bg{stroke:#ffffff}
+.gsfig .f-fg{fill:#1c2330}.gsfig .f-mu{fill:#5a6475}.gsfig .f-ac{fill:#2563eb}.gsfig .f-acs{fill:#e6eefe}.gsfig .f-bd{fill:#c2410c}
+.gsfig .f-bds{fill:#fdeee6}.gsfig .f-ok{fill:#15803d}.gsfig .f-sf{fill:#f0f2f5}.gsfig .f-bg{fill:#ffffff}
+.gsfig .d0{fill:#2166ac}.gsfig .d1{fill:#67a9cf}.gsfig .d2{fill:#d1e5f0}.gsfig .d3{fill:#fddbc7}.gsfig .d4{fill:#ef8a62}.gsfig .d5{fill:#b2182b}
+.gsfig .q0{fill:#fff1e0}.gsfig .q1{fill:#fdc98f}.gsfig .q2{fill:#f98f45}.gsfig .q3{fill:#d9530f}.gsfig .q4{fill:#8c2d04}
+@media (prefers-color-scheme:dark){
+.gsfig .s-fg{stroke:#e6e9ef}.gsfig .s-mu{stroke:#737c8c}.gsfig .s-ac{stroke:#6d9bff}.gsfig .s-bd{stroke:#fb8b5b}.gsfig .s-ok{stroke:#4ade80}.gsfig .s-bg{stroke:#1a1e26}
+.gsfig .f-fg{fill:#e6e9ef}.gsfig .f-mu{fill:#a7afbd}.gsfig .f-ac{fill:#6d9bff}.gsfig .f-acs{fill:#1f2b45}.gsfig .f-bd{fill:#fb8b5b}
+.gsfig .f-bds{fill:#3a2218}.gsfig .f-ok{fill:#4ade80}.gsfig .f-sf{fill:#222733}.gsfig .f-bg{fill:#1a1e26}}
+</style>
+<rect x="0" y="0" width="720" height="650" class="f-bg"/>
+<text x="16.0" y="22.0" class="f-mu" font-size="11" text-anchor="start">공통 앞 단계: 좌표계(2) · 단위와 MAUP(3) · 자료 준비(4) · 지도(5) · 추정과 검정(6~9) · 공간가중치(10)</text>
+<rect x="16.0" y="46.0" width="130.0" height="202.0" rx="6" class="s-ac f-acs" stroke-width="1.2"/>
+<text x="81.0" y="144.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">면 자료</text>
+<text x="81.0" y="160.0" class="f-mu" font-size="9" text-anchor="middle">구역마다 값 (행정동, 격자)</text>
+<line x1="146.0" y1="147.0" x2="170.0" y2="56.0" class="s-mu" stroke-width="0.8"/>
+<rect x="170.0" y="46.0" width="230.0" height="20.0" rx="4" class="s-mu f-sf" stroke-width="0.6"/>
+<text x="178.0" y="60.0" class="f-fg" font-size="11" text-anchor="start">값이 어떤 모양으로 퍼졌나</text>
+<line x1="400.0" y1="56.0" x2="418.0" y2="56.0" class="s-mu" stroke-width="0.8"/>
+<text x="422.0" y="60.0" class="f-fg" font-size="11" text-anchor="start">단계구분도, 박스 지도</text>
+<text x="704.0" y="60.0" class="f-ac" font-size="11" text-anchor="end" font-weight="600">5강</text>
+<line x1="146.0" y1="147.0" x2="170.0" y2="82.0" class="s-mu" stroke-width="0.8"/>
+<rect x="170.0" y="72.0" width="230.0" height="20.0" rx="4" class="s-mu f-sf" stroke-width="0.6"/>
+<text x="178.0" y="86.0" class="f-fg" font-size="11" text-anchor="start">비율의 분모가 작은가</text>
+<line x1="400.0" y1="82.0" x2="418.0" y2="82.0" class="s-mu" stroke-width="0.8"/>
+<text x="422.0" y="86.0" class="f-fg" font-size="11" text-anchor="start">EB 평활, SMR, BYM2</text>
+<text x="704.0" y="86.0" class="f-ac" font-size="11" text-anchor="end" font-weight="600">14·36·37강</text>
+<line x1="146.0" y1="147.0" x2="170.0" y2="108.0" class="s-mu" stroke-width="0.8"/>
+<rect x="170.0" y="98.0" width="230.0" height="20.0" rx="4" class="s-mu f-sf" stroke-width="0.6"/>
+<text x="178.0" y="112.0" class="f-fg" font-size="11" text-anchor="start">이웃끼리 닮았나 (전체)</text>
+<line x1="400.0" y1="108.0" x2="418.0" y2="108.0" class="s-mu" stroke-width="0.8"/>
+<text x="422.0" y="112.0" class="f-fg" font-size="11" text-anchor="start">Moran&#x27;s I, Geary&#x27;s C</text>
+<text x="704.0" y="112.0" class="f-ac" font-size="11" text-anchor="end" font-weight="600">11강</text>
+<line x1="146.0" y1="147.0" x2="170.0" y2="134.0" class="s-mu" stroke-width="0.8"/>
+<rect x="170.0" y="124.0" width="230.0" height="20.0" rx="4" class="s-mu f-sf" stroke-width="0.6"/>
+<text x="178.0" y="138.0" class="f-fg" font-size="11" text-anchor="start">어디서 닮았나 (국지)</text>
+<line x1="400.0" y1="134.0" x2="418.0" y2="134.0" class="s-mu" stroke-width="0.8"/>
+<text x="422.0" y="138.0" class="f-fg" font-size="11" text-anchor="start">LISA, Gi*, EB 비율 LISA</text>
+<text x="704.0" y="138.0" class="f-ac" font-size="11" text-anchor="end" font-weight="600">12~14강</text>
+<line x1="146.0" y1="147.0" x2="170.0" y2="160.0" class="s-mu" stroke-width="0.8"/>
+<rect x="170.0" y="150.0" width="230.0" height="20.0" rx="4" class="s-mu f-sf" stroke-width="0.6"/>
+<text x="178.0" y="164.0" class="f-fg" font-size="11" text-anchor="start">높은 곳이 몰렸나 (검정)</text>
+<line x1="400.0" y1="160.0" x2="418.0" y2="160.0" class="s-mu" stroke-width="0.8"/>
+<text x="422.0" y="164.0" class="f-fg" font-size="11" text-anchor="start">공간 스캔 통계</text>
+<text x="704.0" y="164.0" class="f-ac" font-size="11" text-anchor="end" font-weight="600">15강</text>
+<line x1="146.0" y1="147.0" x2="170.0" y2="186.0" class="s-mu" stroke-width="0.8"/>
+<rect x="170.0" y="176.0" width="230.0" height="20.0" rx="4" class="s-mu f-sf" stroke-width="0.6"/>
+<text x="178.0" y="190.0" class="f-fg" font-size="11" text-anchor="start">설명변수와의 관계는</text>
+<line x1="400.0" y1="186.0" x2="418.0" y2="186.0" class="s-mu" stroke-width="0.8"/>
+<text x="422.0" y="190.0" class="f-fg" font-size="11" text-anchor="start">OLS → 공간시차·오차</text>
+<text x="704.0" y="190.0" class="f-ac" font-size="11" text-anchor="end" font-weight="600">8·24~27강</text>
+<line x1="146.0" y1="147.0" x2="170.0" y2="212.0" class="s-mu" stroke-width="0.8"/>
+<rect x="170.0" y="202.0" width="230.0" height="20.0" rx="4" class="s-mu f-sf" stroke-width="0.6"/>
+<text x="178.0" y="216.0" class="f-fg" font-size="11" text-anchor="start">관계가 곳마다 다른가</text>
+<line x1="400.0" y1="212.0" x2="418.0" y2="212.0" class="s-mu" stroke-width="0.8"/>
+<text x="422.0" y="216.0" class="f-fg" font-size="11" text-anchor="start">체제, GWR, MGWR</text>
+<text x="704.0" y="216.0" class="f-ac" font-size="11" text-anchor="end" font-weight="600">28~30강</text>
+<line x1="146.0" y1="147.0" x2="170.0" y2="238.0" class="s-mu" stroke-width="0.8"/>
+<rect x="170.0" y="228.0" width="230.0" height="20.0" rx="4" class="s-mu f-sf" stroke-width="0.6"/>
+<text x="178.0" y="242.0" class="f-fg" font-size="11" text-anchor="start">비슷한 곳끼리 묶기</text>
+<line x1="400.0" y1="238.0" x2="418.0" y2="238.0" class="s-mu" stroke-width="0.8"/>
+<text x="422.0" y="242.0" class="f-fg" font-size="11" text-anchor="start">K-평균, SKATER, Max-p</text>
+<text x="704.0" y="242.0" class="f-ac" font-size="11" text-anchor="end" font-weight="600">31·32강</text>
+<rect x="16.0" y="268.0" width="130.0" height="72.0" rx="6" class="s-ac f-acs" stroke-width="1.2"/>
+<text x="81.0" y="301.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">점 패턴</text>
+<text x="81.0" y="317.0" class="f-mu" font-size="9" text-anchor="middle">사건의 위치 자체</text>
+<line x1="146.0" y1="304.0" x2="170.0" y2="278.0" class="s-mu" stroke-width="0.8"/>
+<rect x="170.0" y="268.0" width="230.0" height="20.0" rx="4" class="s-mu f-sf" stroke-width="0.6"/>
+<text x="178.0" y="282.0" class="f-fg" font-size="11" text-anchor="start">어디에 많은가</text>
+<line x1="400.0" y1="278.0" x2="418.0" y2="278.0" class="s-mu" stroke-width="0.8"/>
+<text x="422.0" y="282.0" class="f-fg" font-size="11" text-anchor="start">방격, 커널 밀도</text>
+<text x="704.0" y="282.0" class="f-ac" font-size="11" text-anchor="end" font-weight="600">16·17강</text>
+<line x1="146.0" y1="304.0" x2="170.0" y2="304.0" class="s-mu" stroke-width="0.8"/>
+<rect x="170.0" y="294.0" width="230.0" height="20.0" rx="4" class="s-mu f-sf" stroke-width="0.6"/>
+<text x="178.0" y="308.0" class="f-fg" font-size="11" text-anchor="start">무작위보다 몰렸나</text>
+<line x1="400.0" y1="304.0" x2="418.0" y2="304.0" class="s-mu" stroke-width="0.8"/>
+<text x="422.0" y="308.0" class="f-fg" font-size="11" text-anchor="start">G·F, Ripley K·L, 쌍상관</text>
+<text x="704.0" y="308.0" class="f-ac" font-size="11" text-anchor="end" font-weight="600">18강</text>
+<line x1="146.0" y1="304.0" x2="170.0" y2="330.0" class="s-mu" stroke-width="0.8"/>
+<rect x="170.0" y="320.0" width="230.0" height="20.0" rx="4" class="s-mu f-sf" stroke-width="0.6"/>
+<text x="178.0" y="334.0" class="f-fg" font-size="11" text-anchor="start">무엇이 강도를 정하나</text>
+<line x1="400.0" y1="330.0" x2="418.0" y2="330.0" class="s-mu" stroke-width="0.8"/>
+<text x="422.0" y="334.0" class="f-fg" font-size="11" text-anchor="start">비균질 포아송, 군집 과정</text>
+<text x="704.0" y="334.0" class="f-ac" font-size="11" text-anchor="end" font-weight="600">19강</text>
+<rect x="16.0" y="360.0" width="130.0" height="72.0" rx="6" class="s-ac f-acs" stroke-width="1.2"/>
+<text x="81.0" y="393.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">연속 표면</text>
+<text x="81.0" y="409.0" class="f-mu" font-size="9" text-anchor="middle">관측소 값으로 전체 표면</text>
+<line x1="146.0" y1="396.0" x2="170.0" y2="370.0" class="s-mu" stroke-width="0.8"/>
+<rect x="170.0" y="360.0" width="230.0" height="20.0" rx="4" class="s-mu f-sf" stroke-width="0.6"/>
+<text x="178.0" y="374.0" class="f-fg" font-size="11" text-anchor="start">가까울수록 얼마나 닮나</text>
+<line x1="400.0" y1="370.0" x2="418.0" y2="370.0" class="s-mu" stroke-width="0.8"/>
+<text x="422.0" y="374.0" class="f-fg" font-size="11" text-anchor="start">베리오그램</text>
+<text x="704.0" y="374.0" class="f-ac" font-size="11" text-anchor="end" font-weight="600">21강</text>
+<line x1="146.0" y1="396.0" x2="170.0" y2="396.0" class="s-mu" stroke-width="0.8"/>
+<rect x="170.0" y="386.0" width="230.0" height="20.0" rx="4" class="s-mu f-sf" stroke-width="0.6"/>
+<text x="178.0" y="400.0" class="f-fg" font-size="11" text-anchor="start">관측 안 한 곳의 값은</text>
+<line x1="400.0" y1="396.0" x2="418.0" y2="396.0" class="s-mu" stroke-width="0.8"/>
+<text x="422.0" y="400.0" class="f-fg" font-size="11" text-anchor="start">크리깅, 회귀 크리깅</text>
+<text x="704.0" y="400.0" class="f-ac" font-size="11" text-anchor="end" font-weight="600">22강</text>
+<line x1="146.0" y1="396.0" x2="170.0" y2="422.0" class="s-mu" stroke-width="0.8"/>
+<rect x="170.0" y="412.0" width="230.0" height="20.0" rx="4" class="s-mu f-sf" stroke-width="0.6"/>
+<text x="178.0" y="426.0" class="f-fg" font-size="11" text-anchor="start">기준을 넘을 확률은</text>
+<line x1="400.0" y1="422.0" x2="418.0" y2="422.0" class="s-mu" stroke-width="0.8"/>
+<text x="422.0" y="426.0" class="f-fg" font-size="11" text-anchor="start">조건부 시뮬레이션, 지시자 크리깅</text>
+<text x="704.0" y="426.0" class="f-ac" font-size="11" text-anchor="end" font-weight="600">23강</text>
+<rect x="16.0" y="452.0" width="130.0" height="72.0" rx="6" class="s-ac f-acs" stroke-width="1.2"/>
+<text x="81.0" y="485.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">시공간</text>
+<text x="81.0" y="501.0" class="f-mu" font-size="9" text-anchor="middle">구역 × 시점 패널, 시공간 점</text>
+<line x1="146.0" y1="488.0" x2="170.0" y2="462.0" class="s-mu" stroke-width="0.8"/>
+<rect x="170.0" y="452.0" width="230.0" height="20.0" rx="4" class="s-mu f-sf" stroke-width="0.6"/>
+<text x="178.0" y="466.0" class="f-fg" font-size="11" text-anchor="start">어떻게 바뀌어 왔나</text>
+<line x1="400.0" y1="462.0" x2="418.0" y2="462.0" class="s-mu" stroke-width="0.8"/>
+<text x="422.0" y="466.0" class="f-fg" font-size="11" text-anchor="start">Moran 추이, 기간별 LISA</text>
+<text x="704.0" y="466.0" class="f-ac" font-size="11" text-anchor="end" font-weight="600">33·34강</text>
+<line x1="146.0" y1="488.0" x2="170.0" y2="488.0" class="s-mu" stroke-width="0.8"/>
+<rect x="170.0" y="478.0" width="230.0" height="20.0" rx="4" class="s-mu f-sf" stroke-width="0.6"/>
+<text x="178.0" y="492.0" class="f-fg" font-size="11" text-anchor="start">효과의 크기는</text>
+<line x1="400.0" y1="488.0" x2="418.0" y2="488.0" class="s-mu" stroke-width="0.8"/>
+<text x="422.0" y="492.0" class="f-fg" font-size="11" text-anchor="start">고정효과, 공간 패널, 포아송 패널</text>
+<text x="704.0" y="492.0" class="f-ac" font-size="11" text-anchor="end" font-weight="600">35강</text>
+<line x1="146.0" y1="488.0" x2="170.0" y2="514.0" class="s-mu" stroke-width="0.8"/>
+<rect x="170.0" y="504.0" width="230.0" height="20.0" rx="4" class="s-mu f-sf" stroke-width="0.6"/>
+<text x="178.0" y="518.0" class="f-fg" font-size="11" text-anchor="start">어디서 언제 높았나</text>
+<line x1="400.0" y1="514.0" x2="418.0" y2="514.0" class="s-mu" stroke-width="0.8"/>
+<text x="422.0" y="518.0" class="f-fg" font-size="11" text-anchor="start">시공간 스캔, 떠오르는 핫스팟</text>
+<text x="704.0" y="518.0" class="f-ac" font-size="11" text-anchor="end" font-weight="600">34·35강</text>
+<rect x="16.0" y="544.0" width="130.0" height="72.0" rx="6" class="s-ac f-acs" stroke-width="1.2"/>
+<text x="81.0" y="577.0" class="f-fg" font-size="13" text-anchor="middle" font-weight="600">표본·래스터</text>
+<text x="81.0" y="593.0" class="f-mu" font-size="9" text-anchor="middle">조사 설계, 예측 지도, 영상</text>
+<line x1="146.0" y1="580.0" x2="170.0" y2="554.0" class="s-mu" stroke-width="0.8"/>
+<rect x="170.0" y="544.0" width="230.0" height="20.0" rx="4" class="s-mu f-sf" stroke-width="0.6"/>
+<text x="178.0" y="558.0" class="f-fg" font-size="11" text-anchor="start">어디를 잴 것인가</text>
+<line x1="400.0" y1="554.0" x2="418.0" y2="554.0" class="s-mu" stroke-width="0.8"/>
+<text x="422.0" y="558.0" class="f-fg" font-size="11" text-anchor="start">확률 표본, GRTS, 공간 피복</text>
+<text x="704.0" y="558.0" class="f-ac" font-size="11" text-anchor="end" font-weight="600">38강</text>
+<line x1="146.0" y1="580.0" x2="170.0" y2="580.0" class="s-mu" stroke-width="0.8"/>
+<rect x="170.0" y="570.0" width="230.0" height="20.0" rx="4" class="s-mu f-sf" stroke-width="0.6"/>
+<text x="178.0" y="584.0" class="f-fg" font-size="11" text-anchor="start">예측 지도는 얼마나 맞나</text>
+<line x1="400.0" y1="580.0" x2="418.0" y2="580.0" class="s-mu" stroke-width="0.8"/>
+<text x="422.0" y="584.0" class="f-fg" font-size="11" text-anchor="start">공간 교차검증, 독립 검증</text>
+<text x="704.0" y="584.0" class="f-ac" font-size="11" text-anchor="end" font-weight="600">39·40강</text>
+<line x1="146.0" y1="580.0" x2="170.0" y2="606.0" class="s-mu" stroke-width="0.8"/>
+<rect x="170.0" y="596.0" width="230.0" height="20.0" rx="4" class="s-mu f-sf" stroke-width="0.6"/>
+<text x="178.0" y="610.0" class="f-fg" font-size="11" text-anchor="start">픽셀을 어떻게 다루나</text>
+<line x1="400.0" y1="606.0" x2="418.0" y2="606.0" class="s-mu" stroke-width="0.8"/>
+<text x="422.0" y="610.0" class="f-fg" font-size="11" text-anchor="start">집계, 유효 표본 크기</text>
+<text x="704.0" y="610.0" class="f-ac" font-size="11" text-anchor="end" font-weight="600">40강</text>
+<text x="16.0" y="642.0" class="f-mu" font-size="11" text-anchor="start">공통 뒤 단계: 민감도 분석·재현성·인과의 한계(41) · 방법 절 쓰기와 심사 대응(42)</text>
+</svg>
